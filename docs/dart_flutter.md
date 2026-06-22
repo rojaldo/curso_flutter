@@ -1,0 +1,4333 @@
+# 📋 TEMARIO COMPLETO: DART PARA FLUTTER
+
+**Duración recomendada:** 12-15 horas (sesión extendida o dividida en 4-5 días)  
+**Nivel:** De principiante a intermedio-avanzado  
+**Objetivo:** Dominar todos los fundamentos de Dart necesarios para desarrollar aplicaciones Flutter profesionales con código limpio y mantenible
+
+---
+
+## 📖 Guía de Estudio
+
+Este temario está diseñado para aprender Dart desde cero hasta un nivel profesional. Cada sección incluye:
+
+1. **Conceptos teóricos**: Explicaciones claras del "por qué" y "para qué"
+2. **Ejemplos progresivos**: De lo simple a lo complejo
+3. **Casos prácticos**: Situaciones reales de desarrollo Flutter
+4. **Errores comunes**: Qué NO hacer y por qué
+5. **Ejercicios**: Para practicar cada concepto
+
+---
+
+## Tabla de Contenidos
+
+1. [Bloque 1: Fundamentos de Dart](#bloque-1-fundamentos-de-dart)
+2. [Bloque 2: Programación Orientada a Objetos](#bloque-2-programación-orientada-a-objetos)
+3. [Bloque 3: Asincronía en Dart](#bloque-3-asincronía-en-dart)
+4. [Bloque 4: Null Safety](#bloque-4-null-safety)
+5. [Bloque 5: Características Avanzadas](#bloque-5-características-avanzadas)
+6. [Bloque 6: Dart Específico para Flutter](#bloque-6-dart-específico-para-flutter)
+7. [Ejercicios Prácticos Detallados](#ejercicios-prácticos-detallados)
+8. [Proyecto Final Integrador](#proyecto-final-integrador)
+9. [Recursos y Referencias](#recursos-y-referencias)
+
+---
+
+## 🎯 BLOQUE 1: FUNDAMENTOS DE DART
+
+**Duración:** 3 horas  
+**Objetivo**: Comprender la sintaxis básica, tipos de datos y estructuras de control de Dart
+
+---
+
+### 1.1 Introducción y Configuración del Entorno
+
+#### ¿Qué es Dart y por qué aprenderlo?
+
+Dart es un lenguaje de programación moderno creado por Google en 2011. Fue diseñado específicamente para el desarrollo de aplicaciones cliente: móviles (Flutter), web (AngularDart) y de escritorio.
+
+**¿Por qué Dart para Flutter?**
+
+1. **Tipado estático**: Detecta errores en tiempo de compilación, no en producción
+2. **Compilación dual**:
+   - **JIT (Just-In-Time)**: En desarrollo, permite "hot reload" (recarga instantánea)
+   - **AOT (Ahead-Of-Time)**: En producción, genera código nativo optimizado
+3. **Sintaxis familiar**: Si conoces Java, JavaScript o TypeScript, Dart te resultará muy cómodo
+4. **Null safety**: El sistema de tipos previene el error más común en programación: el null pointer exception
+
+**Comparación con otros lenguajes:**
+
+| Característica | Dart | JavaScript | Java | Kotlin |
+|----------------|------|------------|------|--------|
+| Tipado | Estático | Dinámico | Estático | Estático |
+| Null safety | Sí (desde 2.12) | No | Opcional | Sí |
+| Compilación | JIT + AOT | JIT | JIT + AOT | JIT + AOT |
+| Hot reload | Sí (Flutter) | Sí (web) | No | Sí (Compose) |
+| Curva de aprendizaje | Media | Baja | Alta | Media |
+
+#### Instalación paso a paso
+
+**1. Verificar si ya tienes Dart instalado:**
+
+```bash
+dart --version
+```
+
+Si ves algo como `Dart SDK version: 3.x.x`, ya está instalado.
+
+**2. Instalación según tu sistema operativo:**
+
+**macOS (con Homebrew):**
+```bash
+# Instalar Homebrew si no lo tienes
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+# Instalar Dart
+brew tap dart-lang/dart
+brew install dart
+```
+
+**Windows (con Chocolatey):**
+```powershell
+# Instalar Chocolatey si no lo tienes
+Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
+
+# Instalar Dart
+choco install dart-sdk
+```
+
+**Linux (Ubuntu/Debian):**
+```bash
+# Agregar repositorio de Dart
+sudo apt-get update
+sudo apt-get install apt-transport-https
+wget -qO- https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo gpg --dearmor -o /usr/share/keyrings/dart.gpg
+echo 'deb [signed-by=/usr/share/keyrings/dart.gpg arch=amd64] https://storage.googleapis.com/download.dartlang.org/linux/debian stable main' | sudo tee /etc/apt/sources.list.d/dart_stable.list
+
+# Instalar Dart
+sudo apt-get update
+sudo apt-get install dart
+```
+
+**3. Verificar instalación:**
+```bash
+dart --version
+# Deberías ver: Dart SDK version: 3.x.x (stable) on "macos/windows/linux"
+```
+
+#### Tu primer programa en Dart
+
+**Opción 1: Desde la terminal**
+
+```bash
+# Crear archivo
+echo "void main() { print('Hola, mundo'); }" > hola.dart
+
+# Ejecutar
+dart run hola.dart
+# Output: Hola, mundo
+```
+
+**Opción 2: Proyecto completo**
+
+```bash
+# Crear proyecto
+dart create mi_primer_app
+
+# Entrar al directorio
+cd mi_primer_app
+
+# Ver estructura
+ls -la
+# bin/   - Punto de entrada (ejecutable)
+# lib/   - Código de biblioteca
+# test/  - Tests
+# pubspec.yaml - Configuración
+
+# Ejecutar
+dart run
+# Output: Hello world: 42!
+```
+
+**Anatomía de un programa Dart:**
+
+```dart
+// bin/mi_primer_app.dart
+
+// Función main: punto de entrada de todo programa Dart
+// - Es obligatoria
+// - Se ejecuta al iniciar la aplicación
+// - Puede retornar void o int
+void main() {
+  // print: función para imprimir en consola
+  // Añade automáticamente un salto de línea al final
+  print('Hola, mundo');
+  
+  // Las sentencias terminan con punto y coma (;)
+  // El punto y coma es OBLIGATORIO en Dart
+}
+```
+
+**Versiones de main():**
+
+```dart
+// Versión más simple
+void main() {
+  print('Hola');
+}
+
+// Con argumentos de línea de comandos
+void main(List<String> arguments) {
+  // arguments contiene los parámetros pasados al programa
+  // dart run app.dart arg1 arg2 arg3
+  print('Argumentos: $arguments');
+}
+
+// Con código de retorno (útil para scripts)
+int main() {
+  // 0 = éxito, cualquier otro número = error
+  return 0;
+}
+```
+
+#### El archivo pubspec.yaml: El corazón del proyecto
+
+El archivo `pubspec.yaml` es como el `package.json` de Node.js o el `requirements.txt` de Python. Define:
+- Nombre y versión de tu aplicación
+- Dependencias (paquetes externos)
+- Configuración del SDK
+
+**Estructura detallada:**
+
+```yaml
+# pubspec.yaml
+
+# ============================================
+# METADATOS DEL PAQUETE
+# ============================================
+
+# Nombre del paquete (obligatorio)
+# - Debe ser todo en minúsculas
+# - Solo puede contener letras, números y guiones bajos
+# - Debe empezar con letra o guión bajo
+name: mi_app
+
+# Versión (obligatorio para paquetes públicos)
+# Formato: major.minor.patch+build
+version: 1.0.0+1
+
+# Descripción (obligatorio para paquetes públicos)
+description: Una aplicación increíble construida con Dart
+
+# Autor/autora (opcional)
+author: Tu Nombre <tu@email.com>
+
+# Página de inicio (opcional)
+homepage: https://github.com/tuusuario/mi_app
+
+# ============================================
+# CONFIGURACIÓN DEL SDK
+# ============================================
+
+# Rango de versiones de Dart compatibles
+environment:
+  # >= versión mínima, < versión máxima
+  # Ejemplo: >=3.0.0 <4.0.0
+  sdk: '>=3.0.0 <4.0.0'
+
+# ============================================
+# DEPENDENCIAS DE PRODUCCIÓN
+# ============================================
+
+dependencies:
+  # Dependencias de terceros (desde pub.dev)
+  
+  # Formato: nombre: versión
+  # ^1.2.3 significa >=1.2.3 <2.0.0 (actualizaciones menores permitidas)
+  http: ^1.1.0
+  
+  # >=1.2.3 significa cualquier versión >= a la especificada
+  path: '>=1.8.0 <2.0.0'
+  
+  # Cualquier versión (no recomendado)
+  # paquete: any
+  
+  # Desde un repositorio Git
+  mi_paquete:
+    git:
+      url: https://github.com/usuario/mi_paquete.git
+      ref: main  # rama, tag o commit
+  
+  # Desde una ruta local (útil durante desarrollo)
+  mi_paquete_local:
+    path: ../mi_paquete_local
+  
+  # Dependencias con restricciones de plataforma
+  # shared_preferences: ^2.0.0
+
+# ============================================
+# DEPENDENCIAS DE DESARROLLO
+# ============================================
+
+dev_dependencies:
+  # Solo necesarias durante desarrollo, no en producción
+  
+  # Framework de testing
+  test: ^1.24.0
+  
+  # Reglas de linting (análisis estático)
+  lints: ^2.0.0
+  
+  # Generador de código (ejemplo)
+  # build_runner: ^2.0.0
+
+# ============================================
+# CONFIGURACIÓN ESPECÍFICA DE FLUTTER
+# ============================================
+
+# (Solo para proyectos Flutter, no Dart puro)
+# flutter:
+#   assets:
+#     - images/
+#     - assets/data.json
+#   fonts:
+#     - family: MiFuente
+#       fonts:
+#         - asset: fonts/MiFuente-Regular.ttf
+#         - asset: fonts/MiFuente-Bold.ttf
+#           weight: 700
+```
+
+**Comandos de gestión de dependencias:**
+
+```bash
+# Descargar/actualizar dependencias
+dart pub get
+
+# Ver dependencias instaladas
+dart deps
+
+# Actualizar a últimas versiones compatibles
+dart pub upgrade
+
+# Ver árbol de dependencias
+dart pub deps
+
+# Publicar paquete (si es tu propio paquete)
+dart pub publish
+
+# Verificar si el paquete está listo para publicar
+dart pub publish --dry-run
+```
+
+**Archivo analysis_options.yaml:**
+
+```yaml
+# analysis_options.yaml
+
+include: package:lints/recommended.yaml
+
+analyzer:
+  exclude:
+    - build/**
+    - "**/*.g.dart"
+    - "**/*.freezed.dart"
+
+linter:
+  rules:
+    # Evitar print en producción
+    - avoid_print: false
+    
+    # Preferir const cuando sea posible
+    - prefer_const_constructors: true
+    - prefer_const_declarations: true
+    - prefer_const_literals_to_create_immutables: true
+    
+    # Estilo de código
+    - prefer_single_quotes: true
+    - sort_constructors_first: true
+    - sort_unnamed_constructors_first: true
+```
+
+---
+
+### 1.2 Variables y Tipos de Datos
+
+#### Concepto de variable en Dart
+
+Una **variable** es un contenedor que almacena un valor en memoria. En Dart, las variables tienen:
+
+1. **Nombre**: Identificador para acceder al valor
+2. **Tipo**: Determina qué valores puede almacenar
+3. **Valor**: Los datos propiamente dichos
+4. **Referencia**: Dirección de memoria donde se almacena
+
+**Declaración vs Inicialización:**
+
+```dart
+// Declaración: reservar espacio para la variable
+String nombre;
+
+// Inicialización: asignar un valor
+nombre = 'Juan';
+
+// Declaración e inicialización en una línea
+String apellido = 'Pérez';
+```
+
+#### Formas de declarar variables
+
+Dart ofrece varias formas de declarar variables, cada una con un propósito específico:
+
+**1. var: Inferencia de tipos**
+
+```dart
+// Dart infiere el tipo automáticamente
+var nombre = 'Juan';        // Tipo: String
+var edad = 25;             // Tipo: int
+var altura = 1.75;         // Tipo: double
+var activo = true;         // Tipo: bool
+
+// Ventaja: código más limpio
+// Desventaja: el tipo se fija en la primera asignación
+
+// ❌ Error: no se puede cambiar el tipo
+var contador = 0;
+contador = 'texto'; // Error: A value of type 'String' can't be assigned
+
+// ✅ Correcto: mismo tipo
+contador = 10; // OK
+```
+
+**¿Cuándo usar var?**
+- Variables locales con valor inicial
+- Cuando el tipo es obvio por el valor
+- Para reducir verbosidad en código simple
+
+**2. final: Una sola asignación**
+
+```dart
+// final: valor que no puede cambiar después de inicializarse
+// Se determina en TIEMPO DE EJECUCIÓN (runtime)
+
+final String nombre;
+nombre = 'Juan'; // OK, primera asignación
+nombre = 'Ana'; // ❌ Error: Variable can't be reassigned
+
+// Con inicialización directa
+final edad = 25; // Tipo inferido
+
+// final con expresiones evaluadas en runtime
+final DateTime ahora = DateTime.now(); // OK, evaluado al ejecutar
+final int random = Random().nextInt(100); // OK, evaluado al ejecutar
+```
+
+**¿Cuándo usar final?**
+- Variables que no deben cambiar después de inicializarse
+- Valores calculados en runtime
+- Propiedades de clases que se asignan en el constructor
+
+**3. const: Constantes en tiempo de compilación**
+
+```dart
+// const: valor conocido en TIEMPO DE COMPILACIÓN
+// Debe poder calcularse durante la compilación
+
+const pi = 3.14159;
+const segundosPorMinuto = 60;
+
+// ✅ Correcto: valor conocido al compilar
+const nombre = 'App';
+const version = '1.0.0';
+
+// ❌ Error: valor solo conocido en runtime
+const ahora = DateTime.now(); // Error: Not a constant expression
+
+// Diferencia clave con final:
+final fechaActual = DateTime.now(); // OK (final)
+const fechaCompilacion = DateTime.now(); // ❌ Error (const)
+
+// const en colecciones
+const colores = ['rojo', 'verde', 'azul'];
+const numeros = [1, 2, 3];
+
+// ¡Ojo! const crea colecciones INMUTABLES
+// colores.add('amarillo'); // ❌ Error
+```
+
+**¿Cuándo usar const?**
+- Valores literales conocidos al compilar
+- Configuraciones estáticas
+- Optimización de rendimiento (Dart reutiliza instancias const)
+
+**4. late: Inicialización diferida**
+
+```dart
+// late: variable que se inicializará más tarde
+// Se usa cuando NO puedes inicializar en el constructor
+// pero sabes que tendrá valor antes de usarse
+
+class Usuario {
+  // late permite inicializar después
+  late String nombre;
+  
+  // late con inicialización perezosa (lazy)
+  late final String config = _cargarConfig();
+  
+  String _cargarConfig() {
+    print('Cargando configuración...');
+    return 'config_value';
+  }
+}
+
+// Uso
+var usuario = Usuario();
+usuario.nombre = 'Juan'; // Inicialización tardía
+print(usuario.config); // Aquí se ejecuta _cargarConfig()
+
+// Caso de uso típico: dependencias circulares
+class Padre {
+  late Hijo hijo;
+}
+
+class Hijo {
+  final Padre padre;
+  Hijo(this.padre);
+}
+
+var padre = Padre();
+padre.hijo = Hijo(padre); // Sin late, esto sería error
+```
+
+**¿Cuándo usar late?**
+- Inicialización tardía (patrones de inyección de dependencias)
+- Valores costosos que no siempre se necesitan (lazy loading)
+- Cuando el valor depende de otro que aún no existe
+
+**5. Tipado explícito**
+
+```dart
+// Especificar el tipo manualmente
+String nombre = 'Juan';
+int edad = 25;
+double altura = 1.75;
+bool activo = true;
+
+// Útil para:
+// - Documentación (el tipo es evidente)
+// - APIs públicas
+// - Cuando el tipo no es obvio
+// - Valores anulables (String?)
+String? apellido; // Puede ser null
+```
+
+**Tabla comparativa:**
+
+| Modificador | Mutabilidad | Momento de evaluación | Uso típico |
+|-------------|------------|----------------------|------------|
+| `var` | Mutable | Runtime | Variables locales simples |
+| `final` | Inmutable | Runtime | Valores fijos en runtime |
+| `const` | Inmutable | Compilación | Constantes verdaderas |
+| `late` | Diferida | Runtime (lazy) | Inicialización tardía |
+| `Tipo` | Configurable | Configurable | Documentación/APIs |
+
+**Errores comunes con variables:**
+
+```dart
+// ❌ Error 1: Variable no inicializada (sin late)
+String nombre;
+print(nombre); // Error: Non-nullable variable must be initialized
+
+// ✅ Correcto:
+String nombre = 'Juan';
+// o
+late String nombre;
+// o
+String? nombre; // Permite null
+
+// ❌ Error 2: Reasignar final
+final edad = 25;
+edad = 26; // Error: Can't assign to final
+
+// ✅ Correcto:
+var edad = 25;
+edad = 26; // OK
+
+// ❌ Error 3: const con valor de runtime
+const ahora = DateTime.now(); // Error
+
+// ✅ Correcto:
+final ahora = DateTime.now(); // OK
+
+// ❌ Error 4: Modificar colección const
+const lista = [1, 2, 3];
+lista.add(4); // Error
+
+// ✅ Correcto:
+final lista = [1, 2, 3];
+lista.add(4); // OK
+```
+
+---
+
+#### Tipos de datos numéricos
+
+Dart tiene dos tipos numéricos principales: `int` (enteros) y `double` (decimales). Ambos son subtipos de `num`.
+
+**Tipo int: Números enteros**
+
+```dart
+// Declaración
+int edad = 25;
+int year = 2024;
+int negativo = -100;
+
+// Literales especiales
+int hexadecimal = 0xFF;        // 255 en hexadecimal
+int binario = 0b1010;          // 10 en binario
+int cientifico = 1e3;          // 1000 (notación científica)
+
+// Operaciones básicas
+int a = 10;
+int b = 3;
+
+int suma = a + b;           // 13
+int resta = a - b;          // 7
+int multiplicacion = a * b; // 30
+double division = a / b;    // 3.333... (double)
+int divisionEntera = a ~/ b; // 3 (trunca decimales)
+int modulo = a % b;         // 1 (resto de división)
+
+// Operadores de asignación compuesta
+int contador = 10;
+contador += 5;  // contador = contador + 5 → 15
+contador -= 3;  // contador = contador - 3 → 12
+contador *= 2;  // contador = contador * 2 → 24
+contador ~/= 5; // contador = contador ~/ 5 → 4
+contador %= 3;  // contador = contador % 3 → 1
+
+// Operadores de incremento/decremento
+int x = 5;
+int y = ++x;  // Pre-incremento: x=6, y=6
+int z = x++;  // Post-incremento: z=6, x=7
+x--;          // Decremento: x=6
+
+// Métodos útiles de int
+int numero = -42;
+
+numero.abs();           // 42 (valor absoluto)
+numero.sign;            // -1 (signo: -1, 0, o 1)
+(16).bitLength;         // 5 (bits necesarios)
+(10).toRadixString(2);  // '1010' (binario)
+(255).toRadixString(16); // 'ff' (hexadecimal)
+
+// Conversión desde String
+int.parse('42');        // 42
+int.parse('0xFF');       // 255 (hexadecimal)
+int.tryParse('abc');     // null (no lanza excepción)
+int.tryParse('42') ?? 0; // 42 (con valor por defecto)
+
+// Conversión a String
+int valor = 42;
+valor.toString();       // '42'
+valor.toRadixString(16); // '2a' (hexadecimal)
+
+// Límites de int
+int.maxValue;           // 9223372036854775807 (64-bit)
+int.minValue;           // -9223372036854775808
+
+// Verificación de tipo
+valor.isEven;           // false (¿es par?)
+valor.isOdd;            // true (¿es impar?)
+valor.isNegative;       // false (¿es negativo?)
+valor.isFinite;         // true (¿es finito?)
+```
+
+**Tipo double: Números decimales**
+
+```dart
+// Declaración
+double precio = 99.99;
+double pi = 3.14159;
+double cientifico = 1.5e10; // 15000000000.0
+
+// Los literales enteros se convierten automáticamente a double
+double temperatura = 25; // 25.0 (conversión implícita)
+
+// Operaciones
+double a = 10.0;
+double b = 3.0;
+
+double suma = a + b;           // 13.0
+double resta = a - b;          // 7.0
+double multiplicacion = a * b; // 30.0
+double division = a / b;       // 3.333...
+
+// Operaciones con int y double
+int entero = 10;
+double decimal = 3.5;
+double resultado = entero + decimal; // 13.5 (el int se promueve a double)
+int truncado = (entero + decimal).toInt(); // 13
+
+// Métodos de double
+double valor = -3.7;
+
+valor.abs();       // 3.7 (valor absoluto)
+valor.sign;        // -1 (signo)
+valor.ceil();      // -3 (redondeo hacia arriba)
+valor.floor();     // -4 (redondeo hacia abajo)
+valor.round();     // -4 (redondeo al entero más cercano)
+valor.truncate();  // -3 (trunca decimales)
+
+// Comparaciones con precisión
+double x = 0.1 + 0.2; // 0.30000000000000004 (¡error de punto flotante!)
+double y = 0.3;
+
+// ❌ Incorrecto: comparación directa
+print(x == y); // false (por error de precisión)
+
+// ✅ Correcto: comparar con tolerancia
+bool sonIguales(double a, double b, {double tolerancia = 1e-10}) {
+  return (a - b).abs() < tolerancia;
+}
+print(sonIguales(x, y)); // true
+
+// Valores especiales de double
+double infinito = double.infinity;
+double negInfinito = double.negativeInfinity;
+double nan = double.nan;
+
+infinito.isInfinite; // true
+nan.isNaN;           // true
+
+// Conversión desde String
+double.parse('3.14');      // 3.14
+double.tryParse('abc');    // null
+double.tryParse('3.14') ?? 0.0; // 3.14
+
+// Conversión a String
+double valor = 3.14159;
+valor.toString();           // '3.14159'
+valor.toStringAsFixed(2);   // '3.14' (2 decimales)
+valor.toStringAsExponential(2); // '3.14e+0'
+valor.toStringAsPrecision(3);  // '3.14' (3 dígitos significativos)
+```
+
+**Tipo num: Padre de int y double**
+
+```dart
+// num acepta int o double
+num valor = 42;      // int
+valor = 3.14;        // double (OK)
+
+// Métodos de num (comunes a int y double)
+valor.abs();          // Valor absoluto
+valor.sign;           // Signo
+valor.isFinite;       // ¿Es finito?
+valor.isInfinite;     // ¿Es infinito?
+valor.isNaN;          // ¿Es NaN?
+
+// Conversión entre tipos
+num n = 42;
+n.toInt();           // int (sin cambios)
+n.toDouble();         // double (42.0)
+```
+
+**Casos prácticos con números:**
+
+```dart
+// Ejemplo: Cálculo de IVA
+double calcularIVA(double precio, double tasaIVA) {
+  return precio * tasaIVA / 100;
+}
+
+double calcularPrecioFinal(double precio, double tasaIVA) {
+  var iva = calcularIVA(precio, tasaIVA);
+  return precio + iva;
+}
+
+void main() {
+  var precioBase = 100.0;
+  var tasaIVA = 21.0;
+  
+  var precioFinal = calcularPrecioFinal(precioBase, tasaIVA);
+  print('Precio final: ${precioFinal.toStringAsFixed(2)}€');
+}
+
+// Ejemplo: Validación de entrada numérica
+int? parsearNumero(String input) {
+  return int.tryParse(input) ?? double.tryParse(input)?.toInt();
+}
+
+// Ejemplo: Formateo de números
+String formatearNumero(num valor, {int decimales = 2}) {
+  if (valor is int) {
+    return valor.toString();
+  }
+  return valor.toStringAsFixed(decimales);
+}
+
+// Ejemplo: Rango de números
+bool enRango(num valor, num min, num max) {
+  return valor >= min && valor <= max;
+}
+```
+
+---
+
+#### Tipo String: Cadenas de texto
+
+El tipo `String` en Dart es una secuencia inmutable de caracteres UTF-16.
+
+**Creación de Strings:**
+
+```dart
+// Comillas simples o dobles (equivalentes)
+String nombre1 = 'Juan';
+String nombre2 = "Juan";
+
+// Strings multilínea (triples comillas)
+String descripcion = '''
+Este es un texto
+que puede ocupar
+múltiples líneas.
+''';
+
+// String vacío
+String vacio1 = '';
+String vacio2 = "";
+String vacio3 = String();
+
+// Raw strings (sin interpretar escapes)
+String ruta = r'C:\Users\Juan\Documents';
+String regex = r'\d+\.\d+';
+// Sin la 'r', \ sería un carácter de escape
+```
+
+**Interpolación de Strings:**
+
+```dart
+// Interpolación básica con $
+String nombre = 'Juan';
+int edad = 25;
+
+String saludo = 'Hola, $nombre'; // 'Hola, Juan'
+String info = 'Tienes $edad años'; // 'Tienes 25 años'
+
+// Expresiones complejas con ${}
+int a = 5, b = 3;
+String operacion = 'La suma de $a + $b = ${a + b}'; // 'La suma de 5 + 3 = 8'
+
+String lista = 'Elementos: ${[1, 2, 3]}'; // 'Elementos: [1, 2, 3]'
+
+// Acceso a propiedades
+String longitud = 'Longitud: ${nombre.length}'; // 'Longitud: 4'
+
+// Llamadas a métodos
+String mayusculas = 'Nombre en mayúsculas: ${nombre.toUpperCase()}';
+```
+
+**Concatenación y repetición:**
+
+```dart
+// Concatenación con +
+String completo = 'Hola' + ' ' + 'Mundo'; // 'Hola Mundo'
+
+// Concatenación adyacente (solo literales)
+String adyacente = 'Hola' ' ' 'Mundo'; // 'Hola Mundo'
+
+// Repetición con *
+String linea = '-' * 10; // '----------'
+String espacios = ' ' * 4; // '    '
+
+// StringBuilder para muchas concatenaciones
+var buffer = StringBuffer();
+for (var i = 0; i < 1000; i++) {
+  buffer.write(i.toString());
+}
+String resultado = buffer.toString();
+
+// Más eficiente que:
+// String resultado = '';
+// for (var i = 0; i < 1000; i++) {
+//   resultado += i.toString(); // Ineficiente: crea nuevo String cada vez
+// }
+```
+
+**Propiedades y métodos de String:**
+
+```dart
+String texto = '  Hola Mundo  ';
+
+// Propiedades
+texto.length;              // 13 (longitud)
+texto.isEmpty;             // false
+texto.isNotEmpty;          // true
+
+// Acceso a caracteres
+texto[2];                  // ' ' (acceso por índice)
+texto[texto.length - 1];   // ' ' (último carácter)
+
+// Subcadenas
+texto.substring(2);        // 'Hola Mundo  ' (desde índice 2)
+texto.substring(2, 6);    // 'Hola' (del 2 al 6, exclusivo)
+
+// Búsqueda
+texto.indexOf('o');        // 3 (primera ocurrencia)
+texto.lastIndexOf('o');    // 9 (última ocurrencia)
+texto.contains('Mun');     // true
+texto.startsWith('  H');   // true
+texto.endsWith('do  ');    // true
+
+// Transformaciones
+texto.toUpperCase();       // '  HOLA MUNDO  '
+texto.toLowerCase();       // '  hola mundo  '
+texto.trim();              // 'Hola Mundo' (sin espacios)
+texto.trimLeft();          // 'Hola Mundo  '
+texto.trimRight();         // '  Hola Mundo'
+
+// Reemplazo
+texto.replaceAll('o', 'a'); // '  Hala Munda  '
+texto.replaceFirst('o', 'a'); // '  Hala Mundo  '
+texto.replaceRange(2, 6, 'Adiós'); // '  Adiós Mundo  '
+
+// División
+texto.split(' ');          // ['', '', 'Hola', 'Mundo', '', '']
+texto.split(' ').where((s) => s.isNotEmpty).toList(); // ['Hola', 'Mundo']
+
+// Conversión a lista de caracteres
+texto.split('');           // [' ', ' ', 'H', 'o', 'l', 'a', ...]
+texto.runes.toList();      // Lista de códigos de caracteres
+
+// Verificaciones
+texto.startsWith('Hola');  // false (empieza con espacios)
+texto.endsWith('Mundo');   // false (termina con espacios)
+texto.trim().startsWith('Hola'); // true
+```
+
+**Caracteres especiales y escapes:**
+
+```dart
+// Escapes comunes
+String saltoLinea = 'Línea 1\nLínea 2';      // \n = nueva línea
+String tabulacion = 'Col1\tCol2';             // \t = tabulador
+String comillas = 'Ella dijo: "Hola"';        // \" = comillas
+String apostrofe = 'It\'s working';           // \' = apóstrofe
+String backslash = 'Ruta: C:\\Users';         // \\ = backslash
+
+// Caracteres Unicode
+String corazon = '\u2764';                    // ❤ (corazón)
+String euro = '\u20AC';                      // € (euro)
+String emoji = '\u{1F600}';                  // 😀 (emoji, formato para > 4 dígitos)
+
+// Caracteres especiales en Strings
+String nulo = 'Texto\u0000con nulo';         // Carácter nulo
+```
+
+**Ejemplos prácticos:**
+
+```dart
+// Ejemplo: Validación de email
+bool esEmailValido(String email) {
+  if (email.isEmpty) return false;
+  
+  // Validación simple (una validación real requeriría regex)
+  return email.contains('@') && 
+         email.contains('.') && 
+         email.indexOf('@') > 0 &&
+         email.lastIndexOf('.') > email.indexOf('@');
+}
+
+// Ejemplo: Formatear nombre completo
+String formatearNombre(String nombre, String apellido) {
+  // Capitalizar primera letra
+  String nombreCap = nombre[0].toUpperCase() + nombre.substring(1).toLowerCase();
+  String apellidoCap = apellido[0].toUpperCase() + apellido.substring(1).toLowerCase();
+  
+  return '$nombreCap $apellidoCap';
+}
+
+// Ejemplo: Truncar texto con puntos suspensivos
+String truncar(String texto, int maxLongitud) {
+  if (texto.length <= maxLongitud) return texto;
+  return '${texto.substring(0, maxLongitud)}...';
+}
+
+// Ejemplo: Generar slug URL-friendly
+String generarSlug(String titulo) {
+  return titulo
+      .toLowerCase()
+      .replaceAll(' ', '-')
+      .replaceAll(RegExp(r'[^a-z0-9-]'), '')
+      .replaceAll(RegExp(r'-+'), '-');
+}
+
+// Ejemplo: Extraer dominio de email
+String? extraerDominio(String email) {
+  if (!email.contains('@')) return null;
+  return email.split('@')[1];
+}
+
+// Ejemplo: Ocultar información sensible
+String ocultar(String texto, {int visiblesInicio = 2, int visiblesFinal = 2}) {
+  if (texto.length <= visiblesInicio + visiblesFinal) {
+    return '*' * texto.length;
+  }
+  
+  String inicio = texto.substring(0, visiblesInicio);
+  String final = texto.substring(texto.length - visiblesFinal);
+  String medio = '*' * (texto.length - visiblesInicio - visiblesFinal);
+  
+  return '$inicio$medio$final';
+}
+
+// Uso
+print(ocultar('1234567890123456')); // '12************56'
+print(ocultar('juan@email.com', visiblesFinal: 4)); // 'ju*****.com'
+```
+
+---
+
+#### Tipo bool: Valores booleanos
+
+El tipo `bool` representa valores de verdad: `true` o `false`.
+
+```dart
+// Declaración
+bool activo = true;
+bool completado = false;
+
+// Operadores de comparación
+bool esIgual = 5 == 5;     // true
+bool esDiferente = 5 != 3;  // true
+bool esMayor = 5 > 3;      // true
+bool esMenor = 5 < 10;     // true
+bool esMayorIgual = 5 >= 5; // true
+bool esMenorIgual = 5 <= 10; // true
+
+// Operadores lógicos
+bool a = true;
+bool b = false;
+
+bool and = a && b;  // false (AND: ambos deben ser true)
+bool or = a || b;   // true (OR: al menos uno debe ser true)
+bool not = !a;      // false (NOT: invierte el valor)
+
+// Cortocircuito en operadores lógicos
+// &&: si el primer operando es false, no evalúa el segundo
+// ||: si el primer operando es true, no evalúa el segundo
+
+bool funcionLenta() {
+  print('Evaluando...');
+  return true;
+}
+
+void main() {
+  if (false && funcionLenta()) {
+    // funcionLenta() NO se ejecuta (cortocircuito)
+  }
+  
+  if (true || funcionLenta()) {
+    // funcionLenta() NO se ejecuta (cortocircuito)
+  }
+}
+```
+
+**Conversiones a bool:**
+
+```dart
+// Desde otros tipos
+int numero = 1;
+bool esPositivo = numero > 0; // true
+
+String texto = 'Hola';
+bool tieneTexto = texto.isNotEmpty; // true
+
+List lista = [1, 2, 3];
+bool tieneElementos = lista.isNotEmpty; // true
+
+// Patrón común: validar entrada
+bool esEntradaValida(String? input) {
+  // Si input es null o está vacío, retorna false
+  if (input == null || input.isEmpty) return false;
+  
+  // Validaciones adicionales
+  return input.length >= 3 && input.length <= 50;
+}
+```
+
+**Truthy y Falsy en otros lenguajes vs Dart:**
+
+```dart
+// En JavaScript/Python, algunos valores son "falsy":
+// null, undefined, 0, "", [], false
+
+// ❌ En Dart NO existe este concepto:
+// bool esVerdad = 0;      // Error
+// bool esVerdad = "";    // Error
+// bool esVerdad = null;  // Error
+
+// ✅ Conversión explícita en Dart:
+int? numero = 0;
+bool esCero = numero == 0;    // true
+bool esNull = numero == null; // false
+
+String? texto = "";
+bool esVacio = texto?.isEmpty ?? true; // true
+bool tieneTexto = texto?.isNotEmpty ?? false; // false
+
+List? lista = [];
+bool tieneElementos = lista?.isNotEmpty ?? false; // false
+```
+
+**Uso práctico de bool:**
+
+```dart
+// Ejemplo: Validar formulario
+class FormularioValidacion {
+  String? email;
+  String? password;
+  String? confirmPassword;
+  
+  bool get esEmailValido => email != null && email!.contains('@');
+  
+  bool get esPasswordValido => 
+      password != null && 
+      password!.length >= 8;
+  
+  bool get passwordsCoinciden => 
+      password == confirmPassword;
+  
+  bool get esFormularioValido =>
+      esEmailValido && 
+      esPasswordValido && 
+      passwordsCoinciden;
+}
+
+// Ejemplo: Flags de configuración
+class Configuracion {
+  final bool debugMode;
+  final bool analyticsEnabled;
+  final bool crashReportingEnabled;
+  
+  Configuracion({
+    this.debugMode = false,
+    this.analyticsEnabled = true,
+    this.crashReportingEnabled = true,
+  });
+}
+
+// Ejemplo: Estados de toggle
+enum EstadoBoton {
+  activado,
+  desactivado,
+}
+
+class Boton {
+  EstadoBoton estado;
+  
+  Boton({this.estado = EstadoBoton.desactivado});
+  
+  bool get isActivado => estado == EstadoBoton.activado;
+  
+  void toggle() {
+    estado = isActivado ? EstadoBoton.desactivado : EstadoBoton.activado;
+  }
+}
+```
+
+---
+
+### 1.3 Colecciones: List, Set y Map
+
+Las colecciones son estructuras que almacenan múltiples elementos. Dart ofrece tres tipos principales:
+
+#### List: Colección ordenada con duplicados
+
+Una `List` es una colección **ordenada** que permite elementos **duplicados**. Es similar a un array en otros lenguajes.
+
+**Creación de Listas:**
+
+```dart
+// Lista literal
+List<int> numeros = [1, 2, 3, 4, 5];
+var frutas = ['manzana', 'banana', 'naranja']; // Tipo inferido: List<String>
+
+// Lista vacía
+List<int> vacia1 = [];
+List<int> vacia2 = List.empty();
+List<int> vacia3 = <int>[];
+
+// Lista con tamaño fijo (no se puede añadir/eliminar elementos)
+List<int> fijos = List.filled(5, 0); // [0, 0, 0, 0, 0]
+
+// Lista generada
+List<int> cuadrados = List.generate(5, (i) => i * i); // [0, 1, 4, 9, 16]
+
+// Lista desde iterable
+List<int> desdeIter = List.from({1, 2, 3}); // Desde Set
+
+// Lista inmutable (const)
+const List<int> inmutable = [1, 2, 3];
+// inmutable.add(4); // ❌ Error: lista inmutable
+```
+
+**Acceso a elementos:**
+
+```dart
+List<String> frutas = ['manzana', 'banana', 'naranja', 'uva'];
+
+// Por índice (0-based)
+frutas[0];               // 'manzana'
+frutas[frutas.length - 1]; // 'uva' (último)
+frutas[100];             // ❌ Error: RangeError
+
+// Propiedades
+frutas.length;           // 4
+frutas.isEmpty;          // false
+frutas.isNotEmpty;        // true
+
+// Métodos de acceso seguro
+frutas.first;            // 'manzana'
+frutas.last;             // 'uva'
+frutas.firstOrNull;      // 'manzana' (null si está vacía)
+frutas.lastOrNull;       // 'uva' (null si está vacía)
+
+// Sublista
+frutas.sublist(1, 3);    // ['banana', 'naranja'] (desde índice 1, hasta 3 exclusivo)
+frutas.sublist(2);       // ['naranja', 'uva'] (desde índice 2 hasta el final)
+
+// Obtener rango
+frutas.getRange(1, 3);   // Iterable: ('banana', 'naranja')
+```
+
+**Modificación de Listas:**
+
+```dart
+List<String> frutas = ['manzana'];
+
+// Añadir al final
+frutas.add('banana');          // ['manzana', 'banana']
+frutas.addAll(['naranja', 'uva']); // ['manzana', 'banana', 'naranja', 'uva']
+
+// Insertar en posición específica
+frutas.insert(1, 'pera');      // ['manzana', 'pera', 'banana', 'naranja', 'uva']
+frutas.insertAll(0, ['kiwi', 'mango']); // ['kiwi', 'mango', 'manzana', 'pera', ...]
+
+// Reemplazar
+frutas[0] = 'fresa';           // ['fresa', 'mango', 'manzana', ...]
+frutas.replaceRange(0, 2, ['a', 'b']); // Reemplaza elementos en rango
+
+// Eliminar
+frutas.remove('pera');         // Elimina primera ocurrencia de 'pera'
+frutas.removeAt(0);            // Elimina por índice
+frutas.removeLast();           // Elimina último
+frutas.removeRange(0, 2);      // Elimina elementos en rango
+frutas.removeWhere((f) => f.startsWith('a')); // Elimina los que cumplan condición
+frutas.clear();                // Elimina todos
+
+// Operador de propagación (spread)
+var frutas1 = ['manzana', 'banana'];
+var frutas2 = ['naranja', 'uva'];
+var todas = [...frutas1, ...frutas2]; // Combina listas
+
+// Operador null-aware spread
+List<String>? nullable = null;
+var combinada = ['fresa', ...?nullable]; // ['fresa'] (nullable se ignora)
+```
+
+**Búsqueda y verificación:**
+
+```dart
+List<int> numeros = [1, 2, 3, 4, 5, 3, 2, 1];
+
+// Búsqueda
+numeros.indexOf(3);            // 2 (primer índice de 3)
+numeros.lastIndexOf(3);        // 5 (último índice de 3)
+numeros.indexOf(10);           // -1 (no encontrado)
+numeros.indexWhere((n) => n > 3); // 3 (primer índice donde n > 3)
+numeros.lastIndexWhere((n) => n > 3); // 7
+numeros.indexOf(3, 3);         // 5 (busca desde índice 3)
+
+// Verificación
+numeros.contains(3);           // true
+numeros.any((n) => n > 10);    // false (¿algún elemento cumple?)
+numeros.every((n) => n > 0);   // true (¿todos cumplen?)
+
+// Obtener elemento
+numeros.elementAt(2);          // 3 (igual a numeros[2])
+numeros.firstWhere((n) => n > 3, orElse: () => -1); // 4
+numeros.lastWhere((n) => n < 3); // 1
+numeros.singleWhere((n) => n == 5); // 5 (error si hay más de uno)
+```
+
+**Ordenación:**
+
+```dart
+List<int> numeros = [3, 1, 4, 1, 5, 9, 2, 6];
+
+// Ordenar in-place (modifica la lista original)
+numeros.sort(); // [1, 1, 2, 3, 4, 5, 6, 9]
+
+// Ordenar descendente
+numeros.sort((a, b) => b.compareTo(a)); // [9, 6, 5, 4, 3, 2, 1, 1]
+
+// Crear nueva lista ordenada (no modifica original)
+var ordenada = [...numeros]..sort();
+
+// Ordenar objetos
+class Usuario {
+  String nombre;
+  int edad;
+  Usuario(this.nombre, this.edad);
+  
+  @override
+  String toString() => '$nombre ($edad)';
+}
+
+var usuarios = [
+  Usuario('Juan', 25),
+  Usuario('Ana', 30),
+  Usuario('Pedro', 20),
+];
+
+// Ordenar por edad
+usuarios.sort((a, b) => a.edad.compareTo(b.edad));
+
+// Ordenar por nombre
+usuarios.sort((a, b) => a.nombre.compareTo(b.nombre));
+```
+
+**Iteración:**
+
+```dart
+List<String> frutas = ['manzana', 'banana', 'naranja'];
+
+// For-each
+frutas.forEach((fruta) {
+  print(fruta);
+});
+
+// For-in con índice
+for (var i = 0; i < frutas.length; i++) {
+  print('$i: ${frutas[i]}');
+}
+
+// For-in con enumerate
+for (var entrada in frutas.asMap().entries) {
+  print('${entrada.key}: ${entrada.value}');
+}
+
+// While con iterador
+var iter = frutas.iterator;
+while (iter.moveNext()) {
+  print(iter.current);
+}
+```
+
+**Operaciones funcionales:**
+
+```dart
+List<int> numeros = [1, 2, 3, 4, 5];
+
+// map: transforma cada elemento
+var cuadrados = numeros.map((n) => n * n).toList();
+// [1, 4, 9, 16, 25]
+
+// where: filtra elementos
+var pares = numeros.where((n) => n % 2 == 0).toList();
+// [2, 4]
+
+// whereType: filtra por tipo
+var mixto = [1, 'a', 2, 'b', 3];
+var soloNumeros = mixto.whereType<int>().toList();
+// [1, 2, 3]
+
+// expand: expande cada elemento en múltiples
+var anidado = [[1, 2], [3, 4], [5]];
+var plano = anidado.expand((lista) => lista).toList();
+// [1, 2, 3, 4, 5]
+
+// reduce: combina elementos en uno
+var suma = numeros.reduce((a, b) => a + b);
+// 15
+
+// fold: reduce con valor inicial
+var producto = numeros.fold(1, (a, b) => a * b);
+// 120
+
+// skip: salta primeros N elementos
+var sinPrimeros = numeros.skip(2).toList();
+// [3, 4, 5]
+
+// take: toma primeros N elementos
+var primeros = numeros.take(3).toList();
+// [1, 2, 3]
+
+// takeWhile: toma mientras condición sea true
+var menoresQue4 = numeros.takeWhile((n) => n < 4).toList();
+// [1, 2, 3]
+
+// skipWhile: salta mientras condición sea true
+var desde4 = numeros.skipWhile((n) => n < 4).toList();
+// [4, 5]
+
+// distinct: elimina duplicados
+var conDuplicados = [1, 2, 1, 3, 2, 4];
+var unicos = conDuplicados.toSet().toList();
+// [1, 2, 3, 4]
+```
+
+**Ejemplos prácticos con List:**
+
+```dart
+// Ejemplo 1: Gestión de tareas
+class GestorTareas {
+  List<String> _tareas = [];
+  
+  void agregar(String tarea) {
+    if (tarea.isEmpty) {
+      throw ArgumentError('La tarea no puede estar vacía');
+    }
+    _tareas.add(tarea);
+  }
+  
+  void completar(int indice) {
+    if (indice < 0 || indice >= _tareas.length) {
+      throw RangeError('Índice fuera de rango');
+    }
+    _tareas.removeAt(indice);
+  }
+  
+  List<String> pendientes() => List.from(_tareas);
+  
+  int get cantidad => _tareas.length;
+}
+
+// Ejemplo 2: Búsqueda con filtros
+List<Usuario> buscarUsuarios({
+  required List<Usuario> usuarios,
+  String? nombre,
+  int? edadMinima,
+  int? edadMaxima,
+}) {
+  var resultado = usuarios;
+  
+  if (nombre != null) {
+    resultado = resultado
+        .where((u) => u.nombre.toLowerCase().contains(nombre.toLowerCase()))
+        .toList();
+  }
+  
+  if (edadMinima != null) {
+    resultado = resultado.where((u) => u.edad >= edadMinima).toList();
+  }
+  
+  if (edadMaxima != null) {
+    resultado = resultado.where((u) => u.edad <= edadMaxima).toList();
+  }
+  
+  return resultado;
+}
+
+// Ejemplo 3: Paginación
+class Paginacion<T> {
+  final List<T> items;
+  final int paginaActual;
+  final int itemsPorPagina;
+  
+  Paginacion(this.items, this.paginaActual, this.itemsPorPagina);
+  
+  List<T> paginaActual_items() {
+    int inicio = paginaActual * itemsPorPagina;
+    int fin = inicio + itemsPorPagina;
+    
+    if (inicio >= items.length) return [];
+    if (fin > items.length) fin = items.length;
+    
+    return items.sublist(inicio, fin);
+  }
+  
+  int get totalPaginas => (items.length / itemsPorPagina).ceil();
+  
+  bool get haySiguiente => paginaActual < totalPaginas - 1;
+  bool get hayAnterior => paginaActual > 0;
+}
+```
+
+---
+
+#### Set: Colección sin duplicados
+
+Un `Set` es una colección **no ordenada** que **no permite duplicados**. Es útil cuando necesitas garantizar unicidad.
+
+```dart
+// Creación de Sets
+Set<int> numeros = {1, 2, 3, 4, 5};
+var frutas = <String>{'manzana', 'banana'}; // Tipo inferido
+
+// Set vacío (nota: {} es un Map, no un Set)
+Set<int> vacio1 = {};
+Set<int> vacio2 = <int>{};
+var vacio3 = <int>{}; // Tipo inferido
+
+// Set desde List (elimina duplicados)
+var conDuplicados = [1, 2, 2, 3, 3, 3];
+var sinDuplicados = conDuplicados.toSet(); // {1, 2, 3}
+
+// Operaciones básicas
+frutas.add('naranja');        // Añade elemento
+frutas.addAll(['pera', 'uva']); // Añade múltiples
+frutas.remove('banana');     // Elimina elemento
+frutas.contains('manzana');   // true
+frutas.length;               // Cantidad de elementos
+
+// Operaciones de conjuntos
+var setA = {1, 2, 3, 4, 5};
+var setB = {4, 5, 6, 7, 8};
+
+// Unión: elementos de ambos conjuntos
+var union = setA.union(setB);
+// {1, 2, 3, 4, 5, 6, 7, 8}
+
+// Intersección: elementos comunes
+var interseccion = setA.intersection(setB);
+// {4, 5}
+
+// Diferencia: elementos de A que no están en B
+var diferencia = setA.difference(setB);
+// {1, 2, 3}
+
+// Verificaciones
+setA.containsAll({1, 2});    // true (¿contiene todos?)
+setA.contains(1);             // true
+```
+
+**Casos de uso de Set:**
+
+```dart
+// Ejemplo 1: Eliminar duplicados de una lista
+List<int> conRepetidos = [1, 2, 2, 3, 3, 3, 4];
+List<int> sinRepetidos = conRepetidos.toSet().toList();
+// [1, 2, 3, 4] (orden no garantizado)
+
+// Para mantener el orden:
+List<int> sinRepetidosOrdenado = 
+    conRepetidos.fold<List<int>>([], (lista, elemento) {
+      if (!lista.contains(elemento)) lista.add(elemento);
+      return lista;
+    });
+// [1, 2, 3, 4]
+
+// Ejemplo 2: Verificar permisos
+class Usuario {
+  Set<String> permisos = {};
+  
+  void agregarPermiso(String permiso) {
+    permisos.add(permiso);
+  }
+  
+  bool tienePermiso(String permiso) {
+    return permisos.contains(permiso);
+  }
+  
+  bool tieneTodos(List<String> requeridos) {
+    return permisos.containsAll(requeridos);
+  }
+  
+  bool tieneAlguno(List<String> opciones) {
+    return opciones.any((p) => permisos.contains(p));
+  }
+}
+
+// Ejemplo 3: Comparar listas de cambios
+class ComparadorListas {
+  static Set<String> elementosNuevos(List<String> anterior, List<String> actual) {
+    return actual.toSet().difference(anterior.toSet());
+  }
+  
+  static Set<String> elementosEliminados(List<String> anterior, List<String> actual) {
+    return anterior.toSet().difference(actual.toSet());
+  }
+  
+  static Set<String> elementosComunes(List<String> anterior, List<String> actual) {
+    return anterior.toSet().intersection(actual.toSet());
+  }
+}
+```
+
+---
+
+#### Map: Colección clave-valor
+
+Un `Map` es una colección de pares **clave-valor** donde cada clave es única.
+
+```dart
+// Creación de Maps
+Map<String, int> edades = {
+  'Juan': 25,
+  'Ana': 30,
+  'Pedro': 28,
+};
+
+var productos = <String, double>{
+  'manzana': 1.50,
+  'banana': 2.00,
+  'naranja': 1.75,
+};
+
+// Map vacío
+Map<String, int> vacio1 = {};
+Map<String, int> vacio2 = <String, int>{};
+var vacio3 = <String, int>{};
+
+// Crear desde listas
+var claves = ['a', 'b', 'c'];
+var valores = [1, 2, 3];
+var mapa = Map.fromIterables(claves, valores);
+// {'a': 1, 'b': 2, 'c': 3}
+
+// Acceso a valores
+edades['Juan'];              // 25
+edades['Luis'];              // null (clave no existe)
+
+// Con valor por defecto
+edades['Luis'] ?? 0;         // 0 (si es null)
+
+// Acceso seguro
+var valor = edades['Juan'];
+if (valor != null) {
+  print(valor);
+}
+
+// Propiedades
+edades.length;               // 3
+edades.isEmpty;               // false
+edades.isNotEmpty;            // true
+edades.keys;                 // Iterable: ['Juan', 'Ana', 'Pedro']
+edades.values;                // Iterable: [25, 30, 28]
+edades.entries;               // Iterable de MapEntry
+
+// Modificación
+edades['Luis'] = 22;         // Añade o actualiza
+edades.putIfAbsent('Maria', () => 35); // Solo si no existe
+edades.update('Juan', (v) => v + 1);    // Actualiza existente
+edades.update('Luis', (v) => v + 1, ifAbsent: () => 0);
+edades.remove('Pedro');      // Elimina por clave
+edades.removeWhere((k, v) => v < 25);  // Elimina condicionalmente
+edades.clear();              // Elimina todo
+
+// Iteración
+edades.forEach((clave, valor) {
+  print('$clave: $valor');
+});
+
+for (var entrada in edades.entries) {
+  print('${entrada.key}: ${entrada.value}');
+}
+
+for (var clave in edades.keys) {
+  print('$clave: ${edades[clave]}');
+}
+```
+
+**Operaciones avanzadas con Map:**
+
+```dart
+// map: transformar valores
+var precios = {'a': 10, 'b': 20, 'c': 30};
+var conIVA = precios.map((k, v) => MapEntry(k, v * 1.21));
+// {'a': 12.1, 'b': 24.2, 'c': 36.3}
+
+// fromEntries: crear map desde iterable
+var lista = [
+  {'nombre': 'Juan', 'edad': 25},
+  {'nombre': 'Ana', 'edad': 30},
+];
+var porNombre = Map.fromEntries(
+  lista.map((e) => MapEntry(e['nombre'] as String, e))
+);
+
+// Agrupar elementos
+List<Usuario> usuarios = [
+  Usuario('Juan', 25),
+  Usuario('Ana', 30),
+  Usuario('Pedro', 25),
+];
+
+var porEdad = <int, List<Usuario>>{};
+for (var usuario in usuarios) {
+  porEdad.putIfAbsent(usuario.edad, () => []);
+  porEdad[usuario.edad]!.add(usuario);
+}
+// {25: [Usuario(Juan), Usuario(Pedro)], 30: [Usuario(Ana)]}
+
+// Usando fold para agrupar
+var agrupados = usuarios.fold<Map<int, List<String>>>(
+  {},
+  (map, usuario) {
+    map.putIfAbsent(usuario.edad, () => []);
+    map[usuario.edad]!.add(usuario.nombre);
+    return map;
+  },
+);
+```
+
+**Ejemplos prácticos con Map:**
+
+```dart
+// Ejemplo 1: Cache simple
+class Cache<T> {
+  final Map<String, T> _cache = {};
+  final Duration expiracion;
+  
+  Cache({this.expiracion = const Duration(minutes: 5)});
+  
+  T? obtener(String clave) {
+    return _cache[clave];
+  }
+  
+  void guardar(String clave, T valor) {
+    _cache[clave] = valor;
+  }
+  
+  void eliminar(String clave) {
+    _cache.remove(clave);
+  }
+  
+  void limpiar() {
+    _cache.clear();
+  }
+}
+
+// Ejemplo 2: Contador de palabras
+Map<String, int> contarPalabras(String texto) {
+  var palabras = texto
+      .toLowerCase()
+      .split(RegExp(r'\s+'))
+      .where((p) => p.isNotEmpty);
+  
+  var contador = <String, int>{};
+  
+  for (var palabra in palabras) {
+    contador[palabra] = (contador[palabra] ?? 0) + 1;
+  }
+  
+  return contador;
+}
+
+// Ejemplo 3: Configuración tipada
+class Configuracion {
+  final Map<String, dynamic> _valores;
+  
+  Configuracion(this._valores);
+  
+  String? getString(String clave) => _valores[clave] as String?;
+  int? getInt(String clave) => _valores[clave] as int?;
+  double? getDouble(String clave) => _valores[clave] as double?;
+  bool? getBool(String clave) => _valores[clave] as bool?;
+  
+  T? get<T>(String clave) => _valores[clave] as T?;
+  
+  String getStringOr(String clave, String defecto) =>
+      _valores[clave] as String? ?? defecto;
+}
+
+// Uso
+var config = Configuracion({
+  'apiUrl': 'https://api.example.com',
+  'timeout': 30,
+  'debug': true,
+});
+
+print(config.getString('apiUrl')); // 'https://api.example.com'
+print(config.getInt('timeout'));    // 30
+print(config.getStringOr('apiKey', 'default')); // 'default'
+```
+
+---
+
+### 1.4 Funciones
+
+Las funciones en Dart son **ciudadanos de primera clase**: pueden ser asignadas a variables, pasadas como parámetros y retornadas desde otras funciones.
+
+#### Declaración básica
+
+```dart
+// Función simple
+void saludar() {
+  print('Hola, mundo!');
+}
+
+// Función con retorno
+int sumar(int a, int b) {
+  return a + b;
+}
+
+// Función con retorno implícito (arrow function)
+int multiplicar(int a, int b) => a * b;
+
+// Función sin parámetros
+DateTime obtenerFecha() => DateTime.now();
+
+// Función void (no retorna valor)
+void mostrarMensaje(String mensaje) {
+  print(mensaje);
+  // return implícito
+}
+```
+
+#### Parámetros
+
+**Parámetros posicionales (obligatorios):**
+
+```dart
+// Parámetros en orden específico
+void presentar(String nombre, int edad, String ciudad) {
+  print('$nombre tiene $edad años y vive en $ciudad');
+}
+
+presentar('Juan', 25, 'Madrid'); // Correcto
+// presentar('Juan'); // ❌ Error: faltan parámetros
+```
+
+**Parámetros posicionales opcionales:**
+
+```dart
+// Parámetros entre [] son opcionales
+void formato(String texto, [String prefijo = '', String sufijo = '']) {
+  print('$prefijo$texto$sufijo');
+}
+
+formato('Hola');               // 'Hola'
+formato('Hola', '>>');         // '>>Hola'
+formato('Hola', '>>', '<<');    // '>>Hola<<'
+
+// Sin valor por defecto
+void presentacion(String nombre, [int? edad]) {
+  print('Nombre: $nombre');
+  if (edad != null) {
+    print('Edad: $edad');
+  }
+}
+```
+
+**Parámetros nombrados:**
+
+```dart
+// Parámetros entre {} son nombrados
+void configurar({
+  String host = 'localhost',
+  int puerto = 8080,
+  bool ssl = false,
+}) {
+  print('Host: $host, Puerto: $puerto, SSL: $ssl');
+}
+
+configurar();                          // Host: localhost, Puerto: 8080, SSL: false
+configurar(puerto: 3000);              // Host: localhost, Puerto: 3000, SSL: false
+configurar(host: 'api.example.com', ssl: true); // Host: api.example.com, Puerto: 8080, SSL: true
+configurar(host: 'api.example.com', puerto: 443, ssl: true);
+
+// Parámetros nombrados requeridos
+void crearUsuario({
+  required String nombre,
+  required String email,
+  int edad = 0,
+}) {
+  print('Usuario: $nombre, Email: $email, Edad: $edad');
+}
+
+crearUsuario(nombre: 'Juan', email: 'juan@email.com'); // edad = 0
+// crearUsuario(nombre: 'Juan'); // ❌ Error: email es requerido
+```
+
+**Mixto: posicionales y nombrados:**
+
+```dart
+void procesar(
+  int id,                          // Posicional obligatorio
+  String nombre,                    // Posicional obligatorio
+  {String? descripcion,            // Nombrado opcional
+  bool activo = true,              // Nombrado con defecto
+  required DateTime fecha,         // Nombrado requerido
+}) {
+  print('ID: $id, Nombre: $nombre');
+  print('Descripción: ${descripcion ?? "Sin descripción"}');
+  print('Activo: $activo');
+  print('Fecha: $fecha');
+}
+
+procesar(
+  1, 
+  'Producto 1',
+  fecha: DateTime.now(),
+);
+```
+
+#### Funciones como valores
+
+```dart
+// Asignar función a variable
+var operacion = sumar;
+var resultado = operacion(5, 3); // 8
+
+// Tipo de función
+int Function(int, int) miFuncion = multiplicar;
+
+// Función anónima
+var cuadrado = (int n) => n * n;
+print(cuadrado(4)); // 16
+
+// Función anónima multilínea
+var calcular = (int a, int b) {
+  var suma = a + b;
+  var producto = a * b;
+  return {'suma': suma, 'producto': producto};
+};
+print(calcular(3, 4)); // {suma: 7, producto: 12}
+```
+
+#### Funciones de orden superior
+
+Son funciones que reciben o retornan otras funciones.
+
+**Funciones que reciben funciones:**
+
+```dart
+// Función que toma otra función como parámetro
+void ejecutarOperacion(int a, int b, int Function(int, int) operacion) {
+  var resultado = operacion(a, b);
+  print('Resultado: $resultado');
+}
+
+ejecutarOperacion(5, 3, sumar);        // Resultado: 8
+ejecutarOperacion(5, 3, multiplicar);   // Resultado: 15
+ejecutarOperacion(5, 3, (a, b) => a - b); // Resultado: 2
+
+// Ejemplo con List
+var numeros = [1, 2, 3, 4, 5];
+
+// map: transforma cada elemento
+var cuadrados = numeros.map((n) => n * n).toList();
+// [1, 4, 9, 16, 25]
+
+// where: filtra elementos
+var pares = numeros.where((n) => n % 2 == 0).toList();
+// [2, 4]
+
+// reduce: combina elementos
+var suma = numeros.reduce((a, b) => a + b);
+// 15
+
+// fold: reduce con valor inicial
+var producto = numeros.fold(1, (a, b) => a * b);
+// 120
+
+// sort: ordena (modifica la lista original)
+var desordenados = [3, 1, 4, 1, 5];
+desordenados.sort((a, b) => a.compareTo(b));
+// [1, 1, 3, 4, 5]
+```
+
+**Funciones que retornan funciones:**
+
+```dart
+// Función que crea funciones
+int Function(int) crearMultiplicador(int factor) {
+  return (int n) => n * factor;
+}
+
+var porDos = crearMultiplicador(2);
+var porTres = crearMultiplicador(3);
+
+print(porDos(5));  // 10
+print(porTres(5)); // 15
+
+// Ejemplo: validador
+Function(String) crearValidador(int longitudMinima) {
+  return (String texto) {
+    return texto.length >= longitudMinima;
+  };
+}
+
+var validarNombre = crearValidador(3);
+var validarPassword = crearValidador(8);
+
+print(validarNombre('Juan')); // true
+print(validarPassword('123')); // false
+
+// Ejemplo: formateador
+String Function(String) crearFormateador(String prefijo, String sufijo) {
+  return (String texto) => '$prefijo$texto$sufijo';
+}
+
+var formatearHTML = crearFormateador('<p>', '</p>');
+print(formatearHTML('Hola')); // <p>Hola</p>
+```
+
+#### Closures (Clausuras)
+
+Un closure es una función que captura variables de su entorno.
+
+```dart
+// Closure simple
+Function crearContador() {
+  int cuenta = 0; // Variable capturada
+  
+  return () {
+    cuenta++;
+    return cuenta;
+  };
+}
+
+var contador = crearContador();
+print(contador()); // 1
+print(contador()); // 2
+print(contador()); // 3
+
+var otroContador = crearContador();
+print(otroContador()); // 1 (nuevo closure, nueva cuenta)
+
+// Ejemplo práctico: acumulador
+Function crearAcumulador(int inicial) {
+  int valor = inicial;
+  
+  return (int incremento) {
+    valor += incremento;
+    return valor;
+  };
+}
+
+var acumulador = crearAcumulador(0);
+print(acumulador(10)); // 10
+print(acumulador(5));  // 15
+print(acumulador(3));  // 18
+
+// Ejemplo: crear funciones con configuración
+Function crearSaludador(String saludoBase) {
+  return (String nombre) {
+    return '$saludoBase, $nombre!';
+  };
+}
+
+var saludarEspanol = crearSaludador('Hola');
+var saludarIngles = crearSaludador('Hello');
+
+print(saludarEspanol('Juan')); // Hola, Juan!
+print(saludarIngles('John'));   // Hello, John!
+```
+
+#### Funciones recursivas
+
+```dart
+// Factorial con recursión
+int factorial(int n) {
+  if (n <= 1) return 1;
+  return n * factorial(n - 1);
+}
+
+print(factorial(5)); // 120
+
+// Fibonacci con recursión (ineficiente para n grandes)
+int fibonacci(int n) {
+  if (n <= 1) return n;
+  return fibonacci(n - 1) + fibonacci(n - 2);
+}
+
+// Fibonacci con memoización (eficiente)
+int fibonacciMemo(int n, [Map<int, int>? memo]) {
+  memo ??= {};
+  
+  if (n <= 1) return n;
+  if (memo.containsKey(n)) return memo[n]!;
+  
+  memo[n] = fibonacciMemo(n - 1, memo) + fibonacciMemo(n - 2, memo);
+  return memo[n]!;
+}
+
+print(fibonacci(40)); // Lento
+print(fibonacciMemo(40)); // Rápido
+```
+
+#### Ejemplos prácticos de funciones
+
+```dart
+// Ejemplo 1: Validador de formularios
+class Validador {
+  static String? requerido(String? valor) {
+    if (valor == null || valor.isEmpty) {
+      return 'Este campo es requerido';
+    }
+    return null;
+  }
+  
+  static String? email(String? valor) {
+    if (valor == null || !valor.contains('@')) {
+      return 'Email inválido';
+    }
+    return null;
+  }
+  
+  static String? longitudMinima(int minima) {
+    return (String? valor) {
+      if (valor == null || valor.length < minima) {
+        return 'Mínimo $minima caracteres';
+      }
+      return null;
+    };
+  }
+  
+  static String? rango(int minimo, int maximo) {
+    return (String? valor) {
+      if (valor == null) return null;
+      var numero = int.tryParse(valor);
+      if (numero == null) return 'Debe ser un número';
+      if (numero < minimo || numero > maximo) {
+        return 'Debe estar entre $minimo y $maximo';
+      }
+      return null;
+    };
+  }
+  
+  static String? combinar(List<String? Function(String?)> validadores) {
+    return (String? valor) {
+      for (var validador in validadores) {
+        var error = validador(valor);
+        if (error != null) return error;
+      }
+      return null;
+    };
+  }
+}
+
+// Uso
+var validadorEmail = Validador.combinar([
+  Validador.requerido,
+  Validador.email,
+]);
+
+print(validadorEmail('')); // 'Este campo es requerido'
+print(validadorEmail('juan')); // 'Email inválido'
+print(validadorEmail('juan@email.com')); // null
+
+// Ejemplo 2: Pipeline de transformaciones
+class Pipeline<T> {
+  final List<T Function(T)> _transformaciones = [];
+  
+  Pipeline<T> agregar(T Function(T) transformacion) {
+    _transformaciones.add(transformacion);
+    return this;
+  }
+  
+  T ejecutar(T valor) {
+    return _transformaciones.fold(valor, (v, t) => t(v));
+  }
+}
+
+// Uso
+var pipeline = Pipeline<String>()
+    .agregar((s) => s.trim())
+    .agregar((s) => s.toLowerCase())
+    .agregar((s) => s.replaceAll(' ', '-'));
+
+print(pipeline.ejecutar('  Hola Mundo  ')); // 'hola-mundo'
+
+// Ejemplo 3: Debounce para búsquedas
+Timer? _debounceTimer;
+
+void buscarConDebounce(String query, Function(String) onBuscar) {
+  _debounceTimer?.cancel();
+  _debounceTimer = Timer(Duration(milliseconds: 300), () {
+    onBuscar(query);
+  });
+}
+```
+
+---
+
+### 1.5 Control de Flujo
+
+#### Condicionales
+
+**if-else:**
+
+```dart
+var edad = 18;
+
+// if simple
+if (edad >= 18) {
+  print('Mayor de edad');
+}
+
+// if-else
+if (edad >= 18) {
+  print('Mayor de edad');
+} else {
+  print('Menor de edad');
+}
+
+// if-else if-else
+if (edad < 12) {
+  print('Niño');
+} else if (edad < 18) {
+  print('Adolescente');
+} else if (edad < 65) {
+  print('Adulto');
+} else {
+  print('Adulto mayor');
+}
+
+// Operador ternario
+var estado = edad >= 18 ? 'Mayor' : 'Menor';
+
+// Ternario anidado (evitar si es complejo)
+var categoria = edad < 12 ? 'Niño' 
+              : edad < 18 ? 'Adolescente' 
+              : edad < 65 ? 'Adulto' 
+              : 'Adulto mayor';
+
+// Mejor usar if-else para casos complejos
+```
+
+**Operador null-aware:**
+
+```dart
+String? nombre;
+
+// Operador ??
+var mostrar = nombre ?? 'Anónimo'; // Si nombre es null, usa 'Anónimo'
+
+// Operador ??=
+nombre ??= 'Por defecto'; // Si nombre es null, asigna 'Por defecto'
+
+// Encadenamiento
+String? nombreCompleto;
+String? nombre;
+String? apellido;
+
+// Sin operador
+if (nombre != null && apellido != null) {
+  nombreCompleto = '$nombre $apellido';
+} else {
+  nombreCompleto = nombre ?? apellido ?? 'Sin nombre';
+}
+
+// Con operador
+nombreCompleto = (nombre != null && apellido != null) 
+    ? '$nombre $apellido' 
+    : (nombre ?? apellido ?? 'Sin nombre');
+
+// Operador ?.
+var longitud = nombre?.length; // Si nombre es null, retorna null
+var longitudSegura = nombre?.length ?? 0; // Si nombre es null, usa 0
+```
+
+**switch-case:**
+
+```dart
+var dia = 1;
+
+// Switch tradicional
+switch (dia) {
+  case 1:
+    print('Lunes');
+    break;
+  case 2:
+    print('Martes');
+    break;
+  case 3:
+    print('Miércoles');
+    break;
+  case 4:
+    print('Jueves');
+    break;
+  case 5:
+    print('Viernes');
+    break;
+  case 6:
+  case 7:
+    print('Fin de semana');
+    break;
+  default:
+    print('Día inválido');
+}
+
+// Switch con expresiones (Dart 3)
+var diaTexto = switch (dia) {
+  1 => 'Lunes',
+  2 => 'Martes',
+  3 => 'Miércoles',
+  4 => 'Jueves',
+  5 => 'Viernes',
+  6 || 7 => 'Fin de semana',
+  _ => 'Día inválido',
+};
+
+// Switch con patrones (Dart 3)
+var objeto = [1, 2, 3];
+
+var tipo = switch (objeto) {
+  int n when n > 0 => 'Entero positivo',
+  int n when n < 0 => 'Entero negativo',
+  double d => 'Decimal',
+  String s => 'Texto: $s',
+  List l when l.length > 3 => 'Lista larga',
+  List l => 'Lista con ${l.length} elementos',
+  _ => 'Otro tipo',
+};
+```
+
+#### Bucles
+
+**for tradicional:**
+
+```dart
+// Bucle for básico
+for (var i = 0; i < 5; i++) {
+  print(i);
+}
+// Output: 0, 1, 2, 3, 4
+
+// For con decremento
+for (var i = 10; i >= 0; i -= 2) {
+  print(i);
+}
+// Output: 10, 8, 6, 4, 2, 0
+
+// For con múltiples variables
+for (var i = 0, j = 10; i < j; i++, j--) {
+  print('i: $i, j: $j');
+}
+
+// For con colecciones
+var frutas = ['manzana', 'banana', 'naranja'];
+for (var i = 0; i < frutas.length; i++) {
+  print('$i: ${frutas[i]}');
+}
+
+// For con índice usando asMap
+for (var entrada in frutas.asMap().entries) {
+  print('${entrada.key}: ${entrada.value}');
+}
+```
+
+**for-in:**
+
+```dart
+// Iterar sobre lista
+var frutas = ['manzana', 'banana', 'naranja'];
+for (var fruta in frutas) {
+  print(fruta);
+}
+
+// Iterar sobre Set
+var numeros = {1, 2, 3, 4, 5};
+for (var numero in numeros) {
+  print(numero);
+}
+
+// Iterar sobre Map
+var edades = {'Juan': 25, 'Ana': 30};
+for (var entrada in edades.entries) {
+  print('${entrada.key}: ${entrada.value}');
+}
+
+// Iterar sobre String (caracteres)
+var texto = 'Hola';
+for (var caracter in texto.split('')) {
+  print(caracter);
+}
+
+// for-in con iterables
+for (var i in [1, 2, 3, 4, 5].where((n) => n.isEven)) {
+  print(i); // 2, 4
+}
+```
+
+**while y do-while:**
+
+```dart
+// While: verifica condición antes de ejecutar
+var contador = 0;
+while (contador < 5) {
+  print(contador);
+  contador++;
+}
+
+// Do-while: ejecuta al menos una vez
+var numero;
+do {
+  // numero = obtenerEntradaUsuario();
+  print('Ingresa un número positivo');
+} while (numero == null || numero <= 0);
+
+// While con iterador
+var iterador = [1, 2, 3].iterator;
+while (iterador.moveNext()) {
+  print(iterador.current);
+}
+```
+
+**break y continue:**
+
+```dart
+// break: salir del bucle
+for (var i = 0; i < 10; i++) {
+  if (i == 5) break;
+  print(i);
+}
+// Output: 0, 1, 2, 3, 4
+
+// continue: saltar a siguiente iteración
+for (var i = 0; i < 10; i++) {
+  if (i % 2 == 0) continue; // Saltar pares
+  print(i);
+}
+// Output: 1, 3, 5, 7, 9
+
+// Labels para bucles anidados
+externo:
+for (var i = 0; i < 3; i++) {
+  for (var j = 0; j < 3; j++) {
+    if (i == 1 && j == 1) break externo;
+    print('i=$i, j=$j');
+  }
+}
+// Output: i=0, j=0 | i=0, j=1 | i=0, j=2 | i=1, j=0
+
+// Continue con label
+externo:
+for (var i = 0; i < 3; i++) {
+  for (var j = 0; j < 3; j++) {
+    if (j == 1) continue externo;
+    print('i=$i, j=$j');
+  }
+}
+```
+
+**Collection for y if:**
+
+```dart
+// Collection if: incluir elementos condicionalmente
+var mostrarExtras = true;
+var menu = [
+  'Plato principal',
+  if (mostrarExtras) 'Postre',
+  if (mostrarExtras) 'Bebida',
+];
+// ['Plato principal', 'Postre', 'Bebida']
+
+// Collection for: crear lista desde iterable
+var numeros = [1, 2, 3];
+var cuadrados = [for (var n in numeros) n * n];
+// [1, 4, 9]
+
+// Combinar if y for en colecciones
+var pares = [
+  for (var n in [1, 2, 3, 4, 5, 6])
+    if (n % 2 == 0) n
+];
+// [2, 4, 6]
+
+// Anidar for
+var matriz = [
+  for (var i = 1; i <= 3; i++)
+    for (var j = 1; j <= 3; j++)
+      i * j
+];
+// [1, 2, 3, 2, 4, 6, 3, 6, 9]
+```
+
+**Ejemplos prácticos de bucles:**
+
+```dart
+// Ejemplo 1: Procesar archivo línea por línea
+Future<void> procesarArchivo(List<String> lineas) async {
+  var numeroLinea = 1;
+  for (var linea in lineas) {
+    if (linea.trim().isEmpty) continue; // Saltar líneas vacías
+    
+    // Procesar línea
+    print('Línea $numeroLinea: $linea');
+    numeroLinea++;
+  }
+}
+
+// Ejemplo 2: Búsqueda con while
+int? buscarElemento(List<int> lista, int objetivo) {
+  var izquierda = 0;
+  var derecha = lista.length - 1;
+  
+  while (izquierda <= derecha) {
+    var medio = (izquierda + derecha) ~/ 2;
+    
+    if (lista[medio] == objetivo) {
+      return medio;
+    } else if (lista[medio] < objetivo) {
+      izquierda = medio + 1;
+    } else {
+      derecha = medio - 1;
+    }
+  }
+  
+  return null; // No encontrado
+}
+
+// Ejemplo 3: Validar entrada con do-while
+import 'dart:io';
+
+int leerNumeroPositivo() {
+  int? numero;
+  
+  do {
+    stdout.write('Ingresa un número positivo: ');
+    var entrada = stdin.readLineSync();
+    numero = int.tryParse(entrada ?? '');
+    
+    if (numero == null || numero <= 0) {
+      print('Entrada inválida. Intenta de nuevo.');
+    }
+  } while (numero == null || numero <= 0);
+  
+  return numero;
+}
+
+// Ejemplo 4: Tabla de multiplicar con for anidado
+void imprimirTablaMultiplicar(int maximo) {
+  // Encabezado
+  stdout.write('   ');
+  for (var i = 1; i <= maximo; i++) {
+    stdout.write('${i.toString().padLeft(4)}');
+  }
+  print('');
+  
+  // Filas
+  for (var i = 1; i <= maximo; i++) {
+    stdout.write('${i.toString().padLeft(2)} ');
+    for (var j = 1; j <= maximo; j++) {
+      stdout.write('${(i * j).toString().padLeft(4)}');
+    }
+    print('');
+  }
+}
+```
+
+**assert:**
+
+```dart
+// Assert: verificación en modo debug
+void dividir(int a, int b) {
+  assert(b != 0, 'El divisor no puede ser cero');
+  print(a / b);
+}
+
+// Assert con condición compleja
+void procesarUsuario(Map<String, dynamic> datos) {
+  assert(datos.containsKey('nombre'), 'El nombre es requerido');
+  assert(datos['nombre'] is String, 'El nombre debe ser texto');
+  assert((datos['nombre'] as String).length >= 3, 'Mínimo 3 caracteres');
+  
+  print('Procesando: ${datos['nombre']}');
+}
+
+// Assert solo funciona en modo debug
+// En producción se ignoran automáticamente
+
+// Para validación en producción, usar excepciones
+void validarUsuario(Map<String, dynamic> datos) {
+  if (!datos.containsKey('nombre')) {
+    throw ArgumentError('El nombre es requerido');
+  }
+}
+```
+
+---
+
+## 🎯 BLOQUE 2: PROGRAMACIÓN ORIENTADA A OBJETOS
+
+**Duración:** 3 horas  
+**Objetivo**: Dominar los conceptos de POO en Dart: clases, herencia, mixins e interfaces
+
+---
+
+### 2.1 Clases y Objetos
+
+#### Conceptos fundamentales
+
+Una **clase** es una plantilla que define las características y comportamientos de un tipo de objeto. Un **objeto** es una instancia de una clase.
+
+**Anatomía de una clase:**
+
+```dart
+class Usuario {
+  // ========================================
+  // PROPIEDADES (CAMPOS DE INSTANCIA)
+  // ========================================
+  
+  // Propiedades públicas
+  String nombre;
+  int edad;
+  
+  // Propiedad privada (convención: _ prefijo)
+  String _email;
+  
+  // Propiedad estática (compartida por todas las instancias)
+  static int contadorUsuarios = 0;
+  
+  // Propiedad constante
+  static const String version = '1.0.0';
+  
+  // Propiedad final (inmutable después del constructor)
+  final String id;
+  
+  // Propiedad late (inicialización diferida)
+  late String codigoReferido;
+  
+  // ========================================
+  // CONSTRUCTORES
+  // ========================================
+  
+  // Constructor por defecto
+  Usuario(this.nombre, this.edad, this._email, {required this.id}) {
+    contadorUsuarios++;
+  }
+  
+  // Constructor con nombre
+  Usuario.conNombre(this.nombre, {required this.id})
+      : edad = 0,
+        _email = '' {
+    contadorUsuarios++;
+  }
+  
+  // Constructor factory (puede retornar instancia existente)
+  factory Usuario.desdeJson(Map<String, dynamic> json) {
+    return Usuario(
+      json['nombre'] as String,
+      json['edad'] as int,
+      json['email'] as String,
+      id: json['id'] as String,
+    );
+  }
+  
+  // ========================================
+  // GETTERS Y SETTERS
+  // ========================================
+  
+  // Getter: acceder como propiedad
+  String get email => _email;
+  
+  // Getter computado
+  String get nombreCompleto => nombre;
+  
+  // Getter con validación
+  bool get esMayor => edad >= 18;
+  
+  // Setter con validación
+  set email(String valor) {
+    if (valor.contains('@')) {
+      _email = valor;
+    } else {
+      throw ArgumentError('Email inválido');
+    }
+  }
+  
+  // ========================================
+  // MÉTODOS DE INSTANCIA
+  // ========================================
+  
+  void saludar() {
+    print('Hola, soy $nombre');
+  }
+  
+  String presentar() {
+    return 'Usuario(nombre: $nombre, edad: $edad)';
+  }
+  
+  // Método privado
+  void _validar() {
+    assert(nombre.isNotEmpty, 'El nombre no puede estar vacío');
+  }
+  
+  // ========================================
+  // MÉTODOS ESTÁTICOS
+  // ========================================
+  
+  static Usuario crearAnonimo() {
+    return Usuario.conNombre('Anónimo', id: 'anon-${DateTime.now().millisecondsSinceEpoch}');
+  }
+  
+  // ========================================
+  // SOBRECARGA DE OPERADORES
+  // ========================================
+  
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    return other is Usuario && other.id == id;
+  }
+  
+  @override
+  int get hashCode => id.hashCode;
+  
+  @override
+  String toString() => 'Usuario(nombre: $nombre, id: $id)';
+}
+```
+
+**Uso de la clase:**
+
+```dart
+void main() {
+  // Crear instancia
+  var usuario = Usuario('Juan', 25, 'juan@email.com', id: '123');
+  
+  // Acceder a propiedades
+  print(usuario.nombre);      // Juan
+  print(usuario.edad);        // 25
+  print(usuario.email);        // juan@email.com (via getter)
+  print(usuario.esMayor);      // true (getter computado)
+  
+  // Modificar propiedades
+  usuario.nombre = 'Juan Carlos';
+  usuario.email = 'nuevo@email.com';
+  
+  // Llamar métodos
+  usuario.saludar();          // Hola, soy Juan Carlos
+  print(usuario.presentar()); // Usuario(nombre: Juan Carlos, edad: 25)
+  
+  // Propiedades estáticas
+  print(Usuario.contadorUsuarios); // 1
+  print(Usuario.version);          // 1.0.0
+  
+  // Métodos estáticos
+  var anonimo = Usuario.crearAnonimo();
+  
+  // Factory constructor
+  var desdeJson = Usuario.desdeJson({
+    'nombre': 'Ana',
+    'edad': 30,
+    'email': 'ana@email.com',
+    'id': '456',
+  });
+  
+  // Comparación
+  var otro = Usuario('Juan', 25, 'juan@email.com', id: '123');
+  print(usuario == otro);    // true (mismo id)
+  print(usuario.hashCode);    // Hash basado en id
+}
+```
+
+#### Constructores en profundidad
+
+```dart
+class Punto {
+  final double x;
+  final double y;
+  
+  // Constructor por defecto
+  Punto(this.x, this.y);
+  
+  // Constructor con nombre: origen
+  Punto.origen() : x = 0, y = 0;
+  
+  // Constructor con nombre: desde otro punto
+  Punto.desde(Punto otro) : x = otro.x, y = otro.y;
+  
+  // Constructor con nombre: desde JSON
+  Punto.desdeJson(Map<String, dynamic> json)
+      : x = (json['x'] as num).toDouble(),
+        y = (json['y'] as num).toDouble();
+  
+  // Constructor con inicializadores
+  Punto.polar(double radio, double angulo)
+      : x = radio * cos(angulo),
+        y = radio * sin(angulo);
+  
+  // Constructor constante
+  const Punto.constante(this.x, this.y);
+  
+  // Constructor con redirect
+  Punto.cero() : this(0, 0);
+  
+  // Constructor factory (puede retornar instancia existente)
+  static final _cache = <String, Punto>{};
+  
+  factory Punto.cacheado(String id, double x, double y) {
+    return _cache.putIfAbsent(id, () => Punto(x, y));
+  }
+}
+
+// Uso
+void main() {
+  var p1 = Punto(3, 4);              // Constructor por defecto
+  var p2 = Punto.origen();           // (0, 0)
+  var p3 = Punto.desde(p1);          // Copia de p1
+  var p4 = Punto.desdeJson({'x': 5, 'y': 6});
+  var p5 = Punto.polar(1, pi / 4);   // Coordenadas polares
+  
+  // Constante
+  const p6 = Punto.constante(1, 2);
+  
+  // Cacheado
+  var p7 = Punto.cacheado('a', 1, 2);
+  var p8 = Punto.cacheado('a', 1, 2);
+  print(identical(p7, p8)); // true (misma instancia)
+}
+```
+
+#### Inmutabilidad y copyWith
+
+```dart
+class UsuarioInmutable {
+  final String nombre;
+  final String email;
+  final int edad;
+  final List<String> tags;
+  
+  const UsuarioInmutable({
+    required this.nombre,
+    required this.email,
+    required this.edad,
+    required this.tags,
+  });
+  
+  // copyWith para crear copias modificadas
+  UsuarioInmutable copiarCon({
+    String? nombre,
+    String? email,
+    int? edad,
+    List<String>? tags,
+  }) {
+    return UsuarioInmutable(
+      nombre: nombre ?? this.nombre,
+      email: email ?? this.email,
+      edad: edad ?? this.edad,
+      tags: tags ?? List.from(this.tags), // Copia defensiva
+    );
+  }
+  
+  // Serialización
+  Map<String, dynamic> toJson() => {
+    'nombre': nombre,
+    'email': email,
+    'edad': edad,
+    'tags': tags,
+  };
+  
+  factory UsuarioInmutable.fromJson(Map<String, dynamic> json) {
+    return UsuarioInmutable(
+      nombre: json['nombre'] as String,
+      email: json['email'] as String,
+      edad: json['edad'] as int,
+      tags: List<String>.from(json['tags'] as List),
+    );
+  }
+  
+  @override
+  String toString() => 'UsuarioInmutable(nombre: $nombre, email: $email, edad: $edad)';
+}
+
+// Uso
+void main() {
+  var usuario1 = UsuarioInmutable(
+    nombre: 'Juan',
+    email: 'juan@email.com',
+    edad: 25,
+    tags: ['admin', 'user'],
+  );
+  
+  // Crear copia con cambios
+  var usuario2 = usuario1.copiarCon(
+    edad: 26,
+    tags: ['admin', 'user', 'moderator'],
+  );
+  
+  print(usuario1); // edad: 25, tags: ['admin', 'user']
+  print(usuario2); // edad: 26, tags: ['admin', 'user', 'moderator']
+  
+  // usuario1.tags no se modificó (inmutabilidad)
+}
+```
+
+---
+
+### 2.2 Herencia y Polimorfismo
+
+#### Extensión de clases
+
+```dart
+// Clase base
+class Animal {
+  String nombre;
+  int edad;
+  
+  Animal(this.nombre, this.edad);
+  
+  void emitirSonido() {
+    print('$nombre hace un sonido');
+  }
+  
+  void mover() {
+    print('$nombre se mueve');
+  }
+  
+  String presentar() {
+    return 'Animal(nombre: $nombre, edad: $edad)';
+  }
+  
+  @override
+  String toString() => presentar();
+}
+
+// Clase derivada
+class Perro extends Animal {
+  String raza;
+  
+  // Constructor que llama al padre
+  Perro(String nombre, int edad, this.raza) : super(nombre, edad);
+  
+  // Sobrescribir método
+  @override
+  void emitirSonido() {
+    print('$nombre ladra: ¡Guau!');
+  }
+  
+  // Método específico
+  void buscar() {
+    print('$nombre busca algo');
+  }
+  
+  // Sobrescribir con llamada al padre
+  @override
+  String presentar() {
+    return '${super.presentar()}, raza: $raza';
+  }
+}
+
+// Otra clase derivada
+class Gato extends Animal {
+  bool esInterior;
+  
+  Gato(String nombre, int edad, {this.esInterior = true})
+      : super(nombre, edad);
+  
+  @override
+  void emitirSonido() {
+    print('$nombre maúlla: ¡Miau!');
+  }
+  
+  void ronronear() {
+    print('$nombre ronronea');
+  }
+  
+  @override
+  void mover() {
+    if (esInterior) {
+      print('$nombre salta por la casa');
+    } else {
+      super.mover();
+    }
+  }
+}
+
+// Uso
+void main() {
+  var perro = Perro('Rex', 3, 'Pastor Alemán');
+  var gato = Gato('Michi', 2, esInterior: false);
+  
+  // Métodos heredados
+  perro.mover(); // Rex se mueve
+  gato.mover(); // Michi se mueve
+  
+  // Métodos sobrescritos
+  perro.emitirSonido(); // Rex ladra: ¡Guau!
+  gato.emitirSonido(); // Michi maúlla: ¡Miau!
+  
+  // Métodos específicos
+  perro.buscar(); // Rex busca algo
+  gato.ronronear(); // Michi ronronea
+  
+  // Polimorfismo
+  List<Animal> animales = [perro, gato];
+  for (var animal in animales) {
+    animal.emitirSonido(); // Cada uno hace su sonido
+  }
+}
+```
+
+#### Clases abstractas
+
+```dart
+// Clase abstracta: no se puede instanciar
+class Figura {
+  String nombre;
+  
+  Figura(this.nombre);
+  
+  // Método abstracto: debe implementarse en clases hijas
+  double calcularArea();
+  double calcularPerimetro();
+  
+  // Método concreto: compartido por todas las hijas
+  void mostrar() {
+    print('$nombre: Área = ${calcularArea()}, Perímetro = ${calcularPerimetro()}');
+  }
+}
+
+class Circulo extends Figura {
+  double radio;
+  
+  Circulo(this.radio) : super('Círculo');
+  
+  @override
+  double calcularArea() => pi * radio * radio;
+  
+  @override
+  double calcularPerimetro() => 2 * pi * radio;
+}
+
+class Rectangulo extends Figura {
+  double ancho;
+  double alto;
+  
+  Rectangulo(this.ancho, this.alto) : super('Rectángulo');
+  
+  @override
+  double calcularArea() => ancho * alto;
+  
+  @override
+  double calcularPerimetro() => 2 * (ancho + alto);
+}
+
+class Triangulo extends Figura {
+  double lado1, lado2, lado3;
+  
+  Triangulo(this.lado1, this.lado2, this.lado3) : super('Triángulo');
+  
+  @override
+  double calcularArea() {
+    var s = calcularPerimetro() / 2;
+    return sqrt(s * (s - lado1) * (s - lado2) * (s - lado3));
+  }
+  
+  @override
+  double calcularPerimetro() => lado1 + lado2 + lado3;
+}
+
+// Uso
+void main() {
+  // var figura = Figura('Test'); // ❌ Error: clase abstracta
+  
+  var figuras = [
+    Circulo(5),
+    Rectangulo(4, 6),
+    Triangulo(3, 4, 5),
+  ];
+  
+  for (var figura in figuras) {
+    figura.mostrar();
+  }
+  // Círculo: Área = 78.54, Perímetro = 31.42
+  // Rectángulo: Área = 24, Perímetro = 20
+  // Triángulo: Área = 6, Perímetro = 12
+}
+```
+
+#### Interfaces implícitas
+
+En Dart, todas las clases definen implícitamente una interfaz.
+
+```dart
+// Interface implícita
+class Volador {
+  void volar() {
+    print('Volando...');
+  }
+  
+  void aterrizar() {
+    print('Aterrizando...');
+  }
+}
+
+// Implementar interfaz (todos los métodos)
+class Pajaro implements Volador {
+  String nombre;
+  
+  Pajaro(this.nombre);
+  
+  @override
+  void volar() {
+    print('$nombre vuela');
+  }
+  
+  @override
+  void aterrizar() {
+    print('$nombre aterriza en una rama');
+  }
+}
+
+class Avion implements Volador {
+  String modelo;
+  
+  Avion(this.modelo);
+  
+  @override
+  void volar() {
+    print('$modelo vuela con motores');
+  }
+  
+  @override
+  void aterrizar() {
+    print('$modelo aterriza en la pista');
+  }
+}
+
+// Implementar múltiples interfaces
+class Murcielago implements Volador, Animal {
+  @override
+  String nombre = 'Murciélago';
+  
+  @override
+  int edad = 1;
+  
+  @override
+  void volar() {
+    print('Murciélago vuela de noche');
+  }
+  
+  @override
+  void aterrizar() {
+    print('Murciélago se cuelga');
+  }
+  
+  @override
+  void emitirSonido() {
+    print('Murciélago chirría');
+  }
+}
+```
+
+#### Mixins
+
+Los mixins permiten compartir código entre clases sin usar herencia.
+
+```dart
+// Mixin básico
+mixin Nadador {
+  void nadar() {
+    print('$runtimeType nada');
+  }
+}
+
+mixin Caminante {
+  void caminar() {
+    print('$runtimeType camina');
+  }
+}
+
+mixin Volador {
+  void volar() {
+    print('$runtimeType vuela');
+  }
+}
+
+// Usar mixins
+class Pato extends Animal with Nadador, Caminante, Volador {
+  Pato(String nombre, int edad) : super(nombre, edad);
+  
+  @override
+  void emitirSonido() {
+    print('$nombre cuacua');
+  }
+}
+
+// Mixin con restricción (solo ciertas clases pueden usarlo)
+mixin Cantante on Animal {
+  void cantar() {
+    print('$nombre canta');
+  }
+}
+
+class Canario extends Animal with Cantante {
+  Canario(String nombre, int edad) : super(nombre, edad);
+  
+  @override
+  void emitirSonido() {
+    print('$nombre pía');
+  }
+}
+
+// ❌ Error: Canario2 no extiende Animal
+class Canario2 with Cantante {} // Error
+
+// Mixin con estado
+mixin Logger {
+  List<String> _logs = [];
+  
+  void log(String mensaje) {
+    var timestamp = DateTime.now().toIso8601String();
+    _logs.add('[$timestamp] $mensaje');
+  }
+  
+  List<String> get logs => List.unmodifiable(_logs);
+  
+  void imprimirLogs() {
+    for (var log in _logs) {
+      print(log);
+    }
+  }
+}
+
+class Servicio with Logger {
+  void procesar(String dato) {
+    log('Procesando: $dato');
+    // ... procesamiento
+    log('Procesamiento completado');
+  }
+}
+
+// Uso
+void main() {
+  var pato = Pato('Donald', 2);
+  pato.nadar();  // Pato nada
+  pato.caminar(); // Pato camina
+  pato.volar();  // Pato vuela
+  
+  var canario = Canario('Piolín', 1);
+  canario.cantar(); // Piolín canta
+  
+  var servicio = Servicio();
+  servicio.procesar('dato1');
+  servicio.imprimirLogs();
+}
+```
+
+---
+
+### 2.3 Encapsulamiento
+
+Dart usa convenciones para el encapsulamiento, no modificadores de acceso como `public`/`private`.
+
+```dart
+// Encapsulamiento con guion bajo
+
+class CuentaBancaria {
+  // Propiedades privadas (convención: _ prefijo)
+  String _titular;
+  double _saldo;
+  String _numeroCuenta;
+  
+  // Propiedad pública
+  final DateTime fechaCreacion;
+  
+  // Constructor
+  CuentaBancaria(this._titular, this._numeroCuenta, {double saldoInicial = 0})
+      : _saldo = saldoInicial,
+        fechaCreacion = DateTime.now();
+  
+  // Getters públicos
+  String get titular => _titular;
+  double get saldo => _saldo;
+  String get numeroCuenta => '****${_numeroCuenta.substring(4)}';
+  
+  // Setter con validación
+  set titular(String valor) {
+    if (valor.isEmpty) {
+      throw ArgumentError('El titular no puede estar vacío');
+    }
+    _titular = valor;
+  }
+  
+  // Métodos públicos
+  void depositar(double cantidad) {
+    if (cantidad <= 0) {
+      throw ArgumentError('La cantidad debe ser positiva');
+    }
+    _saldo += cantidad;
+    _registrarTransaccion('Depósito', cantidad);
+  }
+  
+  bool retirar(double cantidad) {
+    if (cantidad <= 0) {
+      throw ArgumentError('La cantidad debe ser positiva');
+    }
+    if (cantidad > _saldo) {
+      return false;
+    }
+    _saldo -= cantidad;
+    _registrarTransaccion('Retiro', cantidad);
+    return true;
+  }
+  
+  // Método privado
+  void _registrarTransaccion(String tipo, double cantidad) {
+    // Implementación privada
+    print('[$tipo] Cantidad: $cantidad, Saldo: $_saldo');
+  }
+  
+  // Método estático público
+  static CuentaBancaria crearCuenta(String titular, String numero) {
+    // Validaciones
+    if (titular.isEmpty) throw ArgumentError('Titular requerido');
+    if (numero.length != 10) throw ArgumentError('Número inválido');
+    
+    return CuentaBancaria(titular, numero);
+  }
+}
+
+// Uso
+void main() {
+  var cuenta = CuentaBancaria('Juan Pérez', '1234567890');
+  
+  // Acceso vía getters
+  print(cuenta.titular);       // Juan Pérez
+  print(cuenta.saldo);         // 0.0
+  print(cuenta.numeroCuenta);  // ****7890 (enmascarado)
+  
+  // Modificación vía setters
+  cuenta.titular = 'Juan Carlos Pérez';
+  
+  // Operaciones
+  cuenta.depositar(1000);
+  cuenta.retirar(500);
+  
+  // ❌ No se puede acceder a propiedades privadas
+  // cuenta._titular = 'Otro'; // Error
+  // cuenta._saldo = 1000000;  // Error
+}
+```
+
+---
+
+## 🎯 BLOQUE 3: ASINCRONÍA EN DART
+
+**Duración:** 2 horas  
+**Objetivo**: Dominar la programación asíncrona con Futures, async/await y Streams
+
+---
+
+### 3.1 Futures y async/await
+
+#### ¿Qué es la asincronía?
+
+En Dart, las operaciones que pueden tardar (llamadas HTTP, lectura de archivos, operaciones de base de datos) se manejan de forma **asíncrona**. Esto significa que el programa no se bloquea mientras espera el resultado.
+
+**Síncrono vs Asíncrono:**
+
+```dart
+// Síncrono: bloquea hasta completar
+String leerArchivoSync(String ruta) {
+  // El programa se detiene aquí hasta leer el archivo
+  return File(ruta).readAsStringSync();
+}
+
+// Asíncrono: no bloquea
+Future<String> leerArchivoAsync(String ruta) async {
+  // El programa puede hacer otras cosas mientras lee
+  return File(ruta).readAsString();
+}
+```
+
+#### Future: El tipo asíncrono
+
+Un `Future<T>` representa un valor que estará disponible en el futuro.
+
+```dart
+// Crear un Future
+Future<String> obtenerNombre() {
+  return Future.value('Juan'); // Completado inmediatamente
+}
+
+// Future que tarda
+Future<String> obtenerDeRed() {
+  return Future.delayed(
+    Duration(seconds: 2),
+    () => 'Datos recibidos',
+  );
+}
+
+// Future con error
+Future<int> dividir(int a, int b) {
+  return Future(() {
+    if (b == 0) {
+      throw Exception('División por cero');
+    }
+    return a ~/ b;
+  });
+}
+
+// Usar .then() y .catchError()
+obtenerDeRed()
+  .then((datos) => print('Éxito: $datos'))
+  .catchError((error) => print('Error: $error'));
+```
+
+#### async y await
+
+`async` marca una función como asíncrona. `await` pausa la ejecución hasta que el Future se complete.
+
+```dart
+// Función async
+Future<String> obtenerDatos() async {
+  // await pausa hasta completar
+  var datos = await obtenerDeRed();
+  return 'Procesado: $datos';
+}
+
+// Múltiples awaits secuenciales
+Future<void> procesarTodo() async {
+  print('Iniciando...');
+  
+  var datos1 = await obtenerDeRed();
+  print('Datos 1: $datos1');
+  
+  var datos2 = await obtenerDeRed();
+  print('Datos 2: $datos2');
+  
+  print('Completado');
+}
+
+// Paralelizar con Future.wait
+Future<List<String>> obtenerDatosParalelos() async {
+  var resultados = await Future.wait([
+    obtenerDeRed(),
+    obtenerDeRed(),
+    obtenerDeRed(),
+  ]);
+  return resultados;
+}
+```
+
+#### Manejo de errores
+
+```dart
+// Try-catch en async
+Future<void> manejoErrores() async {
+  try {
+    var resultado = await dividir(10, 0);
+    print(resultado);
+  } on Exception catch (e) {
+    print('Excepción: $e');
+  } catch (e) {
+    print('Error desconocido: $e');
+  } finally {
+    print('Operación completada');
+  }
+}
+
+// Timeout
+Future<String> conTimeout() async {
+  try {
+    var datos = await obtenerDeRed()
+      .timeout(Duration(seconds: 5));
+    return datos;
+  } on TimeoutException {
+    return 'Timeout: operación cancelada';
+  }
+}
+```
+
+---
+
+### 3.2 Streams
+
+Un `Stream<T>` es una secuencia de valores asíncronos a lo largo del tiempo.
+
+```dart
+// Crear un Stream con async*
+Stream<int> contar(int hasta) async* {
+  for (var i = 1; i <= hasta; i++) {
+    await Future.delayed(Duration(seconds: 1));
+    yield i; // Emitir valor
+  }
+}
+
+// Stream periódico
+Stream<DateTime> reloj() {
+  return Stream.periodic(
+    Duration(seconds: 1),
+    (_) => DateTime.now(),
+  );
+}
+
+// Escuchar con listen
+void escucharStream() {
+  var stream = contar(5);
+  
+  stream.listen(
+    (valor) => print('Valor: $valor'),
+    onError: (error) => print('Error: $error'),
+    onDone: () => print('Completado'),
+    cancelOnError: false,
+  );
+}
+
+// Escuchar con await for
+Future<void> esperarStream() async {
+  await for (var valor in contar(5)) {
+    print('Valor: $valor');
+  }
+  print('Stream terminado');
+}
+```
+
+#### StreamController
+
+```dart
+import 'dart:async';
+
+class Emisor {
+  final StreamController<String> _controller = StreamController<String>();
+  
+  Stream<String> get stream => _controller.stream;
+  
+  void emitir(String mensaje) {
+    _controller.add(mensaje);
+  }
+  
+  void emitirError(Exception error) {
+    _controller.addError(error);
+  }
+  
+  void cerrar() {
+    _controller.close();
+  }
+}
+
+// Uso
+void main() {
+  var emisor = Emisor();
+  
+  emisor.stream.listen(
+    (mensaje) => print('Recibido: $mensaje'),
+    onError: (error) => print('Error: $error'),
+    onDone: () => print('Stream cerrado'),
+  );
+  
+  emisor.emitir('Hola');
+  emisor.emitir('Mundo');
+  emisor.cerrar();
+}
+```
+
+#### Transformadores de Streams
+
+```dart
+Stream<int> numeros() async* {
+  for (var i = 0; i < 10; i++) {
+    await Future.delayed(Duration(milliseconds: 100));
+    yield i;
+  }
+}
+
+Future<void> transformaciones() async {
+  // map: transforma cada elemento
+  var cuadrados = numeros().map((n) => n * n);
+  
+  // where: filtra elementos
+  var pares = numeros().where((n) => n % 2 == 0);
+  
+  // take: toma primeros N
+  var primeros = numeros().take(3);
+  
+  // skip: salta primeros N
+  var sinPrimeros = numeros().skip(3);
+  
+  // distinct: elimina duplicados
+  var unicos = numeros().distinct();
+  
+  // expand: expande cada elemento
+  var expandido = numeros().expand((n) => [n, n * 2]);
+  
+  // reduce: combina elementos
+  var suma = await numeros().reduce((a, b) => a + b);
+  
+  // toList: convierte a lista
+  var lista = await numeros().toList();
+}
+```
+
+---
+
+### 3.3 Casos prácticos en Flutter
+
+#### Llamadas HTTP
+
+```dart
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+
+class ApiService {
+  final String baseUrl;
+  
+  ApiService({this.baseUrl = 'https://api.example.com'});
+  
+  Future<Map<String, dynamic>> get(String endpoint) async {
+    try {
+      var response = await http
+        .get(Uri.parse('$baseUrl/$endpoint'))
+        .timeout(Duration(seconds: 10));
+      
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      } else {
+        throw Exception('Error HTTP: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('Error de red: $e');
+    }
+  }
+  
+  Future<Map<String, dynamic>> post(String endpoint, Map data) async {
+    try {
+      var response = await http
+        .post(
+          Uri.parse('$baseUrl/$endpoint'),
+          headers: {'Content-Type': 'application/json'},
+          body: jsonEncode(data),
+        )
+        .timeout(Duration(seconds: 10));
+      
+      if (response.statusCode == 201) {
+        return jsonDecode(response.body);
+      } else {
+        throw Exception('Error HTTP: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('Error de red: $e');
+    }
+  }
+}
+```
+
+#### Widget con carga de datos
+
+```dart
+import 'package:flutter/material.dart';
+
+class UsuarioWidget extends StatefulWidget {
+  final int usuarioId;
+  
+  const UsuarioWidget({required this.usuarioId, super.key});
+  
+  @override
+  State<UsuarioWidget> createState() => _UsuarioWidgetState();
+}
+
+class _UsuarioWidgetState extends State<UsuarioWidget> {
+  Map<String, dynamic>? _usuario;
+  bool _cargando = true;
+  String? _error;
+  
+  @override
+  void initState() {
+    super.initState();
+    _cargarUsuario();
+  }
+  
+  Future<void> _cargarUsuario() async {
+    setState(() {
+      _cargando = true;
+      _error = null;
+    });
+    
+    try {
+      var api = ApiService();
+      var usuario = await api.get('users/${widget.usuarioId}');
+      
+      setState(() {
+        _usuario = usuario;
+        _cargando = false;
+      });
+    } catch (e) {
+      setState(() {
+        _error = e.toString();
+        _cargando = false;
+      });
+    }
+  }
+  
+  @override
+  Widget build(BuildContext context) {
+    if (_cargando) {
+ return Center(child: CircularProgressIndicator());
+    }
+    
+    if (_error != null) {
+      return Center(child: Text('Error: $_error'));
+    }
+    
+    return Column(
+      children: [
+        Text('Usuario: ${_usuario!['name']}'),
+        Text('Email: ${_usuario!['email']}'),
+        ElevatedButton(
+          onPressed: _cargarUsuario,
+          child: Text('Recargar'),
+        ),
+      ],
+    );
+  }
+}
+```
+
+---
+
+## 🎯 BLOQUE 4: NULL SAFETY
+
+**Duración:** 1.5 horas  
+**Objetivo**: Comprender y dominar el sistema de null safety de Dart
+
+---
+
+### 4.1 Tipos Anulables
+
+```dart
+// Tipo no anulable: nunca puede ser null
+String nombre = 'Juan';
+// nombre = null; // ❌ Error
+
+// Tipo anulable: puede ser null
+String? apellido;
+apellido = 'Pérez';
+apellido = null; // ✅ OK
+
+// Operador de navegación segura
+int? longitud = apellido?.length; // null si apellido es null
+
+// Operador de aserción nula
+String seguro = nombre!; // Si nombre es null, lanza excepción
+
+// Operador if-null (??)
+String mostrar = apellido ?? 'Sin apellido';
+
+// Operador de asignación if-null (??=)
+apellido ??= 'Por defecto'; // Si apellido es null, asigna
+```
+
+### 4.2 Patrones de Null Safety
+
+```dart
+// Evitar el operador ! excesivo
+// ❌ Malo
+void proceso(String? texto) {
+  print(texto!.length); // Peligroso
+}
+
+// ✅ Bueno: validación explícita
+void procesoSeguro(String? texto) {
+  if (texto != null) {
+    print(texto.length);
+  } else {
+    print('Texto vacío');
+  }
+}
+
+// ✅ Bueno: usar ?.
+void procesoEncadenado(String? texto) {
+  print(texto?.length ?? 0);
+}
+
+// Modelos inmutables seguros
+class Usuario {
+  final String nombre;
+  final String? apellido;
+  final int edad;
+  
+  Usuario({
+    required this.nombre,
+    this.apellido,
+    required this.edad,
+  });
+  
+  String get nombreCompleto {
+    if (apellido != null) {
+      return '$nombre $apellido';
+    }
+    return nombre;
+  }
+}
+```
+
+---
+
+## 🎯 BLOQUE 5: CARACTERÍSTICAS AVANZADAS
+
+**Duración:** 2 horas  
+**Objetivo**: Dominar extensiones, generics, patterns e isolates
+
+---
+
+### 5.1 Extensiones
+
+```dart
+// Extensión sobre String
+extension StringExtension on String {
+  String capitalizar() {
+    if (isEmpty) return this;
+    return '${this[0].toUpperCase()}${substring(1)}';
+  }
+  
+  String truncar(int longitud) {
+    if (length <= longitud) return this;
+    return '${substring(0, longitud)}...';
+  }
+  
+  bool get esVacio => trim().isEmpty;
+}
+
+// Uso
+var texto = 'hola mundo';
+print(texto.capitalizar()); // 'Hola mundo'
+print(texto.truncar(4)); // 'hola...'
+```
+
+### 5.2 Generics
+
+```dart
+// Clase genérica
+class Contenedor<T> {
+  final T valor;
+  
+  Contenedor(this.valor);
+  
+  T obtener() => valor;
+  
+  R transformar<R>(R Function(T) funcion) => funcion(valor);
+}
+
+// Uso
+var contenedorInt = Contenedor<int>(42);
+print(contenedorInt.obtener()); // 42
+
+var contenedorString = Contenedor<String>('Hola');
+var longitud = contenedorString.transformar((s) => s.length);
+print(longitud); // 4
+```
+
+### 5.3 Patterns (Dart 3+)
+
+```dart
+// Pattern matching con switch
+String clasificar(dynamic valor) {
+  return switch (valor) {
+    int n when n < 0 => 'Negativo',
+    int n when n == 0 => 'Cero',
+    int n => 'Positivo: $n',
+    double d => 'Decimal: $d',
+    String s => 'Texto: $s',
+    _ => 'Tipo desconocido',
+  };
+}
+
+// Records
+var punto = (x: 10, y: 20);
+var (x, y) = (10, 20); // Desestructuración
+
+// Sealed classes
+sealed class Resultado<T> {
+  const Resultado();
+}
+
+class Exito<T> extends Resultado<T> {
+  final T valor;
+  const Exito(this.valor);
+}
+
+class Error<T> extends Resultado<T> {
+  final String mensaje;
+  const Error(this.mensaje);
+}
+```
+
+---
+
+## 🎯 BLOQUE 6: DART ESPECÍFICO PARA FLUTTER
+
+**Duración:** 2 horas  
+**Objetivo**: Aplicar Dart en el contexto de Flutter
+
+---
+
+### 6.1 Widgets y Estado
+
+```dart
+// StatelessWidget
+class MiWidget extends StatelessWidget {
+  final String titulo;
+  final String? subtitulo;
+  
+  const MiWidget({
+    required this.titulo,
+    this.subtitulo,
+    super.key,
+  });
+  
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Text(titulo),
+        if (subtitulo != null) Text(subtitulo!),
+      ],
+    );
+  }
+}
+
+// StatefulWidget
+class ContadorWidget extends StatefulWidget {
+  final int valorInicial;
+  
+  const ContadorWidget({this.valorInicial = 0, super.key});
+  
+  @override
+  State<ContadorWidget> createState() => _ContadorWidgetState();
+}
+
+class _ContadorWidgetState extends State<ContadorWidget> {
+  late int _contador;
+  
+  @override
+  void initState() {
+    super.initState();
+    _contador = widget.valorInicial;
+  }
+  
+  void _incrementar() {
+    setState(() {
+      _contador++;
+    });
+  }
+  
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Text('Contador: $_contador'),
+        ElevatedButton(
+          onPressed: _incrementar,
+          child: Text('Incrementar'),
+        ),
+      ],
+    );
+  }
+}
+```
+
+### 6.2 Gestión de Estado con Provider
+
+```dart
+import 'package:provider/provider.dart';
+
+// Modelo con ChangeNotifier
+class ContadorModel extends ChangeNotifier {
+  int _valor = 0;
+  
+  int get valor => _valor;
+  
+  void incrementar() {
+    _valor++;
+    notifyListeners();
+  }
+  
+  void decrementar() {
+    _valor--;
+    notifyListeners();
+  }
+}
+
+// Provider en main
+void main() {
+  runApp(
+    ChangeNotifierProvider(
+      create: (_) => ContadorModel(),
+      child: MiApp(),
+    ),
+  );
+}
+
+// Consumir en widget
+class ContadorWidget extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Consumer<ContadorModel>(
+          builder: (context, contador, child) {
+            return Text('Valor: ${contador.valor}');
+          },
+        ),
+        ElevatedButton(
+          onPressed: () => context.read<ContadorModel>().incrementar(),
+          child: Text('+1'),
+        ),
+      ],
+    );
+  }
+}
+```
+
+### 6.3 Keys y Rendimiento
+
+```dart
+// Key para identificar widgets en listas
+class ListaWidget extends StatelessWidget {
+  final List<String> items;
+  
+  const ListaWidget({required this.items, super.key});
+  
+  @override
+  Widget build(BuildContext context) {
+    return ListView(
+      children: items.map((item) {
+        return ListTile(
+          key: ValueKey(item), // Key único
+          title: Text(item),
+        );
+      }).toList(),
+    );
+  }
+}
+
+// const para optimizar reconstrucciones
+const Text('Hola'); // Se reutiliza, no se reconstruye
+Text('Hola'); // Se reconstruye cada vez
+```
+
+---
+
+## 📝 EJERCICIOS PRÁCTICOS DETALLADOS
+
+### Ejercicio 1: Calculadora CLI
+
+**Objetivo**: Practicar funciones, control de flujo y manejo de errores.
+
+```dart
+import 'dart:io';
+
+class Calculadora {
+  double sumar(double a, double b) => a + b;
+  double restar(double a, double b) => a - b;
+  double multiplicar(double a, double b) => a * b;
+  
+  double dividir(double a, double b) {
+    if (b == 0) throw ArgumentError('División por cero');
+    return a / b;
+  }
+}
+
+void main() {
+  var calc = Calculadora();
+  
+  while (true) {
+    stdout.write('Operación (+, -, *, /) o "salir": ');
+    var operacion = stdin.readLineSync();
+    
+    if (operacion == 'salir') break;
+    
+    stdout.write('Número 1: ');
+    var n1 = double.tryParse(stdin.readLineSync() ?? '');
+    
+    stdout.write('Número 2: ');
+    var n2 = double.tryParse(stdin.readLineSync() ?? '');
+    
+    if (n1 == null || n2 == null) {
+      print('Números inválidos');
+      continue;
+    }
+    
+    try {
+      var resultado = switch (operacion) {
+        '+' => calc.sumar(n1, n2),
+        '-' => calc.restar(n1, n2),
+        '*' => calc.multiplicar(n1, n2),
+        '/' => calc.dividir(n1, n2),
+        _ => throw ArgumentError('Operación inválida'),
+      };
+      print('Resultado: $resultado');
+    } catch (e) {
+      print('Error: $e');
+    }
+  }
+}
+```
+
+### Ejercicio 2: Sistema de Vehículos con Herencia
+
+**Objetivo**: Practicar POO, herencia, mixins y polimorfismo.
+
+```dart
+abstract class Vehiculo {
+  String marca;
+  String modelo;
+  int year;
+  
+  Vehiculo(this.marca, this.modelo, this.year);
+  
+  void arrancar() => print('$marca $modelo arrancando...');
+  void detener() => print('$marca $modelo deteniéndose...');
+  
+  String descripcion();
+}
+
+mixin Electrico {
+  int bateria = 100;
+  
+  void cargar() {
+    bateria = 100;
+    print('Batería cargada al 100%');
+  }
+  
+  void consumirBateria(int cantidad) {
+    bateria = (bateria - cantidad).clamp(0, 100);
+  }
+}
+
+class Auto extends Vehiculo {
+  int puertas;
+  
+  Auto(String marca, String modelo, int year, this.puertas)
+      : super(marca, modelo, year);
+  
+  @override
+  String descripcion() => 'Auto $marca $modelo ($year) - $puertas puertas';
+}
+
+class Moto extends Vehiculo {
+  bool tieneSidecar;
+  
+  Moto(String marca, String modelo, int year, {this.tieneSidecar = false})
+      : super(marca, modelo, year);
+  
+  @override
+  String descripcion() => 'Moto $marca $modelo ($year)${tieneSidecar ? " con sidecar" : ""}';
+}
+
+class AutoElectrico extends Auto with Electrico {
+  AutoElectrico(String marca, String modelo, int year, int puertas)
+      : super(marca, modelo, year, puertas);
+  
+  @override
+  void arrancar() {
+    if (bateria < 10) {
+      print('Batería baja, cargar primero');
+      return;
+    }
+    consumirBateria(5);
+    super.arrancar();
+  }
+  
+  @override
+  String descripcion() => 'Auto Eléctrico $marca $modelo ($year) - Batería: $bateria%';
+}
+
+void main() {
+  var vehiculos = [<Vehiculo>[
+    Auto('Toyota', 'Corolla', 2024, 4),
+    Moto('Honda', 'CBR', 2023, tieneSidecar: true),
+    AutoElectrico('Tesla', 'Model 3', 2024, 4),
+  ]];
+  
+  for (var v in vehiculos) {
+    print(v.descripcion());
+    v.arrancar();
+    v.detener();
+    print('---');
+  }
+}
+```
+
+### Ejercicio 3: App de Tareas con Provider
+
+**Objetivo**: Integrar todos los conceptos en una app Flutter completa.
+
+```dart
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+// Modelo
+class Tarea {
+  final String id;
+  String titulo;
+  bool completada;
+  DateTime creadoEn;
+  
+  Tarea({
+    required this.id,
+    required this.titulo,
+    this.completada = false,
+    DateTime? creadoEn,
+  }) : creadoEn = creadoEn ?? DateTime.now();
+  
+  Tarea copiarCon({String? titulo, bool? completada}) {
+    return Tarea(
+      id: id,
+      titulo: titulo ?? this.titulo,
+      completada: completada ?? this.completada,
+      creadoEn: creadoEn,
+    );
+  }
+}
+
+// Provider
+class TareasModel extends ChangeNotifier {
+  List<Tarea> _tareas = [];
+  
+  List<Tarea> get tareas => List.unmodifiable(_tareas);
+  List<Tarea> get pendientes => _tareas.where((t) => !t.completada).toList();
+  List<Tarea> get completadas => _tareas.where((t) => t.completada).toList();
+  
+  void agregar(String titulo) {
+    _tareas.add(Tarea(
+      id: DateTime.now().millisecondsSinceEpoch.toString(),
+      titulo: titulo,
+    ));
+    notifyListeners();
+  }
+  
+  void toggle(String id) {
+    var index = _tareas.indexWhere((t) => t.id == id);
+    if (index != -1) {
+      _tareas[index] = _tareas[index].copiarCon(completada: !_tareas[index].completada);
+      notifyListeners();
+    }
+  }
+  
+  void eliminar(String id) {
+    _tareas.removeWhere((t) => t.id == id);
+    notifyListeners();
+  }
+}
+
+// Widget principal
+void main() {
+  runApp(
+    ChangeNotifierProvider(
+      create: (_) => TareasModel(),
+      child: MaterialApp(home: TareasApp()),
+    ),
+  );
+}
+
+class TareasApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('Tareas')),
+      body: ListaTareas(),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => _mostrarDialogo(context),
+        child: Icon(Icons.add),
+      ),
+    );
+  }
+  
+  void _mostrarDialogo(BuildContext context) {
+    var controller = TextEditingController();
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('Nueva tarea'),
+        content: TextField(controller: controller),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text('Cancelar'),
+          ),
+          TextButton(
+            onPressed: () {
+              if (controller.text.isNotEmpty) {
+                context.read<TareasModel>().agregar(controller.text);
+                Navigator.pop(context);
+              }
+            },
+            child: Text('Guardar'),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class ListaTareas extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<TareasModel>(
+      builder: (context, model, child) {
+        if (model.tareas.isEmpty) {
+          return Center(child: Text('No hay tareas'));
+        }
+        
+        return ListView.builder(
+          itemCount: model.tareas.length,
+          itemBuilder: (context, index) {
+            var tarea = model.tareas[index];
+            return ListTile(
+              key: ValueKey(tarea.id),
+              title: Text(
+                tarea.titulo,
+                style: TextStyle(
+                  decoration: tarea.completada
+                    ? TextDecoration.lineThrough
+                    : TextDecoration.none,
+                ),
+              ),
+              leading: Checkbox(
+                value: tarea.completada,
+                onChanged: (_) => model.toggle(tarea.id),
+              ),
+              trailing: IconButton(
+                icon: Icon(Icons.delete),
+                onPressed: () => model.eliminar(tarea.id),
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+}
+```
+
+---
+
+## 📚 RECURSOS Y REFERENCIAS
+
+### Documentación Oficial
+- **Dart.dev**: https://dart.dev/guides
+- **Flutter.dev**: https://flutter.dev/docs
+- **DartPad**: https://dartpad.dev (editor online)
+
+### Paquetes Recomendados
+- **http**: Llamadas HTTP
+- **provider**: Gestión de estado
+- **shared_preferences**: Persistencia local
+- **dio**: Cliente HTTP avanzado
+- **freezed**: Modelos inmutables
+- **riverpod**: Estado reactivo
+
+### Libros y Tutoriales
+- "Dart Apprentice" de raywenderlich
+- "Flutter in Action" de Manning
+- "Programming Flutter" de O'Reilly
+
+---
+
+## 📊 RESUMEN DE TIEMPO
+
+| Bloque | Duración | Contenido Principal |
+|--------|----------|---------------------|
+| 1 | 3h | Variables, tipos, funciones, control de flujo |
+| 2 | 3h | Clases, herencia, mixins, encapsulamiento |
+| 3 | 2h | Futures, async/await, Streams |
+| 4 | 1.5h | Null safety, aserciones, patrones |
+| 5 | 2h | Extensiones, generics, patterns, isolates |
+| 6 | 2h | Widgets, estado, keys, rendimiento |
+
+**Total:** 13.5 horas
+
+---
+
+*Temario completo generado para sesión de Dart enfocada en Flutter*  
+*© Bot-Bunnny - OpenClaw Assistant*
+
