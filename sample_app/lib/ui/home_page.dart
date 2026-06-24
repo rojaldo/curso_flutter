@@ -3,6 +3,16 @@ import 'package:sample_app/ui/core/example_item.dart';
 
 /// Ejemplos organizados por categoría.
 final Map<String, List<ExampleItem>> exampleCategories = {
+  'Ejercicios': [
+    ExampleItem(
+      id: 72,
+      title: 'Calculadora',
+      subtitle: 'Suma, resta, multiplicación y división',
+      icon: Icons.calculate,
+      route: '/exercise_calculator',
+      category: 'Ejercicios',
+    ),
+  ],
   'Conceptos de Widget': [
     ExampleItem(
       id: 100,
@@ -143,6 +153,40 @@ final Map<String, List<ExampleItem>> exampleCategories = {
       icon: Icons.menu,
       route: '/drawer',
       category: 'Navegación',
+    ),
+  ],
+  'Listas': [
+    ExampleItem(
+      id: 40,
+      title: 'Lista genérica',
+      subtitle: 'ListView.builder, ListTile, SnackBar al tocar',
+      icon: Icons.list,
+      route: '/generic_list',
+      category: 'Listas',
+    ),
+    ExampleItem(
+      id: 41,
+      title: 'Lista con items custom',
+      subtitle: 'Card, CircleAvatar, Chip, filas personalizadas',
+      icon: Icons.contact_page,
+      route: '/custom_list',
+      category: 'Listas',
+    ),
+    ExampleItem(
+      id: 42,
+      title: 'Lista desplegable',
+      subtitle: 'ExpansionTile, secciones que se abren y cierran',
+      icon: Icons.expand,
+      route: '/expandable_list',
+      category: 'Listas',
+    ),
+    ExampleItem(
+      id: 43,
+      title: 'Lista tipo checklist',
+      subtitle: 'CheckboxListTile, progreso, tachar completados',
+      icon: Icons.checklist,
+      route: '/checklist_list',
+      category: 'Listas',
     ),
   ],
   'Entrada del usuario': [

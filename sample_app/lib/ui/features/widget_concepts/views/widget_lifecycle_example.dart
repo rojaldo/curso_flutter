@@ -13,18 +13,24 @@ class WidgetLifecycleExample extends StatefulWidget {
 }
 
 class _WidgetLifecycleExampleState extends State<WidgetLifecycleExample> {
-  final List<String> _logs = [];
+  final ValueNotifier<List<String>> _logs = ValueNotifier([]);
   bool _showChild = true;
   int _parentValue = 0;
 
   void _log(String message) {
     final now = DateTime.now();
-    setState(() {
-      _logs.insert(0, '${now.hour.toString().padLeft(2, '0')}:'
-          '${now.minute.toString().padLeft(2, '0')}:'
-          '${now.second.toString().padLeft(2, '0')} — $message');
-      if (_logs.length > 50) _logs.removeLast();
-    });
+    final entry = '${now.hour.toString().padLeft(2, '0')}:'
+        '${now.minute.toString().padLeft(2, '0')}:'
+        '${now.second.toString().padLeft(2, '0')} — $message';
+    final updated = [entry, ..._logs.value];
+    if (updated.length > 50) updated.removeLast();
+    _logs.value = updated;
+  }
+
+  @override
+  void dispose() {
+    _logs.dispose();
+    super.dispose();
   }
 
   @override
@@ -89,7 +95,7 @@ class _MiWidgetState extends State<MiWidget> {
                 label: Text(_showChild ? 'Desmontar' : 'Montar'),
               ),
               OutlinedButton.icon(
-                onPressed: () => setState(() => _logs.clear()),
+                onPressed: () => _logs.value = [],
                 icon: const Icon(Icons.delete_sweep),
                 label: const Text('Limpiar logs'),
               ),
@@ -127,21 +133,26 @@ class _MiWidgetState extends State<MiWidget> {
               color: Colors.black87,
               borderRadius: BorderRadius.circular(8),
             ),
-            child: ListView.builder(
-              padding: const EdgeInsets.all(8),
-              itemCount: _logs.length,
-              itemBuilder: (context, index) {
-                final log = _logs[index];
-                final color = log.contains('initState')
-                    ? Colors.greenAccent
-                    : log.contains('dispose')
-                        ? Colors.redAccent
-                        : log.contains('didUpdate')
-                            ? Colors.orangeAccent
-                            : log.contains('build')
-                                ? Colors.white60
-                                : Colors.white;
-                return Text(log, style: TextStyle(fontFamily: 'monospace', fontSize: 12, color: color));
+            child: ValueListenableBuilder<List<String>>(
+              valueListenable: _logs,
+              builder: (context, logs, _) {
+                return ListView.builder(
+                  padding: const EdgeInsets.all(8),
+                  itemCount: logs.length,
+                  itemBuilder: (context, index) {
+                    final log = logs[index];
+                    final color = log.contains('initState')
+                        ? Colors.greenAccent
+                        : log.contains('dispose')
+                            ? Colors.redAccent
+                            : log.contains('didUpdate')
+                                ? Colors.orangeAccent
+                                : log.contains('build')
+                                    ? Colors.white60
+                                    : Colors.white;
+                    return Text(log, style: TextStyle(fontFamily: 'monospace', fontSize: 12, color: color));
+                  },
+                );
               },
             ),
           ),

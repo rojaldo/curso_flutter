@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sample_app/ui/features/exercises/views/calculator.dart';
 import 'package:sample_app/ui/home_page.dart';
 import 'package:sample_app/ui/features/widget_concepts/views/stateless_vs_stateful_example.dart';
 import 'package:sample_app/ui/features/widget_concepts/views/widget_lifecycle_example.dart';
@@ -39,6 +40,10 @@ import 'package:sample_app/ui/features/material/views/chips_example.dart';
 import 'package:sample_app/ui/features/interaction/views/drag_drop_example.dart';
 import 'package:sample_app/ui/features/interaction/views/dismissible_example.dart';
 import 'package:sample_app/ui/features/interaction/views/reorderable_example.dart';
+import 'package:sample_app/ui/features/lists/views/generic_list_example.dart';
+import 'package:sample_app/ui/features/lists/views/custom_list_example.dart';
+import 'package:sample_app/ui/features/lists/views/expandable_list_example.dart';
+import 'package:sample_app/ui/features/lists/views/checklist_list_example.dart';
 import 'package:sample_app/ui/features/api_rest/views/api_get_list_example.dart';
 import 'package:sample_app/ui/features/api_rest/views/api_get_detail_example.dart';
 import 'package:sample_app/ui/features/api_rest/views/api_post_example.dart';
@@ -106,6 +111,10 @@ class MyApp extends StatelessWidget {
         '/drag_drop': (_) => const DragDropExample(),
         '/dismissible': (_) => const DismissibleExample(),
         '/reorderable': (_) => const ReorderableExample(),
+        '/generic_list': (_) => const GenericListExample(),
+        '/custom_list': (_) => const CustomListExample(),
+        '/expandable_list': (_) => const ExpandableListExample(),
+        '/checklist_list': (_) => const ChecklistListExample(),
         '/api_get_list': (_) => const ApiGetListExample(),
         '/api_get_detail': (_) => const ApiGetDetailExample(),
         '/api_post': (_) => const ApiPostExample(),
@@ -114,7 +123,7 @@ class MyApp extends StatelessWidget {
         '/api_pagination': (_) => const ApiPaginationExample(),
         '/api_search': (_) => const ApiSearchExample(),
         '/api_errors': (_) => const ApiErrorsExample(),
-        '/api_images': (_) => const ApiImagesExample(),
+        '/exercise_calculator': (_) => const CalculatorExample(),
       },
     );
   }
