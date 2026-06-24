@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sample_app/ui/features/exercises/views/apod_page.dart';
 import 'package:sample_app/ui/features/exercises/views/calculator.dart';
 import 'package:sample_app/ui/home_page.dart';
 import 'package:sample_app/ui/features/widget_concepts/views/stateless_vs_stateful_example.dart';
@@ -124,6 +125,7 @@ class MyApp extends StatelessWidget {
         '/api_search': (_) => const ApiSearchExample(),
         '/api_errors': (_) => const ApiErrorsExample(),
         '/exercise_calculator': (_) => const CalculatorExample(),
+        '/exercise_apod': (_) => const ApodPage(),
       },
     );
   }

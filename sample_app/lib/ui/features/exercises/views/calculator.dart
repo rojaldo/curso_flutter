@@ -1,5 +1,6 @@
 // this is a flutter page that demonstrates a simple calculator with basic operations: addition, subtraction, multiplication, and division. It uses a stateful widget to manage the input and output of the calculator. 
 import 'package:flutter/material.dart';
+import 'package:sample_app/model/calculator_model.dart';
 
 class CalculatorExample extends StatefulWidget {
   const CalculatorExample({super.key});
@@ -14,6 +15,12 @@ class _CalculatorExampleState extends State<CalculatorExample> {
   // create state for variable displayText that will hold the text to be displayed in the calculator display
   String displayText = '';
 
+  Calculator calculator = Calculator();
+
+  String processInput(String input) {
+    // Implement the logic to process the input and update the display text
+    return calculator.processInput(input);
+  }
 
 
   @override
@@ -76,11 +83,7 @@ class _CalculatorExampleState extends State<CalculatorExample> {
                     borderRadius: BorderRadius.circular(8),
                     onTap: () {
                       setState(() {
-                        if (label == 'AC') {
-                          displayText = '';
-                        } else {
-                          displayText += label;
-                        }
+                          displayText = processInput(label);
                       });
                     },
                     child: Center(

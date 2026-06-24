@@ -12,6 +12,15 @@ final Map<String, List<ExampleItem>> exampleCategories = {
       route: '/exercise_calculator',
       category: 'Ejercicios',
     ),
+    // apod 
+    ExampleItem(
+      id: 73,
+      title: 'Astronomy Picture of the Day',
+      subtitle: 'Fetch de API REST, parsing, imagen y texto',
+      icon: Icons.image,
+      route: '/exercise_apod',
+      category: 'Ejercicios',
+    ),
   ],
   'Conceptos de Widget': [
     ExampleItem(
