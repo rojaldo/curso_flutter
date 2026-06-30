@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sample_app/ui/features/exercises/views/apod_page.dart';
 import 'package:sample_app/ui/features/exercises/views/calculator.dart';
+import 'package:sample_app/ui/features/exercises/views/user_form_page.dart';
 import 'package:sample_app/ui/features/exercises/view_models/calculator_cubit.dart';
 import 'package:sample_app/ui/features/exercises/views/location_page.dart';
 import 'package:sample_app/ui/features/exercises/views/star_wars_page.dart';
@@ -155,6 +156,7 @@ class MyApp extends StatelessWidget {
               create: (_) => CalculatorCubit(prefs: _prefs),
               child: const CalculatorExample(),
             ),
+        '/exercise_user_form': (_) => UserFormPage(prefs: _prefs),
         '/exercise_apod': (_) => const ApodPage(),
         '/exercise_star_wars': (_) => const StarWarsPage(),
         '/exercise_location': (_) => const LocationPage(),

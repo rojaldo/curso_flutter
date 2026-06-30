@@ -52,6 +52,7 @@ dependencies:
   tflite_flutter: ^0.11.0
   # Decodificar bytes del frame de la cámara a Image para preprocesar.
   image: ^4.3.0
+  equatable: ^2.0.8
 
 dev_dependencies:
   flutter_test:

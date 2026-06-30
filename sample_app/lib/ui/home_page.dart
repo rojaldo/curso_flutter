@@ -37,6 +37,14 @@ final Map<String, List<ExampleItem>> exampleCategories = {
       route: '/exercise_location',
       category: 'Ejercicios',
     ),
+    ExampleItem(
+      id: 96,
+      title: 'Formulario de usuario',
+      subtitle: 'TextFormField, validación, diálogo de resultado',
+      icon: Icons.person_add,
+      route: '/exercise_user_form',
+      category: 'Ejercicios',
+    ),
   ],
   'Conceptos de Widget': [
     ExampleItem(
