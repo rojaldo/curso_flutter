@@ -1,0 +1,4017 @@
+:source-highlighter: pygments
+:pygments-style: friendly
+:pygments-css: class
+
+== Módulo Completo: Estado y Gestión de Datos en Flutter
+
+=== Índice
+
+[arabic]
+. link:#introducción-al-estado[Introducción al Estado]
+. link:++#setstate---fundamentos++[setState - Fundamentos]
+. link:++#inheritedwidget---estado-heredado++[InheritedWidget - Estado
+Heredado]
+. link:++#provider---gestión-declarativa++[Provider - Gestión
+Declarativa]
+. link:++#riverpod---estado-reactivo-moderno++[Riverpod - Estado
+Reactivo Moderno]
+. link:++#bloc---patrón-de-flujo++[BLoC/Cubit - Patrón de Flujo]
+. link:++#getx---solución-todo-en-uno++[GetX - Solución Todo en Uno]
+. link:#comparativa-de-soluciones[Comparativa de Soluciones]
+. link:#persistencia-de-estado[Persistencia de Estado]
+. link:#patrones-avanzados[Patrones Avanzados]
+. link:#ejemplos-prácticos-completos[Ejemplos Prácticos Completos]
+. link:#mejores-prácticas[Mejores Prácticas]
+. link:#errores-comunes-y-soluciones[Errores Comunes y Soluciones]
+
+'''''
+
+=== Introducción al Estado
+
+==== ¿Qué es el Estado?
+
+El *estado* en Flutter es la información que un widget necesita para
+renderizarse. Cuando el estado cambia, el widget se reconstruye para
+reflejar esos cambios.
+
+....
+┌─────────────────────────────────────────┐
+│              Tipos de Estado            │
+├─────────────────────────────────────────┤
+│                                         │
+│  Estado Local (Ephemeral)               │
+│  ├── StatefulWidget + setState          │
+│  ├── Solo afecta al widget actual       │
+│  └── Ejemplo: contador, selección       │
+│                                         │
+│  Estado de Aplicación (App State)      │
+│  ├── Compartido entre widgets           │
+│  ├── Requiere gestión externa          │
+│  └── Ejemplo: auth, carrito, usuario    │
+│                                         │
+│  Estado de Widget                       │
+│  ├── Inmutable en StatelessWidget       │
+│  ├── Mutable en StatefulWidget          │
+│  └── Se pasa vía constructor            │
+│                                         │
+└─────────────────────────────────────────┘
+....
+
+==== ¿Por Qué es Importante la Gestión de Estado?
+
+[source,dart]
+----
+// ❌ Problema: Estado disperso y difícil de mantener
+class BadExample extends StatefulWidget {
+  @override
+  State<BadExample> createState() => _BadExampleState();
+}
+
+class _BadExampleState extends State<BadExample> {
+  int counter = 0;
+  String userName = '';
+  bool isLoggedIn = false;
+  List<String> cartItems = [];
+  double cartTotal = 0;
+  String searchQuery = '';
+  int selectedTab = 0;
+  // ... más variables de estado
+  // Problema: difícil de mantener, propagar y sincronizar
+}
+
+// ✅ Solución: Estado centralizado y gestionado
+class GoodExample extends StatelessWidget {
+  final AppState appState; // Estado centralizado
+  final CartState cartState; // Estado específico
+  final UserState userState; // Estado de usuario
+  
+  // Cada estado tiene responsabilidad única
+  // Fácil de testear, mantener y escalar
+}
+----
+
+==== Flujo de Datos en Flutter
+
+....
+┌──────────────────────────────────────────────────────────┐
+│                   Flujo de Datos                         │
+├──────────────────────────────────────────────────────────┤
+│                                                          │
+│  1. Estado Local (setState)                             │
+│     Widget → setState → Rebuild                         │
+│                                                          │
+│  2. Estado Heredado (InheritedWidget)                   │
+│     Ancestor → InheritedWidget → Descendants            │
+│                                                          │
+│  3. Estado Reactivo (Provider/Riverpod)                 │
+│     Provider → Consumer → Rebuild                       │
+│                                                          │
+│  4. Patrón de Flujo (BLoC)                               │
+│     Event → BLoC → State → Widget                       │
+│                                                          │
+│  5. Estado Observable (GetX)                            │
+│     Rx Variable → Widget → Auto-rebuild                 │
+│                                                          │
+└──────────────────────────────────────────────────────────┘
+....
+
+'''''
+
+=== setState - Fundamentos
+
+==== Concepto Básico
+
+`+setState+` es el método más simple para gestionar estado local en
+Flutter. Marca el widget como "`sucio`" y programa una reconstrucción.
+
+[source,dart]
+----
+class CounterExample extends StatefulWidget {
+  const CounterExample({super.key});
+  
+  @override
+  State<CounterExample> createState() => _CounterExampleState();
+}
+
+class _CounterExampleState extends State<CounterExample> {
+  int _counter = 0;
+  
+  void _increment() {
+    setState(() {
+      _counter++;
+    });
+  }
+  
+  void _decrement() {
+    setState(() {
+      _counter--;
+    });
+  }
+  
+  void _reset() {
+    setState(() {
+      _counter = 0;
+    });
+  }
+  
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Contador con setState')),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Text('Valor actual:'),
+            Text(
+              '$_counter',
+              style: Theme.of(context).textTheme.headlineLarge,
+            ),
+          ],
+        ),
+      ),
+      floatingActionButton: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          FloatingActionButton(
+            heroTag: 'increment',
+            onPressed: _increment,
+            child: const Icon(Icons.add),
+          ),
+          const SizedBox(height: 8),
+          FloatingActionButton(
+            heroTag: 'decrement',
+            onPressed: _decrement,
+            child: const Icon(Icons.remove),
+          ),
+          const SizedBox(height: 8),
+          FloatingActionButton(
+            heroTag: 'reset',
+            onPressed: _reset,
+            child: const Icon(Icons.refresh),
+          ),
+        ],
+      ),
+    );
+  }
+}
+----
+
+==== Reglas de setState
+
+[source,dart]
+----
+class SetStateRules extends StatefulWidget {
+  const SetStateRules({super.key});
+  
+  @override
+  State<SetStateRules> createState() => _SetStateRulesState();
+}
+
+class _SetStateRulesState extends State<SetStateRules> {
+  int _counter = 0;
+  String _status = 'Inicial';
+  List<String> _items = [];
+  
+  // ✅ Correcto: Actualizar estado dentro de setState
+  void _incrementCorrect() {
+    setState(() {
+      _counter++;
+      _status = 'Incrementado a $_counter';
+    });
+  }
+  
+  // ❌ Incorrecto: setState con valor hardcodeado
+  void _wrongUsage() {
+    // Esto actualiza pero puede causar confusión
+    setState(() {
+      _counter = _counter + 1; // No usar el valor anterior directamente
+    });
+  }
+  
+  // ✅ Correcto: setState asíncrono con callbacks
+  Future<void> _fetchData() async {
+    setState(() {
+      _status = 'Cargando...';
+    });
+    
+    try {
+      final data = await _fetchItemsFromApi();
+      if (mounted) { // Verificar que el widget sigue montado
+        setState(() {
+          _items = data;
+          _status = 'Cargado';
+        });
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          _status = 'Error: $e';
+        });
+      }
+    }
+  }
+  
+  // ✅ Correcto: Lógica de cálculo fuera de setState
+  void _calculateTotal() {
+    final total = _items.length * 10; // Cálculo fuera
+    setState(() {
+      _status = 'Total: $total';
+    });
+  }
+  
+  // ❌ Incorrecto: setState en initState
+  @override
+  void initState() {
+    super.initState();
+    // setState(() {}); // ❌ Error: No llamar setState en initState
+    // Usar:
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      // Aquí sí se puede usar setState
+    });
+  }
+  
+  // ❌ Incorrecto: setState en build
+  @override
+  Widget build(BuildContext context) {
+    // setState(() {}); // ❌ Error: Causa loop infinito
+    return Container();
+  }
+  
+  // ✅ Correcto: Verificar mounted antes de setState
+  void _updateFromCallback() {
+    if (mounted) {
+      setState(() {
+        _status = 'Actualizado';
+      });
+    }
+  }
+  
+  Future<List<String>> _fetchItemsFromApi() async {
+    await Future.delayed(const Duration(seconds: 1));
+    return ['Item 1', 'Item 2', 'Item 3'];
+  }
+  
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Reglas de setState')),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text('Contador: $_counter'),
+            Text('Estado: $_status'),
+            Text('Items: ${_items.length}'),
+          ],
+        ),
+      ),
+    );
+  }
+}
+----
+
+==== Estado Local Complejo
+
+[source,dart]
+----
+class FormExample extends StatefulWidget {
+  const FormExample({super.key});
+  
+  @override
+  State<FormExample> createState() => _FormExampleState();
+}
+
+class _FormExampleState extends State<FormExample> {
+  final _formKey = GlobalKey<FormState>();
+  
+  // Estado del formulario
+  String _name = '';
+  String _email = '';
+  String _phone = '';
+  String _selectedCountry = 'España';
+  bool _acceptTerms = false;
+  bool _subscribeNewsletter = false;
+  List<String> _selectedInterests = [];
+  
+  // Estado de UI
+  bool _isSubmitting = false;
+  String? _errorMessage;
+  bool _showSuccess = false;
+  
+  final List<String> _countries = ['España', 'México', 'Argentina', 'Colombia', 'Chile'];
+  final List<String> _interests = ['Tecnología', 'Deportes', 'Música', 'Viajes', 'Gastronomía'];
+  
+  void _toggleInterest(String interest) {
+    setState(() {
+      if (_selectedInterests.contains(interest)) {
+        _selectedInterests.remove(interest);
+      } else {
+        _selectedInterests.add(interest);
+      }
+    });
+  }
+  
+  Future<void> _submitForm() async {
+    if (!_formKey.currentState!.validate()) return;
+    
+    setState(() {
+      _isSubmitting = true;
+      _errorMessage = null;
+    });
+    
+    try {
+      // Simular envío
+      await Future.delayed(const Duration(seconds: 2));
+      
+      // Procesar datos
+      _formKey.currentState!.save();
+      
+      setState(() {
+        _isSubmitting = false;
+        _showSuccess = true;
+      });
+      
+      // Resetear después de mostrar éxito
+      await Future.delayed(const Duration(seconds: 2));
+      
+      if (mounted) {
+        setState(() {
+          _showSuccess = false;
+          _name = '';
+          _email = '';
+          _phone = '';
+          _acceptTerms = false;
+          _subscribeNewsletter = false;
+          _selectedInterests = [];
+        });
+        _formKey.currentState!.reset();
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          _isSubmitting = false;
+          _errorMessage = 'Error al enviar: $e';
+        });
+      }
+    }
+  }
+  
+  @override
+  Widget build(BuildContext context) {
+    if (_showSuccess) {
+      return Scaffold(
+        appBar: AppBar(title: const Text('Formulario')),
+        body: const Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(Icons.check_circle, color: Colors.green, size: 64),
+              SizedBox(height: 16),
+              Text('¡Enviado correctamente!', style: TextStyle(fontSize: 20)),
+            ],
+          ),
+        ),
+      );
+    }
+    
+    return Scaffold(
+      appBar: AppBar(title: const Text('Formulario Complejo')),
+      body: Form(
+        key: _formKey,
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              // Campo nombre
+              TextFormField(
+                decoration: const InputDecoration(
+                  labelText: 'Nombre',
+                  border: OutlineInputBorder(),
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Por favor introduce tu nombre';
+                  }
+                  if (value.length < 3) {
+                    return 'El nombre debe tener al menos 3 caracteres';
+                  }
+                  return null;
+                },
+                onSaved: (value) => _name = value ?? '',
+              ),
+              const SizedBox(height: 16),
+              
+              // Campo email
+              TextFormField(
+                decoration: const InputDecoration(
+                  labelText: 'Email',
+                  border: OutlineInputBorder(),
+                ),
+                keyboardType: TextInputType.emailAddress,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Por favor introduce tu email';
+                  }
+                  if (!value.contains('@')) {
+                    return 'Por favor introduce un email válido';
+                  }
+                  return null;
+                },
+                onSaved: (value) => _email = value ?? '',
+              ),
+              const SizedBox(height: 16),
+              
+              // Campo teléfono
+              TextFormField(
+                decoration: const InputDecoration(
+                  labelText: 'Teléfono',
+                  border: OutlineInputBorder(),
+                ),
+                keyboardType: TextInputType.phone,
+                onSaved: (value) => _phone = value ?? '',
+              ),
+              const SizedBox(height: 16),
+              
+              // Dropdown país
+              DropdownButtonFormField<String>(
+                value: _selectedCountry,
+                decoration: const InputDecoration(
+                  labelText: 'País',
+                  border: OutlineInputBorder(),
+                ),
+                items: _countries.map((country) {
+                  return DropdownMenuItem(
+                    value: country,
+                    child: Text(country),
+                  );
+                }).toList(),
+                onChanged: (value) {
+                  setState(() {
+                    _selectedCountry = value ?? 'España';
+                  });
+                },
+              ),
+              const SizedBox(height: 16),
+              
+              // Intereses
+              const Text('Intereses:', style: TextStyle(fontWeight: FontWeight.bold)),
+              Wrap(
+                spacing: 8,
+                children: _interests.map((interest) {
+                  final isSelected = _selectedInterests.contains(interest);
+                  return FilterChip(
+                    label: Text(interest),
+                    selected: isSelected,
+                    onSelected: (_) => _toggleInterest(interest),
+                  );
+                }).toList(),
+              ),
+              const SizedBox(height: 16),
+              
+              // Checkboxes
+              CheckboxListTile(
+                title: const Text('Acepto los términos y condiciones'),
+                value: _acceptTerms,
+                onChanged: (value) {
+                  setState(() {
+                    _acceptTerms = value ?? false;
+                  });
+                },
+              ),
+              CheckboxListTile(
+                title: const Text('Suscribirse al newsletter'),
+                value: _subscribeNewsletter,
+                onChanged: (value) {
+                  setState(() {
+                    _subscribeNewsletter = value ?? false;
+                  });
+                },
+              ),
+              const SizedBox(height: 16),
+              
+              // Error message
+              if (_errorMessage != null)
+                Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: Colors.red.shade100,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Text(
+                    _errorMessage!,
+                    style: const TextStyle(color: Colors.red),
+                  ),
+                ),
+              const SizedBox(height: 16),
+              
+              // Botón de envío
+              ElevatedButton(
+                onPressed: _isSubmitting || !_acceptTerms ? null : _submitForm,
+                child: _isSubmitting
+                    ? const SizedBox(
+                        width: 20,
+                        height: 20,
+                        child: CircularProgressIndicator(strokeWidth: 2),
+                      )
+                    : const Text('Enviar'),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+----
+
+==== Limitaciones de setState
+
+[source,dart]
+----
+class SetStateLimitations extends StatelessWidget {
+  const SetStateLimitations({super.key});
+  
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Limitaciones de setState')),
+      body: const Padding(
+        padding: EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Limitaciones de setState:',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            SizedBox(height: 16),
+            Text('❌ Solo funciona dentro del widget actual'),
+            Text('❌ Requiere propagar callbacks a widgets hijos'),
+            Text('❌ Difícil de compartir entre pantallas'),
+            Text('❌ Sin persistencia automática'),
+            Text('❌ No maneja estado asíncrono eficientemente'),
+            Text('❌ Código repetitivo para actualizaciones'),
+            SizedBox(height: 24),
+            Text(
+              'Cuando usar setState:',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            SizedBox(height: 16),
+            Text('✅ Estado local simple (contador, toggle)'),
+            Text('✅ Formularios pequeños'),
+            Text('✅ Animaciones locales'),
+            Text('✅ UI state (loading, error)'),
+            SizedBox(height: 24),
+            Text(
+              'Cuando usar otras soluciones:',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            SizedBox(height: 16),
+            Text('🔹 Provider/Riverpod: Estado compartido'),
+            Text('🔹 BLoC: Lógica compleja y flujos'),
+            Text('🔹 GetX: Estado reactivo + navegación + DI'),
+          ],
+        ),
+      ),
+    );
+  }
+}
+----
+
+'''''
+
+=== InheritedWidget - Estado Heredado
+
+==== Concepto
+
+`+InheritedWidget+` permite propagar datos hacia abajo en el árbol de
+widgets sin pasarlos explícitamente por cada constructor.
+
+[source,dart]
+----
+// Widget heredado personalizado
+class CounterInherited extends InheritedWidget {
+  final int counter;
+  final VoidCallback increment;
+  final VoidCallback decrement;
+  
+  const CounterInherited({
+    super.key,
+    required this.counter,
+    required this.increment,
+    required this.decrement,
+    required super.child,
+  });
+  
+  // Método estático para acceder desde descendientes
+  static CounterInherited of(BuildContext context) {
+    final CounterInherited? result = 
+        context.dependOnInheritedWidgetOfExactType<CounterInherited>();
+    assert(result != null, 'No CounterInherited found in context');
+    return result!;
+  }
+  
+  @override
+  bool updateShouldNotify(CounterInherited oldWidget) {
+    return counter != oldWidget.counter;
+  }
+}
+
+// Widget que proporciona el estado
+class CounterProvider extends StatefulWidget {
+  final Widget child;
+  
+  const CounterProvider({super.key, required this.child});
+  
+  @override
+  State<CounterProvider> createState() => _CounterProviderState();
+}
+
+class _CounterProviderState extends State<CounterProvider> {
+  int _counter = 0;
+  
+  void _increment() {
+    setState(() {
+      _counter++;
+    });
+  }
+  
+  void _decrement() {
+    setState(() {
+      _counter--;
+    });
+  }
+  
+  @override
+  Widget build(BuildContext context) {
+    return CounterInherited(
+      counter: _counter,
+      increment: _increment,
+      decrement: _decrement,
+      child: widget.child,
+    );
+  }
+}
+
+// Widget que consume el estado
+class CounterConsumer extends StatelessWidget {
+  const CounterConsumer({super.key});
+  
+  @override
+  Widget build(BuildContext context) {
+    final inherited = CounterInherited.of(context);
+    
+    return Scaffold(
+      appBar: AppBar(title: const Text('InheritedWidget')),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Text('Contador desde InheritedWidget:'),
+            Text(
+              '${inherited.counter}',
+              style: Theme.of(context).textTheme.headlineLarge,
+            ),
+          ],
+        ),
+      ),
+      floatingActionButton: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          FloatingActionButton(
+            heroTag: 'inc',
+            onPressed: inherited.increment,
+            child: const Icon(Icons.add),
+          ),
+          const SizedBox(height: 8),
+          FloatingActionButton(
+            heroTag: 'dec',
+            onPressed: inherited.decrement,
+            child: const Icon(Icons.remove),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// Uso en la app
+class InheritedWidgetExample extends StatelessWidget {
+  const InheritedWidgetExample({super.key});
+  
+  @override
+  Widget build(BuildContext context) {
+    return CounterProvider(
+      child: const CounterConsumer(),
+    );
+  }
+}
+----
+
+==== Patrón InheritedWidget Completo
+
+[source,dart]
+----
+// Modelo de datos
+class UserModel {
+  final String id;
+  final String name;
+  final String email;
+  final String? avatar;
+  
+  const UserModel({
+    required this.id,
+    required this.name,
+    required this.email,
+    this.avatar,
+  });
+  
+  UserModel copyWith({
+    String? id,
+    String? name,
+    String? email,
+    String? avatar,
+  }) {
+    return UserModel(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      email: email ?? this.email,
+      avatar: avatar ?? this.avatar,
+    );
+  }
+}
+
+// Estado de autenticación
+class AuthState {
+  final UserModel? user;
+  final bool isLoading;
+  final String? error;
+  final bool isAuthenticated;
+  
+  const AuthState({
+    this.user,
+    this.isLoading = false,
+    this.error,
+    this.isAuthenticated = false,
+  });
+  
+  AuthState copyWith({
+    UserModel? user,
+    bool? isLoading,
+    String? error,
+    bool? isAuthenticated,
+  }) {
+    return AuthState(
+      user: user ?? this.user,
+      isLoading: isLoading ?? this.isLoading,
+      error: error ?? this.error,
+      isAuthenticated: isAuthenticated ?? this.isAuthenticated,
+    );
+  }
+}
+
+// InheritedWidget para autenticación
+class AuthInherited extends InheritedWidget {
+  final AuthState state;
+  final Future<void> Function(String email, String password) login;
+  final Future<void> Function(String name, String email, String password) register;
+  final VoidCallback logout;
+  
+  const AuthInherited({
+    super.key,
+    required this.state,
+    required this.login,
+    required this.register,
+    required this.logout,
+    required super.child,
+  });
+  
+  static AuthInherited of(BuildContext context) {
+    final result = context.dependOnInheritedWidgetOfExactType<AuthInherited>();
+    assert(result != null, 'No AuthInherited found in context');
+    return result!;
+  }
+  
+  static AuthInherited? maybeOf(BuildContext context) {
+    return context.dependOnInheritedWidgetOfExactType<AuthInherited>();
+  }
+  
+  @override
+  bool updateShouldNotify(AuthInherited oldWidget) {
+    return state.isAuthenticated != oldWidget.state.isAuthenticated ||
+           state.user != oldWidget.state.user ||
+           state.isLoading != oldWidget.state.isLoading ||
+           state.error != oldWidget.state.error;
+  }
+}
+
+// Provider de autenticación
+class AuthProvider extends StatefulWidget {
+  final Widget child;
+  
+  const AuthProvider({super.key, required this.child});
+  
+  @override
+  State<AuthProvider> createState() => AuthProviderState();
+}
+
+class AuthProviderState extends State<AuthProvider> {
+  AuthState _state = const AuthState();
+  
+  AuthState get state => _state;
+  
+  Future<void> login(String email, String password) async {
+    setState(() {
+      _state = _state.copyWith(isLoading: true, error: null);
+    });
+    
+    try {
+      // Simular llamada API
+      await Future.delayed(const Duration(seconds: 1));
+      
+      setState(() {
+        _state = AuthState(
+          user: UserModel(
+            id: '1',
+            name: 'Usuario Demo',
+            email: email,
+          ),
+          isLoading: false,
+          isAuthenticated: true,
+        );
+      });
+    } catch (e) {
+      setState(() {
+        _state = _state.copyWith(
+          isLoading: false,
+          error: 'Error de autenticación: $e',
+        );
+      });
+    }
+  }
+  
+  Future<void> register(String name, String email, String password) async {
+    setState(() {
+      _state = _state.copyWith(isLoading: true, error: null);
+    });
+    
+    try {
+      await Future.delayed(const Duration(seconds: 1));
+      
+      setState(() {
+        _state = AuthState(
+          user: UserModel(
+            id: '1',
+            name: name,
+            email: email,
+          ),
+          isLoading: false,
+          isAuthenticated: true,
+        );
+      });
+    } catch (e) {
+      setState(() {
+        _state = _state.copyWith(
+          isLoading: false,
+          error: 'Error de registro: $e',
+        );
+      });
+    }
+  }
+  
+  void logout() {
+    setState(() {
+      _state = const AuthState();
+    });
+  }
+  
+  @override
+  Widget build(BuildContext context) {
+    return AuthInherited(
+      state: _state,
+      login: login,
+      register: register,
+      logout: logout,
+      child: widget.child,
+    );
+  }
+}
+
+// Widget de pantalla de login
+class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
+  
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+  
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+  
+  @override
+  Widget build(BuildContext context) {
+    final auth = AuthInherited.of(context);
+    
+    return Scaffold(
+      appBar: AppBar(title: const Text('Login')),
+      body: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            if (auth.state.error != null)
+              Container(
+                padding: const EdgeInsets.all(8),
+                margin: const EdgeInsets.only(bottom: 16),
+                decoration: BoxDecoration(
+                  color: Colors.red.shade100,
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Text(
+                  auth.state.error!,
+                  style: const TextStyle(color: Colors.red),
+                ),
+              ),
+            TextField(
+              controller: _emailController,
+              decoration: const InputDecoration(
+                labelText: 'Email',
+                border: OutlineInputBorder(),
+              ),
+              keyboardType: TextInputType.emailAddress,
+            ),
+            const SizedBox(height: 16),
+            TextField(
+              controller: _passwordController,
+              decoration: const InputDecoration(
+                labelText: 'Contraseña',
+                border: OutlineInputBorder(),
+              ),
+              obscureText: true,
+            ),
+            const SizedBox(height: 24),
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: auth.state.isLoading
+                    ? null
+                    : () => auth.login(
+                        _emailController.text,
+                        _passwordController.text,
+                      ),
+                child: auth.state.isLoading
+                    ? const SizedBox(
+                        width: 20,
+                        height: 20,
+                        child: CircularProgressIndicator(strokeWidth: 2),
+                      )
+                    : const Text('Iniciar sesión'),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// Widget de pantalla principal (solo visible si autenticado)
+class HomeScreen extends StatelessWidget {
+  const HomeScreen({super.key});
+  
+  @override
+  Widget build(BuildContext context) {
+    final auth = AuthInherited.of(context);
+    
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Home'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.logout),
+            onPressed: auth.logout,
+          ),
+        ],
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            if (auth.state.user?.avatar != null)
+              CircleAvatar(
+                backgroundImage: NetworkImage(auth.state.user!.avatar!),
+                radius: 40,
+              ),
+            const SizedBox(height: 16),
+            Text(
+              '¡Hola, ${auth.state.user?.name ?? "Usuario"}!',
+              style: const TextStyle(fontSize: 24),
+            ),
+            const SizedBox(height: 8),
+            Text(auth.state.user?.email ?? ''),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// Widget principal que decide qué mostrar
+class AuthWrapper extends StatelessWidget {
+  const AuthWrapper({super.key});
+  
+  @override
+  Widget build(BuildContext context) {
+    final auth = AuthInherited.of(context);
+    
+    if (auth.state.isAuthenticated) {
+      return const HomeScreen();
+    }
+    
+    return const LoginScreen();
+  }
+}
+
+// App principal
+class InheritedAuthApp extends StatelessWidget {
+  const InheritedAuthApp({super.key});
+  
+  @override
+  Widget build(BuildContext context) {
+    return AuthProvider(
+      child: const AuthWrapper(),
+    );
+  }
+}
+----
+
+'''''
+
+=== Provider - Gestión Declarativa
+
+==== Instalación
+
+[source,yaml]
+----
+# pubspec.yaml
+dependencies:
+  provider: ^6.1.1
+----
+
+==== Provider Básico
+
+[source,dart]
+----
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+// Modelo que extiende ChangeNotifier
+class CounterModel extends ChangeNotifier {
+  int _value = 0;
+  
+  int get value => _value;
+  
+  void increment() {
+    _value++;
+    notifyListeners();
+  }
+  
+  void decrement() {
+    _value--;
+    notifyListeners();
+  }
+  
+  void reset() {
+    _value = 0;
+    notifyListeners();
+  }
+}
+
+// Uso con Provider
+class ProviderBasicExample extends StatelessWidget {
+  const ProviderBasicExample({super.key});
+  
+  @override
+  Widget build(BuildContext context) {
+    return ChangeNotifierProvider(
+      create: (_) => CounterModel(),
+      child: const CounterScreen(),
+    );
+  }
+}
+
+class CounterScreen extends StatelessWidget {
+  const CounterScreen({super.key});
+  
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Provider Básico')),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            // Consumer: Solo reconstruye este widget
+            Consumer<CounterModel>(
+              builder: (context, counter, child) {
+                return Text(
+                  'Valor: ${counter.value}',
+                  style: Theme.of(context).textTheme.headlineLarge,
+                );
+              },
+            ),
+            const SizedBox(height: 24),
+            // Usando Provider.of
+            Text('Doble: ${Provider.of<CounterModel>(context).value * 2}'),
+          ],
+        ),
+      ),
+      floatingActionButton: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          FloatingActionButton(
+            heroTag: 'inc',
+            onPressed: () => context.read<CounterModel>().increment(),
+            child: const Icon(Icons.add),
+          ),
+          const SizedBox(height: 8),
+          FloatingActionButton(
+            heroTag: 'dec',
+            onPressed: () => context.read<CounterModel>().decrement(),
+            child: const Icon(Icons.remove),
+          ),
+          const SizedBox(height: 8),
+          FloatingActionButton(
+            heroTag: 'reset',
+            onPressed: () => context.read<CounterModel>().reset(),
+            child: const Icon(Icons.refresh),
+          ),
+        ],
+      ),
+    );
+  }
+}
+----
+
+==== Múltiples Providers
+
+[source,dart]
+----
+// Modelos
+class UserModel extends ChangeNotifier {
+  String _name = 'Usuario';
+  String _email = 'usuario@email.com';
+  bool _isLoggedIn = false;
+  
+  String get name => _name;
+  String get email => _email;
+  bool get isLoggedIn => _isLoggedIn;
+  
+  Future<void> login(String email, String password) async {
+    await Future.delayed(const Duration(seconds: 1));
+    _email = email;
+    _name = 'Usuario Logueado';
+    _isLoggedIn = true;
+    notifyListeners();
+  }
+  
+  void logout() {
+    _isLoggedIn = false;
+    notifyListeners();
+  }
+  
+  void updateName(String newName) {
+    _name = newName;
+    notifyListeners();
+  }
+}
+
+class ThemeModel extends ChangeNotifier {
+  ThemeMode _mode = ThemeMode.system;
+  
+  ThemeMode get mode => _mode;
+  
+  void setMode(ThemeMode mode) {
+    _mode = mode;
+    notifyListeners();
+  }
+  
+  void toggle() {
+    _mode = _mode == ThemeMode.light ? ThemeMode.dark : ThemeMode.light;
+    notifyListeners();
+  }
+}
+
+class CartModel extends ChangeNotifier {
+  final List<CartItem> _items = [];
+  
+  List<CartItem> get items => List.unmodifiable(_items);
+  int get count => _items.length;
+  double get total => _items.fold(0, (sum, item) => sum + item.price);
+  
+  void add(CartItem item) {
+    _items.add(item);
+    notifyListeners();
+  }
+  
+  void remove(int index) {
+    _items.removeAt(index);
+    notifyListeners();
+  }
+  
+  void clear() {
+    _items.clear();
+    notifyListeners();
+  }
+}
+
+class CartItem {
+  final String id;
+  final String name;
+  final double price;
+  
+  CartItem({required this.id, required this.name, required this.price});
+}
+
+// Multi-provider
+class MultiProviderExample extends StatelessWidget {
+  const MultiProviderExample({super.key});
+  
+  @override
+  Widget build(BuildContext context) {
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => UserModel()),
+        ChangeNotifierProvider(create: (_) => ThemeModel()),
+        ChangeNotifierProvider(create: (_) => CartModel()),
+      ],
+      child: const MainApp(),
+    );
+  }
+}
+
+class MainApp extends StatelessWidget {
+  const MainApp({super.key});
+  
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<ThemeModel>(
+      builder: (context, theme, child) {
+        return MaterialApp(
+          theme: ThemeData.light(),
+          darkTheme: ThemeData.dark(),
+          themeMode: theme.mode,
+          home: const HomeScreen(),
+        );
+      },
+    );
+  }
+}
+----
+
+==== Selector para Optimización
+
+[source,dart]
+----
+class SelectorExample extends StatelessWidget {
+  const SelectorExample({super.key});
+  
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Selector Example')),
+      body: Column(
+        children: [
+          // Selector: Solo reconstruye cuando el valor seleccionado cambia
+          Selector<CartModel, int>(
+            selector: (context, cart) => cart.count,
+            builder: (context, count, child) {
+              return Text('Items en carrito: $count');
+            },
+          ),
+          
+          // Selector con lista de valores
+          Selector<CartModel, (int, double)>(
+            selector: (context, cart) => (cart.count, cart.total),
+            builder: (context, values, child) {
+              return Text('Items: ${values.$1}, Total: \$${values.$2.toStringAsFixed(2)}');
+            },
+          ),
+          
+          // Consumer vs Selector
+          // Consumer: Reconstruye en cualquier cambio del modelo
+          Consumer<CartModel>(
+            builder: (context, cart, child) {
+              return Text('Consumer: ${cart.count}');
+            },
+          ),
+          
+          // Selector: Solo reconstruye cuando count cambia
+          Selector<CartModel, int>(
+            selector: (context, cart) => cart.count,
+            builder: (context, count, child) {
+              return Text('Selector: $count');
+            },
+          ),
+        ],
+      ),
+    );
+  }
+}
+----
+
+==== ProxyProvider para Dependencias
+
+[source,dart]
+----
+// Servicio de API
+class ApiService {
+  Future<List<Product>> fetchProducts() async {
+    await Future.delayed(const Duration(seconds: 1));
+    return [
+      Product(id: '1', name: 'Producto 1', price: 10.0),
+      Product(id: '2', name: 'Producto 2', price: 20.0),
+      Product(id: '3', name: 'Producto 3', price: 30.0),
+    ];
+  }
+}
+
+// Modelo que depende de ApiService
+class ProductsModel extends ChangeNotifier {
+  final ApiService _apiService;
+  
+  ProductsModel(this._apiService);
+  
+  List<Product> _products = [];
+  bool _isLoading = false;
+  String? _error;
+  
+  List<Product> get products => _products;
+  bool get isLoading => _isLoading;
+  String? get error => _error;
+  
+  Future<void> loadProducts() async {
+    _isLoading = true;
+    _error = null;
+    notifyListeners();
+    
+    try {
+      _products = await _apiService.fetchProducts();
+      _isLoading = false;
+      notifyListeners();
+    } catch (e) {
+      _isLoading = false;
+      _error = e.toString();
+      notifyListeners();
+    }
+  }
+}
+
+class Product {
+  final String id;
+  final String name;
+  final double price;
+  
+  Product({required this.id, required this.name, required this.price});
+}
+
+// ProxyProvider para inyección de dependencias
+class ProxyProviderExample extends StatelessWidget {
+  const ProxyProviderExample({super.key});
+  
+  @override
+  Widget build(BuildContext context) {
+    return MultiProvider(
+      providers: [
+        Provider(create: (_) => ApiService()),
+        ChangeNotifierProxyProvider<ApiService, ProductsModel>(
+          create: (_) => ProductsModel(ApiService()),
+          update: (_, apiService, productsModel) {
+            return productsModel ?? ProductsModel(apiService);
+          },
+        ),
+      ],
+      child: const ProductsScreen(),
+    );
+  }
+}
+
+class ProductsScreen extends StatelessWidget {
+  const ProductsScreen({super.key});
+  
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Productos')),
+      body: Consumer<ProductsModel>(
+        builder: (context, model, child) {
+          if (model.isLoading) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          
+          if (model.error != null) {
+            return Center(child: Text('Error: ${model.error}'));
+          }
+          
+          return ListView.builder(
+            itemCount: model.products.length,
+            itemBuilder: (context, index) {
+              final product = model.products[index];
+              return ListTile(
+                title: Text(product.name),
+                subtitle: Text('\$${product.price}'),
+              );
+            },
+          );
+        },
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => context.read<ProductsModel>().loadProducts(),
+        child: const Icon(Icons.refresh),
+      ),
+    );
+  }
+}
+----
+
+'''''
+
+=== Riverpod - Estado Reactivo Moderno
+
+==== Instalación
+
+[source,yaml]
+----
+# pubspec.yaml
+dependencies:
+  flutter_riverpod: ^2.4.9
+----
+
+==== Provider Básico en Riverpod
+
+[source,dart]
+----
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+// Provider simple
+final counterProvider = StateProvider<int>((ref) => 0);
+
+// Provider con lógica
+final counterNotifierProvider = StateNotifierProvider<CounterNotifier, int>((ref) {
+  return CounterNotifier();
+});
+
+class CounterNotifier extends StateNotifier<int> {
+  CounterNotifier() : super(0);
+  
+  void increment() => state++;
+  void decrement() => state--;
+  void reset() => state = 0;
+}
+
+// Provider asíncrono
+final asyncCounterProvider = FutureProvider<int>((ref) async {
+  await Future.delayed(const Duration(seconds: 1));
+  return 42;
+});
+
+// Uso
+class RiverpodBasicExample extends ConsumerWidget {
+  const RiverpodBasicExample({super.key});
+  
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    // Leer valor
+    final counter = ref.watch(counterNotifierProvider);
+    
+    return Scaffold(
+      appBar: AppBar(title: const Text('Riverpod Básico')),
+      body: Center(
+        child: Text(
+          'Valor: $counter',
+          style: Theme.of(context).textTheme.headlineLarge,
+        ),
+      ),
+      floatingActionButton: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          FloatingActionButton(
+            heroTag: 'inc',
+            onPressed: () => ref.read(counterNotifierProvider.notifier).increment(),
+            child: const Icon(Icons.add),
+          ),
+          const SizedBox(height: 8),
+          FloatingActionButton(
+            heroTag: 'dec',
+            onPressed: () => ref.read(counterNotifierProvider.notifier).decrement(),
+            child: const Icon(Icons.remove),
+          ),
+          const SizedBox(height: 8),
+          FloatingActionButton(
+            heroTag: 'reset',
+            onPressed: () => ref.read(counterNotifierProvider.notifier).reset(),
+            child: const Icon(Icons.refresh),
+          ),
+        ],
+      ),
+    );
+  }
+}
+----
+
+==== StateNotifier para Estado Complejo
+
+[source,dart]
+----
+// Modelo de datos
+class Todo {
+  final String id;
+  final String title;
+  final bool completed;
+  final DateTime createdAt;
+  
+  Todo({
+    required this.id,
+    required this.title,
+    this.completed = false,
+    DateTime? createdAt,
+  }) : createdAt = createdAt ?? DateTime.now();
+  
+  Todo copyWith({
+    String? id,
+    String? title,
+    bool? completed,
+    DateTime? createdAt,
+  }) {
+    return Todo(
+      id: id ?? this.id,
+      title: title ?? this.title,
+      completed: completed ?? this.completed,
+      createdAt: createdAt ?? this.createdAt,
+    );
+  }
+}
+
+// Estado del todos
+class TodoList {
+  final List<Todo> todos;
+  final String filter; // 'all', 'active', 'completed'
+  
+  TodoList({
+    this.todos = const [],
+    this.filter = 'all',
+  });
+  
+  TodoList copyWith({
+    List<Todo>? todos,
+    String? filter,
+  }) {
+    return TodoList(
+      todos: todos ?? this.todos,
+      filter: filter ?? this.filter,
+    );
+  }
+  
+  List<Todo> get filteredTodos {
+    switch (filter) {
+      case 'active':
+        return todos.where((t) => !t.completed).toList();
+      case 'completed':
+        return todos.where((t) => t.completed).toList();
+      default:
+        return todos;
+    }
+  }
+  
+  int get activeCount => todos.where((t) => !t.completed).length;
+  int get completedCount => todos.where((t) => t.completed).length;
+}
+
+// StateNotifier
+class TodoNotifier extends StateNotifier<TodoList> {
+  TodoNotifier() : super(TodoList());
+  
+  void add(String title) {
+    state = state.copyWith(
+      todos: [
+        ...state.todos,
+        Todo(
+          id: DateTime.now().millisecondsSinceEpoch.toString(),
+          title: title,
+        ),
+      ],
+    );
+  }
+  
+  void toggle(String id) {
+    state = state.copyWith(
+      todos: state.todos.map((todo) {
+        if (todo.id == id) {
+          return todo.copyWith(completed: !todo.completed);
+        }
+        return todo;
+      }).toList(),
+    );
+  }
+  
+  void remove(String id) {
+    state = state.copyWith(
+      todos: state.todos.where((todo) => todo.id != id).toList(),
+    );
+  }
+  
+  void setFilter(String filter) {
+    state = state.copyWith(filter: filter);
+  }
+  
+  void clearCompleted() {
+    state = state.copyWith(
+      todos: state.todos.where((todo) => !todo.completed).toList(),
+    );
+  }
+}
+
+// Provider
+final todoProvider = StateNotifierProvider<TodoNotifier, TodoList>((ref) {
+  return TodoNotifier();
+});
+
+// Providers derivados
+final filteredTodosProvider = Provider<List<Todo>>((ref) {
+  return ref.watch(todoProvider).filteredTodos;
+});
+
+final activeCountProvider = Provider<int>((ref) {
+  return ref.watch(todoProvider).activeCount;
+});
+
+final completedCountProvider = Provider<int>((ref) {
+  return ref.watch(todoProvider).completedCount;
+});
+
+// UI
+class TodoScreen extends ConsumerStatefulWidget {
+  const TodoScreen({super.key});
+  
+  @override
+  ConsumerState<TodoScreen> createState() => _TodoScreenState();
+}
+
+class _TodoScreenState extends ConsumerState<TodoScreen> {
+  final _controller = TextEditingController();
+  
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+  
+  void _addTodo() {
+    if (_controller.text.trim().isEmpty) return;
+    ref.read(todoProvider.notifier).add(_controller.text.trim());
+    _controller.clear();
+  }
+  
+  @override
+  Widget build(BuildContext context) {
+    final todos = ref.watch(filteredTodosProvider);
+    final activeCount = ref.watch(activeCountProvider);
+    final filter = ref.watch(todoProvider).filter;
+    
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Todos'),
+        actions: [
+          if (ref.watch(completedCountProvider) > 0)
+            IconButton(
+              icon: const Icon(Icons.clear_all),
+              onPressed: () => ref.read(todoProvider.notifier).clearCompleted(),
+            ),
+        ],
+      ),
+      body: Column(
+        children: [
+          // Input
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: TextField(
+              controller: _controller,
+              decoration: InputDecoration(
+                hintText: '¿Qué necesitas hacer?',
+                suffixIcon: IconButton(
+                  icon: const Icon(Icons.add),
+                  onPressed: _addTodo,
+                ),
+              ),
+              onSubmitted: (_) => _addTodo(),
+            ),
+          ),
+          
+          // Filtros
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: ['all', 'active', 'completed'].map((f) {
+              return Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 4),
+                child: FilterChip(
+                  label: Text(_getFilterLabel(f)),
+                  selected: filter == f,
+                  onSelected: (_) => ref.read(todoProvider.notifier).setFilter(f),
+                ),
+              );
+            }).toList(),
+          ),
+          const SizedBox(height: 16),
+          
+          // Contador
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Text('Activos: $activeCount'),
+          ),
+          const SizedBox(height: 8),
+          
+          // Lista
+          Expanded(
+            child: todos.isEmpty
+                ? const Center(child: Text('No hay tareas'))
+                : ListView.builder(
+                    itemCount: todos.length,
+                    itemBuilder: (context, index) {
+                      final todo = todos[index];
+                      return ListTile(
+                        leading: Checkbox(
+                          value: todo.completed,
+                          onChanged: (_) => 
+                              ref.read(todoProvider.notifier).toggle(todo.id),
+                        ),
+                        title: Text(
+                          todo.title,
+                          style: TextStyle(
+                            decoration: todo.completed
+                                ? TextDecoration.lineThrough
+                                : null,
+                          ),
+                        ),
+                        trailing: IconButton(
+                          icon: const Icon(Icons.delete),
+                          onPressed: () =>
+                              ref.read(todoProvider.notifier).remove(todo.id),
+                        ),
+                      );
+                    },
+                  ),
+          ),
+        ],
+      ),
+    );
+  }
+  
+  String _getFilterLabel(String filter) {
+    switch (filter) {
+      case 'active':
+        return 'Activos';
+      case 'completed':
+        return 'Completados';
+      default:
+        return 'Todos';
+    }
+  }
+}
+----
+
+==== Providers Familiares (Family)
+
+[source,dart]
+----
+// Provider con parámetros
+final productProvider = FutureProvider.family<Product, String>((ref, id) async {
+  await Future.delayed(const Duration(milliseconds: 500));
+  return Product(
+    id: id,
+    name: 'Producto $id',
+    price: double.parse(id) * 10,
+  );
+});
+
+// Provider que depende de otro provider
+final userProductsProvider = FutureProvider<List<Product>>((ref) async {
+  final userId = ref.watch(currentUserIdProvider);
+  await Future.delayed(const Duration(seconds: 1));
+  return [
+    Product(id: '1', name: 'Producto 1', price: 10.0),
+    Product(id: '2', name: 'Producto 2', price: 20.0),
+  ];
+});
+
+// AutoDispose para limpiar memoria
+final searchResultsProvider = FutureProvider.autoDispose<List<String>>((ref) async {
+  final query = ref.watch(searchQueryProvider);
+  if (query.isEmpty) return [];
+  
+  await Future.delayed(const Duration(milliseconds: 300));
+  return ['Result 1', 'Result 2', 'Result 3'];
+});
+
+final searchQueryProvider = StateProvider<String>((ref) => '');
+
+// Uso
+class ProductDetailScreen extends ConsumerWidget {
+  final String productId;
+  
+  const ProductDetailScreen({super.key, required this.productId});
+  
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final productAsync = ref.watch(productProvider(productId));
+    
+    return Scaffold(
+      appBar: AppBar(title: Text('Producto $productId')),
+      body: productAsync.when(
+        data: (product) => Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(product.name, style: const TextStyle(fontSize: 24)),
+              Text('\$${product.price}'),
+            ],
+          ),
+        ),
+        loading: () => const Center(child: CircularProgressIndicator()),
+        error: (error, _) => Center(child: Text('Error: $error')),
+      ),
+    );
+  }
+}
+----
+
+'''''
+
+=== BLoC - Patrón de Flujo
+
+==== Instalación
+
+[source,yaml]
+----
+# pubspec.yaml
+dependencies:
+  flutter_bloc: ^8.1.3
+  equatable: ^2.0.5
+----
+
+==== BLoC Básico
+
+[source,dart]
+----
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:equatable/equatable.dart';
+
+// Eventos
+abstract class CounterEvent extends Equatable {
+  const CounterEvent();
+  
+  @override
+  List<Object?> get props => [];
+}
+
+class CounterIncrementPressed extends CounterEvent {}
+class CounterDecrementPressed extends CounterEvent {}
+class CounterResetPressed extends CounterEvent {}
+
+// Estados
+class CounterState extends Equatable {
+  final int count;
+  
+  const CounterState({required this.count});
+  
+  @override
+  List<Object?> get props => [count];
+  
+  CounterState copyWith({int? count}) {
+    return CounterState(count: count ?? this.count);
+  }
+}
+
+// BLoC
+class CounterBloc extends Bloc<CounterEvent, CounterState> {
+  CounterBloc() : super(const CounterState(count: 0)) {
+    on<CounterIncrementPressed>(_onIncrement);
+    on<CounterDecrementPressed>(_onDecrement);
+    on<CounterResetPressed>(_onReset);
+  }
+  
+  void _onIncrement(CounterIncrementPressed event, Emitter<CounterState> emit) {
+    emit(state.copyWith(count: state.count + 1));
+  }
+  
+  void _onDecrement(CounterDecrementPressed event, Emitter<CounterState> emit) {
+    emit(state.copyWith(count: state.count - 1));
+  }
+  
+  void _onReset(CounterResetPressed event, Emitter<CounterState> emit) {
+    emit(const CounterState(count: 0));
+  }
+}
+
+// UI
+class BlocBasicExample extends StatelessWidget {
+  const BlocBasicExample({super.key});
+  
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (_) => CounterBloc(),
+      child: const CounterPage(),
+    );
+  }
+}
+
+class CounterPage extends StatelessWidget {
+  const CounterPage({super.key});
+  
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('BLoC Counter')),
+      body: Center(
+        child: BlocBuilder<CounterBloc, CounterState>(
+          builder: (context, state) {
+            return Text(
+              'Valor: ${state.count}',
+              style: Theme.of(context).textTheme.headlineLarge,
+            );
+          },
+        ),
+      ),
+      floatingActionButton: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          FloatingActionButton(
+            heroTag: 'inc',
+            onPressed: () => context.read<CounterBloc>().add(CounterIncrementPressed()),
+            child: const Icon(Icons.add),
+          ),
+          const SizedBox(height: 8),
+          FloatingActionButton(
+            heroTag: 'dec',
+            onPressed: () => context.read<CounterBloc>().add(CounterDecrementPressed()),
+            child: const Icon(Icons.remove),
+          ),
+          const SizedBox(height: 8),
+          FloatingActionButton(
+            heroTag: 'reset',
+            onPressed: () => context.read<CounterBloc>().add(CounterResetPressed()),
+            child: const Icon(Icons.refresh),
+          ),
+        ],
+      ),
+    );
+  }
+}
+----
+
+==== Cubit - BLoC Simplificado
+
+[source,dart]
+----
+// Cubit es más simple que BLoC para casos básicos
+class CounterCubit extends Cubit<int> {
+  CounterCubit() : super(0);
+  
+  void increment() => emit(state + 1);
+  void decrement() => emit(state - 1);
+  void reset() => emit(0);
+}
+
+// Uso
+class CubitExample extends StatelessWidget {
+  const CubitExample({super.key});
+  
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (_) => CounterCubit(),
+      child: const CubitPage(),
+    );
+  }
+}
+
+class CubitPage extends StatelessWidget {
+  const CubitPage({super.key});
+  
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Cubit Counter')),
+      body: Center(
+        child: BlocBuilder<CounterCubit, int>(
+          builder: (context, state) {
+            return Text(
+              'Valor: $state',
+              style: Theme.of(context).textTheme.headlineLarge,
+            );
+          },
+        ),
+      ),
+      floatingActionButton: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          FloatingActionButton(
+            heroTag: 'inc',
+            onPressed: () => context.read<CounterCubit>().increment(),
+            child: const Icon(Icons.add),
+          ),
+          const SizedBox(height: 8),
+          FloatingActionButton(
+            heroTag: 'dec',
+            onPressed: () => context.read<CounterCubit>().decrement(),
+            child: const Icon(Icons.remove),
+          ),
+          const SizedBox(height: 8),
+          FloatingActionButton(
+            heroTag: 'reset',
+            onPressed: () => context.read<CounterCubit>().reset(),
+            child: const Icon(Icons.refresh),
+          ),
+        ],
+      ),
+    );
+  }
+}
+----
+
+==== BLoC con Estado Complejo
+
+[source,dart]
+----
+// Estados
+abstract class AuthState extends Equatable {
+  const AuthState();
+  
+  @override
+  List<Object?> get props => [];
+}
+
+class AuthInitial extends AuthState {}
+
+class AuthLoading extends AuthState {}
+
+class Authenticated extends AuthState {
+  final User user;
+  
+  const Authenticated(this.user);
+  
+  @override
+  List<Object?> get props => [user];
+}
+
+class Unauthenticated extends AuthState {}
+
+class AuthError extends AuthState {
+  final String message;
+  
+  const AuthError(this.message);
+  
+  @override
+  List<Object?> get props => [message];
+}
+
+// Eventos
+abstract class AuthEvent extends Equatable {
+  const AuthEvent();
+  
+  @override
+  List<Object?> get props => [];
+}
+
+class AuthLoginRequested extends AuthEvent {
+  final String email;
+  final String password;
+  
+  const AuthLoginRequested({
+    required this.email,
+    required this.password,
+  });
+  
+  @override
+  List<Object?> get props => [email, password];
+}
+
+class AuthLogoutRequested extends AuthEvent {}
+
+class AuthStatusChecked extends AuthEvent {}
+
+// Modelo
+class User {
+  final String id;
+  final String name;
+  final String email;
+  
+  const User({
+    required this.id,
+    required this.name,
+    required this.email,
+  });
+}
+
+// Repositorio
+abstract class AuthRepository {
+  Future<User> login(String email, String password);
+  Future<void> logout();
+  Future<User?> getCurrentUser();
+}
+
+class FakeAuthRepository implements AuthRepository {
+  @override
+  Future<User> login(String email, String password) async {
+    await Future.delayed(const Duration(seconds: 1));
+    if (email.isEmpty || password.isEmpty) {
+      throw Exception('Email y contraseña requeridos');
+    }
+    if (password.length < 6) {
+      throw Exception('Contraseña debe tener al menos 6 caracteres');
+    }
+    return User(id: '1', name: 'Usuario Demo', email: email);
+  }
+  
+  @override
+  Future<void> logout() async {
+    await Future.delayed(const Duration(milliseconds: 500));
+  }
+  
+  @override
+  Future<User?> getCurrentUser() async {
+    return null;
+  }
+}
+
+// BLoC
+class AuthBloc extends Bloc<AuthEvent, AuthState> {
+  final AuthRepository _authRepository;
+  
+  AuthBloc(this._authRepository) : super(AuthInitial()) {
+    on<AuthLoginRequested>(_onLogin);
+    on<AuthLogoutRequested>(_onLogout);
+    on<AuthStatusChecked>(_onStatusChecked);
+  }
+  
+  Future<void> _onLogin(AuthLoginRequested event, Emitter<AuthState> emit) async {
+    emit(AuthLoading());
+    try {
+      final user = await _authRepository.login(event.email, event.password);
+      emit(Authenticated(user));
+    } catch (e) {
+      emit(AuthError(e.toString()));
+    }
+  }
+  
+  Future<void> _onLogout(AuthLogoutRequested event, Emitter<AuthState> emit) async {
+    emit(AuthLoading());
+    try {
+      await _authRepository.logout();
+      emit(Unauthenticated());
+    } catch (e) {
+      emit(AuthError(e.toString()));
+    }
+  }
+  
+  Future<void> _onStatusChecked(AuthStatusChecked event, Emitter<AuthState> emit) async {
+    emit(AuthLoading());
+    try {
+      final user = await _authRepository.getCurrentUser();
+      if (user != null) {
+        emit(Authenticated(user));
+      } else {
+        emit(Unauthenticated());
+      }
+    } catch (e) {
+      emit(AuthError(e.toString()));
+    }
+  }
+}
+
+// UI
+class AuthBlocExample extends StatelessWidget {
+  const AuthBlocExample({super.key});
+  
+  @override
+  Widget build(BuildContext context) {
+    return RepositoryProvider(
+      create: (_) => FakeAuthRepository(),
+      child: BlocProvider(
+        create: (context) => AuthBloc(context.read<AuthRepository>()),
+        child: const AuthPage(),
+      ),
+    );
+  }
+}
+
+class AuthPage extends StatelessWidget {
+  const AuthPage({super.key});
+  
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<AuthBloc, AuthState>(
+      builder: (context, state) {
+        if (state is Authenticated) {
+          return HomeScreen(user: state.user);
+        }
+        return const LoginScreen();
+      },
+    );
+  }
+}
+
+class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
+  
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+  
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+  
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Login')),
+      body: BlocConsumer<AuthBloc, AuthState>(
+        listener: (context, state) {
+          if (state is AuthError) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(state.message)),
+            );
+          }
+        },
+        builder: (context, state) {
+          return Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                TextField(
+                  controller: _emailController,
+                  decoration: const InputDecoration(
+                    labelText: 'Email',
+                    border: OutlineInputBorder(),
+                  ),
+                  keyboardType: TextInputType.emailAddress,
+                ),
+                const SizedBox(height: 16),
+                TextField(
+                  controller: _passwordController,
+                  decoration: const InputDecoration(
+                    labelText: 'Contraseña',
+                    border: OutlineInputBorder(),
+                  ),
+                  obscureText: true,
+                ),
+                const SizedBox(height: 24),
+                if (state is AuthLoading)
+                  const CircularProgressIndicator()
+                else
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        context.read<AuthBloc>().add(AuthLoginRequested(
+                          email: _emailController.text,
+                          password: _passwordController.text,
+                        ));
+                      },
+                      child: const Text('Iniciar sesión'),
+                    ),
+                  ),
+              ],
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
+
+class HomeScreen extends StatelessWidget {
+  final User user;
+  
+  const HomeScreen({super.key, required this.user});
+  
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Home'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.logout),
+            onPressed: () {
+              context.read<AuthBloc>().add(AuthLogoutRequested());
+            },
+          ),
+        ],
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Icon(Icons.account_circle, size: 80),
+            const SizedBox(height: 16),
+            Text('¡Hola, ${user.name}!', style: const TextStyle(fontSize: 24)),
+            const SizedBox(height: 8),
+            Text(user.email),
+          ],
+        ),
+      ),
+    );
+  }
+}
+----
+
+'''''
+
+=== GetX - Solución Todo en Uno
+
+==== Instalación
+
+[source,yaml]
+----
+# pubspec.yaml
+dependencies:
+  get: ^4.6.6
+----
+
+==== Gestión de Estado con GetX
+
+[source,dart]
+----
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+
+// Controlador con variables reactivas
+class CounterController extends GetxController {
+  final _count = 0.obs;
+  
+  // Getter para exponer el valor
+  int get count => _count.value;
+  
+  // Rx para acceso directo
+  RxInt get rxCount => _count;
+  
+  void increment() => _count++;
+  void decrement() => _count--;
+  void reset() => _count.value = 0;
+}
+
+// Controlador con clase observable
+class User {
+  String name;
+  String email;
+  
+  User({required this.name, required this.email});
+}
+
+class UserController extends GetxController {
+  final _user = Rxn<User>();
+  
+  User? get user => _user.value;
+  Rxn<User> get rxUser => _user;
+  
+  void login(String name, String email) {
+    _user.value = User(name: name, email: email);
+  }
+  
+  void logout() {
+    _user.value = null;
+  }
+  
+  void updateName(String newName) {
+    if (_user.value != null) {
+      _user.update((val) {
+        val!.name = newName;
+      });
+    }
+  }
+}
+
+// Controlador con lista observable
+class TodosController extends GetxController {
+  final _todos = <Todo>[].obs;
+  final _filter = 'all'.obs;
+  
+  List<Todo> get todos => _todos;
+  String get filter => _filter.value;
+  
+  List<Todo> get filteredTodos {
+    switch (_filter.value) {
+      case 'active':
+        return _todos.where((t) => !t.completed).toList();
+      case 'completed':
+        return _todos.where((t) => t.completed).toList();
+      default:
+        return _todos.toList();
+    }
+  }
+  
+  void add(String title) {
+    _todos.add(Todo(
+      id: DateTime.now().millisecondsSinceEpoch.toString(),
+      title: title,
+    ));
+  }
+  
+  void toggle(String id) {
+    final index = _todos.indexWhere((t) => t.id == id);
+    if (index != -1) {
+      _todos[index].completed = !_todos[index].completed;
+      _todos.refresh();
+    }
+  }
+  
+  void remove(String id) {
+    _todos.removeWhere((t) => t.id == id);
+  }
+  
+  void setFilter(String newFilter) {
+    _filter.value = newFilter;
+  }
+  
+  void clearCompleted() {
+    _todos.removeWhere((t) => t.completed);
+  }
+}
+
+class Todo {
+  final String id;
+  final String title;
+  bool completed;
+  
+  Todo({required this.id, required this.title, this.completed = false});
+}
+
+// UI con GetX
+class GetXBasicExample extends StatelessWidget {
+  const GetXBasicExample({super.key});
+  
+  @override
+  Widget build(BuildContext context) {
+    return GetMaterialApp(
+      title: 'GetX Example',
+      home: const CounterPage(),
+    );
+  }
+}
+
+class CounterPage extends StatelessWidget {
+  const CounterPage({super.key});
+  
+  @override
+  Widget build(BuildContext context) {
+    // Inyectar controlador
+    final controller = Get.put(CounterController());
+    
+    return Scaffold(
+      appBar: AppBar(title: const Text('GetX Counter')),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            // Forma 1: Obx
+            Obx(() => Text(
+              'Valor: ${controller.count}',
+              style: Theme.of(context).textTheme.headlineLarge,
+            )),
+            
+            const SizedBox(height: 24),
+            
+            // Forma 2: GetBuilder
+            GetBuilder<CounterController>(
+              builder: (c) => Text(
+                'GetBuilder: ${c.count}',
+                style: Theme.of(context).textTheme.headlineMedium,
+              ),
+            ),
+          ],
+        ),
+      ),
+      floatingActionButton: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          FloatingActionButton(
+            heroTag: 'inc',
+            onPressed: controller.increment,
+            child: const Icon(Icons.add),
+          ),
+          const SizedBox(height: 8),
+          FloatingActionButton(
+            heroTag: 'dec',
+            onPressed: controller.decrement,
+            child: const Icon(Icons.remove),
+          ),
+          const SizedBox(height: 8),
+          FloatingActionButton(
+            heroTag: 'reset',
+            onPressed: controller.reset,
+            child: const Icon(Icons.refresh),
+          ),
+        ],
+      ),
+    );
+  }
+}
+----
+
+==== Navegación con GetX
+
+[source,dart]
+----
+class GetXNavigation extends StatelessWidget {
+  const GetXNavigation({super.key});
+  
+  @override
+  Widget build(BuildContext context) {
+    return GetMaterialApp(
+      initialRoute: '/',
+      getPages: [
+        GetPage(name: '/', page: () => const HomePage()),
+        GetPage(name: '/details/:id', page: () => const DetailPage()),
+        GetPage(name: '/settings', page: () => const SettingsPage()),
+      ],
+    );
+  }
+}
+
+class HomePage extends StatelessWidget {
+  const HomePage({super.key});
+  
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Home')),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            ElevatedButton(
+              onPressed: () => Get.toNamed('/details/123'),
+              child: const Text('Ir a Detalles'),
+            ),
+            ElevatedButton(
+              onPressed: () => Get.toNamed('/settings'),
+              child: const Text('Ir a Ajustes'),
+            ),
+            ElevatedButton(
+              onPressed: () => Get.toNamed('/details/456', arguments: {
+                'title': 'Detalle personalizado',
+                'extra': 'datos adicionales',
+              }),
+              child: const Text('Ir con argumentos'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class DetailPage extends StatelessWidget {
+  const DetailPage({super.key});
+  
+  @override
+  Widget build(BuildContext context) {
+    final id = Get.parameters['id'];
+    final args = Get.arguments as Map<String, dynamic>?;
+    
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(args?['title'] ?? 'Detalle $id'),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text('ID: $id'),
+            if (args != null) Text('Extra: ${args['extra']}'),
+            const SizedBox(height: 24),
+            ElevatedButton(
+              onPressed: () => Get.back(result: 'Resultado desde detalle'),
+              child: const Text('Volver'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class SettingsPage extends StatelessWidget {
+  const SettingsPage({super.key});
+  
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Ajustes')),
+      body: Center(
+        child: ElevatedButton(
+          onPressed: () => Get.back(),
+          child: const Text('Volver'),
+        ),
+      ),
+    );
+  }
+}
+----
+
+==== Dependencias con GetX
+
+[source,dart]
+----
+// Servicio
+class ApiService {
+  Future<List<Product>> getProducts() async {
+    await Future.delayed(const Duration(seconds: 1));
+    return [
+      Product(id: '1', name: 'Producto 1', price: 10.0),
+      Product(id: '2', name: 'Producto 2', price: 20.0),
+      Product(id: '3', name: 'Producto 3', price: 30.0),
+    ];
+  }
+}
+
+class Product {
+  final String id;
+  final String name;
+  final double price;
+  
+  Product({required this.id, required this.name, required this.price});
+}
+
+// Controlador con dependencia
+class ProductsController extends GetxController {
+  final ApiService _apiService = Get.find();
+  
+  final _products = <Product>[].obs;
+  final _isLoading = false.obs;
+  final _error = RxnString();
+  
+  List<Product> get products => _products;
+  bool get isLoading => _isLoading.value;
+  String? get error => _error.value;
+  
+  @override
+  void onInit() {
+    super.onInit();
+    loadProducts();
+  }
+  
+  Future<void> loadProducts() async {
+    _isLoading.value = true;
+    _error.value = null;
+    
+    try {
+      final products = await _apiService.getProducts();
+      _products.assignAll(products);
+    } catch (e) {
+      _error.value = e.toString();
+    } finally {
+      _isLoading.value = false;
+    }
+  }
+}
+
+// Configuración de dependencias
+class DependencyInjection {
+  static void init() {
+    // Servicio singleton
+    Get.put(ApiService(), permanent: true);
+    
+    // Controladores lazy
+    Get.lazyPut(() => ProductsController());
+    Get.lazyPut(() => UserController());
+  }
+}
+
+// Uso
+class ProductsPage extends StatelessWidget {
+  const ProductsPage({super.key});
+  
+  @override
+  Widget build(BuildContext context) {
+    // Inyectar controlador
+    final controller = Get.put(ProductsController());
+    
+    return Scaffold(
+      appBar: AppBar(title: const Text('Productos')),
+      body: Obx(() {
+        if (controller.isLoading) {
+          return const Center(child: CircularProgressIndicator());
+        }
+        
+        if (controller.error != null) {
+          return Center(child: Text('Error: ${controller.error}'));
+        }
+        
+        return ListView.builder(
+          itemCount: controller.products.length,
+          itemBuilder: (context, index) {
+            final product = controller.products[index];
+            return ListTile(
+              title: Text(product.name),
+              subtitle: Text('\$${product.price}'),
+            );
+          },
+        );
+      }),
+      floatingActionButton: FloatingActionButton(
+        onPressed: controller.loadProducts,
+        child: const Icon(Icons.refresh),
+      ),
+    );
+  }
+}
+----
+
+'''''
+
+=== Comparativa de Soluciones
+
+==== Tabla Comparativa
+
+[width="100%",cols="23%,13%,22%,13%,13%,8%,8%",options="header",]
+|===
+|Característica |setState |InheritedWidget |Provider |Riverpod |BLoC
+|GetX
+|*Curva de aprendizaje* |Baja |Media |Baja |Media |Alta |Baja
+
+|*Verbosidad* |Baja |Alta |Media |Media |Alta |Baja
+
+|*Estado local* |✅ |❌ |❌ |✅ |✅ |✅
+
+|*Estado global* |❌ |✅ |✅ |✅ |✅ |✅
+
+|*Testing* |Difícil |Difícil |Fácil |Fácil |Muy fácil |Fácil
+
+|*Boilerplate* |Bajo |Alto |Medio |Medio |Alto |Bajo
+
+|*Dependencias* |Ninguna |Ninguna |Provider |Riverpod |BLoC |GetX
+
+|*IDE Support* |✅ |✅ |✅ |✅ |✅ |✅
+
+|*DevTools* |❌ |❌ |✅ |✅ |✅ |❌
+
+|*Escalabilidad* |Baja |Media |Alta |Alta |Muy alta |Media
+
+|*Async* |Manual |Manual |✅ |✅ |✅ |✅
+|===
+
+==== Cuándo Usar Cada Solución
+
+[source,dart]
+----
+class WhenToUseExample extends StatelessWidget {
+  const WhenToUseExample({super.key});
+  
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Cuándo usar cada solución')),
+      body: ListView(
+        padding: const EdgeInsets.all(16),
+        children: [
+          _buildSolution('setState', [
+            '✅ Estado local simple (contador, toggle)',
+            '✅ Formularios pequeños',
+            '✅ Animaciones locales',
+            '✅ UI state (loading, error)',
+            '❌ Estado compartido',
+            '❌ Lógica compleja',
+          ]),
+          _buildSolution('InheritedWidget', [
+            '✅ Estado compartido simple',
+            '✅ Sin dependencias externas',
+            '✅ Control total del árbol',
+            '❌ Mucho boilerplate',
+            '❌ Difícil de mantener',
+          ]),
+          _buildSolution('Provider', [
+            '✅ Estado de aplicación simple-medio',
+            '✅ Inyección de dependencias',
+            '✅ Fácil de aprender',
+            '✅ Bien soportado',
+            '❌ Sin código generation',
+            '❌ Menos features que Riverpod',
+          ]),
+          _buildSolution('Riverpod', [
+            '✅ Estado complejo',
+            '✅ Estado asíncrono',
+            '✅ Providers dependientes',
+            '✅ Testing fácil',
+            '✅ Sin BuildContext',
+            '❌ Curva de aprendizaje media',
+          ]),
+          _buildSolution('BLoC/Cubit', [
+            '✅ Proyectos grandes',
+            '✅ Equipo grande',
+            '✅ Testing extensivo',
+            '✅ Flujo de datos complejo',
+            '✅ Separación clara de responsabilidades',
+            '❌ Mucho boilerplate',
+            '❌ Curva de aprendizaje alta',
+          ]),
+          _buildSolution('GetX', [
+            '✅ Desarrollo rápido',
+            '✅ Todo en uno (estado, navegación, DI)',
+            '✅ Código minimalista',
+            '❌ Menos convenciones',
+            '❌ Menos testing support',
+            '❌ Dependencias pesadas',
+          ]),
+        ],
+      ),
+    );
+  }
+  
+  Widget _buildSolution(String name, List<String> points) {
+    return Card(
+      margin: const EdgeInsets.only(bottom: 16),
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(name, style: const TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+            )),
+            const SizedBox(height: 8),
+            ...points.map((point) => Padding(
+              padding: const EdgeInsets.only(bottom: 4),
+              child: Text(point),
+            )),
+          ],
+        ),
+      ),
+    );
+  }
+}
+----
+
+'''''
+
+=== Persistencia de Estado
+
+==== SharedPreferences con Provider
+
+[source,dart]
+----
+import 'package:shared_preferences/shared_preferences.dart';
+
+class SettingsModel extends ChangeNotifier {
+  static const _themeKey = 'theme_mode';
+  static const _localeKey = 'locale';
+  static const _notificationsKey = 'notifications_enabled';
+  
+  ThemeMode _themeMode = ThemeMode.system;
+  Locale _locale = const Locale('es');
+  bool _notificationsEnabled = true;
+  
+  ThemeMode get themeMode => _themeMode;
+  Locale get locale => _locale;
+  bool get notificationsEnabled => _notificationsEnabled;
+  
+  Future<void> load() async {
+    final prefs = await SharedPreferences.getInstance();
+    
+    _themeMode = _stringToThemeMode(prefs.getString(_themeKey));
+    final localeString = prefs.getString(_localeKey);
+    if (localeString != null) {
+      _locale = Locale(localeString);
+    }
+    _notificationsEnabled = prefs.getBool(_notificationsKey) ?? true;
+    
+    notifyListeners();
+  }
+  
+  Future<void> setThemeMode(ThemeMode mode) async {
+    _themeMode = mode;
+    notifyListeners();
+    
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(_themeKey, _themeModeToString(mode));
+  }
+  
+  Future<void> setLocale(Locale locale) async {
+    _locale = locale;
+    notifyListeners();
+    
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(_localeKey, locale.languageCode);
+  }
+  
+  Future<void> setNotificationsEnabled(bool enabled) async {
+    _notificationsEnabled = enabled;
+    notifyListeners();
+    
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool(_notificationsKey, enabled);
+  }
+  
+  String _themeModeToString(ThemeMode mode) {
+    switch (mode) {
+      case ThemeMode.light:
+        return 'light';
+      case ThemeMode.dark:
+        return 'dark';
+      default:
+        return 'system';
+    }
+  }
+  
+  ThemeMode _stringToThemeMode(String? value) {
+    switch (value) {
+      case 'light':
+        return ThemeMode.light;
+      case 'dark':
+        return ThemeMode.dark;
+      default:
+        return ThemeMode.system;
+    }
+  }
+}
+
+// Inicialización
+class SettingsApp extends StatelessWidget {
+  const SettingsApp({super.key});
+  
+  @override
+  Widget build(BuildContext context) {
+    return ChangeNotifierProvider(
+      create: (_) => SettingsModel()..load(),
+      child: Consumer<SettingsModel>(
+        builder: (context, settings, child) {
+          return MaterialApp(
+            theme: ThemeData.light(),
+            darkTheme: ThemeData.dark(),
+            themeMode: settings.themeMode,
+            locale: settings.locale,
+            home: const SettingsScreen(),
+          );
+        },
+      ),
+    );
+  }
+}
+----
+
+==== Hydrated BLoC para Persistencia
+
+[source,dart]
+----
+import 'package:hydrated_bloc/hydrated_bloc.dart';
+import 'package:path_provider/path_provider.dart';
+
+// Estado
+class ThemeState extends Equatable {
+  final ThemeMode themeMode;
+  
+  const ThemeState({required this.themeMode});
+  
+  @override
+  List<Object?> get props => [themeMode];
+  
+  factory ThemeState.fromJson(Map<String, dynamic> json) {
+    return ThemeState(
+      themeMode: ThemeMode.values[json['themeMode'] as int],
+    );
+  }
+  
+  Map<String, dynamic> toJson() {
+    return {'themeMode': themeMode.index};
+  }
+}
+
+// Evento
+abstract class ThemeEvent {}
+class ThemeChanged extends ThemeEvent {
+  final ThemeMode themeMode;
+  ThemeChanged(this.themeMode);
+}
+
+// BLoC Hidratado
+class ThemeBloc extends HydratedBloc<ThemeEvent, ThemeState> {
+  ThemeBloc() : super(const ThemeState(themeMode: ThemeMode.system)) {
+    on<ThemeChanged>((event, emit) {
+      emit(ThemeState(themeMode: event.themeMode));
+    });
+  }
+  
+  @override
+  ThemeState? fromJson(Map<String, dynamic> json) {
+    return ThemeState.fromJson(json);
+  }
+  
+  @override
+  Map<String, dynamic>? toJson(ThemeState state) {
+    return state.toJson();
+  }
+}
+
+// Inicialización
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  
+  final storage = await HydratedStorage.build(
+    storageDirectory: await getApplicationDocumentsDirectory(),
+  );
+  
+  HydratedBloc.storage = storage;
+  
+  runApp(const MyApp());
+}
+----
+
+'''''
+
+=== Patrones Avanzados
+
+==== Patrón Repositorio
+
+[source,dart]
+----
+// Modelo
+class Product {
+  final String id;
+  final String name;
+  final double price;
+  final String description;
+  
+  const Product({
+    required this.id,
+    required this.name,
+    required this.price,
+    required this.description,
+  });
+  
+  factory Product.fromJson(Map<String, dynamic> json) {
+    return Product(
+      id: json['id'],
+      name: json['name'],
+      price: (json['price'] as num).toDouble(),
+      description: json['description'] ?? '',
+    );
+  }
+  
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'name': name,
+      'price': price,
+      'description': description,
+    };
+  }
+}
+
+// Repositorio abstracto
+abstract class ProductRepository {
+  Future<List<Product>> getProducts();
+  Future<Product> getProduct(String id);
+  Future<void> addProduct(Product product);
+  Future<void> updateProduct(Product product);
+  Future<void> deleteProduct(String id);
+}
+
+// Implementación API
+class ApiProductRepository implements ProductRepository {
+  final http.Client _client;
+  
+  ApiProductRepository(this._client);
+  
+  @override
+  Future<List<Product>> getProducts() async {
+    final response = await _client.get(Uri.parse('https://api.example.com/products'));
+    if (response.statusCode != 200) {
+      throw Exception('Failed to load products');
+    }
+    final List<dynamic> data = json.decode(response.body);
+    return data.map((json) => Product.fromJson(json)).toList();
+  }
+  
+  @override
+  Future<Product> getProduct(String id) async {
+    final response = await _client.get(Uri.parse('https://api.example.com/products/$id'));
+    if (response.statusCode != 200) {
+      throw Exception('Failed to load product');
+    }
+    return Product.fromJson(json.decode(response.body));
+  }
+  
+  @override
+  Future<void> addProduct(Product product) async {
+    final response = await _client.post(
+      Uri.parse('https://api.example.com/products'),
+      headers: {'Content-Type': 'application/json'},
+      body: json.encode(product.toJson()),
+    );
+    if (response.statusCode != 201) {
+      throw Exception('Failed to add product');
+    }
+  }
+  
+  @override
+  Future<void> updateProduct(Product product) async {
+    final response = await _client.put(
+      Uri.parse('https://api.example.com/products/${product.id}'),
+      headers: {'Content-Type': 'application/json'},
+      body: json.encode(product.toJson()),
+    );
+    if (response.statusCode != 200) {
+      throw Exception('Failed to update product');
+    }
+  }
+  
+  @override
+  Future<void> deleteProduct(String id) async {
+    final response = await _client.delete(Uri.parse('https://api.example.com/products/$id'));
+    if (response.statusCode != 204) {
+      throw Exception('Failed to delete product');
+    }
+  }
+}
+
+// Implementación mock para testing
+class MockProductRepository implements ProductRepository {
+  final List<Product> _products = [
+    Product(id: '1', name: 'Producto 1', price: 10.0, description: 'Desc 1'),
+    Product(id: '2', name: 'Producto 2', price: 20.0, description: 'Desc 2'),
+  ];
+  
+  @override
+  Future<List<Product>> getProducts() async {
+    await Future.delayed(const Duration(milliseconds: 500));
+    return _products;
+  }
+  
+  @override
+  Future<Product> getProduct(String id) async {
+    await Future.delayed(const Duration(milliseconds: 300));
+    final product = _products.firstWhere((p) => p.id == id);
+    return product;
+  }
+  
+  @override
+  Future<void> addProduct(Product product) async {
+    await Future.delayed(const Duration(milliseconds: 300));
+    _products.add(product);
+  }
+  
+  @override
+  Future<void> updateProduct(Product product) async {
+    await Future.delayed(const Duration(milliseconds: 300));
+    final index = _products.indexWhere((p) => p.id == product.id);
+    if (index != -1) {
+      _products[index] = product;
+    }
+  }
+  
+  @override
+  Future<void> deleteProduct(String id) async {
+    await Future.delayed(const Duration(milliseconds: 300));
+    _products.removeWhere((p) => p.id == id);
+  }
+}
+
+// Provider con repositorio
+final productRepositoryProvider = Provider<ProductRepository>((ref) {
+  // return ApiProductRepository(http.Client());
+  return MockProductRepository();
+});
+
+final productsProvider = FutureProvider<List<Product>>((ref) async {
+  final repository = ref.watch(productRepositoryProvider);
+  return repository.getProducts();
+});
+
+final productDetailProvider = FutureProvider.family<Product, String>((ref, id) async {
+  final repository = ref.watch(productRepositoryProvider);
+  return repository.getProduct(id);
+});
+----
+
+'''''
+
+=== Ejemplos Prácticos Completos
+
+==== App de Tareas con Riverpod
+
+[source,dart]
+----
+// main.dart
+void main() {
+  runApp(const ProviderScope(child: TodoApp()));
+}
+
+class TodoApp extends StatelessWidget {
+  const TodoApp({super.key});
+  
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Todo App',
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
+        useMaterial3: true,
+      ),
+      home: const TodoScreen(),
+    );
+  }
+}
+
+// providers.dart
+final todoListProvider = StateNotifierProvider<TodoListNotifier, List<Todo>>((ref) {
+  return TodoListNotifier();
+});
+
+final todoFilterProvider = StateProvider<TodoFilter>((ref) => TodoFilter.all);
+
+final filteredTodosProvider = Provider<List<Todo>>((ref) {
+  final todos = ref.watch(todoListProvider);
+  final filter = ref.watch(todoFilterProvider);
+  
+  return switch (filter) {
+    TodoFilter.all => todos,
+    TodoFilter.active => todos.where((t) => !t.completed).toList(),
+    TodoFilter.completed => todos.where((t) => t.completed).toList(),
+  };
+});
+
+final todoStatsProvider = Provider<TodoStats>((ref) {
+  final todos = ref.watch(todoListProvider);
+  return TodoStats(
+    total: todos.length,
+    active: todos.where((t) => !t.completed).length,
+    completed: todos.where((t) => t.completed).length,
+  );
+});
+
+class Todo {
+  final String id;
+  final String title;
+  final bool completed;
+  final DateTime createdAt;
+  
+  Todo({
+    required this.id,
+    required this.title,
+    this.completed = false,
+    DateTime? createdAt,
+  }) : createdAt = createdAt ?? DateTime.now();
+  
+  Todo copyWith({String? id, String? title, bool? completed, DateTime? createdAt}) {
+    return Todo(
+      id: id ?? this.id,
+      title: title ?? this.title,
+      completed: completed ?? this.completed,
+      createdAt: createdAt ?? this.createdAt,
+    );
+  }
+}
+
+class TodoListNotifier extends StateNotifier<List<Todo>> {
+  TodoListNotifier() : super([]);
+  
+  void add(String title) {
+    state = [
+      ...state,
+      Todo(id: DateTime.now().millisecondsSinceEpoch.toString(), title: title),
+    ];
+  }
+  
+  void toggle(String id) {
+    state = state.map((todo) {
+      if (todo.id == id) {
+        return todo.copyWith(completed: !todo.completed);
+      }
+      return todo;
+    }).toList();
+  }
+  
+  void remove(String id) {
+    state = state.where((todo) => todo.id != id).toList();
+  }
+  
+  void clearCompleted() {
+    state = state.where((todo) => !todo.completed).toList();
+  }
+  
+  void edit(String id, String newTitle) {
+    state = state.map((todo) {
+      if (todo.id == id) {
+        return todo.copyWith(title: newTitle);
+      }
+      return todo;
+    }).toList();
+  }
+}
+
+enum TodoFilter { all, active, completed }
+
+class TodoStats {
+  final int total;
+  final int active;
+  final int completed;
+  
+  const TodoStats({
+    required this.total,
+    required this.active,
+    required this.completed,
+  });
+}
+
+// screens.dart
+class TodoScreen extends ConsumerStatefulWidget {
+  const TodoScreen({super.key});
+  
+  @override
+  ConsumerState<TodoScreen> createState() => _TodoScreenState();
+}
+
+class _TodoScreenState extends ConsumerState<TodoScreen> {
+  final _controller = TextEditingController();
+  
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+  
+  void _addTodo() {
+    if (_controller.text.trim().isEmpty) return;
+    ref.read(todoListProvider.notifier).add(_controller.text.trim());
+    _controller.clear();
+  }
+  
+  @override
+  Widget build(BuildContext context) {
+    final todos = ref.watch(filteredTodosProvider);
+    final stats = ref.watch(todoStatsProvider);
+    final filter = ref.watch(todoFilterProvider);
+    
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Todo App'),
+        actions: [
+          if (stats.completed > 0)
+            IconButton(
+              icon: const Icon(Icons.clear_all),
+              onPressed: () => ref.read(todoListProvider.notifier).clearCompleted(),
+            ),
+        ],
+      ),
+      body: Column(
+        children: [
+          // Estadísticas
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                _buildStat('Total', stats.total),
+                _buildStat('Activos', stats.active),
+                _buildStat('Completados', stats.completed),
+              ],
+            ),
+          ),
+          
+          // Input
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: TextField(
+              controller: _controller,
+              decoration: InputDecoration(
+                hintText: '¿Qué necesitas hacer?',
+                border: const OutlineInputBorder(),
+                suffixIcon: IconButton(
+                  icon: const Icon(Icons.add),
+                  onPressed: _addTodo,
+                ),
+              ),
+              onSubmitted: (_) => _addTodo(),
+            ),
+          ),
+          
+          // Filtros
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: TodoFilter.values.map((f) {
+                return Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 4),
+                  child: FilterChip(
+                    label: Text(_getFilterLabel(f)),
+                    selected: filter == f,
+                    onSelected: (_) => ref.read(todoFilterProvider.notifier).state = f,
+                  ),
+                );
+              }).toList(),
+            ),
+          ),
+          const SizedBox(height: 16),
+          
+          // Lista
+          Expanded(
+            child: todos.isEmpty
+                ? const Center(child: Text('No hay tareas'))
+                : ListView.builder(
+                    itemCount: todos.length,
+                    itemBuilder: (context, index) {
+                      final todo = todos[index];
+                      return TodoTile(todo: todo);
+                    },
+                  ),
+          ),
+        ],
+      ),
+    );
+  }
+  
+  Widget _buildStat(String label, int value) {
+    return Column(
+      children: [
+        Text('$value', style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+        Text(label, style: const TextStyle(color: Colors.grey)),
+      ],
+    );
+  }
+  
+  String _getFilterLabel(TodoFilter filter) {
+    return switch (filter) {
+      TodoFilter.all => 'Todos',
+      TodoFilter.active => 'Activos',
+      TodoFilter.completed => 'Completados',
+    };
+  }
+}
+
+class TodoTile extends ConsumerWidget {
+  final Todo todo;
+  
+  const TodoTile({super.key, required this.todo});
+  
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return ListTile(
+      leading: Checkbox(
+        value: todo.completed,
+        onChanged: (_) => ref.read(todoListProvider.notifier).toggle(todo.id),
+      ),
+      title: Text(
+        todo.title,
+        style: TextStyle(
+          decoration: todo.completed ? TextDecoration.lineThrough : null,
+        ),
+      ),
+      subtitle: Text(
+        'Creado: ${todo.createdAt.toString().substring(0, 16)}',
+        style: const TextStyle(fontSize: 12, color: Colors.grey),
+      ),
+      trailing: IconButton(
+        icon: const Icon(Icons.delete, color: Colors.red),
+        onPressed: () => ref.read(todoListProvider.notifier).remove(todo.id),
+      ),
+      onTap: () => _showEditDialog(context, ref),
+    );
+  }
+  
+  void _showEditDialog(BuildContext context, WidgetRef ref) {
+    final controller = TextEditingController(text: todo.title);
+    
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Editar tarea'),
+          content: TextField(
+            controller: controller,
+            decoration: const InputDecoration(
+              hintText: 'Título de la tarea',
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('Cancelar'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                if (controller.text.trim().isNotEmpty) {
+                  ref.read(todoListProvider.notifier).edit(todo.id, controller.text.trim());
+                }
+                Navigator.pop(context);
+              },
+              child: const Text('Guardar'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+}
+----
+
+'''''
+
+=== Mejores Prácticas
+
+==== 1. Separar Lógica de UI
+
+[source,dart]
+----
+// ❌ Malo: Lógica en el widget
+class BadExample extends StatefulWidget {
+  @override
+  State<BadExample> createState() => _BadExampleState();
+}
+
+class _BadExampleState extends State<BadExample> {
+  List<User> _users = [];
+  bool _isLoading = false;
+  String? _error;
+  
+  Future<void> _loadUsers() async {
+    setState(() => _isLoading = true);
+    try {
+      final response = await http.get(Uri.parse('https://api.example.com/users'));
+      final data = json.decode(response.body);
+      setState(() {
+        _users = data.map((u) => User.fromJson(u)).toList();
+        _isLoading = false;
+      });
+    } catch (e) {
+      setState(() {
+        _error = e.toString();
+        _isLoading = false;
+      });
+    }
+  }
+  
+  @override
+  Widget build(BuildContext context) {
+    if (_isLoading) return CircularProgressIndicator();
+    if (_error != null) return Text('Error: $_error');
+    return ListView(children: _users.map((u) => Text(u.name)).toList());
+  }
+}
+
+// ✅ Bueno: Lógica en controlador/proveedor
+class UserState {
+  final List<User> users;
+  final bool isLoading;
+  final String? error;
+  
+  const UserState({this.users = const [], this.isLoading = false, this.error});
+  
+  UserState copyWith({List<User>? users, bool? isLoading, String? error}) {
+    return UserState(
+      users: users ?? this.users,
+      isLoading: isLoading ?? this.isLoading,
+      error: error ?? this.error,
+    );
+  }
+}
+
+class UserNotifier extends StateNotifier<UserState> {
+  final UserRepository _repository;
+  
+  UserNotifier(this._repository) : super(const UserState());
+  
+  Future<void> loadUsers() async {
+    state = state.copyWith(isLoading: true, error: null);
+    try {
+      final users = await _repository.getUsers();
+      state = state.copyWith(users: users, isLoading: false);
+    } catch (e) {
+      state = state.copyWith(error: e.toString(), isLoading: false);
+    }
+  }
+}
+
+class GoodExample extends ConsumerWidget {
+  const GoodExample({super.key});
+  
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final state = ref.watch(userProvider);
+    
+    if (state.isLoading) return const CircularProgressIndicator();
+    if (state.error != null) return Text('Error: ${state.error}');
+    
+    return ListView(
+      children: state.users.map((u) => Text(u.name)).toList(),
+    );
+  }
+}
+----
+
+==== 2. Usar Estados Inmutables
+
+[source,dart]
+----
+// ❌ Malo: Estado mutable
+class MutableState extends ChangeNotifier {
+  List<User> users = [];
+  
+  void addUser(User user) {
+    users.add(user); // Mutación directa
+    notifyListeners();
+  }
+}
+
+// ✅ Bueno: Estado inmutable
+class ImmutableState extends ChangeNotifier {
+  List<User> _users = [];
+  
+  List<User> get users => List.unmodifiable(_users);
+  
+  void addUser(User user) {
+    _users = [..._users, user]; // Nueva lista
+    notifyListeners();
+  }
+  
+  void removeUser(String id) {
+    _users = _users.where((u) => u.id != id).toList();
+    notifyListeners();
+  }
+}
+----
+
+==== 3. Minimizar Reconstrucciones
+
+[source,dart]
+----
+// ❌ Malo: Todo el widget se reconstruye
+class BadCounter extends ConsumerWidget {
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final count = ref.watch(counterProvider);
+    
+    return Scaffold(
+      appBar: AppBar(title: const Text('Counter')),
+      body: Center(
+        child: Column(
+          children: [
+            const Text('El valor es:'), // Se reconstruye innecesariamente
+            Text('$count'),
+          ],
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => ref.read(counterProvider.notifier).increment(),
+        child: const Icon(Icons.add),
+      ),
+    );
+  }
+}
+
+// ✅ Bueno: Solo el necesario se reconstruye
+class GoodCounter extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Counter')),
+      body: Center(
+        child: Column(
+          children: [
+            const Text('El valor es:'), // No se reconstruye
+            Consumer<CounterNotifier>(
+              builder: (context, counter, _) => Text('${counter.value}'),
+            ),
+          ],
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {}, // Usar Consumer para el botón si es necesario
+        child: const Icon(Icons.add),
+      ),
+    );
+  }
+}
+----
+
+==== 4. Gestionar Ciclo de Vida
+
+[source,dart]
+----
+class LifecycleExample extends StatefulWidget {
+  const LifecycleExample({super.key});
+  
+  @override
+  State<LifecycleExample> createState() => _LifecycleExampleState();
+}
+
+class _LifecycleExampleState extends State<LifecycleExample> with WidgetsBindingObserver {
+  late final StreamSubscription _subscription;
+  Timer? _timer;
+  
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    
+    // Inicializar suscripciones
+    _subscription = someStream.listen((data) {
+      // Manejar datos
+    });
+    
+    // Timer periódico
+    _timer = Timer.periodic(const Duration(seconds: 30), (_) {
+      _refreshData();
+    });
+  }
+  
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    switch (state) {
+      case AppLifecycleState.resumed:
+        _resumeApp();
+        break;
+      case AppLifecycleState.paused:
+        _pauseApp();
+        break;
+      default:
+        break;
+    }
+  }
+  
+  void _resumeApp() {
+    // Reanudar operaciones
+    _refreshData();
+  }
+  
+  void _pauseApp() {
+    // Pausar operaciones costosas
+    _timer?.cancel();
+  }
+  
+  void _refreshData() {
+    // Refrescar datos
+  }
+  
+  @override
+  void dispose() {
+    _subscription.cancel();
+    _timer?.cancel();
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+  
+  @override
+  Widget build(BuildContext context) {
+    return Container();
+  }
+}
+----
+
+'''''
+
+=== Errores Comunes y Soluciones
+
+==== 1. Memory Leaks
+
+[source,dart]
+----
+// ❌ Malo: No cancelar suscripciones
+class LeakyWidget extends StatefulWidget {
+  @override
+  State<LeakyWidget> createState() => _LeakyWidgetState();
+}
+
+class _LeakyWidgetState extends State<LeakyWidget> {
+  StreamSubscription? _subscription;
+  
+  @override
+  void initState() {
+    super.initState();
+    _subscription = someStream.listen((data) {
+      setState(() {
+        // Actualizar estado
+      });
+    });
+  }
+  
+  @override
+  Widget build(BuildContext context) {
+    return Container();
+  }
+  // ❌ Falta dispose
+}
+
+// ✅ Bueno: Cancelar suscripciones
+class FixedWidget extends StatefulWidget {
+  @override
+  State<FixedWidget> createState() => _FixedWidgetState();
+}
+
+class _FixedWidgetState extends State<FixedWidget> {
+  StreamSubscription? _subscription;
+  
+  @override
+  void initState() {
+    super.initState();
+    _subscription = someStream.listen((data) {
+      if (mounted) { // Verificar que sigue montado
+        setState(() {
+          // Actualizar estado
+        });
+      }
+    });
+  }
+  
+  @override
+  void dispose() {
+    _subscription?.cancel(); // ✅ Cancelar
+    super.dispose();
+  }
+  
+  @override
+  Widget build(BuildContext context) {
+    return Container();
+  }
+}
+----
+
+==== 2. setState en dispose
+
+[source,dart]
+----
+// ❌ Malo: setState después de dispose
+class BadDispose extends StatefulWidget {
+  @override
+  State<BadDispose> createState() => _BadDisposeState();
+}
+
+class _BadDisposeState extends State<BadDispose> {
+  @override
+  void dispose() {
+    someAsyncOperation().then((_) {
+      setState(() {}); // ❌ Error: Widget ya desmontado
+    });
+    super.dispose();
+  }
+  
+  @override
+  Widget build(BuildContext context) {
+    return Container();
+  }
+}
+
+// ✅ Bueno: Verificar mounted
+class GoodDispose extends StatefulWidget {
+  @override
+  State<GoodDispose> createState() => _GoodDisposeState();
+}
+
+class _GoodDisposeState extends State<GoodDispose> {
+  @override
+  void dispose() {
+    someAsyncOperation().then((_) {
+      if (mounted) { // ✅ Verificar antes de setState
+        setState(() {});
+      }
+    });
+    super.dispose();
+  }
+  
+  @override
+  Widget build(BuildContext context) {
+    return Container();
+  }
+}
+----
+
+==== 3. Provider fuera de contexto
+
+[source,dart]
+----
+// ❌ Malo: Acceder provider fuera de contexto
+class BadProviderUse extends StatelessWidget {
+  final ProviderRef ref;
+  
+  BadProviderUse(this.ref); // ❌ No pasar ref
+  
+  void someMethod() {
+    ref.read(someProvider); // ❌ Fuera de contexto
+  }
+  
+  @override
+  Widget build(BuildContext context) {
+    return Container();
+  }
+}
+
+// ✅ Bueno: Usar dentro de ConsumerWidget
+class GoodProviderUse extends ConsumerWidget {
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    void someMethod() {
+      ref.read(someProvider); // ✅ Dentro de build
+    }
+    
+    return ElevatedButton(
+      onPressed: () {
+        someMethod();
+        // O directamente
+        ref.read(someProvider.notifier).doSomething();
+      },
+      child: const Text('Action'),
+    );
+  }
+}
+----
+
+'''''
+
+=== Conclusión
+
+La gestión de estado en Flutter ofrece múltiples soluciones según las
+necesidades:
+
+[arabic]
+. *setState*: Para estado local simple y temporal
+. *InheritedWidget*: Para estado compartido sin dependencias externas
+. *Provider*: Para estado de aplicación simple-medio con fácil
+aprendizaje
+. *Riverpod*: Para estado complejo, asíncrono y mejor testing
+. *BLoC/Cubit*: Para proyectos grandes con flujos complejos
+. *GetX*: Para desarrollo rápido con todo incluido
+
+*Recomendaciones:* - Empezar con Provider o Riverpod para la mayoría de
+proyectos - Considerar BLoC para equipos grandes y testing extensivo -
+Usar setState solo para UI state local - Mantener estados inmutables -
+Separar siempre la lógica de la UI - Implementar persistencia cuando sea
+necesario
+
+'''''
+
+*Versión del documento*: 1.0 +
+*Flutter versión*: 3.24.0 +
+*Última actualización*: Julio 2025

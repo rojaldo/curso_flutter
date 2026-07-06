@@ -1,14 +1,4 @@
-= Dart para Flutter: Guía Completa
-:toc: left
-:icons: font
-:source-highlighter: highlight.js
-:toclevels: 3
-:toc-title: Contenidos
-:date: 2026-05-27
-:lang: es
-
-== DART PARA FLUTTER
-
+== 📋 TEMARIO COMPLETO: DART PARA FLUTTER
 
 *Duración recomendada:* 12-15 horas (sesión extendida o dividida en 4-5
 días) +

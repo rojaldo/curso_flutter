@@ -1,0 +1,2260 @@
+# Módulo Completo: Instalación y Configuración de Flutter
+
+## Índice
+
+1. [Introducción a Flutter](#introducción-a-flutter)
+2. [Requisitos del Sistema](#requisitos-del-sistema)
+3. [Opciones de Instalación](#opciones-de-instalación)
+4. [Instalación en Windows](#instalación-en-windows)
+5. [Instalación en macOS](#instalación-en-macos)
+6. [Instalación en Linux](#instalación-en-linux)
+7. [Instalación con FVM (Flutter Version Manager)](#instalación-con-fvm-flutter-version-manager)
+8. [Configuración de IDEs](#configuración-de-ides)
+9. [Configuración de Plataformas Nativas](#configuración-de-plataformas-nativas)
+10. [Gestión de Proyectos Flutter](#gestión-de-proyectos-flutter)
+11. [Testing en Flutter](#testing-en-flutter)
+12. [Solución de Problemas](#solución-de-problemas)
+13. [Mejores Prácticas](#mejores-prácticas)
+
+---
+
+## Introducción a Flutter
+
+### ¿Qué es Flutter?
+
+Flutter es un framework de código abierto desarrollado por Google para crear aplicaciones móviles, web y de escritorio desde una única base de código. Utiliza el lenguaje de programación Dart y se caracteriza por:
+
+- **Hot Reload**: Permite ver cambios en tiempo real sin reiniciar la app
+- **Widgets personalizados**: Amplia biblioteca de widgets adaptables
+- **Rendimiento nativo**: Compila directamente a código nativo (ARM/x64)
+- **Multiplataforma**: iOS, Android, Web, Windows, macOS, Linux
+
+### Ventajas de Flutter
+
+| Característica | Beneficio |
+|----------------|-----------|
+| Single Codebase | Un solo código para todas las plataformas |
+| Hot Reload | Desarrollo rápido con cambios instantáneos |
+| UI Consistente | Mismo look & feel en todas las plataformas |
+| Open Source | Sin costes de licencia, comunidad activa |
+| Rendimiento | Compilación nativa con acceso directo al hardware |
+
+---
+
+## Requisitos del Sistema
+
+### Requisitos Mínimos
+
+#### Para Windows
+
+- **Sistema Operativo**: Windows 10 (64-bit) o superior
+- **Espacio en disco**: 2.5 GB (sin Android Studio)
+- **Herramientas**: Git 2.x, PowerShell 5.1+
+- **RAM**: 8 GB mínimo (16 GB recomendado)
+
+#### Para macOS
+
+- **Sistema Operativo**: macOS 10.14 (Mojave) o superior
+- **Espacio en disco**: 2.8 GB
+- **Herramientas**: Xcode 13+ (para desarrollo iOS)
+- **RAM**: 8 GB mínimo (16 GB recomendado)
+
+#### Para Linux
+
+- **Distribuciones soportadas**: Ubuntu 18.04+, Debian 10+, Fedora 30+
+- **Espacio en disco**: 2.5 GB
+- **Herramientas**: Git, curl, unzip
+- **RAM**: 8 GB mínimo
+
+### Herramientas Necesarias
+
+```bash
+# Verificar Git instalado
+git --version
+
+# Verificar curl instalado (Linux/macOS)
+curl --version
+
+# Verificar PowerShell (Windows)
+$PSVersionTable.PSVersion
+```
+
+---
+
+## Opciones de Instalación
+
+Flutter ofrece varias formas de instalación según tus necesidades:
+
+### 1. Instalación Directa (SDK Oficial)
+
+**Ventajas:**
+- Instalación oficial y estable
+- Actualizaciones directas desde Google
+- Documentación oficial coincide
+
+**Desventajas:**
+- Gestión manual de versiones
+- Cambio de versiones complejo
+- Conflictos entre proyectos con diferentes versiones
+
+### 2. Instalación con FVM (Recomendada)
+
+**Ventajas:**
+- Gestión múltiple de versiones
+- Versiones por proyecto
+- Fácil cambio entre versiones
+- Ideal para equipos
+
+**Desventajas:**
+- Requiere aprendizaje adicional
+- Capa extra de configuración
+
+### 3. Instalación via Gestor de Paquetes
+
+| Sistema | Gestor | Comando |
+|---------|--------|---------|
+| Windows | Chocolatey | `choco install flutter` |
+| macOS | Homebrew | `brew install flutter` |
+| Linux | Snap | `snap install flutter --classic` |
+
+**Ventajas:**
+- Actualizaciones automáticas
+- Instalación simplificada
+
+**Desventajas:**
+- Versiones pueden estar desactualizadas
+- Menos control sobre versiones específicas
+
+---
+
+## Instalación en Windows
+
+### Paso 1: Preparación del Entorno
+
+#### 1.1 Instalar Git
+
+```powershell
+# Opción 1: Via Chocolatey (recomendado)
+choco install git -y
+
+# Opción 2: Descarga directa
+# https://git-scm.com/download/win
+```
+
+**Verificar instalación:**
+
+```powershell
+git --version
+# Salida esperada: git version 2.x.x
+```
+
+#### 1.2 Instalar Visual Studio Build Tools
+
+Flutter requiere herramientas de compilación de C++ para desarrollo de escritorio:
+
+```powershell
+# Instalar via Chocolatey
+choco install visualstudio2022buildtools -y
+choco install visualstudio2022-workload-vctools -y
+```
+
+**O instalación manual:**
+1. Descargar desde: https://visualstudio.microsoft.com/visual-cpp-build-tools/
+2. Seleccionar "Desktop development with C++"
+3. Instalar
+
+#### 1.3 Configurar Android Studio (para desarrollo Android)
+
+```powershell
+# Instalar Android Studio
+choco install androidstudio -y
+```
+
+**Configuración necesaria:**
+
+1. Abrir Android Studio
+2. Ir a **File > Settings > Appearance & Behavior > System Settings > Android SDK**
+3. Instalar los siguientes componentes:
+   - Android SDK Platform 33 (o superior)
+   - Android SDK Build-Tools
+   - Android SDK Command-line Tools
+   - Android Emulator
+   - Android SDK Platform-Tools
+
+4. Configurar variables de entorno:
+
+```powershell
+# Añadir a PATH del usuario
+$env:Path += ";C:\Users\$env:USERNAME\AppData\Local\Android\Sdk\platform-tools"
+$env:Path += ";C:\Users\$env:USERNAME\AppData\Local\Android\Sdk\tools"
+$env:Path += ";C:\Users\$env:USERNAME\AppData\Local\Android\Sdk\cmdline-tools\latest\bin"
+
+# Hacer permanente (PowerShell)
+[Environment]::SetEnvironmentVariable("Path", $env:Path, "User")
+
+# Variable ANDROID_HOME
+[Environment]::SetEnvironmentVariable("ANDROID_HOME", "C:\Users\$env:USERNAME\AppData\Local\Android\Sdk", "User")
+```
+
+### Paso 2: Descargar Flutter SDK
+
+#### Opción A: Descarga Directa
+
+```powershell
+# Crear directorio para desarrollo
+mkdir C:\flutter_dev
+cd C:\flutter_dev
+
+# Descargar Flutter SDK
+# Ir a: https://docs.flutter.dev/get-started/install/windows
+# Descargar el ZIP más reciente
+
+# O via PowerShell
+Invoke-WebRequest -Uri "https://storage.googleapis.com/flutter_infra_release/releases/stable/windows/flutter_windows_3.24.0-stable.zip" -OutFile "flutter.zip"
+
+# Extraer
+Expand-Archive flutter.zip -DestinationPath C:\flutter_dev
+```
+
+#### Opción B: Via Git (recomendado para actualizaciones)
+
+```powershell
+# Clonar repositorio
+cd C:\
+git clone https://github.com/flutter/flutter.git -b stable
+
+# O especificar versión
+git clone https://github.com/flutter/flutter.git -b 3.24.0
+```
+
+### Paso 3: Configurar PATH
+
+```powershell
+# Añadir Flutter al PATH temporalmente
+$env:Path += ";C:\flutter\bin"
+
+# Hacer permanente
+[Environment]::SetEnvironmentVariable("Path", [Environment]::GetEnvironmentVariable("Path", "User") + ";C:\flutter\bin", "User")
+```
+
+### Paso 4: Verificar Instalación
+
+```powershell
+# Cerrar y reabrir PowerShell
+flutter --version
+
+# Salida esperada:
+# Flutter 3.24.0 • channel stable • https://github.com/flutter/flutter.git
+# Framework • revision xxxxxxxxxx
+# Engine • revision xxxxxxxxxx
+# Tools • Dart 3.5.0 • DevTools 2.39.1
+```
+
+### Paso 5: Ejecutar Flutter Doctor
+
+```powershell
+flutter doctor
+```
+
+**Salida típica:**
+
+```
+[✓] Flutter (Channel stable, 3.24.0, on Microsoft Windows)
+[✓] Windows version (10 or higher)
+[✗] Android toolchain - develop for Android devices
+    ✗ Unable to locate Android SDK
+    • Install Android Studio from: https://developer.android.com/studio
+[✓] Chrome - develop for the web
+[!] Android Studio (not installed)
+[✓] VS Code (version 1.85)
+[✓] Connected device (3 available)
+[✓] Network resources
+```
+
+**Resolver problemas detectados:**
+
+```powershell
+# Si Android toolchain falla
+flutter doctor --android-licenses
+
+# Aceptar todas las licencias
+# Presionar 'y' para cada una
+```
+
+### Paso 6: Configurar Emuladores Android
+
+```powershell
+# Listar emuladores disponibles
+flutter emulators
+
+# Crear un nuevo emulador
+flutter emulators --create --name mi_emulador
+
+# Lanzar emulador
+flutter emulators --launch mi_emulador
+
+# O desde Android Studio
+# Tools > Device Manager > Create Device
+```
+
+---
+
+## Instalación en macOS
+
+### Paso 1: Preparación del Entorno
+
+#### 1.1 Instalar Homebrew (si no está instalado)
+
+```bash
+# Verificar si Homebrew está instalado
+brew --version
+
+# Si no está instalado
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+```
+
+#### 1.2 Instalar Herramientas Básicas
+
+```bash
+# Instalar Git
+brew install git
+
+# Verificar instalación
+git --version
+```
+
+#### 1.3 Instalar Xcode (para desarrollo iOS)
+
+```bash
+# Instalar Xcode desde App Store
+# O via comando:
+xcode-select --install
+
+# Aceptar licencia
+sudo xcodebuild -license accept
+
+# Configurar Command Line Tools
+sudo xcode-select --switch /Applications/Xcode.app/Contents/Developer
+```
+
+### Paso 2: Instalar Flutter SDK
+
+#### Opción A: Via Homebrew (más sencillo)
+
+```bash
+# Instalar Flutter
+brew install flutter
+
+# Verificar
+flutter --version
+```
+
+#### Opción B: Instalación Manual
+
+```bash
+# Crear directorio de desarrollo
+mkdir -p ~/development
+cd ~/development
+
+# Descargar Flutter
+curl -O https://storage.googleapis.com/flutter_infra_release/releases/stable/macos/flutter_macos_3.24.0-stable.zip
+
+# Extraer
+unzip flutter_macos_3.24.0-stable.zip
+
+# O via Git (recomendado)
+git clone https://github.com/flutter/flutter.git -b stable
+```
+
+### Paso 3: Configurar PATH
+
+```bash
+# Para Zsh (macOS Catalina y posteriores)
+echo 'export PATH="$HOME/development/flutter/bin:$PATH"' >> ~/.zshrc
+source ~/.zshrc
+
+# Para Bash (versiones anteriores)
+echo 'export PATH="$HOME/development/flutter/bin:$PATH"' >> ~/.bash_profile
+source ~/.bash_profile
+
+# Verificar
+which flutter
+flutter --version
+```
+
+### Paso 4: Configurar CocoaPods (para iOS)
+
+```bash
+# Instalar CocoaPods
+sudo gem install cocoapods
+
+# O via Homebrew
+brew install cocoapods
+
+# Verificar
+pod --version
+```
+
+### Paso 5: Configurar Android Studio
+
+```bash
+# Instalar Android Studio
+brew install --cask android-studio
+
+# Configurar Android SDK
+# Abrir Android Studio y seguir el wizard de configuración
+
+# Variables de entorno
+echo 'export ANDROID_HOME=$HOME/Library/Android/sdk' >> ~/.zshrc
+echo 'export PATH=$PATH:$ANDROID_HOME/emulator' >> ~/.zshrc
+echo 'export PATH=$PATH:$ANDROID_HOME/platform-tools' >> ~/.zshrc
+source ~/.zshrc
+```
+
+### Paso 6: Ejecutar Flutter Doctor
+
+```bash
+# Verificar todo el entorno
+flutter doctor -v
+
+# Salida esperada en macOS
+[✓] Flutter (Channel stable, 3.24.0, on macOS)
+[✓] Android toolchain - develop for Android devices
+[✓] Xcode - develop for iOS and macOS
+[✓] Chrome - develop for the web
+[✓] Android Studio
+[✓] VS Code
+[✓] Connected device
+```
+
+---
+
+## Instalación en Linux
+
+### Paso 1: Preparación del Entorno
+
+#### Para Ubuntu/Debian
+
+```bash
+# Actualizar sistema
+sudo apt update && sudo apt upgrade -y
+
+# Instalar dependencias
+sudo apt install -y curl git unzip xz-utils zip libglu1-mesa
+
+# Instalar herramientas de compilación
+sudo apt install -y clang cmake ninja-build pkg-config libgtk-3-dev
+```
+
+#### Para Fedora
+
+```bash
+# Actualizar sistema
+sudo dnf update -y
+
+# Instalar dependencias
+sudo dnf install -y curl git unzip xz zip
+
+# Instalar herramientas de compilación
+sudo dnf install -y clang cmake ninja-build gtk3-devel
+```
+
+#### Para Arch Linux
+
+```bash
+# Instalar dependencias
+sudo pacman -S --needed curl git unzip xz zip clang cmake ninja gtk3
+```
+
+### Paso 2: Instalar Flutter SDK
+
+#### Opción A: Via Snap (Ubuntu)
+
+```bash
+# Instalar Flutter via Snap
+sudo snap install flutter --classic
+
+# Verificar
+flutter --version
+```
+
+#### Opción B: Instalación Manual
+
+```bash
+# Crear directorio
+mkdir -p ~/development
+cd ~/development
+
+# Descargar Flutter
+curl -O https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_3.24.0-stable.tar.xz
+
+# Extraer
+tar xf flutter_linux_3.24.0-stable.tar.xz
+
+# O via Git (recomendado)
+git clone https://github.com/flutter/flutter.git -b stable
+```
+
+### Paso 3: Configurar PATH
+
+```bash
+# Añadir al PATH (para Bash)
+echo 'export PATH="$HOME/development/flutter/bin:$PATH"' >> ~/.bashrc
+source ~/.bashrc
+
+# Para Zsh
+echo 'export PATH="$HOME/development/flutter/bin:$PATH"' >> ~/.zshrc
+source ~/.zshrc
+```
+
+### Paso 4: Instalar Android Studio
+
+```bash
+# Descargar Android Studio
+# https://developer.android.com/studio
+
+# Para Ubuntu/Debian, extraer y ejecutar
+tar -xzf android-studio-*.tar.gz -C /opt/
+sudo ln -s /opt/android-studio/bin/studio.sh /usr/local/bin/android-studio
+
+# Configurar variables de entorno
+echo 'export ANDROID_HOME=$HOME/Android/Sdk' >> ~/.bashrc
+echo 'export PATH=$PATH:$ANDROID_HOME/emulator' >> ~/.bashrc
+echo 'export PATH=$PATH:$ANDROID_HOME/platform-tools' >> ~/.bashrc
+source ~/.bashrc
+```
+
+### Paso 5: Configurar Linux Desktop Support
+
+```bash
+# Habilitar soporte para Linux Desktop
+flutter config --enable-linux-desktop
+
+# Verificar
+flutter doctor
+```
+
+---
+
+## Instalación con FVM (Flutter Version Manager)
+
+### ¿Qué es FVM?
+
+FVM (Flutter Version Manager) es una herramienta que permite gestionar múltiples versiones de Flutter de forma flexible, ideal para equipos y proyectos que necesitan versiones específicas.
+
+### Ventajas de FVM
+
+- **Versiones por proyecto**: Cada proyecto puede usar una versión diferente
+- **Cambio rápido**: Alternar entre versiones con un comando
+- **Reproducibilidad**: Garantiza que todo el equipo use la misma versión
+- **CI/CD friendly**: Fácil configuración en pipelines
+
+### Paso 1: Instalar FVM
+
+#### Via Homebrew (macOS)
+
+```bash
+brew tap leoafarias/fvm
+brew install fvm
+```
+
+#### Via Chocolatey (Windows)
+
+```powershell
+choco install fvm
+```
+
+#### Via Dart Pub (todas las plataformas)
+
+```bash
+# Requiere Dart SDK
+dart pub global activate fvm
+
+# Añadir al PATH
+echo 'export PATH="$HOME/.pub-cache/bin:$PATH"' >> ~/.zshrc  # macOS/Linux
+# O en Windows, añadir %APPDATA%\Pub\Cache\bin al PATH
+```
+
+### Paso 2: Configurar FVM
+
+```bash
+# Verificar instalación
+fvm --version
+
+# Listar versiones disponibles
+fvm releases
+
+# Ver versiones instaladas
+fvm list
+```
+
+### Paso 3: Instalar Versiones Flutter
+
+```bash
+# Instalar versión específica
+fvm install 3.24.0
+
+# Instalar versión estable más reciente
+fvm install stable
+
+# Instalar versión beta
+fvm install beta
+
+# Instalar versión específica del canal
+fvm install 3.19.0 --channel stable
+```
+
+### Paso 4: Configurar Proyecto con FVM
+
+```bash
+# Ir al directorio del proyecto
+cd mi_proyecto_flutter
+
+# Instalar y usar versión específica para el proyecto
+fvm install 3.24.0
+fvm use 3.24.0
+
+# Esto crea un archivo .fvm/fvm_config.json
+# y un symlink en .fvm/flutter_sdk
+```
+
+### Paso 5: Archivo de Configuración FVM
+
+El archivo `.fvm/fvm_config.json` contiene:
+
+```json
+{
+  "flutterSdkVersion": "3.24.0",
+  "flavors": {}
+}
+```
+
+### Paso 6: Usar Flutter con FVM
+
+```bash
+# En lugar de usar 'flutter' directamente, usar:
+fvm flutter run
+fvm flutter build apk
+fvm flutter pub get
+
+# Ejecutar comandos Dart
+fvm dart analyze
+fvm dart test
+```
+
+### Paso 7: Configurar IDE con FVM
+
+#### VS Code
+
+```json
+// settings.json
+{
+  "dart.flutterSdkPath": ".fvm/flutter_sdk",
+  "dart.sdkPath": ".fvm/flutter_sdk/cache/dart-sdk"
+}
+```
+
+#### Android Studio / IntelliJ IDEA
+
+1. Abrir **Preferences** > **Languages & Frameworks** > **Flutter**
+2. Establecer Flutter SDK path a: `/path/to/project/.fvm/flutter_sdk`
+
+### Paso 8: Comandos Útiles de FVM
+
+```bash
+# Ver versión actual del proyecto
+fvm current
+
+# Listar todas las versiones instaladas
+fvm list
+
+# Eliminar versión específica
+fvm remove 3.16.0
+
+# Actualizar FVM
+fvm self upgrade
+
+# Ver información de la versión actual
+fvm flutter --version
+```
+
+### Ejemplo Práctico: Proyecto Multi-Versión
+
+```bash
+# Proyecto A con Flutter 3.16.0
+cd proyecto_a
+fvm install 3.16.0
+fvm use 3.16.0
+fvm flutter pub get
+
+# Proyecto B con Flutter 3.24.0
+cd ../proyecto_b
+fvm install 3.24.0
+fvm use 3.24.0
+fvm flutter pub get
+
+# Cada proyecto mantiene su versión configurada
+```
+
+---
+
+## Configuración de IDEs
+
+### Visual Studio Code (Recomendado)
+
+#### Instalación de Extensiones
+
+```bash
+# Extensiones esenciales:
+1. Flutter (Dart Code) - Soporte completo para Flutter
+2. Dart - Soporte para lenguaje Dart
+3. Awesome Flutter Snippets - Snippets de código
+4. Flutter Widget Snippets - Snippets de widgets
+5. Flutter Intl - Internacionalización
+6. Error Lens - Visualización de errores en línea
+```
+
+#### Configuración Recomendada (settings.json)
+
+```json
+{
+  "dart.enableCompletionCommitCharacters": true,
+  "dart.previewFlutterUiGuides": true,
+  "dart.previewFlutterUiGuidesCustomTracking": true,
+  "dart.showTodos": true,
+  "dart.uiSdkPath": null,
+  "[dart]": {
+    "editor.formatOnSave": true,
+    "editor.formatOnType": true,
+    "editor.rulers": [80],
+    "editor.selectionHighlight": false,
+    "editor.suggest.snippetsPreventQuickSuggestions": false,
+    "editor.suggestSelection": "first",
+    "editor.tabCompletion": "onlySnippets",
+    "editor.wordBasedSuggestions": "off"
+  },
+  "flutter.hotReloadOnSave": true,
+  "flutter.runDevTools": "auto",
+  "flutter.showTestOutput": "all"
+}
+```
+
+#### Configurar Debugging
+
+```json
+// launch.json
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Flutter: Run",
+      "request": "launch",
+      "type": "dart"
+    },
+    {
+      "name": "Flutter: Run (debug mode)",
+      "request": "launch",
+      "type": "dart",
+      "flutterMode": "debug"
+    },
+    {
+      "name": "Flutter: Run (profile mode)",
+      "request": "launch",
+      "type": "dart",
+      "flutterMode": "profile"
+    },
+    {
+      "name": "Flutter: Run (release mode)",
+      "request": "launch",
+      "type": "dart",
+      "flutterMode": "release"
+    }
+  ]
+}
+```
+
+### Android Studio / IntelliJ IDEA
+
+#### Configuración Inicial
+
+1. **Instalar Plugins:**
+   - File > Settings > Plugins
+   - Buscar "Flutter"
+   - Instalar plugin oficial de Flutter
+
+2. **Configurar Flutter SDK:**
+   - File > Settings > Languages & Frameworks > Flutter
+   - Establecer ruta al SDK de Flutter
+
+3. **Configurar Dart SDK:**
+   - File > Settings > Languages & Frameworks > Dart
+   - Habilitar Dart support
+   - Establecer ruta: `[flutter_sdk]/cache/dart-sdk`
+
+#### Atajos de Teclado Útiles
+
+| Acción | Windows/Linux | macOS |
+|--------|---------------|-------|
+| Hot Reload | Ctrl + \ | Cmd + \ |
+| Hot Restart | Ctrl + Shift + \ | Cmd + Shift + \ |
+| Crear Widget | Alt + Insert | Cmd + N |
+| Importar Librería | Alt + Enter | Option + Enter |
+| Formatear Código | Ctrl + Alt + L | Cmd + Option + L |
+| Find Usages | Alt + F7 | Option + F7 |
+
+---
+
+## Configuración de Plataformas Nativas
+
+### Android (obligatorio para desarrollo móvil)
+
+#### Requisitos Android
+
+- **Android SDK**: API Level 21+ (Android 5.0)
+- **Build Tools**: 30.0.0 o superior
+- **Android Gradle Plugin**: 7.0+
+
+#### Configuración Detallada
+
+```bash
+# Verificar configuración Android
+flutter doctor --android-licenses
+
+# Aceptar todas las licencias
+# Presionar 'y' para cada una
+
+# Listar dispositivos Android
+flutter devices
+
+# Listar emuladores
+flutter emulators
+
+# Crear emulador (si no existe)
+flutter emulators --create --name pixel_7
+
+# Lanzar emulador
+flutter emulators --launch pixel_7
+```
+
+#### Configuración de android/app/build.gradle
+
+```gradle
+android {
+    compileSdkVersion 34  // SDK más reciente
+    ndkVersion flutter.ndkVersion
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+
+    defaultConfig {
+        applicationId "com.ejemplo.mi_app"
+        minSdkVersion 21  // Mínimo soportado
+        targetSdkVersion 34
+        versionCode 1
+        versionName "1.0.0"
+    }
+
+    buildTypes {
+        release {
+            signingConfig signingConfigs.release
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+```
+
+#### Crear Dispositivo Virtual (AVD)
+
+```bash
+# Via línea de comandos
+avdmanager create avd \
+  --name "pixel_7_api_34" \
+  --package "system-images;android-34;google_apis;x86_64" \
+  --device "pixel_7"
+
+# O via Android Studio
+# Tools > Device Manager > Create Device
+```
+
+### iOS (solo macOS)
+
+#### Requisitos iOS
+
+- **macOS**: Obligatorio para desarrollo iOS
+- **Xcode**: 13.0 o superior
+- **CocoaPods**: Gestor de dependencias
+
+#### Configuración Inicial
+
+```bash
+# Instalar CocoaPods si no está instalado
+sudo gem install cocoapods
+
+# O via Homebrew
+brew install cocoapods
+
+# Configurar Xcode
+sudo xcode-select --switch /Applications/Xcode.app/Contents/Developer
+sudo xcodebuild -runFirstLaunch
+
+# Verificar iOS toolchain
+flutter doctor
+```
+
+#### Configuración de Firmas (Signing)
+
+```bash
+# Abrir proyecto en Xcode
+open ios/Runner.xcworkspace
+
+# En Xcode:
+# 1. Seleccionar Runner en el navegador
+# 2. Ir a Signing & Capabilities
+# 3. Seleccionar Team de desarrollo
+# 4. Xcode gestionará automáticamente el Bundle ID
+```
+
+#### Configurar Dispositivo Físico iOS
+
+1. Conectar iPhone/iPad via USB
+2. Abrir Xcode > Window > Devices and Simulators
+3. Seleccionar dispositivo
+4. Confian en el dispositivo desde Settings > Developer en iOS
+
+#### Ejecutar en iOS
+
+```bash
+# Listar dispositivos iOS
+flutter devices
+
+# Ejecutar en simulador
+flutter run -d iPhone14
+
+# Ejecutar en dispositivo físico
+flutter run -d <device_id>
+
+# Build para producción
+flutter build ipa --release
+```
+
+#### Configuración ios/Runner.xcodeproj
+
+```ruby
+# ios/Runner.xcodeproj/project.pbxproj
+# Asegurar que estos valores estén configurados:
+
+IPHONEOS_DEPLOYMENT_TARGET = 12.0;  # Mínimo soportado
+PRODUCT_BUNDLE_IDENTIFIER = com.ejemplo.miApp;
+SWIFT_VERSION = 5.0;
+```
+
+### Web (todas las plataformas)
+
+#### Habilitar Soporte Web
+
+```bash
+# Habilitar soporte web (si no está habilitado)
+flutter config --enable-web
+
+# Verificar
+flutter doctor
+# Debería mostrar: [✓] Chrome - develop for the web
+```
+
+#### Ejecutar Aplicación Web
+
+```bash
+# Desarrollo con hot reload
+flutter run -d chrome
+
+# Build para producción
+flutter build web --release
+
+# Build con renderizador específico
+flutter build web --web-renderer html  # Para compatibilidad
+flutter build web --web-renderer canvaskit  # Para rendimiento
+```
+
+#### Configuración web/index.html
+
+```html
+<!DOCTYPE html>
+<html>
+<head>
+  <base href="$FLUTTER_BASE_HREF">
+  <meta charset="UTF-8">
+  <meta content="IE=Edge" http-equiv="X-UA-Compatible">
+  <meta name="description" content="Mi App Flutter">
+  
+  <!-- iOS meta tags & icons -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="Mi App">
+  <link rel="apple-touch-icon" href="icons/Icon-192.png">
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="favicon.png"/>
+  
+  <title>Mi App Flutter</title>
+</head>
+<body>
+  <script src="flutter_bootstrap.js" async></script>
+</body>
+</html>
+```
+
+### Desktop (Windows, macOS, Linux)
+
+#### Habilitar Soporte Desktop
+
+```bash
+# Habilitar todas las plataformas desktop
+flutter config --enable-windows-desktop
+flutter config --enable-macos-desktop
+flutter config --enable-linux-desktop
+
+# O habilitar solo una
+flutter config --enable-macos-desktop
+```
+
+#### Windows Desktop
+
+```bash
+# Requisitos ya cubiertos en instalación Windows
+# Visual Studio Build Tools con desarrollo C++
+
+# Ejecutar aplicación Windows
+flutter run -d windows
+
+# Build para distribución
+flutter build windows --release
+```
+
+#### macOS Desktop
+
+```bash
+# Requisitos: Xcode con Command Line Tools
+
+# Ejecutar aplicación macOS
+flutter run -d macos
+
+# Build para distribución
+flutter build macos --release
+```
+
+#### Linux Desktop
+
+```bash
+# Requisitos ya cubiertos en instalación Linux
+
+# Ejecutar aplicación Linux
+flutter run -d linux
+
+# Build para distribución
+flutter build linux --release
+```
+
+---
+
+## Gestión de Proyectos Flutter
+
+### Crear un Nuevo Proyecto
+
+```bash
+# Crear proyecto básico
+flutter create mi_app
+
+# Crear con organización específica
+flutter create --org com.miempresa mi_app
+
+# Crear con descripción
+flutter create --description "Mi primera app Flutter" mi_app
+
+# Crear proyecto con plataformas específicas
+flutter create --platforms android,ios,web mi_app
+
+# Crear proyecto sin tests
+flutter create --no-pub mi_app
+
+# Crear con plantilla específica
+flutter create --template app mi_app
+flutter create --template package mi_paquete
+flutter create --template plugin mi_plugin
+```
+
+### Estructura de un Proyecto Flutter
+
+```
+mi_app/
+├── android/           # Código nativo Android
+│   ├── app/
+│   │   └── src/main/
+│   │       ├── AndroidManifest.xml
+│   │       └── kotlin/
+│   └── build.gradle
+├── ios/               # Código nativo iOS
+│   └── Runner/
+│       ├── Info.plist
+│       └── AppDelegate.swift
+├── lib/               # Código Dart principal
+│   ├── main.dart       # Punto de entrada
+│   ├── screens/        # Pantallas
+│   ├── widgets/        # Widgets personalizados
+│   ├── models/         # Modelos de datos
+│   ├── services/       # Servicios/API
+│   └── utils/          # Utilidades
+├── test/              # Tests unitarios
+│   └── widget_test.dart
+├── web/               # Código web
+│   ├── index.html
+│   └── manifest.json
+├── windows/           # Código Windows
+├── macos/             # Código macOS
+├── linux/             # Código Linux
+├── pubspec.yaml       # Dependencias y metadata
+├── pubspec.lock       # Versiones exactas
+└── analysis_options.yaml  # Configuración de linting
+```
+
+### Gestión de Dependencias
+
+#### pubspec.yaml
+
+```yaml
+name: mi_app
+description: Mi aplicación Flutter
+
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  
+  # Dependencias principales
+  cupertino_icons: ^1.0.6
+  provider: ^6.1.1
+  dio: ^5.4.0
+  shared_preferences: ^2.2.2
+  
+  # Dependencias con versión específica
+  equatable: 2.0.5
+  
+  # Dependencias desde Git
+  mi_paquete:
+    git:
+      url: https://github.com/usuario/mi_paquete.git
+      ref: main
+  
+  # Dependencias desde path local
+  mi_paquete_local:
+    path: ../mi_paquete_local
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.1
+  mocktail: ^1.0.0
+
+flutter:
+  uses-material-design: true
+  
+  # Assets
+  assets:
+    - assets/images/
+    - assets/icons/
+    - assets/json/
+  
+  # Fuentes
+  fonts:
+    - family: Roboto
+      fonts:
+        - asset: assets/fonts/Roboto-Regular.ttf
+        - asset: assets/fonts/Roboto-Bold.ttf
+          weight: 700
+```
+
+#### Comandos de Gestión
+
+```bash
+# Obtener dependencias
+flutter pub get
+
+# Actualizar dependencias
+flutter pub upgrade
+
+# Actualizar dependencia específica
+flutter pub upgrade provider
+
+# Verificar dependencias obsoletas
+flutter pub outdated
+
+# Ver árbol de dependencias
+flutter pub deps
+
+# Ver dependencias con detalles
+flutter pub deps --style=compact
+
+# Ejecutar scripts personalizados
+flutter pub run build_runner build
+
+# Limpiar cache
+flutter pub cache clean
+```
+
+### Ejecutar Aplicación
+
+```bash
+# Ejecutar en dispositivo/emulador predeterminado
+flutter run
+
+# Ejecutar en dispositivo específico
+flutter run -d <device_id>
+
+# Ejecutar en modo debug
+flutter run --debug
+
+# Ejecutar en modo profile (más cercano a release)
+flutter run --profile
+
+# Ejecutar en modo release
+flutter run --release
+
+# Ejecutar con observatorio en puerto específico
+flutter run --observatory-port=8888
+
+# Ejecutar con verbose logging
+flutter run -v
+```
+
+### Hot Reload vs Hot Restart
+
+| Comando | Atajo | Descripción |
+|---------|-------|-------------|
+| Hot Reload | `r` | Actualiza UI sin reiniciar |
+| Hot Restart | `R` | Reinicia app manteniendo sesión |
+| Debug Pause | `p` | Pausa debugging |
+| Detener | `q` | Termina la app |
+
+```bash
+# En la consola de flutter run
+# Presionar 'r' para hot reload
+# Presionar 'R' para hot restart
+# Presionar 'h' para ayuda
+# Presionar 'q' para salir
+```
+
+### Build de Producción
+
+#### Android
+
+```bash
+# APK de debug
+flutter build apk --debug
+
+# APK de release
+flutter build apk --release
+
+# APK por ABI (recomendado para Play Store)
+flutter build apk --split-per-abi
+
+# App Bundle (recomendado para Play Store)
+flutter build appbundle --release
+
+# Con firmas específicas
+flutter build apk --release \
+  --build-name=1.0.0 \
+  --build-number=1
+```
+
+#### iOS
+
+```bash
+# Build para dispositivo
+flutter build ios --release
+
+# Generar IPA
+flutter build ipa --release
+
+# Para App Store
+flutter build ipa --release --export-options-plist=ExportOptions.plist
+```
+
+#### Web
+
+```bash
+# Build web estándar
+flutter build web --release
+
+# Build con renderizador específico
+flutter build web --web-renderer html --release
+flutter build web --web-renderer canvaskit --release
+
+# Build con base href personalizado
+flutter build web --base-href="/mi_app/"
+```
+
+#### Desktop
+
+```bash
+# Windows
+flutter build windows --release
+
+# macOS
+flutter build macos --release
+
+# Linux
+flutter build linux --release
+```
+
+### Modos de Compilación
+
+| Modo | Uso | Optimizaciones | Hot Reload |
+|------|-----|----------------|------------|
+| Debug | Desarrollo | Ninguna | ✅ Sí |
+| Profile | Testing rendimiento | Parciales | ❌ No |
+| Release | Producción | Completas | ❌ No |
+
+---
+
+## Testing en Flutter
+
+### Tipos de Tests
+
+Flutter soporta tres tipos de tests:
+
+1. **Unit Tests**: Prueban funciones y métodos individuales
+2. **Widget Tests**: Prueban widgets en aislamiento
+3. **Integration Tests**: Prueban flujos completos de la app
+
+### Estructura de Tests
+
+```
+test/
+├── unit/
+│   ├── models/
+│   │   └── user_test.dart
+│   └── services/
+│       └── api_service_test.dart
+├── widgets/
+│   ├── screens/
+│   │   └── home_screen_test.dart
+│   └── widgets/
+│       └── custom_button_test.dart
+└── integration/
+    └── app_test.dart
+
+integration_test/
+└── app_test.dart
+```
+
+### Unit Tests
+
+#### Ejemplo de Test Unitario
+
+```dart
+// test/unit/models/user_test.dart
+import 'package:flutter_test/flutter_test.dart';
+import 'package:mi_app/models/user.dart';
+
+void main() {
+  group('User Model', () {
+    test('User se crea correctamente', () {
+      final user = User(
+        id: '1',
+        name: 'Juan',
+        email: 'juan@email.com',
+      );
+      
+      expect(user.id, '1');
+      expect(user.name, 'Juan');
+      expect(user.email, 'juan@email.com');
+    });
+    
+    test('User.fromJson parsea JSON correctamente', () {
+      final json = {
+        'id': '1',
+        'name': 'Juan',
+        'email': 'juan@email.com',
+      };
+      
+      final user = User.fromJson(json);
+      
+      expect(user.id, '1');
+      expect(user.name, 'Juan');
+    });
+    
+    test('User.toJson genera JSON correcto', () {
+      final user = User(id: '1', name: 'Juan', email: 'juan@email.com');
+      
+      final json = user.toJson();
+      
+      expect(json['id'], '1');
+      expect(json['name'], 'Juan');
+    });
+    
+    test('Dos users con mismo ID son iguales', () {
+      final user1 = User(id: '1', name: 'Juan', email: 'juan@email.com');
+      final user2 = User(id: '1', name: 'Juan', email: 'juan@email.com');
+      
+      expect(user1, equals(user2));
+    });
+  });
+}
+```
+
+#### Ejemplo con Mocking
+
+```dart
+// test/unit/services/api_service_test.dart
+import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
+import 'package:dio/dio.dart';
+import 'package:mi_app/services/api_service.dart';
+
+class MockDio extends Mock implements Dio {}
+
+void main() {
+  late ApiService apiService;
+  late MockDio mockDio;
+  
+  setUp(() {
+    mockDio = MockDio();
+    apiService = ApiService(mockDio);
+  });
+  
+  group('ApiService', () {
+    test('fetchUsers devuelve lista de usuarios', () async {
+      // Arrange
+      final response = Response(
+        data: [
+          {'id': '1', 'name': 'Juan'},
+          {'id': '2', 'name': 'Maria'},
+        ],
+        statusCode: 200,
+        requestOptions: RequestOptions(path: '/users'),
+      );
+      
+      when(() => mockDio.get(any())).thenAnswer((_) async => response);
+      
+      // Act
+      final users = await apiService.fetchUsers();
+      
+      // Assert
+      expect(users.length, 2);
+      expect(users[0].name, 'Juan');
+      verify(() => mockDio.get('/users')).called(1);
+    });
+    
+    test('fetchUsers lanza excepción en error', () async {
+      when(() => mockDio.get(any())).thenThrow(DioException(
+        requestOptions: RequestOptions(path: '/users'),
+      ));
+      
+      expect(
+        () => apiService.fetchUsers(),
+        throwsA(isA<ApiException>()),
+      );
+    });
+  });
+}
+```
+
+### Widget Tests
+
+#### Ejemplo de Test de Widget
+
+```dart
+// test/widgets/screens/home_screen_test.dart
+import 'package:flutter/material.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:mi_app/screens/home_screen.dart';
+import 'package:mi_app/widgets/user_card.dart';
+
+void main() {
+  group('HomeScreen Widget Tests', () {
+    testWidgets('HomeScreen muestra título correctamente', (WidgetTester tester) async {
+      // Arrange & Act
+      await tester.pumpWidget(MaterialApp(home: HomeScreen()));
+      
+      // Assert
+      expect(find.text('Bienvenido'), findsOneWidget);
+    });
+    
+    testWidgets('HomeScreen muestra lista de usuarios', (WidgetTester tester) async {
+      // Arrange
+      final users = [
+        User(id: '1', name: 'Juan'),
+        User(id: '2', name: 'Maria'),
+      ];
+      
+      // Act
+      await tester.pumpWidget(MaterialApp(
+        home: HomeScreen(users: users),
+      ));
+      
+      // Assert
+      expect(find.byType(UserCard), findsNWidgets(2));
+      expect(find.text('Juan'), findsOneWidget);
+      expect(find.text('Maria'), findsOneWidget);
+    });
+    
+    testWidgets('Botón de añadir usuario funciona', (WidgetTester tester) async {
+      // Arrange
+      await tester.pumpWidget(MaterialApp(home: HomeScreen()));
+      
+      // Act
+      await tester.tap(find.byIcon(Icons.add));
+      await tester.pumpAndSettle();
+      
+      // Assert
+      expect(find.text('Nuevo Usuario'), findsOneWidget);
+    });
+    
+    testWidgets('ListView es scrollable', (WidgetTester tester) async {
+      // Arrange
+      final users = List.generate(
+        100,
+        (i) => User(id: '$i', name: 'Usuario $i'),
+      );
+      
+      // Act
+      await tester.pumpWidget(MaterialApp(
+        home: HomeScreen(users: users),
+      ));
+      
+      // Assert - verificar que el widget es scrollable
+      expect(find.byType(ListView), findsOneWidget);
+      
+      // Simular scroll
+      await tester.fling(find.byType(ListView), Offset(0, -500), 1000);
+      await tester.pumpAndSettle();
+    });
+    
+    testWidgets('Widget muestra indicador de carga', (WidgetTester tester) async {
+      // Act
+      await tester.pumpWidget(MaterialApp(
+        home: HomeScreen(isLoading: true),
+      ));
+      
+      // Assert
+      expect(find.byType(CircularProgressIndicator), findsOneWidget);
+    });
+  });
+}
+```
+
+#### Test de Widget con Interacción
+
+```dart
+// test/widgets/widgets/custom_button_test.dart
+import 'package:flutter/material.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:mi_app/widgets/custom_button.dart';
+
+void main() {
+  group('CustomButton Tests', () {
+    testWidgets('Botón muestra texto correctamente', (WidgetTester tester) async {
+      await tester.pumpWidget(MaterialApp(
+        home: Scaffold(
+          body: CustomButton(text: 'Presionar'),
+        ),
+      ));
+      
+      expect(find.text('Presionar'), findsOneWidget);
+    });
+    
+    testWidgets('Botón responde a tap', (WidgetTester tester) async {
+      var pressed = false;
+      
+      await tester.pumpWidget(MaterialApp(
+        home: Scaffold(
+          body: CustomButton(
+            text: 'Presionar',
+            onPressed: () => pressed = true,
+          ),
+        ),
+      ));
+      
+      await tester.tap(find.byType(CustomButton));
+      
+      expect(pressed, true);
+    });
+    
+    testWidgets('Botón deshabilitado no responde', (WidgetTester tester) async {
+      var pressed = false;
+      
+      await tester.pumpWidget(MaterialApp(
+        home: Scaffold(
+          body: CustomButton(
+            text: 'Presionar',
+            onPressed: null,
+          ),
+        ),
+      ));
+      
+      // Verificar que el botón está deshabilitado
+      final button = tester.widget<ElevatedButton>(find.byType(ElevatedButton));
+      expect(button.onPressed, isNull);
+    });
+    
+    testWidgets('Botón muestra loading cuando isLoading es true', (WidgetTester tester) async {
+      await tester.pumpWidget(MaterialApp(
+        home: Scaffold(
+          body: CustomButton(
+            text: 'Presionar',
+            isLoading: true,
+          ),
+        ),
+      ));
+      
+      expect(find.byType(CircularProgressIndicator), findsOneWidget);
+    });
+  });
+}
+```
+
+### Integration Tests
+
+#### Configuración de Integration Tests
+
+```dart
+// integration_test/app_test.dart
+import 'package:flutter_test/flutter_test.dart';
+import 'package:integration_test/integration_test.dart';
+import 'package:mi_app/main.dart' as app;
+
+void main() {
+  IntegrationTestWidgetsFlutterBinding.ensureInitializer();
+  
+  group('Integration Tests - Login Flow', () {
+    testWidgets('Usuario puede hacer login', (WidgetTester tester) async {
+      // Iniciar app
+      app.main();
+      await tester.pumpAndSettle();
+      
+      // Verificar pantalla de login
+      expect(find.text('Iniciar Sesión'), findsOneWidget);
+      
+      // Ingresar credenciales
+      await tester.enterText(
+        find.byKey(Key('email_field')),
+        'usuario@email.com',
+      );
+      await tester.enterText(
+        find.byKey(Key('password_field')),
+        'password123',
+      );
+      
+      // Presionar botón de login
+      await tester.tap(find.byKey(Key('login_button')));
+      await tester.pumpAndSettle(Duration(seconds: 3));
+      
+      // Verificar navegación a home
+      expect(find.text('Bienvenido'), findsOneWidget);
+    });
+    
+    testWidgets('Usuario puede navegar a perfil', (WidgetTester tester) async {
+      // Asumiendo que ya estamos en home
+      await tester.tap(find.byIcon(Icons.person));
+      await tester.pumpAndSettle();
+      
+      expect(find.text('Mi Perfil'), findsOneWidget);
+    });
+  });
+}
+```
+
+#### Ejecutar Integration Tests
+
+```bash
+# En dispositivo/emulador
+flutter test integration_test/app_test.dart
+
+# En dispositivos específicos
+flutter test integration_test/app_test.dart -d <device_id>
+
+# Generar reporte de coverage
+flutter test integration_test/app_test.dart --coverage
+```
+
+### Comandos de Testing
+
+```bash
+# Ejecutar todos los tests
+flutter test
+
+# Ejecutar test específico
+flutter test test/unit/models/user_test.dart
+
+# Ejecutar tests con coverage
+flutter test --coverage
+
+# Generar reporte HTML de coverage
+genhtml coverage/lcov.info -o coverage/html
+open coverage/html/index.html
+
+# Ejecutar tests en paralelo
+flutter test --concurrency=4
+
+# Ejecutar tests con verbose
+flutter test -v
+
+# Ejecutar tests coincidentes con patrón
+flutter test --name "User Model"
+
+# Ejecutar integration tests
+flutter test integration_test/app_test.dart
+
+# Ejecutar tests en dispositivo físico
+flutter test integration_test/app_test.dart -d <device_id>
+```
+
+### Coverage y Calidad
+
+#### Configurar analysis_options.yaml
+
+```yaml
+include: package:flutter_lints/flutter.yaml
+
+linter:
+  rules:
+    - always_declare_return_types
+    - avoid_dynamic_calls
+    - avoid_empty_else
+    - avoid_print
+    - avoid_relative_lib_imports
+    - avoid_returning_null_for_void
+    - avoid_slow_async_io
+    - avoid_types_as_parameter_names
+    - cancel_subscriptions
+    - close_sinks
+    - comment_references
+    - control_flow_in_finally
+    - empty_statements
+    - hash_and_equals
+    - invariant_booleans
+    - iterable_contains_unrelated_type
+    - list_remove_unrelated_type
+    - literal_only_boolean_expressions
+    - no_adjacent_strings_in_list
+    - no_duplicate_case_values
+    - no_logic_in_create_state
+    - prefer_const_constructors
+    - prefer_const_constructors_in_immutables
+    - prefer_const_declarations
+    - prefer_const_literals_to_create_immutables
+    - prefer_final_fields
+    - prefer_final_locals
+    - require_trailing_commas
+    - sort_child_properties_last
+    - test_types_in_equals
+    - throw_in_finally
+    - unnecessary_null_aware_assignments
+    - unnecessary_null_in_if_null_operators
+    - unnecessary_overrides
+    - unnecessary_parenthesis
+    - unnecessary_statements
+    - unrelated_type_equality_checks
+    - use_build_context_synchronously
+    - use_key_in_widget_constructors
+    - valid_regexps
+```
+
+#### Ejecutar Análisis
+
+```bash
+# Analizar código
+flutter analyze
+
+# Ver problemas específicos
+flutter analyze --no-pub
+
+# Formatear código
+dart format .
+
+# Ver diff sin aplicar
+dart format --output=none --set-exit-if-changed .
+```
+
+---
+
+## Solución de Problemas
+
+### Problemas Comunes y Soluciones
+
+#### Flutter Doctor muestra errores
+
+```bash
+# Ver errores detallados
+flutter doctor -v
+
+# Soluciones comunes:
+
+# 1. Android licenses no aceptadas
+flutter doctor --android-licenses
+
+# 2. Xcode no configurado (macOS)
+sudo xcode-select --switch /Applications/Xcode.app/Contents/Developer
+sudo xcodebuild -runFirstLaunch
+
+# 3. CocoaPods no instalado
+sudo gem install cocoapods
+# O
+brew install cocoapods
+
+# 4. Android SDK no encontrado
+# Configurar ANDROID_HOME
+export ANDROID_HOME=$HOME/Android/Sdk
+export PATH=$PATH:$ANDROID_HOME/emulator
+export PATH=$PATH:$ANDROID_HOME/platform-tools
+```
+
+#### Error: "Flutter SDK not found"
+
+```bash
+# Verificar PATH
+echo $PATH | grep flutter
+
+# Añadir Flutter al PATH
+export PATH="$HOME/flutter/bin:$PATH"
+
+# Hacer permanente (Bash)
+echo 'export PATH="$HOME/flutter/bin:$PATH"' >> ~/.bashrc
+
+# Hacer permanente (Zsh)
+echo 'export PATH="$HOME/flutter/bin:$PATH"' >> ~/.zshrc
+```
+
+#### Error: "Gradle build failed"
+
+```bash
+# Limpiar proyecto
+flutter clean
+flutter pub get
+
+# Limpiar cache de Gradle
+cd android
+./gradlew clean
+cd ..
+
+# Eliminar cache de Flutter
+flutter pub cache clean
+
+# Reconstruir
+flutter build apk --release
+```
+
+#### Error: "Unable to locate Android SDK"
+
+```bash
+# Configurar variable de entorno
+export ANDROID_HOME=$HOME/Library/Android/sdk  # macOS
+export ANDROID_HOME=$HOME/Android/Sdk           # Linux
+export ANDROID_HOME=C:\Users\$env:USERNAME\AppData\Local\Android\Sdk  # Windows
+
+# Añadir al PATH
+export PATH=$PATH:$ANDROID_HOME/emulator
+export PATH=$PATH:$ANDROID_HOME/platform-tools
+export PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin
+```
+
+#### Error: "iOS deployment target"
+
+```bash
+# Abrir ios/Podfile
+# Cambiar platform a:
+platform :ios, '12.0'
+
+# Actualizar pods
+cd ios
+pod repo update
+pod install
+cd ..
+```
+
+#### Hot Reload no funciona
+
+```bash
+# Verificar que la app está en modo debug
+flutter run --debug
+
+# Hot restart manual
+flutter run --hot
+
+# Si persiste, hacer full restart
+flutter clean
+flutter pub get
+flutter run
+```
+
+#### Memoria insuficiente al compilar
+
+```bash
+# Aumentar memoria de Gradle
+# En android/gradle.properties:
+org.gradle.jvmargs=-Xmx4096M --illegal-access=permit
+
+# Para Linux/macOS, también:
+# En ~/.gradle/gradle.properties:
+org.gradle.daemon=true
+org.gradle.parallel=true
+org.gradle.configureondemand=true
+```
+
+#### Error de certificados en macOS
+
+```bash
+# Resetear certificados de Xcode
+sudo rm -rf /Library/Developer/CommandLineTools
+xcode-select --install
+
+# Actualizar certificados
+sudo security delete-certificate -c "Apple Worldwide Developer Relations Certification Authority" /Library/Keychains/System.keychain
+sudo security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain ~/Downloads/AppleWWDRCAG3.cer
+```
+
+### Logs y Depuración
+
+```bash
+# Ver logs de Flutter
+flutter logs
+
+# Ver logs en tiempo real
+flutter run --verbose
+
+# Ver logs específicos de plataforma
+flutter run --device-vm-service-port=8888
+
+# En la app, usar:
+debugPrint('Mensaje de debug');
+print('Mensaje normal');
+log('Mensaje de log');
+
+// Assertions (solo en debug)
+assert(condition, 'Mensaje si falla');
+```
+
+---
+
+## Mejores Prácticas
+
+### 1. Gestión de Versiones
+
+```bash
+# Usar FVM para proyectos en equipo
+fvm install 3.24.0
+fvm use 3.24.0
+
+# Crear archivo .fvmrc para el proyecto
+{
+  "flutterSdkVersion": "3.24.0",
+  "flavors": {}
+}
+
+# Añadir a .gitignore
+.flutter-plugins-dependencies
+pubspec.lock  # Solo para aplicaciones, no packages
+```
+
+### 2. Estructura de Proyecto
+
+```
+lib/
+├── main.dart                 # Punto de entrada
+├── app.dart                  # Configuración de la app
+├── core/                     # Core functionality
+│   ├── constants/
+│   ├── theme/
+│   ├── utils/
+│   └── errors/
+├── data/                     # Capa de datos
+│   ├── models/
+│   ├── repositories/
+│   └── services/
+├── domain/                   # Capa de dominio
+│   ├── entities/
+│   ├── repositories/
+│   └── usecases/
+├── presentation/             # Capa de presentación
+│   ├── screens/
+│   ├── widgets/
+│   └── providers/
+└── generated/                # Código generado
+```
+
+### 3. Gestión de Dependencias
+
+```yaml
+# En pubspec.yaml, usar rangos de versiones
+dependencies:
+  flutter:
+    sdk: flutter
+  
+  # Dependencias principales - usar caret syntax
+  provider: ^6.1.1        # >=6.1.1 <7.0.0
+  dio: ^5.4.0             # Actualizaciones minor permitidas
+  
+  # Dependencias críticas - versiones específicas
+  equatable: 2.0.5        # Exactamente esta versión
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.1
+  mocktail: ^1.0.0
+```
+
+### 4. Código Limpio
+
+```dart
+// ❌ Malo
+void main() {
+  runApp(MaterialApp(
+    home: Scaffold(
+      body: Center(
+        child: Text('Hola'),
+      ),
+    ),
+  ));
+}
+
+// ✅ Bueno
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Mi App',
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
+        useMaterial3: true,
+      ),
+      home: const HomeScreen(),
+    );
+  }
+}
+
+class HomeScreen extends StatelessWidget {
+  const HomeScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Inicio')),
+      body: const Center(
+        child: Text('Hola'),
+      ),
+    );
+  }
+}
+```
+
+### 5. Testing Strategy
+
+```dart
+// Pirámide de testing:
+// - Muchos unit tests (rápidos, aislados)
+// - Algunos widget tests (UI components)
+// - Pocos integration tests (flujos críticos)
+
+// Coverage objetivo:
+// - Unit tests: 70-80%
+// - Widget tests: 50-60%
+// - Integration tests: 10-20%
+```
+
+### 6. Performance
+
+```dart
+// Usar const widgets cuando sea posible
+const Text('Hola');  // Reutiliza el widget
+
+// Evitar rebuilds innecesarios
+class MyWidget extends StatelessWidget {
+  const MyWidget({super.key});  // Key ayuda a Flutter
+  
+  @override
+  Widget build(BuildContext context) {
+    return const Text('Hola');
+  }
+}
+
+// Usar ListView.builder para listas largas
+ListView.builder(
+  itemCount: items.length,
+  itemBuilder: (context, index) {
+    return ListTile(title: Text(items[index]));
+  },
+)
+
+// Cachear imágenes
+Image.network(
+  'https://example.com/image.jpg',
+  cacheWidth: 300,  // Limitar tamaño en memoria
+)
+```
+
+### 7. CI/CD Integration
+
+```yaml
+# .github/workflows/flutter.yml
+name: Flutter CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - uses: subosito/flutter-action@v2
+      with:
+        flutter-version: '3.24.0'
+        channel: 'stable'
+    
+    - name: Install dependencies
+      run: flutter pub get
+    
+    - name: Run tests
+      run: flutter test --coverage
+    
+    - name: Build APK
+      run: flutter build apk --release
+    
+    - name: Upload coverage
+      uses: codecov/codecov-action@v3
+      with:
+        files: coverage/lcov.info
+```
+
+### 8. Documentación
+
+```dart
+/// Clase que representa un usuario en la aplicación.
+/// 
+/// Contiene información básica del usuario incluyendo
+/// su identificador único, nombre y email.
+/// 
+/// Ejemplo de uso:
+/// ```dart
+/// final user = User(
+///   id: '123',
+///   name: 'Juan García',
+///   email: 'juan@email.com',
+/// );
+/// ```
+class User {
+  /// Identificador único del usuario.
+  final String id;
+  
+  /// Nombre completo del usuario.
+  final String name;
+  
+  /// Dirección de email del usuario.
+  final String email;
+  
+  const User({
+    required this.id,
+    required this.name,
+    required this.email,
+  });
+  
+  /// Crea un [User] desde un mapa JSON.
+  factory User.fromJson(Map<String, dynamic> json) {
+    return User(
+      id: json['id'] as String,
+      name: json['name'] as String,
+      email: json['email'] as String,
+    );
+  }
+  
+  /// Convierte este [User] a un mapa JSON.
+  Map<String, dynamic> toJson() => {
+    'id': id,
+    'name': name,
+    'email': email,
+  };
+}
+```
+
+---
+
+## Recursos Adicionales
+
+### Documentación Oficial
+
+- **Flutter Docs**: https://docs.flutter.dev
+- **Dart Docs**: https://dart.dev/guides
+- **Flutter API**: https://api.flutter.dev
+- **Pub.dev**: https://pub.dev
+
+### Tutoriales y Cursos
+
+- **Flutter Codelabs**: https://codelabs.flutter.dev
+- **Flutter Cookbook**: https://docs.flutter.dev/cookbook
+- **Flutter Samples**: https://flutter.github.io/samples
+
+### Herramientas Útiles
+
+- **Flutter Doctor**: `flutter doctor -v`
+- **Dart DevTools**: `flutter pub global activate devtools`
+- **Flutter Format**: `dart format .`
+- **Flutter Analyze**: `flutter analyze`
+- **Flutter Test**: `flutter test --coverage`
+
+### Comunidad
+
+- **Flutter GitHub**: https://github.com/flutter/flutter
+- **Flutter Discord**: https://discord.gg/flutter
+- **Stack Overflow**: Etiqueta `flutter`
+- **Reddit**: r/FlutterDev
+
+---
+
+## Conclusión
+
+Este módulo cubre todo el proceso de instalación, configuración y gestión de Flutter para todas las plataformas soportadas. Los puntos clave son:
+
+1. **Instalación**: Elige entre instalación directa, FVM o gestores de paquetes según tus necesidades
+2. **FVM**: Recomendado para equipos y proyectos con múltiples versiones
+3. **IDEs**: VS Code y Android Studio son las opciones principales
+4. **Plataformas**: Android es obligatorio para móvil; iOS requiere macOS
+5. **Testing**: Unit, Widget e Integration tests son esenciales
+6. **CI/CD**: Automatiza builds y tests con GitHub Actions u otros servicios
+
+Para continuar tu aprendizaje, te recomiendo:
+
+- Practicar con los codelabs oficiales
+- Crear proyectos de prueba para cada plataforma
+- Contribuir a proyectos open source de Flutter
+- Mantenerte actualizado con las novedades en el blog de Flutter
+
+---
+
+**Versión del documento**: 1.0  
+**Flutter versión**: 3.24.0  
+**Dart versión**: 3.5.0  
+**Última actualización**: Julio 2025

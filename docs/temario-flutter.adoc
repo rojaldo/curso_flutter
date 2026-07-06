@@ -1,19 +1,10 @@
-= Temario Flutter: Guía Completa
-:toc: left
-:icons: font
-:source-highlighter: highlight.js
-:toclevels: 3
-:toc-title: Contenidos
-:date: 2026-05-27
-:lang: es
-
-== Módulo 1: Introducción a Flutter (2 horas)
+=== Módulo 1: Introducción a Flutter (2 horas)
 
 '''''
 
-=== 1. Qué es Flutter y Dart
+==== 1. Qué es Flutter y Dart
 
-==== ¿Qué es Flutter?
+===== ¿Qué es Flutter?
 
 Flutter es un framework de desarrollo de aplicaciones multiplataforma
 creado por Google. Permite crear aplicaciones para iOS, Android, Web y
@@ -55,7 +46,7 @@ pantalla completa
 |Native Android |Kotlin |Máxima |Sí |No (rebuild)
 |===
 
-==== ¿Qué es Dart?
+===== ¿Qué es Dart?
 
 Dart es el lenguaje de programación que usa Flutter. Fue creado por
 Google y está optimizado para desarrollo de interfaces de usuario.
@@ -112,9 +103,9 @@ sin reiniciar
 
 '''''
 
-=== 2. Instalación y configuración del entorno de desarrollo
+==== 2. Instalación y configuración del entorno de desarrollo
 
-==== Requisitos del sistema
+===== Requisitos del sistema
 
 *Para Windows:* - Windows 10 o superior (64-bit) - Espacio en disco: 2.5
 GB mínimo - Git instalado
@@ -125,7 +116,7 @@ iOS) - Git instalado
 *Para Linux:* - Ubuntu 18.04 LTS o superior (o equivalente) - Git
 instalado
 
-==== Instalación paso a paso
+===== Instalación paso a paso
 
 *1. Descargar Flutter SDK*
 
@@ -225,7 +216,7 @@ open -a Simulator
 flutter devices
 ----
 
-==== Verificación completa
+===== Verificación completa
 
 [source,bash]
 ----
@@ -241,11 +232,11 @@ flutter run
 
 '''''
 
-=== 3. Estructura de un proyecto Flutter
+==== 3. Estructura de un proyecto Flutter
 
-==== Anatomía del proyecto
+===== Anatomía del proyecto
 
-Cuando ejecutas `flutter create mi_app`, se genera esta estructura:
+Cuando ejecutas `+flutter create mi_app+`, se genera esta estructura:
 
 ....
 mi_app/
@@ -277,7 +268,7 @@ mi_app/
 └── README.md              # Documentación del proyecto
 ....
 
-==== Archivos clave explicados
+===== Archivos clave explicados
 
 *pubspec.yaml - El corazón del proyecto*
 
@@ -366,7 +357,7 @@ class HomePage extends StatelessWidget {
 }
 ----
 
-==== Carpetas importantes
+===== Carpetas importantes
 
 *lib/ - Tu código Dart*
 
@@ -415,9 +406,9 @@ void main() {
 
 '''''
 
-=== 4. Hot Reload vs Hot Restart
+==== 4. Hot Reload vs Hot Restart
 
-==== ¿Qué es Hot Reload?
+===== ¿Qué es Hot Reload?
 
 Hot Reload es una de las características más importantes de Flutter.
 Permite ver los cambios en el código casi instantáneamente sin perder el
@@ -475,14 +466,14 @@ class _ContadorWidgetState extends State<ContadorWidget> {
 ----
 
 *Con Hot Reload:* 1. Presiona el botón 5 veces (contador = 5) 2. Cambia
-el texto a ``Veces presionadas: $contador'' 3. Guarda y Hot Reload 4.
+el texto a "`Veces presionadas: $contador`" 3. Guarda y Hot Reload 4.
 *Resultado:* El contador sigue en 5, pero el texto cambió
 
 *Sin Hot Reload (Hot Restart):* 1. Presiona el botón 5 veces (contador =
 5) 2. Cambia el texto 3. Hot Restart 4. *Resultado:* El contador vuelve
 a 0 (estado perdido)
 
-==== Hot Restart (Reinicio en caliente)
+===== Hot Restart (Reinicio en caliente)
 
 Hot Restart recarga completamente la aplicación, similar a cerrar y
 volver a abrir la app.
@@ -491,7 +482,7 @@ volver a abrir la app.
 
 * Cambios en el código de inicialización (main())
 * Cambios en el tema global (MaterialApp)
-* Añadir nuevas dependencias (requiere `flutter pub get`)
+* Añadir nuevas dependencias (requiere `+flutter pub get+`)
 * Cambios en el estado que no se reflejan con Hot Reload
 * Errores que persisten después de Hot Reload
 
@@ -508,7 +499,7 @@ volver a abrir la app.
 # - Hot Restart: Shift+R o botón 🔄
 ----
 
-==== Diferencias detalladas
+===== Diferencias detalladas
 
 [cols=",,",options="header",]
 |===
@@ -521,7 +512,7 @@ volver a abrir la app.
 |Dependencias nuevas |❌ No funciona |✅ Funciona
 |===
 
-==== Cuándo NO funciona Hot Reload
+===== Cuándo NO funciona Hot Reload
 
 *1. Cambios en main():*
 
@@ -577,9 +568,9 @@ enum Estado { inicial, cargando, error, exito }
 
 '''''
 
-=== 5. Widget Tree y Render Tree
+==== 5. Widget Tree y Render Tree
 
-==== Concepto fundamental
+===== Concepto fundamental
 
 Flutter funciona con tres árboles principales que trabajan juntos:
 
@@ -629,7 +620,7 @@ class EjemploWidget extends StatelessWidget {
 }
 ----
 
-==== Flujo de renderizado
+===== Flujo de renderizado
 
 ....
 Widget (Configuración)
@@ -674,7 +665,7 @@ class MiBoton extends StatelessWidget {
 // RenderBox/RenderParagraph/etc. realmente pintan en el canvas
 ----
 
-==== StatelessWidget vs StatefulWidget en el árbol
+===== StatelessWidget vs StatefulWidget en el árbol
 
 *StatelessWidget:*
 
@@ -759,7 +750,7 @@ class _ContadorWidgetState extends State<ContadorWidget> {
 }
 ----
 
-==== El árbol en acción
+===== El árbol en acción
 
 [source,dart]
 ----
@@ -808,7 +799,7 @@ class AppCompleja extends StatelessWidget {
 8. GPU dibuja solo lo que cambió
 ....
 
-==== Optimización del árbol
+===== Optimización del árbol
 
 *Mal ejemplo (Widget hondo):*
 
@@ -867,9 +858,9 @@ Widget buenEjemplo() {
 
 '''''
 
-=== 6. Primer proyecto: ``Hola Mundo''
+==== 6. Primer proyecto: "`Hola Mundo`"
 
-==== Crear el proyecto
+===== Crear el proyecto
 
 [source,bash]
 ----
@@ -881,9 +872,9 @@ cd hola_mundo
 flutter run
 ----
 
-==== Limpiar el código por defecto
+===== Limpiar el código por defecto
 
-Flutter genera mucho código por defecto. Vamos a crear un ``Hola Mundo''
+Flutter genera mucho código por defecto. Vamos a crear un "`Hola Mundo`"
 minimalista:
 
 [source,dart]
@@ -981,7 +972,7 @@ class HomePage extends StatelessWidget {
 }
 ----
 
-==== Versión interactiva con estado
+===== Versión interactiva con estado
 
 Vamos a crear una versión más interactiva que cuente clics:
 
@@ -1120,7 +1111,7 @@ class _ContadorPageState extends State<ContadorPage> {
 }
 ----
 
-==== Ejercicio práctico: Personalizar el Hola Mundo
+===== Ejercicio práctico: Personalizar el Hola Mundo
 
 *Objetivo:* Modifica el código para:
 
@@ -1237,7 +1228,7 @@ class _MiAppPersonalizadaState extends State<MiAppPersonalizada> {
 }
 ----
 
-==== Resumen del Módulo 1
+===== Resumen del Módulo 1
 
 En este módulo aprendiste:
 
@@ -1251,13 +1242,13 @@ Básicos
 
 '''''
 
-== Módulo 2: Fundamentos de Dart (4 horas)
+=== Módulo 2: Fundamentos de Dart (4 horas)
 
 '''''
 
-=== 1. Variables y Tipos de Datos
+==== 1. Variables y Tipos de Datos
 
-==== Variables
+===== Variables
 
 En Dart, las variables almacenan referencias a objetos. El tipo de
 variable se puede inferir o declarar explícitamente.
@@ -1288,10 +1279,10 @@ dinamico = 42;                // válido en tiempo de compilación
 dinamico.hola();              // válido en compilación, error en runtime si no existe
 ----
 
-==== final y const
+===== final y const
 
-`final` y `const` declaran variables inmutables, pero con diferencias
-importantes:
+`+final+` y `+const+` declaran variables inmutables, pero con
+diferencias importantes:
 
 [source,dart]
 ----
@@ -1329,7 +1320,7 @@ const punto2 = Punto(10, 20);
 print(identical(punto1, punto2));  // true - son el mismo objeto
 ----
 
-==== Tipos numéricos
+===== Tipos numéricos
 
 [source,dart]
 ----
@@ -1369,7 +1360,7 @@ double.parse('3.14');     // 3.14
 int.tryParse('abc');      // null (no lanza excepción)
 ----
 
-==== Strings
+===== Strings
 
 [source,dart]
 ----
@@ -1429,7 +1420,7 @@ print(vacio.length);    // 0
 print(nulo?.isEmpty);   // null - acceso seguro
 ----
 
-==== Booleanos
+===== Booleanos
 
 [source,dart]
 ----
@@ -1462,7 +1453,7 @@ print(5 == '5');  // false - tipos diferentes
 print(true == 1); // false - no hay conversión automática
 ----
 
-==== Colecciones: Listas
+===== Colecciones: Listas
 
 [source,dart]
 ----
@@ -1565,7 +1556,7 @@ print(frutas.indexOf('pera'));       // -1 (no encontrado)
 print(frutas.contains('manzana'));   // true
 ----
 
-==== Colecciones: Sets
+===== Colecciones: Sets
 
 [source,dart]
 ----
@@ -1605,7 +1596,7 @@ frutas.length;               // Cantidad de elementos
 frutas.isEmpty;               // ¿Está vacío?
 ----
 
-==== Colecciones: Maps
+===== Colecciones: Maps
 
 [source,dart]
 ----
@@ -1683,9 +1674,9 @@ var nuevoMapa = mapa.map((key, value) =>
 
 '''''
 
-=== 2. Operadores
+==== 2. Operadores
 
-==== Operadores aritméticos
+===== Operadores aritméticos
 
 [source,dart]
 ----
@@ -1717,7 +1708,7 @@ print('$dividend ÷ $divisor = $cociente con resto $resto');
 print('Verificación: ${divisor * cociente + resto} = $dividend'); // 17 = 17
 ----
 
-==== Operadores de asignación
+===== Operadores de asignación
 
 [source,dart]
 ----
@@ -1741,7 +1732,7 @@ c ??= 10;  // Si c NO es null, no hace nada
 print(c);  // 5
 ----
 
-==== Operadores de igualdad y relacionales
+===== Operadores de igualdad y relacionales
 
 [source,dart]
 ----
@@ -1777,7 +1768,7 @@ const a2 = [1, 2, 3];
 print(identical(a1, a2));    // true - objetos canónicos
 ----
 
-==== Operadores lógicos
+===== Operadores lógicos
 
 [source,dart]
 ----
@@ -1812,7 +1803,7 @@ print(x << 2);  // 20  (desplazamiento izquierda: 10100)
 print(x >> 1);  // 2   (desplazamiento derecha: 0010)
 ----
 
-==== Operadores de tipo
+===== Operadores de tipo
 
 [source,dart]
 ----
@@ -1857,7 +1848,7 @@ void manejarDato(dynamic dato) {
 }
 ----
 
-==== Operador condicional (ternario)
+===== Operador condicional (ternario)
 
 [source,dart]
 ----
@@ -1895,7 +1886,7 @@ class Usuario {
 }
 ----
 
-==== Operador cascade (..)
+===== Operador cascade (..)
 
 [source,dart]
 ----
@@ -1962,9 +1953,9 @@ personaNula
 
 '''''
 
-=== 3. Control de Flujo
+==== 3. Control de Flujo
 
-==== if-else
+===== if-else
 
 [source,dart]
 ----
@@ -2014,7 +2005,7 @@ if (baseDatosDisponible ?? cacheDisponible ?? false) {
 }
 ----
 
-==== switch-case
+===== switch-case
 
 [source,dart]
 ----
@@ -2108,7 +2099,7 @@ void tiempoEstimado(Transporte t) {
 }
 ----
 
-==== Bucles: for
+===== Bucles: for
 
 [source,dart]
 ----
@@ -2158,7 +2149,7 @@ for (int i = 1; i <= 3; i++) {
 }
 ----
 
-==== Bucles: while y do-while
+===== Bucles: while y do-while
 
 [source,dart]
 ----
@@ -2211,7 +2202,7 @@ while (true) {
 }
 ----
 
-==== break y continue
+===== break y continue
 
 [source,dart]
 ----
@@ -2258,7 +2249,7 @@ for (int i = 0; i < 5; i++) {
 }
 ----
 
-==== assert
+===== assert
 
 [source,dart]
 ----
@@ -2296,9 +2287,9 @@ class Persona {
 
 '''''
 
-=== 4. Funciones
+==== 4. Funciones
 
-==== Declaración de funciones
+===== Declaración de funciones
 
 [source,dart]
 ----
@@ -2330,7 +2321,7 @@ String clasificarNota(int nota) {
 }
 ----
 
-==== Parámetros
+===== Parámetros
 
 [source,dart]
 ----
@@ -2403,7 +2394,7 @@ void mostrarFecha({DateTime? fecha}) {
 }
 ----
 
-==== Funciones como objetos de primera clase
+===== Funciones como objetos de primera clase
 
 [source,dart]
 ----
@@ -2442,7 +2433,7 @@ var operaciones = <String, int Function(int, int)>{
 print(operaciones['sumar']!(5, 3));  // 8
 ----
 
-==== Funciones anónimas y closures
+===== Funciones anónimas y closures
 
 [source,dart]
 ----
@@ -2509,7 +2500,7 @@ void crearBotones() {
 }
 ----
 
-==== Funciones asíncronas
+===== Funciones asíncronas
 
 [source,dart]
 ----
@@ -2580,9 +2571,9 @@ Future<void> escucharStream() async {
 
 '''''
 
-=== 5. Programación Orientada a Objetos
+==== 5. Programación Orientada a Objetos
 
-==== Clases básicas
+===== Clases básicas
 
 [source,dart]
 ----
@@ -2639,7 +2630,7 @@ persona1.cambiarEdad = 30;
 print(persona1.edad);  // 30
 ----
 
-==== Propiedades
+===== Propiedades
 
 [source,dart]
 ----
@@ -2674,7 +2665,7 @@ class Punto {
 import 'dart:math' show sqrt;
 ----
 
-==== Constructores
+===== Constructores
 
 [source,dart]
 ----
@@ -2724,7 +2715,7 @@ var p4 = Punto2D.fromCoordenadas('7,24');
 var p5 = Punto2D.cero();
 ----
 
-==== Herencia
+===== Herencia
 
 [source,dart]
 ----
@@ -2795,7 +2786,7 @@ gato.hacerSonido();   // Michi maúlla: ¡Miau!
 gato.ronronear();     // Michi ronronea
 ----
 
-==== Interfaces y clases abstractas
+===== Interfaces y clases abstractas
 
 [source,dart]
 ----
@@ -2878,7 +2869,7 @@ class Cuadrado implements Dibujable {
 }
 ----
 
-==== Mixins
+===== Mixins
 
 [source,dart]
 ----
@@ -2939,7 +2930,7 @@ class Aguila extends Animal with Volador2 {
 }
 ----
 
-==== Enums
+===== Enums
 
 [source,dart]
 ----
@@ -3020,9 +3011,9 @@ enum DiaSemana {
 
 '''''
 
-=== 6. Manejo de Excepciones
+==== 6. Manejo de Excepciones
 
-==== try-catch-finally
+===== try-catch-finally
 
 [source,dart]
 ----
@@ -3066,7 +3057,7 @@ try {
 }
 ----
 
-==== throw
+===== throw
 
 [source,dart]
 ----
@@ -3114,7 +3105,7 @@ try {
 }
 ----
 
-==== Ejemplo práctico: Validación
+===== Ejemplo práctico: Validación
 
 [source,dart]
 ----
@@ -3171,9 +3162,9 @@ void crearUsuario() {
 
 '''''
 
-=== 7. Null Safety
+==== 7. Null Safety
 
-==== Conceptos básicos
+===== Conceptos básicos
 
 [source,dart]
 ----
@@ -3200,7 +3191,7 @@ nombre2 ??= 'Por defecto';  // Asigna si es null
 print(nombre2);  // Por defecto
 ----
 
-==== Aserción de no-null (!)
+===== Aserción de no-null (!)
 
 [source,dart]
 ----
@@ -3224,7 +3215,7 @@ String? texto;
 // print(texto!.length);  // Runtime error: null
 ----
 
-==== late
+===== late
 
 [source,dart]
 ----
@@ -3268,7 +3259,7 @@ class Controlador {
 }
 ----
 
-==== Patrones comunes
+===== Patrones comunes
 
 [source,dart]
 ----
@@ -3320,9 +3311,9 @@ Future<void> procesarStream() async {
 
 '''''
 
-=== 8. Asincronía
+==== 8. Asincronía
 
-==== Future
+===== Future
 
 [source,dart]
 ----
@@ -3390,7 +3381,7 @@ Future<int> procesoEncadenado() async {
 }
 ----
 
-==== async/await
+===== async/await
 
 [source,dart]
 ----
@@ -3449,7 +3440,7 @@ Future<void> procesarParalelo() async {
 }
 ----
 
-==== Stream
+===== Stream
 
 [source,dart]
 ----
@@ -3522,9 +3513,9 @@ void broadcastStream() {
 
 '''''
 
-=== 9. Ejercicios Prácticos
+==== 9. Ejercicios Prácticos
 
-==== Ejercicio 1: Gestión de usuarios
+===== Ejercicio 1: Gestión de usuarios
 
 [source,dart]
 ----
@@ -3599,7 +3590,7 @@ class GestorUsuarios {
 }
 ----
 
-==== Ejercicio 2: Calculadora con validación
+===== Ejercicio 2: Calculadora con validación
 
 [source,dart]
 ----
@@ -3644,7 +3635,7 @@ class Calculadora {
 }
 ----
 
-==== Ejercicio 3: Sistema de reservas
+===== Ejercicio 3: Sistema de reservas
 
 [source,dart]
 ----
@@ -3732,16 +3723,17 @@ herencia, interfaces, mixins, enums ✅ Manejo de excepciones con
 try-catch-finally ✅ Null safety: tipos anulables, late, aserciones ✅
 Programación asíncrona: Future, Stream, async/await
 
-*Próximo módulo:* Widgets Básicos y Layout## Módulo 3: Widgets Básicos y
-Layout (4 horas)
+*Próximo módulo:* Widgets Básicos y Layout
 
 '''''
 
-=== 1. StatelessWidget vs StatefulWidget
+=== Módulo 3: Widgets Básicos y Layout (4 horas)
 
-==== StatelessWidget
+==== 1. StatelessWidget vs StatefulWidget
 
-Un `StatelessWidget` es un widget que no tiene estado mutable. Su
+===== StatelessWidget
+
+Un `+StatelessWidget+` es un widget que no tiene estado mutable. Su
 apariencia depende únicamente de sus parámetros de configuración.
 
 *Características:* - Inmutable: no puede cambiar después de ser
@@ -3813,10 +3805,10 @@ class TarjetaUsuario extends StatelessWidget {
 }
 ----
 
-==== StatefulWidget
+===== StatefulWidget
 
-Un `StatefulWidget` es un widget que tiene estado mutable. Puede cambiar
-su apariencia en respuesta a eventos.
+Un `+StatefulWidget+` es un widget que tiene estado mutable. Puede
+cambiar su apariencia en respuesta a eventos.
 
 *Características:* - Mutable: el estado puede cambiar durante la vida
 del widget - Se compone de dos clases: el Widget y el State - El State
@@ -3907,7 +3899,7 @@ class _ContadorWidgetState extends State<ContadorWidget> {
 }
 ----
 
-==== Ciclo de vida del StatefulWidget
+===== Ciclo de vida del StatefulWidget
 
 [source,dart]
 ----
@@ -3979,11 +3971,11 @@ class _CicloVidaWidgetState extends State<CicloVidaWidget> {
 
 '''''
 
-=== 2. Widgets de texto, imágenes e iconos
+==== 2. Widgets de texto, imágenes e iconos
 
-==== Text
+===== Text
 
-El widget `Text` muestra una cadena de texto con estilo opcional.
+El widget `+Text+` muestra una cadena de texto con estilo opcional.
 
 [source,dart]
 ----
@@ -4041,9 +4033,9 @@ const SelectableText(
 );
 ----
 
-==== Image
+===== Image
 
-El widget `Image` muestra imágenes desde diversas fuentes.
+El widget `+Image+` muestra imágenes desde diversas fuentes.
 
 [source,dart]
 ----
@@ -4099,9 +4091,9 @@ Image.memory(
 // BoxFit.scaleDown: No agranda más del original
 ----
 
-==== Icon
+===== Icon
 
-El widget `Icon` muestra íconos Material Design.
+El widget `+Icon+` muestra íconos Material Design.
 
 [source,dart]
 ----
@@ -4150,12 +4142,12 @@ IconButton(
 
 '''''
 
-=== 3. Container, Padding, Center, Align
+==== 3. Container, Padding, Center, Align
 
-==== Container
+===== Container
 
-El widget `Container` es un versátil contenedor que puede tener padding,
-bordes, márgenes, color de fondo, etc.
+El widget `+Container+` es un versátil contenedor que puede tener
+padding, bordes, márgenes, color de fondo, etc.
 
 [source,dart]
 ----
@@ -4237,9 +4229,9 @@ Container(
 );
 ----
 
-==== Padding
+===== Padding
 
-El widget `Padding` añade espacio alrededor de su hijo.
+El widget `+Padding+` añade espacio alrededor de su hijo.
 
 [source,dart]
 ----
@@ -4279,9 +4271,9 @@ Padding(
 );
 ----
 
-==== Center
+===== Center
 
-El widget `Center` centra su hijo dentro de sí mismo.
+El widget `+Center+` centra su hijo dentro de sí mismo.
 
 [source,dart]
 ----
@@ -4301,9 +4293,9 @@ Center(
 );
 ----
 
-==== Align
+===== Align
 
-El widget `Align` alinea su hijo en una posición específica.
+El widget `+Align+` alinea su hijo en una posición específica.
 
 [source,dart]
 ----
@@ -4338,11 +4330,11 @@ const Align(
 
 '''''
 
-=== 4. Column, Row, Stack, Wrap
+==== 4. Column, Row, Stack, Wrap
 
-==== Column
+===== Column
 
-El widget `Column` organiza widgets verticalmente.
+El widget `+Column+` organiza widgets verticalmente.
 
 [source,dart]
 ----
@@ -4408,9 +4400,9 @@ const SingleChildScrollView(
 );
 ----
 
-==== Row
+===== Row
 
-El widget `Row` organiza widgets horizontalmente.
+El widget `+Row+` organiza widgets horizontalmente.
 
 [source,dart]
 ----
@@ -4462,9 +4454,9 @@ const SingleChildScrollView(
 );
 ----
 
-==== Stack
+===== Stack
 
-El widget `Stack` superpone widgets unos sobre otros.
+El widget `+Stack+` superpone widgets unos sobre otros.
 
 [source,dart]
 ----
@@ -4585,9 +4577,9 @@ Container(
 );
 ----
 
-==== Wrap
+===== Wrap
 
-El widget `Wrap` organiza widgets en múltiples líneas cuando no caben.
+El widget `+Wrap+` organiza widgets en múltiples líneas cuando no caben.
 
 [source,dart]
 ----
@@ -4641,11 +4633,11 @@ Wrap(
 
 '''''
 
-=== 5. ListView, GridView, SingleChildScrollView
+==== 5. ListView, GridView, SingleChildScrollView
 
-==== ListView
+===== ListView
 
-El widget `ListView` muestra una lista desplazable de widgets.
+El widget `+ListView+` muestra una lista desplazable de widgets.
 
 [source,dart]
 ----
@@ -4701,9 +4693,9 @@ RefreshIndicator(
 );
 ----
 
-==== GridView
+===== GridView
 
-El widget `GridView` muestra una cuadrícula de widgets.
+El widget `+GridView+` muestra una cuadrícula de widgets.
 
 [source,dart]
 ----
@@ -4779,9 +4771,9 @@ GridView.builder(
 );
 ----
 
-==== SingleChildScrollView
+===== SingleChildScrollView
 
-El widget `SingleChildScrollView` permite hacer scroll cuando el
+El widget `+SingleChildScrollView+` permite hacer scroll cuando el
 contenido excede el tamaño.
 
 [source,dart]
@@ -4850,11 +4842,11 @@ SingleChildScrollView(
 
 '''''
 
-=== 6. Scaffold, AppBar, Drawer, BottomNavigationBar
+==== 6. Scaffold, AppBar, Drawer, BottomNavigationBar
 
-==== Scaffold
+===== Scaffold
 
-El widget `Scaffold` proporciona la estructura básica de una pantalla
+El widget `+Scaffold+` proporciona la estructura básica de una pantalla
 Material Design.
 
 [source,dart]
@@ -4913,7 +4905,7 @@ Scaffold(
 );
 ----
 
-==== AppBar
+===== AppBar
 
 [source,dart]
 ----
@@ -4961,7 +4953,7 @@ AppBar(
 );
 ----
 
-==== Drawer
+===== Drawer
 
 [source,dart]
 ----
@@ -5031,7 +5023,7 @@ Drawer(
 );
 ----
 
-==== BottomNavigationBar
+===== BottomNavigationBar
 
 [source,dart]
 ----
@@ -5087,9 +5079,9 @@ class _MyAppState extends State<MyApp> {
 
 '''''
 
-=== 7. Ejercicios prácticos del Módulo 3
+==== 7. Ejercicios prácticos del Módulo 3
 
-==== Ejercicio 1: Perfil de usuario
+===== Ejercicio 1: Perfil de usuario
 
 Crear una tarjeta de perfil con: - Avatar circular - Nombre y email -
 Botones de acción - Estadísticas en fila
@@ -5210,7 +5202,7 @@ class PerfilUsuario extends StatelessWidget {
 }
 ----
 
-==== Ejercicio 2: Lista de productos
+===== Ejercicio 2: Lista de productos
 
 Crear una lista de productos con: - Imagen, título, precio - Rating con
 estrellas - Botón de añadir al carrito
@@ -5343,9 +5335,9 @@ integrando todo lo aprendido
 
 '''''
 
-=== 1. Gestión de estado local
+==== 1. Gestión de estado local
 
-==== ¿Qué es el estado?
+===== ¿Qué es el estado?
 
 El *estado* (state) son los datos que pueden cambiar durante la vida de
 una aplicación y que afectan a lo que el usuario ve.
@@ -5355,9 +5347,9 @@ contador, formulario) - *Estado elevado*: Se pasa de padre a hijos (ej:
 tema, usuario logueado) - *Estado global*: Compartido entre múltiples
 pantallas (ej: carrito, sesión)
 
-==== setState y reconstrucción
+===== setState y reconstrucción
 
-El método `setState` marca el widget como ``sucio'' y programa una
+El método `+setState+` marca el widget como "`sucio`" y programa una
 reconstrucción:
 
 [source,dart]
@@ -5448,9 +5440,9 @@ void initState() {
 }
 ----
 
-==== Lifting State Up (Elevar el estado)
+===== Lifting State Up (Elevar el estado)
 
-Cuando múltiples widgets necesitan compartir estado, se ``eleva'' al
+Cuando múltiples widgets necesitan compartir estado, se "`eleva`" al
 ancestro común más cercano:
 
 [source,dart]
@@ -5643,12 +5635,12 @@ class _TareasInputState extends State<TareasInput> {
 
 '''''
 
-=== 2. Navegación básica
+==== 2. Navegación básica
 
-==== Navigator.push y Navigator.pop
+===== Navigator.push y Navigator.pop
 
 Flutter usa una pila de navegación (stack) donde cada pantalla es una
-``ruta'':
+"`ruta`":
 
 [source,dart]
 ----
@@ -5699,7 +5691,7 @@ class SegundaPantalla extends StatelessWidget {
 }
 ----
 
-==== Pasar datos entre pantallas
+===== Pasar datos entre pantallas
 
 [source,dart]
 ----
@@ -5750,7 +5742,7 @@ Navigator.push(
 );
 ----
 
-==== Recibir datos de vuelta
+===== Recibir datos de vuelta
 
 [source,dart]
 ----
@@ -5797,9 +5789,9 @@ Future<void> _seleccionarColor(BuildContext context) async {
 
 '''''
 
-=== 3. Rutas nombradas
+==== 3. Rutas nombradas
 
-==== Configuración de rutas
+===== Configuración de rutas
 
 [source,dart]
 ----
@@ -5845,7 +5837,7 @@ class MyApp extends StatelessWidget {
 }
 ----
 
-==== Navegación con rutas nombradas
+===== Navegación con rutas nombradas
 
 [source,dart]
 ----
@@ -5893,7 +5885,7 @@ Navigator.pop(context);
 Navigator.pop(context, 'resultado');
 ----
 
-==== onGenerateRoute para argumentos tipados
+===== onGenerateRoute para argumentos tipados
 
 [source,dart]
 ----
@@ -5931,9 +5923,9 @@ Navigator.pushNamed(
 
 '''''
 
-=== 4. Hero animations
+==== 4. Hero animations
 
-==== Hero básico
+===== Hero básico
 
 Las animaciones Hero permiten compartir elementos entre pantallas:
 
@@ -6000,7 +5992,7 @@ class DetalleProductoPage extends StatelessWidget {
 }
 ----
 
-==== Hero con placeholder
+===== Hero con placeholder
 
 [source,dart]
 ----
@@ -6022,7 +6014,7 @@ Hero(
 );
 ----
 
-==== Hero con flightShuttleBuilder
+===== Hero con flightShuttleBuilder
 
 [source,dart]
 ----
@@ -6053,9 +6045,9 @@ Hero(
 
 '''''
 
-=== 5. Formularios
+==== 5. Formularios
 
-==== TextField y TextEditingController
+===== TextField y TextEditingController
 
 [source,dart]
 ----
@@ -6126,7 +6118,7 @@ class _FormularioBasicoState extends State<FormularioBasico> {
 }
 ----
 
-==== Form y FormField
+===== Form y FormField
 
 [source,dart]
 ----
@@ -6251,7 +6243,7 @@ class _FormularioValidadoState extends State<FormularioValidado> {
 }
 ----
 
-==== FocusNode y Focus management
+===== FocusNode y Focus management
 
 [source,dart]
 ----
@@ -6330,9 +6322,9 @@ class _FocusExampleState extends State<FocusExample> {
 
 '''''
 
-=== 6. Diálogos y sheets
+==== 6. Diálogos y sheets
 
-==== AlertDialog
+===== AlertDialog
 
 [source,dart]
 ----
@@ -6392,7 +6384,7 @@ Future<String?> _mostrarInputDialog(BuildContext context) async {
 }
 ----
 
-==== BottomSheet
+===== BottomSheet
 
 [source,dart]
 ----
@@ -6465,7 +6457,7 @@ void _mostrarBottomSheetGrande(BuildContext context) {
 }
 ----
 
-==== SnackBar
+===== SnackBar
 
 [source,dart]
 ----
@@ -6508,9 +6500,9 @@ void _mostrarSnackBarPersonalizado(BuildContext context) {
 
 '''''
 
-=== 7. Ejercicios prácticos del Módulo 4
+==== 7. Ejercicios prácticos del Módulo 4
 
-==== Ejercicio 1: App de notas
+===== Ejercicio 1: App de notas
 
 Crear una app de notas con: - Lista de notas - Añadir notas - Editar
 notas - Eliminar notas (con confirmación)
@@ -6761,11 +6753,11 @@ Validación (3 horas)
 
 '''''
 
-=== 1. TextFormField y FormField
+==== 1. TextFormField y FormField
 
-==== TextFormField básico
+===== TextFormField básico
 
-`TextFormField` es un `TextField` que sabe trabajar con `Form`:
+`+TextFormField+` es un `+TextField+` que sabe trabajar con `+Form+`:
 
 [source,dart]
 ----
@@ -6877,7 +6869,7 @@ class _FormularioTextFormFieldState extends State<FormularioTextFormField> {
 }
 ----
 
-==== InputDecoration completo
+===== InputDecoration completo
 
 [source,dart]
 ----
@@ -6949,7 +6941,7 @@ TextFormField(
 );
 ----
 
-==== TextFormField con controlador
+===== TextFormField con controlador
 
 [source,dart]
 ----
@@ -7035,9 +7027,9 @@ class _TextFormFieldConControladorState extends State<TextFormFieldConControlado
 
 '''''
 
-=== 2. Validación personalizada
+==== 2. Validación personalizada
 
-==== Validadores reutilizables
+===== Validadores reutilizables
 
 [source,dart]
 ----
@@ -7156,7 +7148,7 @@ class Validators {
 }
 ----
 
-==== Uso de validadores personalizados
+===== Uso de validadores personalizados
 
 [source,dart]
 ----
@@ -7319,9 +7311,9 @@ class _FormularioConValidadoresState extends State<FormularioConValidadores> {
 
 '''''
 
-=== 3. Formularios complejos
+==== 3. Formularios complejos
 
-==== Checkbox, Radio y Switch
+===== Checkbox, Radio y Switch
 
 [source,dart]
 ----
@@ -7514,7 +7506,7 @@ class _FormularioCheckboxRadioState extends State<FormularioCheckboxRadio> {
 }
 ----
 
-==== Dropdown y Select
+===== Dropdown y Select
 
 [source,dart]
 ----
@@ -7705,7 +7697,7 @@ class _FormularioDropdownState extends State<FormularioDropdown> {
 }
 ----
 
-==== Date y Time Picker
+===== Date y Time Picker
 
 [source,dart]
 ----
@@ -7885,9 +7877,9 @@ class _FormularioFechaHoraState extends State<FormularioFechaHora> {
 
 '''''
 
-=== 4. Ejercicios prácticos del Módulo 5
+==== 4. Ejercicios prácticos del Módulo 5
 
-==== Ejercicio: Formulario de registro completo
+===== Ejercicio: Formulario de registro completo
 
 Crear un formulario de registro con: - Validación completa - Selección
 de fecha de nacimiento - Selección de país/ciudad dependientes -
@@ -8226,11 +8218,11 @@ horas)
 
 '''''
 
-=== 1. Paquete http
+==== 1. Paquete http
 
-==== Instalación
+===== Instalación
 
-Añadir en `pubspec.yaml`:
+Añadir en `+pubspec.yaml+`:
 
 [source,yaml]
 ----
@@ -8238,7 +8230,7 @@ dependencies:
   http: ^1.1.0
 ----
 
-==== Importar
+===== Importar
 
 [source,dart]
 ----
@@ -8246,7 +8238,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 ----
 
-==== GET request
+===== GET request
 
 [source,dart]
 ----
@@ -8302,7 +8294,7 @@ Future<void> obtenerDatosProtegidos() async {
 }
 ----
 
-==== POST request
+===== POST request
 
 [source,dart]
 ----
@@ -8368,7 +8360,7 @@ Future<void> subirArchivo(File archivo) async {
 }
 ----
 
-==== PUT y PATCH
+===== PUT y PATCH
 
 [source,dart]
 ----
@@ -8403,7 +8395,7 @@ Future<void> actualizarEmail(int id, String nuevoEmail) async {
 }
 ----
 
-==== DELETE
+===== DELETE
 
 [source,dart]
 ----
@@ -8420,9 +8412,9 @@ Future<void> eliminarUsuario(int id) async {
 
 '''''
 
-=== 2. Modelos de datos
+==== 2. Modelos de datos
 
-==== Clase modelo básica
+===== Clase modelo básica
 
 [source,dart]
 ----
@@ -8566,9 +8558,9 @@ class Empresa {
 }
 ----
 
-==== Modelo con json_serializable
+===== Modelo con json_serializable
 
-Instalar dependencias en `pubspec.yaml`:
+Instalar dependencias en `+pubspec.yaml+`:
 
 [source,yaml]
 ----
@@ -8633,9 +8625,9 @@ flutter pub run build_runner build
 
 '''''
 
-=== 3. Servicio API
+==== 3. Servicio API
 
-==== Servicio genérico
+===== Servicio genérico
 
 [source,dart]
 ----
@@ -8808,7 +8800,7 @@ class NetworkException implements Exception {
 }
 ----
 
-==== Servicio específico
+===== Servicio específico
 
 [source,dart]
 ----
@@ -8855,9 +8847,9 @@ class UsuarioService {
 
 '''''
 
-=== 4. Loading states y errores
+==== 4. Loading states y errores
 
-==== Estados de carga
+===== Estados de carga
 
 [source,dart]
 ----
@@ -8971,7 +8963,7 @@ class _UsuariosPageState extends State<UsuariosPage> {
 }
 ----
 
-==== Widget de loading reutilizable
+===== Widget de loading reutilizable
 
 [source,dart]
 ----
@@ -9026,9 +9018,9 @@ LoadingOverlay(
 
 '''''
 
-=== 5. Ejercicios prácticos del Módulo 6
+==== 5. Ejercicios prácticos del Módulo 6
 
-==== Ejercicio: App de productos con API
+===== Ejercicio: App de productos con API
 
 Crear una app que: - Obtiene productos de una API REST - Muestra lista
 con estados de carga - Permite ver detalles - Implementa búsqueda
@@ -9444,9 +9436,9 @@ Datos (3 horas)
 
 '''''
 
-=== 1. SharedPreferences
+==== 1. SharedPreferences
 
-==== Instalación
+===== Instalación
 
 [source,yaml]
 ----
@@ -9454,14 +9446,14 @@ dependencies:
   shared_preferences: ^2.2.0
 ----
 
-==== Conceptos básicos
+===== Conceptos básicos
 
-`SharedPreferences` permite almacenar datos simples de forma
-persistente: - Tipos: `String`, `int`, `double`, `bool`, `List<String>`
-- Almacenamiento: clave-valor - Uso ideal: preferencias,
-configuraciones, flags
+`+SharedPreferences+` permite almacenar datos simples de forma
+persistente: - Tipos: `+String+`, `+int+`, `+double+`, `+bool+`,
+`+List<String>+` - Almacenamiento: clave-valor - Uso ideal:
+preferencias, configuraciones, flags
 
-==== Servicio de SharedPreferences
+===== Servicio de SharedPreferences
 
 [source,dart]
 ----
@@ -9509,7 +9501,7 @@ class PreferenciasService {
 }
 ----
 
-==== Uso en la app
+===== Uso en la app
 
 [source,dart]
 ----
@@ -9587,7 +9579,7 @@ class _MyAppState extends State<MyApp> {
 }
 ----
 
-==== Página de configuración
+===== Página de configuración
 
 [source,dart]
 ----
@@ -9798,9 +9790,9 @@ class _ConfiguracionPageState extends State<ConfiguracionPage> {
 
 '''''
 
-=== 2. SQLite con sqflite
+==== 2. SQLite con sqflite
 
-==== Instalación
+===== Instalación
 
 [source,yaml]
 ----
@@ -9809,7 +9801,7 @@ dependencies:
   path: ^1.8.0
 ----
 
-==== Modelo de datos
+===== Modelo de datos
 
 [source,dart]
 ----
@@ -9880,7 +9872,7 @@ class Tarea {
 }
 ----
 
-==== Servicio de base de datos
+===== Servicio de base de datos
 
 [source,dart]
 ----
@@ -9938,7 +9930,7 @@ class DatabaseService {
 }
 ----
 
-==== Repositorio de tareas
+===== Repositorio de tareas
 
 [source,dart]
 ----
@@ -10075,7 +10067,7 @@ class TareasRepository {
 }
 ----
 
-==== Página de tareas con SQLite
+===== Página de tareas con SQLite
 
 [source,dart]
 ----
@@ -10315,9 +10307,9 @@ class _TareasSQLitePageState extends State<TareasSQLitePage> {
 
 '''''
 
-=== 3. Hive (NoSQL)
+==== 3. Hive (NoSQL)
 
-==== Instalación
+===== Instalación
 
 [source,yaml]
 ----
@@ -10326,7 +10318,7 @@ dependencies:
   hive_flutter: ^1.1.0
 ----
 
-==== Inicialización
+===== Inicialización
 
 [source,dart]
 ----
@@ -10340,7 +10332,7 @@ void main() async {
 }
 ----
 
-==== Modelo con Hive
+===== Modelo con Hive
 
 [source,dart]
 ----
@@ -10381,7 +10373,7 @@ class ProductoHive extends HiveObject {
 // flutter pub run build_runner build
 ----
 
-==== Servicio con Hive
+===== Servicio con Hive
 
 [source,dart]
 ----
@@ -10431,9 +10423,9 @@ class ProductoHiveService {
 
 '''''
 
-=== 4. Almacenamiento de archivos
+==== 4. Almacenamiento de archivos
 
-==== Escribir y leer archivos
+===== Escribir y leer archivos
 
 [source,dart]
 ----
@@ -10500,9 +10492,9 @@ class ArchivoService {
 
 '''''
 
-=== 5. Ejercicios prácticos del Módulo 7
+==== 5. Ejercicios prácticos del Módulo 7
 
-==== Ejercicio: App de notas con SQLite
+===== Ejercicio: App de notas con SQLite
 
 Crear una app de notas con: - CRUD completo (Crear, Leer, Actualizar,
 Eliminar) - Búsqueda por título - Filtros por categoría - Ordenamiento
@@ -10527,9 +10519,9 @@ Patrones (4 horas)
 
 '''''
 
-=== 1. Separación de responsabilidades
+==== 1. Separación de responsabilidades
 
-==== Estructura de carpetas recomendada
+===== Estructura de carpetas recomendada
 
 ....
 lib/
@@ -10566,7 +10558,7 @@ lib/
     └── routes.dart              # Rutas nombradas
 ....
 
-==== Ejemplo práctico: App de productos
+===== Ejemplo práctico: App de productos
 
 ....
 lib/
@@ -10636,14 +10628,14 @@ lib/
 
 '''''
 
-=== 2. Patrón Repository
+==== 2. Patrón Repository
 
-==== Definición
+===== Definición
 
 El patrón Repository separa la lógica de acceso a datos de la lógica de
 negocio.
 
-==== Implementación
+===== Implementación
 
 [source,dart]
 ----
@@ -10770,9 +10762,9 @@ class ProductoRepositoryImpl implements ProductoRepository {
 
 '''''
 
-=== 3. Provider para estado
+==== 3. Provider para estado
 
-==== Instalación
+===== Instalación
 
 [source,yaml]
 ----
@@ -10780,7 +10772,7 @@ dependencies:
   provider: ^6.1.0
 ----
 
-==== ChangeNotifier básico
+===== ChangeNotifier básico
 
 [source,dart]
 ----
@@ -10833,7 +10825,7 @@ class ProductoProvider extends ChangeNotifier {
 enum EstadoCarga { inicial, cargando, cargado, error }
 ----
 
-==== MultiProvider
+===== MultiProvider
 
 [source,dart]
 ----
@@ -10863,7 +10855,7 @@ void main() {
 }
 ----
 
-==== Consumo en widgets
+===== Consumo en widgets
 
 [source,dart]
 ----
@@ -10923,9 +10915,9 @@ class ProductoListPage extends StatelessWidget {
 
 '''''
 
-=== 4. BLoC/Cubit
+==== 4. BLoC/Cubit
 
-==== Instalación
+===== Instalación
 
 [source,yaml]
 ----
@@ -10934,7 +10926,7 @@ dependencies:
   equatable: ^2.0.5
 ----
 
-==== Estados con Equatable
+===== Estados con Equatable
 
 [source,dart]
 ----
@@ -10968,7 +10960,7 @@ class ProductoError extends ProductoState {
 }
 ----
 
-==== Eventos
+===== Eventos
 
 [source,dart]
 ----
@@ -11009,7 +11001,7 @@ class SearchProductos extends ProductoEvent {
 }
 ----
 
-==== BLoC
+===== BLoC
 
 [source,dart]
 ----
@@ -11086,7 +11078,7 @@ class ProductoBloc extends Bloc<ProductoEvent, ProductoState> {
 }
 ----
 
-==== Cubit (versión simplificada)
+===== Cubit (versión simplificada)
 
 [source,dart]
 ----
@@ -11133,7 +11125,7 @@ class ProductoCubit extends Cubit<ProductoState> {
 }
 ----
 
-==== Uso en widgets con BlocBuilder
+===== Uso en widgets con BlocBuilder
 
 [source,dart]
 ----
@@ -11187,9 +11179,9 @@ class ProductoListPage extends StatelessWidget {
 
 '''''
 
-=== 5. Clean Architecture (opcional)
+==== 5. Clean Architecture (opcional)
 
-==== Estructura
+===== Estructura
 
 ....
 lib/
@@ -11217,7 +11209,7 @@ lib/
     └── providers/
 ....
 
-==== Entidad de dominio
+===== Entidad de dominio
 
 [source,dart]
 ----
@@ -11238,7 +11230,7 @@ class Producto {
 }
 ----
 
-==== Caso de uso
+===== Caso de uso
 
 [source,dart]
 ----
@@ -11265,9 +11257,9 @@ class AddProducto {
 
 '''''
 
-=== 6. Ejercicios prácticos del Módulo 8
+==== 6. Ejercicios prácticos del Módulo 8
 
-==== Ejercicio: App con arquitectura completa
+===== Ejercicio: App con arquitectura completa
 
 Crear una app de tareas con: - Patrón Repository - Provider o BLoC para
 estado - Clean Architecture
@@ -11310,7 +11302,7 @@ completa
 
 '''''
 
-=== 1. Tipos de tests en Flutter
+==== 1. Tipos de tests en Flutter
 
 Flutter tiene tres niveles de testing:
 
@@ -11324,9 +11316,9 @@ Flutter tiene tres niveles de testing:
 
 '''''
 
-=== 2. Unit Tests
+==== 2. Unit Tests
 
-==== Estructura de tests
+===== Estructura de tests
 
 [source,dart]
 ----
@@ -11399,7 +11391,7 @@ void main() {
 }
 ----
 
-==== Test de servicios
+===== Test de servicios
 
 [source,dart]
 ----
@@ -11484,7 +11476,7 @@ void main() {
 }
 ----
 
-==== Test de validadores
+===== Test de validadores
 
 [source,dart]
 ----
@@ -11562,9 +11554,9 @@ void main() {
 
 '''''
 
-=== 3. Widget Tests
+==== 3. Widget Tests
 
-==== Test básico de widget
+===== Test básico de widget
 
 [source,dart]
 ----
@@ -11639,7 +11631,7 @@ void main() {
 }
 ----
 
-==== Test de formularios
+===== Test de formularios
 
 [source,dart]
 ----
@@ -11755,7 +11747,7 @@ void main() {
 }
 ----
 
-==== Test de navegación
+===== Test de navegación
 
 [source,dart]
 ----
@@ -11813,9 +11805,9 @@ void main() {
 
 '''''
 
-=== 4. Integration Tests
+==== 4. Integration Tests
 
-==== Configuración
+===== Configuración
 
 [source,yaml]
 ----
@@ -11827,7 +11819,7 @@ dev_dependencies:
     sdk: flutter
 ----
 
-==== Test de integración
+===== Test de integración
 
 [source,dart]
 ----
@@ -11915,9 +11907,9 @@ void main() {
 
 '''''
 
-=== 5. Mocking con Mocktail
+==== 5. Mocking con Mocktail
 
-==== Mock de dependencias
+===== Mock de dependencias
 
 [source,dart]
 ----
@@ -11943,7 +11935,7 @@ void main() {
 }
 ----
 
-==== Test con mocks
+===== Test con mocks
 
 [source,dart]
 ----
@@ -12025,9 +12017,9 @@ void main() {
 
 '''''
 
-=== 6. Cobertura de tests
+==== 6. Cobertura de tests
 
-==== Ejecutar tests con cobertura
+===== Ejecutar tests con cobertura
 
 [source,bash]
 ----
@@ -12036,7 +12028,7 @@ genhtml coverage/lcov.info -o coverage/html
 open coverage/html/index.html
 ----
 
-==== Configuración de coverage
+===== Configuración de coverage
 
 [source,yaml]
 ----
@@ -12045,7 +12037,7 @@ dev_dependencies:
   coverage: ^1.6.0
 ----
 
-==== Excluir archivos de cobertura
+===== Excluir archivos de cobertura
 
 [source,dart]
 ----
@@ -12055,9 +12047,9 @@ dev_dependencies:
 
 '''''
 
-=== 7. Good Practices
+==== 7. Good Practices
 
-==== Nombrar tests descriptivamente
+===== Nombrar tests descriptivamente
 
 [source,dart]
 ----
@@ -12084,7 +12076,7 @@ void main() {
 }
 ----
 
-==== UsarAAA pattern
+===== UsarAAA pattern
 
 [source,dart]
 ----
@@ -12102,7 +12094,7 @@ test('descripcion del test', () async {
 });
 ----
 
-==== Tests independientes
+===== Tests independientes
 
 [source,dart]
 ----
@@ -12131,9 +12123,9 @@ void main() {
 
 '''''
 
-=== 8. Ejercicios prácticos del Módulo 9
+==== 8. Ejercicios prácticos del Módulo 9
 
-==== Ejercicio: Tests completos para una app de tareas
+===== Ejercicio: Tests completos para una app de tareas
 
 Crear tests para: 1. Modelos (fromJson, toJson, copyWith) 2. Repositorio
 (CRUD con mocks) 3. Provider (estados y transiciones) 4. Widgets
@@ -12154,13 +12146,13 @@ practices y patrones AAA
 
 *Próximo módulo:* Publicación
 
-== Módulo 10: Publicación (3 horas)
+=== Módulo 10: Publicación (3 horas)
 
 '''''
 
-=== 1. Preparación para producción
+==== 1. Preparación para producción
 
-==== Configurar versiones y build numbers
+===== Configurar versiones y build numbers
 
 [source,yaml]
 ----
@@ -12170,7 +12162,7 @@ version: 1.0.0+1
 # version: 1.2.3+45 significa versión 1.2.3 build 45
 ----
 
-==== Modos de compilación
+===== Modos de compilación
 
 [source,bash]
 ----
@@ -12184,7 +12176,7 @@ flutter run --profile
 flutter run --release
 ----
 
-==== Limpiar proyecto antes de publicar
+===== Limpiar proyecto antes de publicar
 
 [source,bash]
 ----
@@ -12207,9 +12199,9 @@ flutter build ios --release
 
 '''''
 
-=== 2. Firmado de apps (Signing)
+==== 2. Firmado de apps (Signing)
 
-==== Android
+===== Android
 
 *Generar keystore:*
 
@@ -12220,7 +12212,7 @@ keytool -genkey -v -keystore mi-app-key.jks \
   -alias mi-app-alias
 ----
 
-*Configurar en `android/key.properties`:*
+*Configurar en `+android/key.properties+`:*
 
 [source,properties]
 ----
@@ -12230,7 +12222,7 @@ keyAlias=mi-app-alias
 storeFile=../mi-app-key.jks
 ----
 
-*Configurar en `android/app/build.gradle`:*
+*Configurar en `+android/app/build.gradle+`:*
 
 [source,groovy]
 ----
@@ -12264,7 +12256,7 @@ android {
 }
 ----
 
-*ProGuard rules (`android/app/proguard-rules.pro`):*
+*ProGuard rules (`+android/app/proguard-rules.pro+`):*
 
 [source,proguard]
 ----
@@ -12291,19 +12283,19 @@ flutter build apk --release
 flutter build appbundle --release
 ----
 
-==== iOS
+===== iOS
 
 *Configurar en Xcode:*
 
 [arabic]
-. Abrir `ios/Runner.xcworkspace` en Xcode
+. Abrir `+ios/Runner.xcworkspace+` en Xcode
 . Seleccionar Runner > Signing & Capabilities
 . Seleccionar Team (Apple Developer)
 . Automáticamente se gestionan los certificados
 
 *Configurar Bundle ID:*
 
-En `ios/Runner/Info.plist`:
+En `+ios/Runner/Info.plist+`:
 
 [source,xml]
 ----
@@ -12334,9 +12326,9 @@ open ios/Runner.xcworkspace
 
 '''''
 
-=== 3. Google Play Store
+==== 3. Google Play Store
 
-==== Requisitos
+===== Requisitos
 
 * Cuenta de Google Play Developer ($25 una vez)
 * App firmada con keystore propio
@@ -12347,7 +12339,7 @@ open ios/Runner.xcworkspace
 ** Banner de feature (1024x500 px) opcional
 ** Video promocional opcional
 
-==== Preparar recursos
+===== Preparar recursos
 
 *Icono de la app:*
 
@@ -12376,7 +12368,7 @@ flutter pub run flutter_launcher_icons
 * Formato: PNG o JPEG
 * Incluir diferentes tamaños de pantalla
 
-==== Subir a Google Play Console
+===== Subir a Google Play Console
 
 [arabic]
 . *Crear aplicación:*
@@ -12388,9 +12380,9 @@ flutter pub run flutter_launcher_icons
 * Detalles de la app (descripción, screenshots)
 * Categoría y etiquetas
 . *Subir AAB:*
-* Ir a ``Lanzamientos de producción''
+* Ir a "`Lanzamientos de producción`"
 * Crear nuevo lanzamiento
-* Subir archivo `.aab`
+* Subir archivo `+.aab+`
 * Notas de versión
 . *Revisión:*
 * Revisar advertencias y errores
@@ -12399,7 +12391,7 @@ flutter pub run flutter_launcher_icons
 * Enviar para revisión
 * Tiempo de revisión: 1-7 días
 
-==== Configurar firmado automático
+===== Configurar firmado automático
 
 [source,yaml]
 ----
@@ -12442,9 +12434,9 @@ jobs:
 
 '''''
 
-=== 4. App Store (iOS)
+==== 4. App Store (iOS)
 
-==== Requisitos
+===== Requisitos
 
 * Cuenta Apple Developer ($99/año)
 * Certificados y provisioning profiles
@@ -12454,7 +12446,7 @@ jobs:
 ** Screenshots (2.5x mínimo)
 ** App Preview videos opcional
 
-==== App Store Connect
+===== App Store Connect
 
 [arabic]
 . *Crear App ID:*
@@ -12476,7 +12468,7 @@ jobs:
 * Completar información de revisión
 * Tiempo de revisión: 1-3 días
 
-==== Fastlane para iOS
+===== Fastlane para iOS
 
 [source,ruby]
 ----
@@ -12512,9 +12504,9 @@ end
 
 '''''
 
-=== 5. CI/CD con GitHub Actions
+==== 5. CI/CD con GitHub Actions
 
-==== Workflow completo
+===== Workflow completo
 
 [source,yaml]
 ----
@@ -12648,9 +12640,9 @@ jobs:
 
 '''''
 
-=== 6. Actualizaciones y versionado
+==== 6. Actualizaciones y versionado
 
-==== Versionado semántico
+===== Versionado semántico
 
 ....
 MAJOR.MINOR.PATCH+BUILD
@@ -12661,7 +12653,7 @@ PATCH: Correcciones de bugs
 BUILD: Número de build incremental
 ....
 
-==== Actualizar versión
+===== Actualizar versión
 
 [source,yaml]
 ----
@@ -12683,7 +12675,7 @@ class VersionService {
 }
 ----
 
-Dependencia en `pubspec.yaml`:
+Dependencia en `+pubspec.yaml+`:
 
 [source,yaml]
 ----
@@ -12691,7 +12683,7 @@ dependencies:
   package_info_plus: ^4.0.0
 ----
 
-==== Changelog
+===== Changelog
 
 [source,markdown]
 ----
@@ -12720,9 +12712,9 @@ dependencies:
 
 '''''
 
-=== 7. Monetización
+==== 7. Monetización
 
-==== Ads con AdMob
+===== Ads con AdMob
 
 [source,yaml]
 ----
@@ -12780,7 +12772,7 @@ class AdService {
 }
 ----
 
-==== Compras dentro de la app (In-App Purchases)
+===== Compras dentro de la app (In-App Purchases)
 
 [source,yaml]
 ----
@@ -12854,9 +12846,9 @@ class PurchaseService {
 
 '''''
 
-=== 8. Analytics y Crashlytics
+==== 8. Analytics y Crashlytics
 
-==== Firebase Analytics
+===== Firebase Analytics
 
 [source,yaml]
 ----
@@ -12918,7 +12910,7 @@ class AnalyticsService {
 }
 ----
 
-==== Firebase Crashlytics
+===== Firebase Crashlytics
 
 [source,yaml]
 ----
@@ -12975,9 +12967,9 @@ class CrashlyticsService {
 
 '''''
 
-=== 9. Ejercicios prácticos del Módulo 10
+==== 9. Ejercicios prácticos del Módulo 10
 
-==== Ejercicio: Preparar app para producción
+===== Ejercicio: Preparar app para producción
 
 [arabic]
 . Configurar keystore para Android
@@ -13036,7 +13028,7 @@ Crashlytics
 
 '''''
 
-== Cierre del Temario Flutter 30h
+=== Cierre del Temario Flutter 30h
 
 *Resumen del curso completo:*
 

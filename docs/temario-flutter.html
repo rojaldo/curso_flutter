@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 2.0.26">
-<title>Temario Flutter: Guía Completa</title>
+<title>Módulo 1: Introducción a Flutter (2 horas)</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
 /*! Asciidoctor default stylesheet | MIT License | https://asciidoctor.org */
@@ -433,505 +433,18 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 #footer-text{color:rgba(0,0,0,.6);font-size:.9em}}
 @media amzn-kf8{#header,#content,#footnotes,#footer{padding:0}}
 </style>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.3/styles/github.min.css">
 </head>
-<body class="article toc2 toc-left">
+<body class="article">
 <div id="header">
-<h1>Temario Flutter: Guía Completa</h1>
-<div id="toc" class="toc2">
-<div id="toctitle">Contenidos</div>
-<ul class="sectlevel1">
-<li><a href="#_módulo_1_introducción_a_flutter_2_horas">Módulo 1: Introducción a Flutter (2 horas)</a>
-<ul class="sectlevel2">
-<li><a href="#_1_qué_es_flutter_y_dart">1. Qué es Flutter y Dart</a>
-<ul class="sectlevel3">
-<li><a href="#_qué_es_flutter">¿Qué es Flutter?</a></li>
-<li><a href="#_qué_es_dart">¿Qué es Dart?</a></li>
-</ul>
-</li>
-<li><a href="#_2_instalación_y_configuración_del_entorno_de_desarrollo">2. Instalación y configuración del entorno de desarrollo</a>
-<ul class="sectlevel3">
-<li><a href="#_requisitos_del_sistema">Requisitos del sistema</a></li>
-<li><a href="#_instalación_paso_a_paso">Instalación paso a paso</a></li>
-<li><a href="#_verificación_completa">Verificación completa</a></li>
-</ul>
-</li>
-<li><a href="#_3_estructura_de_un_proyecto_flutter">3. Estructura de un proyecto Flutter</a>
-<ul class="sectlevel3">
-<li><a href="#_anatomía_del_proyecto">Anatomía del proyecto</a></li>
-<li><a href="#_archivos_clave_explicados">Archivos clave explicados</a></li>
-<li><a href="#_carpetas_importantes">Carpetas importantes</a></li>
-</ul>
-</li>
-<li><a href="#_4_hot_reload_vs_hot_restart">4. Hot Reload vs Hot Restart</a>
-<ul class="sectlevel3">
-<li><a href="#_qué_es_hot_reload">¿Qué es Hot Reload?</a></li>
-<li><a href="#_hot_restart_reinicio_en_caliente">Hot Restart (Reinicio en caliente)</a></li>
-<li><a href="#_diferencias_detalladas">Diferencias detalladas</a></li>
-<li><a href="#_cuándo_no_funciona_hot_reload">Cuándo NO funciona Hot Reload</a></li>
-</ul>
-</li>
-<li><a href="#_5_widget_tree_y_render_tree">5. Widget Tree y Render Tree</a>
-<ul class="sectlevel3">
-<li><a href="#_concepto_fundamental">Concepto fundamental</a></li>
-<li><a href="#_flujo_de_renderizado">Flujo de renderizado</a></li>
-<li><a href="#_statelesswidget_vs_statefulwidget_en_el_árbol">StatelessWidget vs StatefulWidget en el árbol</a></li>
-<li><a href="#_el_árbol_en_acción">El árbol en acción</a></li>
-<li><a href="#_optimización_del_árbol">Optimización del árbol</a></li>
-</ul>
-</li>
-<li><a href="#_6_primer_proyecto_hola_mundo">6. Primer proyecto: ``Hola Mundo''</a>
-<ul class="sectlevel3">
-<li><a href="#_crear_el_proyecto">Crear el proyecto</a></li>
-<li><a href="#_limpiar_el_código_por_defecto">Limpiar el código por defecto</a></li>
-<li><a href="#_versión_interactiva_con_estado">Versión interactiva con estado</a></li>
-<li><a href="#_ejercicio_práctico_personalizar_el_hola_mundo">Ejercicio práctico: Personalizar el Hola Mundo</a></li>
-<li><a href="#_resumen_del_módulo_1">Resumen del Módulo 1</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><a href="#_módulo_2_fundamentos_de_dart_4_horas">Módulo 2: Fundamentos de Dart (4 horas)</a>
-<ul class="sectlevel2">
-<li><a href="#_1_variables_y_tipos_de_datos">1. Variables y Tipos de Datos</a>
-<ul class="sectlevel3">
-<li><a href="#_variables">Variables</a></li>
-<li><a href="#_final_y_const">final y const</a></li>
-<li><a href="#_tipos_numéricos">Tipos numéricos</a></li>
-<li><a href="#_strings">Strings</a></li>
-<li><a href="#_booleanos">Booleanos</a></li>
-<li><a href="#_colecciones_listas">Colecciones: Listas</a></li>
-<li><a href="#_colecciones_sets">Colecciones: Sets</a></li>
-<li><a href="#_colecciones_maps">Colecciones: Maps</a></li>
-</ul>
-</li>
-<li><a href="#_2_operadores">2. Operadores</a>
-<ul class="sectlevel3">
-<li><a href="#_operadores_aritméticos">Operadores aritméticos</a></li>
-<li><a href="#_operadores_de_asignación">Operadores de asignación</a></li>
-<li><a href="#_operadores_de_igualdad_y_relacionales">Operadores de igualdad y relacionales</a></li>
-<li><a href="#_operadores_lógicos">Operadores lógicos</a></li>
-<li><a href="#_operadores_de_tipo">Operadores de tipo</a></li>
-<li><a href="#_operador_condicional_ternario">Operador condicional (ternario)</a></li>
-<li><a href="#_operador_cascade">Operador cascade (..)</a></li>
-</ul>
-</li>
-<li><a href="#_3_control_de_flujo">3. Control de Flujo</a>
-<ul class="sectlevel3">
-<li><a href="#_if_else">if-else</a></li>
-<li><a href="#_switch_case">switch-case</a></li>
-<li><a href="#_bucles_for">Bucles: for</a></li>
-<li><a href="#_bucles_while_y_do_while">Bucles: while y do-while</a></li>
-<li><a href="#_break_y_continue">break y continue</a></li>
-<li><a href="#_assert">assert</a></li>
-</ul>
-</li>
-<li><a href="#_4_funciones">4. Funciones</a>
-<ul class="sectlevel3">
-<li><a href="#_declaración_de_funciones">Declaración de funciones</a></li>
-<li><a href="#_parámetros">Parámetros</a></li>
-<li><a href="#_funciones_como_objetos_de_primera_clase">Funciones como objetos de primera clase</a></li>
-<li><a href="#_funciones_anónimas_y_closures">Funciones anónimas y closures</a></li>
-<li><a href="#_funciones_asíncronas">Funciones asíncronas</a></li>
-</ul>
-</li>
-<li><a href="#_5_programación_orientada_a_objetos">5. Programación Orientada a Objetos</a>
-<ul class="sectlevel3">
-<li><a href="#_clases_básicas">Clases básicas</a></li>
-<li><a href="#_propiedades">Propiedades</a></li>
-<li><a href="#_constructores">Constructores</a></li>
-<li><a href="#_herencia">Herencia</a></li>
-<li><a href="#_interfaces_y_clases_abstractas">Interfaces y clases abstractas</a></li>
-<li><a href="#_mixins">Mixins</a></li>
-<li><a href="#_enums">Enums</a></li>
-</ul>
-</li>
-<li><a href="#_6_manejo_de_excepciones">6. Manejo de Excepciones</a>
-<ul class="sectlevel3">
-<li><a href="#_try_catch_finally">try-catch-finally</a></li>
-<li><a href="#_throw">throw</a></li>
-<li><a href="#_ejemplo_práctico_validación">Ejemplo práctico: Validación</a></li>
-</ul>
-</li>
-<li><a href="#_7_null_safety">7. Null Safety</a>
-<ul class="sectlevel3">
-<li><a href="#_conceptos_básicos">Conceptos básicos</a></li>
-<li><a href="#_aserción_de_no_null">Aserción de no-null (!)</a></li>
-<li><a href="#_late">late</a></li>
-<li><a href="#_patrones_comunes">Patrones comunes</a></li>
-</ul>
-</li>
-<li><a href="#_8_asincronía">8. Asincronía</a>
-<ul class="sectlevel3">
-<li><a href="#_future">Future</a></li>
-<li><a href="#_asyncawait">async/await</a></li>
-<li><a href="#_stream">Stream</a></li>
-</ul>
-</li>
-<li><a href="#_9_ejercicios_prácticos">9. Ejercicios Prácticos</a>
-<ul class="sectlevel3">
-<li><a href="#_ejercicio_1_gestión_de_usuarios">Ejercicio 1: Gestión de usuarios</a></li>
-<li><a href="#_ejercicio_2_calculadora_con_validación">Ejercicio 2: Calculadora con validación</a></li>
-<li><a href="#_ejercicio_3_sistema_de_reservas">Ejercicio 3: Sistema de reservas</a></li>
-</ul>
-</li>
-<li><a href="#_1_statelesswidget_vs_statefulwidget">1. StatelessWidget vs StatefulWidget</a>
-<ul class="sectlevel3">
-<li><a href="#_statelesswidget">StatelessWidget</a></li>
-<li><a href="#_statefulwidget">StatefulWidget</a></li>
-<li><a href="#_ciclo_de_vida_del_statefulwidget">Ciclo de vida del StatefulWidget</a></li>
-</ul>
-</li>
-<li><a href="#_2_widgets_de_texto_imágenes_e_iconos">2. Widgets de texto, imágenes e iconos</a>
-<ul class="sectlevel3">
-<li><a href="#_text">Text</a></li>
-<li><a href="#_image">Image</a></li>
-<li><a href="#_icon">Icon</a></li>
-</ul>
-</li>
-<li><a href="#_3_container_padding_center_align">3. Container, Padding, Center, Align</a>
-<ul class="sectlevel3">
-<li><a href="#_container">Container</a></li>
-<li><a href="#_padding">Padding</a></li>
-<li><a href="#_center">Center</a></li>
-<li><a href="#_align">Align</a></li>
-</ul>
-</li>
-<li><a href="#_4_column_row_stack_wrap">4. Column, Row, Stack, Wrap</a>
-<ul class="sectlevel3">
-<li><a href="#_column">Column</a></li>
-<li><a href="#_row">Row</a></li>
-<li><a href="#_stack">Stack</a></li>
-<li><a href="#_wrap">Wrap</a></li>
-</ul>
-</li>
-<li><a href="#_5_listview_gridview_singlechildscrollview">5. ListView, GridView, SingleChildScrollView</a>
-<ul class="sectlevel3">
-<li><a href="#_listview">ListView</a></li>
-<li><a href="#_gridview">GridView</a></li>
-<li><a href="#_singlechildscrollview">SingleChildScrollView</a></li>
-</ul>
-</li>
-<li><a href="#_6_scaffold_appbar_drawer_bottomnavigationbar">6. Scaffold, AppBar, Drawer, BottomNavigationBar</a>
-<ul class="sectlevel3">
-<li><a href="#_scaffold">Scaffold</a></li>
-<li><a href="#_appbar">AppBar</a></li>
-<li><a href="#_drawer">Drawer</a></li>
-<li><a href="#_bottomnavigationbar">BottomNavigationBar</a></li>
-</ul>
-</li>
-<li><a href="#_7_ejercicios_prácticos_del_módulo_3">7. Ejercicios prácticos del Módulo 3</a>
-<ul class="sectlevel3">
-<li><a href="#_ejercicio_1_perfil_de_usuario">Ejercicio 1: Perfil de usuario</a></li>
-<li><a href="#_ejercicio_2_lista_de_productos">Ejercicio 2: Lista de productos</a></li>
-</ul>
-</li>
-<li><a href="#_1_gestión_de_estado_local">1. Gestión de estado local</a>
-<ul class="sectlevel3">
-<li><a href="#_qué_es_el_estado">¿Qué es el estado?</a></li>
-<li><a href="#_setstate_y_reconstrucción">setState y reconstrucción</a></li>
-<li><a href="#_lifting_state_up_elevar_el_estado">Lifting State Up (Elevar el estado)</a></li>
-</ul>
-</li>
-<li><a href="#_2_navegación_básica">2. Navegación básica</a>
-<ul class="sectlevel3">
-<li><a href="#_navigator_push_y_navigator_pop">Navigator.push y Navigator.pop</a></li>
-<li><a href="#_pasar_datos_entre_pantallas">Pasar datos entre pantallas</a></li>
-<li><a href="#_recibir_datos_de_vuelta">Recibir datos de vuelta</a></li>
-</ul>
-</li>
-<li><a href="#_3_rutas_nombradas">3. Rutas nombradas</a>
-<ul class="sectlevel3">
-<li><a href="#_configuración_de_rutas">Configuración de rutas</a></li>
-<li><a href="#_navegación_con_rutas_nombradas">Navegación con rutas nombradas</a></li>
-<li><a href="#_ongenerateroute_para_argumentos_tipados">onGenerateRoute para argumentos tipados</a></li>
-</ul>
-</li>
-<li><a href="#_4_hero_animations">4. Hero animations</a>
-<ul class="sectlevel3">
-<li><a href="#_hero_básico">Hero básico</a></li>
-<li><a href="#_hero_con_placeholder">Hero con placeholder</a></li>
-<li><a href="#_hero_con_flightshuttlebuilder">Hero con flightShuttleBuilder</a></li>
-</ul>
-</li>
-<li><a href="#_5_formularios">5. Formularios</a>
-<ul class="sectlevel3">
-<li><a href="#_textfield_y_texteditingcontroller">TextField y TextEditingController</a></li>
-<li><a href="#_form_y_formfield">Form y FormField</a></li>
-<li><a href="#_focusnode_y_focus_management">FocusNode y Focus management</a></li>
-</ul>
-</li>
-<li><a href="#_6_diálogos_y_sheets">6. Diálogos y sheets</a>
-<ul class="sectlevel3">
-<li><a href="#_alertdialog">AlertDialog</a></li>
-<li><a href="#_bottomsheet">BottomSheet</a></li>
-<li><a href="#_snackbar">SnackBar</a></li>
-</ul>
-</li>
-<li><a href="#_7_ejercicios_prácticos_del_módulo_4">7. Ejercicios prácticos del Módulo 4</a>
-<ul class="sectlevel3">
-<li><a href="#_ejercicio_1_app_de_notas">Ejercicio 1: App de notas</a></li>
-</ul>
-</li>
-<li><a href="#_1_textformfield_y_formfield">1. TextFormField y FormField</a>
-<ul class="sectlevel3">
-<li><a href="#_textformfield_básico">TextFormField básico</a></li>
-<li><a href="#_inputdecoration_completo">InputDecoration completo</a></li>
-<li><a href="#_textformfield_con_controlador">TextFormField con controlador</a></li>
-</ul>
-</li>
-<li><a href="#_2_validación_personalizada">2. Validación personalizada</a>
-<ul class="sectlevel3">
-<li><a href="#_validadores_reutilizables">Validadores reutilizables</a></li>
-<li><a href="#_uso_de_validadores_personalizados">Uso de validadores personalizados</a></li>
-</ul>
-</li>
-<li><a href="#_3_formularios_complejos">3. Formularios complejos</a>
-<ul class="sectlevel3">
-<li><a href="#_checkbox_radio_y_switch">Checkbox, Radio y Switch</a></li>
-<li><a href="#_dropdown_y_select">Dropdown y Select</a></li>
-<li><a href="#_date_y_time_picker">Date y Time Picker</a></li>
-</ul>
-</li>
-<li><a href="#_4_ejercicios_prácticos_del_módulo_5">4. Ejercicios prácticos del Módulo 5</a>
-<ul class="sectlevel3">
-<li><a href="#_ejercicio_formulario_de_registro_completo">Ejercicio: Formulario de registro completo</a></li>
-</ul>
-</li>
-<li><a href="#_1_paquete_http">1. Paquete http</a>
-<ul class="sectlevel3">
-<li><a href="#_instalación">Instalación</a></li>
-<li><a href="#_importar">Importar</a></li>
-<li><a href="#_get_request">GET request</a></li>
-<li><a href="#_post_request">POST request</a></li>
-<li><a href="#_put_y_patch">PUT y PATCH</a></li>
-<li><a href="#_delete">DELETE</a></li>
-</ul>
-</li>
-<li><a href="#_2_modelos_de_datos">2. Modelos de datos</a>
-<ul class="sectlevel3">
-<li><a href="#_clase_modelo_básica">Clase modelo básica</a></li>
-<li><a href="#_modelo_con_json_serializable">Modelo con json_serializable</a></li>
-</ul>
-</li>
-<li><a href="#_3_servicio_api">3. Servicio API</a>
-<ul class="sectlevel3">
-<li><a href="#_servicio_genérico">Servicio genérico</a></li>
-<li><a href="#_servicio_específico">Servicio específico</a></li>
-</ul>
-</li>
-<li><a href="#_4_loading_states_y_errores">4. Loading states y errores</a>
-<ul class="sectlevel3">
-<li><a href="#_estados_de_carga">Estados de carga</a></li>
-<li><a href="#_widget_de_loading_reutilizable">Widget de loading reutilizable</a></li>
-</ul>
-</li>
-<li><a href="#_5_ejercicios_prácticos_del_módulo_6">5. Ejercicios prácticos del Módulo 6</a>
-<ul class="sectlevel3">
-<li><a href="#_ejercicio_app_de_productos_con_api">Ejercicio: App de productos con API</a></li>
-</ul>
-</li>
-<li><a href="#_1_sharedpreferences">1. SharedPreferences</a>
-<ul class="sectlevel3">
-<li><a href="#_instalación_2">Instalación</a></li>
-<li><a href="#_conceptos_básicos_2">Conceptos básicos</a></li>
-<li><a href="#_servicio_de_sharedpreferences">Servicio de SharedPreferences</a></li>
-<li><a href="#_uso_en_la_app">Uso en la app</a></li>
-<li><a href="#_página_de_configuración">Página de configuración</a></li>
-</ul>
-</li>
-<li><a href="#_2_sqlite_con_sqflite">2. SQLite con sqflite</a>
-<ul class="sectlevel3">
-<li><a href="#_instalación_3">Instalación</a></li>
-<li><a href="#_modelo_de_datos">Modelo de datos</a></li>
-<li><a href="#_servicio_de_base_de_datos">Servicio de base de datos</a></li>
-<li><a href="#_repositorio_de_tareas">Repositorio de tareas</a></li>
-<li><a href="#_página_de_tareas_con_sqlite">Página de tareas con SQLite</a></li>
-</ul>
-</li>
-<li><a href="#_3_hive_nosql">3. Hive (NoSQL)</a>
-<ul class="sectlevel3">
-<li><a href="#_instalación_4">Instalación</a></li>
-<li><a href="#_inicialización">Inicialización</a></li>
-<li><a href="#_modelo_con_hive">Modelo con Hive</a></li>
-<li><a href="#_servicio_con_hive">Servicio con Hive</a></li>
-</ul>
-</li>
-<li><a href="#_4_almacenamiento_de_archivos">4. Almacenamiento de archivos</a>
-<ul class="sectlevel3">
-<li><a href="#_escribir_y_leer_archivos">Escribir y leer archivos</a></li>
-</ul>
-</li>
-<li><a href="#_5_ejercicios_prácticos_del_módulo_7">5. Ejercicios prácticos del Módulo 7</a>
-<ul class="sectlevel3">
-<li><a href="#_ejercicio_app_de_notas_con_sqlite">Ejercicio: App de notas con SQLite</a></li>
-</ul>
-</li>
-<li><a href="#_1_separación_de_responsabilidades">1. Separación de responsabilidades</a>
-<ul class="sectlevel3">
-<li><a href="#_estructura_de_carpetas_recomendada">Estructura de carpetas recomendada</a></li>
-<li><a href="#_ejemplo_práctico_app_de_productos">Ejemplo práctico: App de productos</a></li>
-</ul>
-</li>
-<li><a href="#_2_patrón_repository">2. Patrón Repository</a>
-<ul class="sectlevel3">
-<li><a href="#_definición">Definición</a></li>
-<li><a href="#_implementación">Implementación</a></li>
-</ul>
-</li>
-<li><a href="#_3_provider_para_estado">3. Provider para estado</a>
-<ul class="sectlevel3">
-<li><a href="#_instalación_5">Instalación</a></li>
-<li><a href="#_changenotifier_básico">ChangeNotifier básico</a></li>
-<li><a href="#_multiprovider">MultiProvider</a></li>
-<li><a href="#_consumo_en_widgets">Consumo en widgets</a></li>
-</ul>
-</li>
-<li><a href="#_4_bloccubit">4. BLoC/Cubit</a>
-<ul class="sectlevel3">
-<li><a href="#_instalación_6">Instalación</a></li>
-<li><a href="#_estados_con_equatable">Estados con Equatable</a></li>
-<li><a href="#_eventos">Eventos</a></li>
-<li><a href="#_bloc">BLoC</a></li>
-<li><a href="#_cubit_versión_simplificada">Cubit (versión simplificada)</a></li>
-<li><a href="#_uso_en_widgets_con_blocbuilder">Uso en widgets con BlocBuilder</a></li>
-</ul>
-</li>
-<li><a href="#_5_clean_architecture_opcional">5. Clean Architecture (opcional)</a>
-<ul class="sectlevel3">
-<li><a href="#_estructura">Estructura</a></li>
-<li><a href="#_entidad_de_dominio">Entidad de dominio</a></li>
-<li><a href="#_caso_de_uso">Caso de uso</a></li>
-</ul>
-</li>
-<li><a href="#_6_ejercicios_prácticos_del_módulo_8">6. Ejercicios prácticos del Módulo 8</a>
-<ul class="sectlevel3">
-<li><a href="#_ejercicio_app_con_arquitectura_completa">Ejercicio: App con arquitectura completa</a></li>
-</ul>
-</li>
-<li><a href="#_1_tipos_de_tests_en_flutter">1. Tipos de tests en Flutter</a></li>
-<li><a href="#_2_unit_tests">2. Unit Tests</a>
-<ul class="sectlevel3">
-<li><a href="#_estructura_de_tests">Estructura de tests</a></li>
-<li><a href="#_test_de_servicios">Test de servicios</a></li>
-<li><a href="#_test_de_validadores">Test de validadores</a></li>
-</ul>
-</li>
-<li><a href="#_3_widget_tests">3. Widget Tests</a>
-<ul class="sectlevel3">
-<li><a href="#_test_básico_de_widget">Test básico de widget</a></li>
-<li><a href="#_test_de_formularios">Test de formularios</a></li>
-<li><a href="#_test_de_navegación">Test de navegación</a></li>
-</ul>
-</li>
-<li><a href="#_4_integration_tests">4. Integration Tests</a>
-<ul class="sectlevel3">
-<li><a href="#_configuración">Configuración</a></li>
-<li><a href="#_test_de_integración">Test de integración</a></li>
-</ul>
-</li>
-<li><a href="#_5_mocking_con_mocktail">5. Mocking con Mocktail</a>
-<ul class="sectlevel3">
-<li><a href="#_mock_de_dependencias">Mock de dependencias</a></li>
-<li><a href="#_test_con_mocks">Test con mocks</a></li>
-</ul>
-</li>
-<li><a href="#_6_cobertura_de_tests">6. Cobertura de tests</a>
-<ul class="sectlevel3">
-<li><a href="#_ejecutar_tests_con_cobertura">Ejecutar tests con cobertura</a></li>
-<li><a href="#_configuración_de_coverage">Configuración de coverage</a></li>
-<li><a href="#_excluir_archivos_de_cobertura">Excluir archivos de cobertura</a></li>
-</ul>
-</li>
-<li><a href="#_7_good_practices">7. Good Practices</a>
-<ul class="sectlevel3">
-<li><a href="#_nombrar_tests_descriptivamente">Nombrar tests descriptivamente</a></li>
-<li><a href="#_usaraaa_pattern">UsarAAA pattern</a></li>
-<li><a href="#_tests_independientes">Tests independientes</a></li>
-</ul>
-</li>
-<li><a href="#_8_ejercicios_prácticos_del_módulo_9">8. Ejercicios prácticos del Módulo 9</a>
-<ul class="sectlevel3">
-<li><a href="#_ejercicio_tests_completos_para_una_app_de_tareas">Ejercicio: Tests completos para una app de tareas</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><a href="#_módulo_10_publicación_3_horas">Módulo 10: Publicación (3 horas)</a>
-<ul class="sectlevel2">
-<li><a href="#_1_preparación_para_producción">1. Preparación para producción</a>
-<ul class="sectlevel3">
-<li><a href="#_configurar_versiones_y_build_numbers">Configurar versiones y build numbers</a></li>
-<li><a href="#_modos_de_compilación">Modos de compilación</a></li>
-<li><a href="#_limpiar_proyecto_antes_de_publicar">Limpiar proyecto antes de publicar</a></li>
-</ul>
-</li>
-<li><a href="#_2_firmado_de_apps_signing">2. Firmado de apps (Signing)</a>
-<ul class="sectlevel3">
-<li><a href="#_android">Android</a></li>
-<li><a href="#_ios">iOS</a></li>
-</ul>
-</li>
-<li><a href="#_3_google_play_store">3. Google Play Store</a>
-<ul class="sectlevel3">
-<li><a href="#_requisitos">Requisitos</a></li>
-<li><a href="#_preparar_recursos">Preparar recursos</a></li>
-<li><a href="#_subir_a_google_play_console">Subir a Google Play Console</a></li>
-<li><a href="#_configurar_firmado_automático">Configurar firmado automático</a></li>
-</ul>
-</li>
-<li><a href="#_4_app_store_ios">4. App Store (iOS)</a>
-<ul class="sectlevel3">
-<li><a href="#_requisitos_2">Requisitos</a></li>
-<li><a href="#_app_store_connect">App Store Connect</a></li>
-<li><a href="#_fastlane_para_ios">Fastlane para iOS</a></li>
-</ul>
-</li>
-<li><a href="#_5_cicd_con_github_actions">5. CI/CD con GitHub Actions</a>
-<ul class="sectlevel3">
-<li><a href="#_workflow_completo">Workflow completo</a></li>
-</ul>
-</li>
-<li><a href="#_6_actualizaciones_y_versionado">6. Actualizaciones y versionado</a>
-<ul class="sectlevel3">
-<li><a href="#_versionado_semántico">Versionado semántico</a></li>
-<li><a href="#_actualizar_versión">Actualizar versión</a></li>
-<li><a href="#_changelog">Changelog</a></li>
-</ul>
-</li>
-<li><a href="#_7_monetización">7. Monetización</a>
-<ul class="sectlevel3">
-<li><a href="#_ads_con_admob">Ads con AdMob</a></li>
-<li><a href="#_compras_dentro_de_la_app_in_app_purchases">Compras dentro de la app (In-App Purchases)</a></li>
-</ul>
-</li>
-<li><a href="#_8_analytics_y_crashlytics">8. Analytics y Crashlytics</a>
-<ul class="sectlevel3">
-<li><a href="#_firebase_analytics">Firebase Analytics</a></li>
-<li><a href="#_firebase_crashlytics">Firebase Crashlytics</a></li>
-</ul>
-</li>
-<li><a href="#_9_ejercicios_prácticos_del_módulo_10">9. Ejercicios prácticos del Módulo 10</a>
-<ul class="sectlevel3">
-<li><a href="#_ejercicio_preparar_app_para_producción">Ejercicio: Preparar app para producción</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><a href="#_cierre_del_temario_flutter_30h">Cierre del Temario Flutter 30h</a></li>
-</ul>
-</div>
 </div>
 <div id="content">
-<div class="sect1">
-<h2 id="_módulo_1_introducción_a_flutter_2_horas">Módulo 1: Introducción a Flutter (2 horas)</h2>
-<div class="sectionbody">
-<hr>
 <div class="sect2">
-<h3 id="_1_qué_es_flutter_y_dart">1. Qué es Flutter y Dart</h3>
+<h3 id="_módulo_1_introducción_a_flutter_2_horas">Módulo 1: Introducción a Flutter (2 horas)</h3>
+<hr>
 <div class="sect3">
-<h4 id="_qué_es_flutter">¿Qué es Flutter?</h4>
+<h4 id="_1_qué_es_flutter_y_dart">1. Qué es Flutter y Dart</h4>
+<div class="sect4">
+<h5 id="_qué_es_flutter">¿Qué es Flutter?</h5>
 <div class="paragraph">
 <p>Flutter es un framework de desarrollo de aplicaciones multiplataforma
 creado por Google. Permite crear aplicaciones para iOS, Android, Web y
@@ -1053,8 +566,8 @@ pantalla completa</p>
 </tbody>
 </table>
 </div>
-<div class="sect3">
-<h4 id="_qué_es_dart">¿Qué es Dart?</h4>
+<div class="sect4">
+<h5 id="_qué_es_dart">¿Qué es Dart?</h5>
 <div class="paragraph">
 <p>Dart es el lenguaje de programación que usa Flutter. Fue creado por
 Google y está optimizado para desarrollo de interfaces de usuario.</p>
@@ -1087,7 +600,7 @@ desarrollo</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// Variables y tipos
+<pre class="highlight"><code class="language-dart" data-lang="dart">// Variables y tipos
 String nombre = 'Flutter';
 int version = 3;
 double rendimiento = 60.0; // FPS
@@ -1138,10 +651,10 @@ sin reiniciar</p>
 <hr>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_2_instalación_y_configuración_del_entorno_de_desarrollo">2. Instalación y configuración del entorno de desarrollo</h3>
 <div class="sect3">
-<h4 id="_requisitos_del_sistema">Requisitos del sistema</h4>
+<h4 id="_2_instalación_y_configuración_del_entorno_de_desarrollo">2. Instalación y configuración del entorno de desarrollo</h4>
+<div class="sect4">
+<h5 id="_requisitos_del_sistema">Requisitos del sistema</h5>
 <div class="paragraph">
 <p><strong>Para Windows:</strong> - Windows 10 o superior (64-bit) - Espacio en disco: 2.5
 GB mínimo - Git instalado</p>
@@ -1155,14 +668,14 @@ iOS) - Git instalado</p>
 instalado</p>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_instalación_paso_a_paso">Instalación paso a paso</h4>
+<div class="sect4">
+<h5 id="_instalación_paso_a_paso">Instalación paso a paso</h5>
 <div class="paragraph">
 <p><strong>1. Descargar Flutter SDK</strong></p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># Windows (PowerShell)
+<pre class="highlight"><code class="language-bash" data-lang="bash"># Windows (PowerShell)
 # Descargar desde: https://docs.flutter.dev/get-started/install/windows
 
 # macOS
@@ -1177,7 +690,7 @@ git clone https://github.com/flutter/flutter.git -b stable</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># Agregar Flutter al PATH
+<pre class="highlight"><code class="language-bash" data-lang="bash"># Agregar Flutter al PATH
 
 # macOS/Linux (agregar a ~/.bashrc o ~/.zshrc)
 export PATH="$PATH:`pwd`/flutter/bin"
@@ -1191,7 +704,7 @@ export PATH="$PATH:`pwd`/flutter/bin"
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># Ejecutar comando de verificación
+<pre class="highlight"><code class="language-bash" data-lang="bash"># Ejecutar comando de verificación
 flutter doctor
 
 # Este comando verifica:
@@ -1253,7 +766,7 @@ flutter doctor
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># Crear emulador desde Android Studio
+<pre class="highlight"><code class="language-bash" data-lang="bash"># Crear emulador desde Android Studio
 # Tools &gt; Device Manager &gt; Create Device
 
 # O desde línea de comandos
@@ -1271,7 +784,7 @@ flutter emulators --launch android_emulator</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># Abrir Simulator
+<pre class="highlight"><code class="language-bash" data-lang="bash"># Abrir Simulator
 open -a Simulator
 
 # Listar dispositivos iOS
@@ -1279,11 +792,11 @@ flutter devices</code></pre>
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_verificación_completa">Verificación completa</h4>
+<div class="sect4">
+<h5 id="_verificación_completa">Verificación completa</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># Crear proyecto de prueba
+<pre class="highlight"><code class="language-bash" data-lang="bash"># Crear proyecto de prueba
 flutter create mi_primera_app
 cd mi_primera_app
 
@@ -1296,10 +809,10 @@ flutter run
 <hr>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_3_estructura_de_un_proyecto_flutter">3. Estructura de un proyecto Flutter</h3>
 <div class="sect3">
-<h4 id="_anatomía_del_proyecto">Anatomía del proyecto</h4>
+<h4 id="_3_estructura_de_un_proyecto_flutter">3. Estructura de un proyecto Flutter</h4>
+<div class="sect4">
+<h5 id="_anatomía_del_proyecto">Anatomía del proyecto</h5>
 <div class="paragraph">
 <p>Cuando ejecutas <code>flutter create mi_app</code>, se genera esta estructura:</p>
 </div>
@@ -1335,14 +848,14 @@ flutter run
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_archivos_clave_explicados">Archivos clave explicados</h4>
+<div class="sect4">
+<h5 id="_archivos_clave_explicados">Archivos clave explicados</h5>
 <div class="paragraph">
 <p><strong>pubspec.yaml - El corazón del proyecto</strong></p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">name: mi_app                          # Nombre del paquete
+<pre class="highlight"><code class="language-yaml" data-lang="yaml">name: mi_app                          # Nombre del paquete
 description: Mi primera app Flutter   # Descripción
 publish_to: 'none'                   # No publicar en pub.dev
 version: 1.0.0+1                      # Versión (versión+build_number)
@@ -1380,7 +893,7 @@ flutter:
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">import 'package:flutter/material.dart';
+<pre class="highlight"><code class="language-dart" data-lang="dart">import 'package:flutter/material.dart';
 
 void main() {
   // Punto de entrada de la aplicación
@@ -1427,8 +940,8 @@ class HomePage extends StatelessWidget {
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_carpetas_importantes">Carpetas importantes</h4>
+<div class="sect4">
+<h5 id="_carpetas_importantes">Carpetas importantes</h5>
 <div class="paragraph">
 <p><strong>lib/ - Tu código Dart</strong></p>
 </div>
@@ -1461,7 +974,7 @@ class HomePage extends StatelessWidget {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// test/widget_test.dart
+<pre class="highlight"><code class="language-dart" data-lang="dart">// test/widget_test.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mi_app/main.dart';
@@ -1480,10 +993,10 @@ void main() {
 <hr>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_4_hot_reload_vs_hot_restart">4. Hot Reload vs Hot Restart</h3>
 <div class="sect3">
-<h4 id="_qué_es_hot_reload">¿Qué es Hot Reload?</h4>
+<h4 id="_4_hot_reload_vs_hot_restart">4. Hot Reload vs Hot Restart</h4>
+<div class="sect4">
+<h5 id="_qué_es_hot_reload">¿Qué es Hot Reload?</h5>
 <div class="paragraph">
 <p>Hot Reload es una de las características más importantes de Flutter.
 Permite ver los cambios en el código casi instantáneamente sin perder el
@@ -1518,7 +1031,7 @@ en UI</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">class ContadorWidget extends StatefulWidget {
+<pre class="highlight"><code class="language-dart" data-lang="dart">class ContadorWidget extends StatefulWidget {
   const ContadorWidget({super.key});
 
   @override
@@ -1555,7 +1068,7 @@ class _ContadorWidgetState extends State&lt;ContadorWidget&gt; {
 </div>
 <div class="paragraph">
 <p><strong>Con Hot Reload:</strong> 1. Presiona el botón 5 veces (contador = 5) 2. Cambia
-el texto a ``Veces presionadas: $contador'' 3. Guarda y Hot Reload 4.
+el texto a &#8220;Veces presionadas: $contador&#8221; 3. Guarda y Hot Reload 4.
 <strong>Resultado:</strong> El contador sigue en 5, pero el texto cambió</p>
 </div>
 <div class="paragraph">
@@ -1564,8 +1077,8 @@ el texto a ``Veces presionadas: $contador'' 3. Guarda y Hot Reload 4.
 a 0 (estado perdido)</p>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_hot_restart_reinicio_en_caliente">Hot Restart (Reinicio en caliente)</h4>
+<div class="sect4">
+<h5 id="_hot_restart_reinicio_en_caliente">Hot Restart (Reinicio en caliente)</h5>
 <div class="paragraph">
 <p>Hot Restart recarga completamente la aplicación, similar a cerrar y
 volver a abrir la app.</p>
@@ -1597,7 +1110,7 @@ volver a abrir la app.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># En la terminal (mientras flutter run está activo)
+<pre class="highlight"><code class="language-bash" data-lang="bash"># En la terminal (mientras flutter run está activo)
 # Presiona 'R' mayúscula para Hot Restart
 # Presiona 'r' minúscula para Hot Reload
 
@@ -1607,8 +1120,8 @@ volver a abrir la app.</p>
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_diferencias_detalladas">Diferencias detalladas</h4>
+<div class="sect4">
+<h5 id="_diferencias_detalladas">Diferencias detalladas</h5>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 33.3333%;">
@@ -1656,14 +1169,14 @@ volver a abrir la app.</p>
 </tbody>
 </table>
 </div>
-<div class="sect3">
-<h4 id="_cuándo_no_funciona_hot_reload">Cuándo NO funciona Hot Reload</h4>
+<div class="sect4">
+<h5 id="_cuándo_no_funciona_hot_reload">Cuándo NO funciona Hot Reload</h5>
 <div class="paragraph">
 <p><strong>1. Cambios en main():</strong></p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">void main() {
+<pre class="highlight"><code class="language-dart" data-lang="dart">void main() {
   // Estos cambios requieren Hot Restart
   runApp(const MiApp());
 }</code></pre>
@@ -1674,7 +1187,7 @@ volver a abrir la app.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// Variable global - requiere Hot Restart
+<pre class="highlight"><code class="language-dart" data-lang="dart">// Variable global - requiere Hot Restart
 const String API_URL = 'https://api.example.com';
 
 class Config {
@@ -1688,7 +1201,7 @@ class Config {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">class MiWidget extends StatefulWidget {
+<pre class="highlight"><code class="language-dart" data-lang="dart">class MiWidget extends StatefulWidget {
   const MiWidget({super.key});
 
   @override
@@ -1710,17 +1223,17 @@ class MiWidgetState extends State&lt;MiWidget&gt; {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// Añadir o modificar enums requiere Hot Restart
+<pre class="highlight"><code class="language-dart" data-lang="dart">// Añadir o modificar enums requiere Hot Restart
 enum Estado { inicial, cargando, error, exito }</code></pre>
 </div>
 </div>
 <hr>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_5_widget_tree_y_render_tree">5. Widget Tree y Render Tree</h3>
 <div class="sect3">
-<h4 id="_concepto_fundamental">Concepto fundamental</h4>
+<h4 id="_5_widget_tree_y_render_tree">5. Widget Tree y Render Tree</h4>
+<div class="sect4">
+<h5 id="_concepto_fundamental">Concepto fundamental</h5>
 <div class="paragraph">
 <p>Flutter funciona con tres árboles principales que trabajan juntos:</p>
 </div>
@@ -1743,7 +1256,7 @@ vida)</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// Esta estructura forma el Widget Tree
+<pre class="highlight"><code class="language-dart" data-lang="dart">// Esta estructura forma el Widget Tree
 MaterialApp
 └── Scaffold
     ├── AppBar
@@ -1757,7 +1270,7 @@ MaterialApp
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">class EjemploWidget extends StatelessWidget {
+<pre class="highlight"><code class="language-dart" data-lang="dart">class EjemploWidget extends StatelessWidget {
   const EjemploWidget({super.key});
 
   @override
@@ -1781,8 +1294,8 @@ MaterialApp
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_flujo_de_renderizado">Flujo de renderizado</h4>
+<div class="sect4">
+<h5 id="_flujo_de_renderizado">Flujo de renderizado</h5>
 <div class="literalblock">
 <div class="content">
 <pre>Widget (Configuración)
@@ -1797,7 +1310,7 @@ RenderObject (Dibuja en pantalla)</pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// 1. WIDGET (Configuración inmutable)
+<pre class="highlight"><code class="language-dart" data-lang="dart">// 1. WIDGET (Configuración inmutable)
 // Solo describe QUÉ se debe renderizar
 class MiBoton extends StatelessWidget {
   final String texto;
@@ -1829,14 +1342,14 @@ class MiBoton extends StatelessWidget {
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_statelesswidget_vs_statefulwidget_en_el_árbol">StatelessWidget vs StatefulWidget en el árbol</h4>
+<div class="sect4">
+<h5 id="_statelesswidget_vs_statefulwidget_en_el_árbol">StatelessWidget vs StatefulWidget en el árbol</h5>
 <div class="paragraph">
 <p><strong>StatelessWidget:</strong></p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// StatelessWidget - Sin estado mutable
+<pre class="highlight"><code class="language-dart" data-lang="dart">// StatelessWidget - Sin estado mutable
 class TarjetaUsuario extends StatelessWidget {
   final String nombre;
   final String email;
@@ -1870,7 +1383,7 @@ class TarjetaUsuario extends StatelessWidget {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// StatefulWidget - Con estado mutable
+<pre class="highlight"><code class="language-dart" data-lang="dart">// StatefulWidget - Con estado mutable
 class ContadorWidget extends StatefulWidget {
   final int valorInicial;
 
@@ -1917,11 +1430,11 @@ class _ContadorWidgetState extends State&lt;ContadorWidget&gt; {
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_el_árbol_en_acción">El árbol en acción</h4>
+<div class="sect4">
+<h5 id="_el_árbol_en_acción">El árbol en acción</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// Ejemplo completo mostrando cómo interactúan los árboles
+<pre class="highlight"><code class="language-dart" data-lang="dart">// Ejemplo completo mostrando cómo interactúan los árboles
 class AppCompleja extends StatelessWidget {
   const AppCompleja({super.key});
 
@@ -1969,14 +1482,14 @@ class AppCompleja extends StatelessWidget {
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_optimización_del_árbol">Optimización del árbol</h4>
+<div class="sect4">
+<h5 id="_optimización_del_árbol">Optimización del árbol</h5>
 <div class="paragraph">
 <p><strong>Mal ejemplo (Widget hondo):</strong></p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// Demasiados niveles de anidación
+<pre class="highlight"><code class="language-dart" data-lang="dart">// Demasiados niveles de anidación
 Widget malEjemplo() {
   return Container(
     child: Padding(
@@ -2009,7 +1522,7 @@ Widget malEjemplo() {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// Menos niveles, mismo resultado
+<pre class="highlight"><code class="language-dart" data-lang="dart">// Menos niveles, mismo resultado
 Widget buenEjemplo() {
   return Padding(
     padding: const EdgeInsets.all(8),
@@ -2032,13 +1545,13 @@ Widget buenEjemplo() {
 <hr>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_6_primer_proyecto_hola_mundo">6. Primer proyecto: ``Hola Mundo''</h3>
 <div class="sect3">
-<h4 id="_crear_el_proyecto">Crear el proyecto</h4>
+<h4 id="_6_primer_proyecto_hola_mundo">6. Primer proyecto: &#8220;Hola Mundo&#8221;</h4>
+<div class="sect4">
+<h5 id="_crear_el_proyecto">Crear el proyecto</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># Crear nuevo proyecto
+<pre class="highlight"><code class="language-bash" data-lang="bash"># Crear nuevo proyecto
 flutter create hola_mundo
 cd hola_mundo
 
@@ -2047,15 +1560,15 @@ flutter run</code></pre>
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_limpiar_el_código_por_defecto">Limpiar el código por defecto</h4>
+<div class="sect4">
+<h5 id="_limpiar_el_código_por_defecto">Limpiar el código por defecto</h5>
 <div class="paragraph">
-<p>Flutter genera mucho código por defecto. Vamos a crear un ``Hola Mundo''
+<p>Flutter genera mucho código por defecto. Vamos a crear un &#8220;Hola Mundo&#8221;
 minimalista:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// lib/main.dart
+<pre class="highlight"><code class="language-dart" data-lang="dart">// lib/main.dart
 import 'package:flutter/material.dart';
 
 void main() {
@@ -2149,14 +1662,14 @@ class HomePage extends StatelessWidget {
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_versión_interactiva_con_estado">Versión interactiva con estado</h4>
+<div class="sect4">
+<h5 id="_versión_interactiva_con_estado">Versión interactiva con estado</h5>
 <div class="paragraph">
 <p>Vamos a crear una versión más interactiva que cuente clics:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// lib/main.dart - Versión interactiva
+<pre class="highlight"><code class="language-dart" data-lang="dart">// lib/main.dart - Versión interactiva
 import 'package:flutter/material.dart';
 
 void main() {
@@ -2290,8 +1803,8 @@ class _ContadorPageState extends State&lt;ContadorPage&gt; {
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_ejercicio_práctico_personalizar_el_hola_mundo">Ejercicio práctico: Personalizar el Hola Mundo</h4>
+<div class="sect4">
+<h5 id="_ejercicio_práctico_personalizar_el_hola_mundo">Ejercicio práctico: Personalizar el Hola Mundo</h5>
 <div class="paragraph">
 <p><strong>Objetivo:</strong> Modifica el código para:</p>
 </div>
@@ -2313,7 +1826,7 @@ class _ContadorPageState extends State&lt;ContadorPage&gt; {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">import 'package:flutter/material.dart';
+<pre class="highlight"><code class="language-dart" data-lang="dart">import 'package:flutter/material.dart';
 
 void main() {
   runApp(const MiAppPersonalizada());
@@ -2418,8 +1931,8 @@ class _MiAppPersonalizadaState extends State&lt;MiAppPersonalizada&gt; {
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_resumen_del_módulo_1">Resumen del Módulo 1</h4>
+<div class="sect4">
+<h5 id="_resumen_del_módulo_1">Resumen del Módulo 1</h5>
 <div class="paragraph">
 <p>En este módulo aprendiste:</p>
 </div>
@@ -2437,22 +1950,20 @@ Básicos</p>
 </div>
 </div>
 </div>
-</div>
-<div class="sect1">
-<h2 id="_módulo_2_fundamentos_de_dart_4_horas">Módulo 2: Fundamentos de Dart (4 horas)</h2>
-<div class="sectionbody">
-<hr>
 <div class="sect2">
-<h3 id="_1_variables_y_tipos_de_datos">1. Variables y Tipos de Datos</h3>
+<h3 id="_módulo_2_fundamentos_de_dart_4_horas">Módulo 2: Fundamentos de Dart (4 horas)</h3>
+<hr>
 <div class="sect3">
-<h4 id="_variables">Variables</h4>
+<h4 id="_1_variables_y_tipos_de_datos">1. Variables y Tipos de Datos</h4>
+<div class="sect4">
+<h5 id="_variables">Variables</h5>
 <div class="paragraph">
 <p>En Dart, las variables almacenan referencias a objetos. El tipo de
 variable se puede inferir o declarar explícitamente.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// Inferencia de tipos - Dart infiere el tipo automáticamente
+<pre class="highlight"><code class="language-dart" data-lang="dart">// Inferencia de tipos - Dart infiere el tipo automáticamente
 var nombre = 'Ana';           // Tipo: String
 var edad = 25;                // Tipo: int
 var altura = 1.75;            // Tipo: double
@@ -2477,15 +1988,15 @@ dinamico.hola();              // válido en compilación, error en runtime si no
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_final_y_const">final y const</h4>
+<div class="sect4">
+<h5 id="_final_y_const">final y const</h5>
 <div class="paragraph">
-<p><code>final</code> y <code>const</code> declaran variables inmutables, pero con diferencias
-importantes:</p>
+<p><code>final</code> y <code>const</code> declaran variables inmutables, pero con
+diferencias importantes:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// final - asignación única, valor determinado en runtime
+<pre class="highlight"><code class="language-dart" data-lang="dart">// final - asignación única, valor determinado en runtime
 final String nombre = 'Carlos';
 final DateTime ahora = DateTime.now();  // válido, se evalúa en runtime
 
@@ -2520,11 +2031,11 @@ print(identical(punto1, punto2));  // true - son el mismo objeto</code></pre>
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_tipos_numéricos">Tipos numéricos</h4>
+<div class="sect4">
+<h5 id="_tipos_numéricos">Tipos numéricos</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// int - números enteros
+<pre class="highlight"><code class="language-dart" data-lang="dart">// int - números enteros
 int edad = 30;
 int hex = 0xFF;              // 255 en hexadecimal
 int binario = 0b1111;        // 15 en binario
@@ -2561,11 +2072,11 @@ int.tryParse('abc');      // null (no lanza excepción)</code></pre>
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_strings">Strings</h4>
+<div class="sect4">
+<h5 id="_strings">Strings</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// Literales de string
+<pre class="highlight"><code class="language-dart" data-lang="dart">// Literales de string
 String simple = 'Hola mundo';
 String comillasDobles = "Hola mundo";
 String multilinea = '''
@@ -2622,11 +2133,11 @@ print(nulo?.isEmpty);   // null - acceso seguro</code></pre>
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_booleanos">Booleanos</h4>
+<div class="sect4">
+<h5 id="_booleanos">Booleanos</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">bool activo = true;
+<pre class="highlight"><code class="language-dart" data-lang="dart">bool activo = true;
 bool inactivo = false;
 
 // Operadores lógicos
@@ -2656,11 +2167,11 @@ print(true == 1); // false - no hay conversión automática</code></pre>
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_colecciones_listas">Colecciones: Listas</h4>
+<div class="sect4">
+<h5 id="_colecciones_listas">Colecciones: Listas</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// Creación de listas
+<pre class="highlight"><code class="language-dart" data-lang="dart">// Creación de listas
 List&lt;int&gt; numeros = [1, 2, 3, 4, 5];
 var frutas = ['manzana', 'banana', 'naranja'];
 List&lt;String&gt; vacia = [];
@@ -2760,11 +2271,11 @@ print(frutas.contains('manzana'));   // true</code></pre>
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_colecciones_sets">Colecciones: Sets</h4>
+<div class="sect4">
+<h5 id="_colecciones_sets">Colecciones: Sets</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// Creación de sets (colecciones sin duplicados)
+<pre class="highlight"><code class="language-dart" data-lang="dart">// Creación de sets (colecciones sin duplicados)
 Set&lt;int&gt; numeros = {1, 2, 3, 4, 5};
 var frutas = &lt;String&gt;{'manzana', 'banana', 'naranja'};
 Set&lt;String&gt; vacio = {};  // Set vacío
@@ -2801,11 +2312,11 @@ frutas.isEmpty;               // ¿Está vacío?</code></pre>
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_colecciones_maps">Colecciones: Maps</h4>
+<div class="sect4">
+<h5 id="_colecciones_maps">Colecciones: Maps</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// Creación de maps (diccionarios clave-valor)
+<pre class="highlight"><code class="language-dart" data-lang="dart">// Creación de maps (diccionarios clave-valor)
 Map&lt;String, int&gt; edades = {
   'Ana': 28,
   'Carlos': 32,
@@ -2880,13 +2391,13 @@ var nuevoMapa = mapa.map((key, value) =&gt;
 <hr>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_2_operadores">2. Operadores</h3>
 <div class="sect3">
-<h4 id="_operadores_aritméticos">Operadores aritméticos</h4>
+<h4 id="_2_operadores">2. Operadores</h4>
+<div class="sect4">
+<h5 id="_operadores_aritméticos">Operadores aritméticos</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">int a = 10;
+<pre class="highlight"><code class="language-dart" data-lang="dart">int a = 10;
 int b = 3;
 
 // Operadores básicos
@@ -2915,11 +2426,11 @@ print('Verificación: ${divisor * cociente + resto} = $dividend'); // 17 = 17</c
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_operadores_de_asignación">Operadores de asignación</h4>
+<div class="sect4">
+<h5 id="_operadores_de_asignación">Operadores de asignación</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// Asignación simple
+<pre class="highlight"><code class="language-dart" data-lang="dart">// Asignación simple
 int a = 10;
 
 // Asignación compuesta
@@ -2940,11 +2451,11 @@ print(c);  // 5</code></pre>
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_operadores_de_igualdad_y_relacionales">Operadores de igualdad y relacionales</h4>
+<div class="sect4">
+<h5 id="_operadores_de_igualdad_y_relacionales">Operadores de igualdad y relacionales</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// Igualdad
+<pre class="highlight"><code class="language-dart" data-lang="dart">// Igualdad
 print(5 == 5);    // true
 print(5 == '5');  // false - tipos diferentes
 print(5 != 5);    // false
@@ -2977,11 +2488,11 @@ print(identical(a1, a2));    // true - objetos canónicos</code></pre>
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_operadores_lógicos">Operadores lógicos</h4>
+<div class="sect4">
+<h5 id="_operadores_lógicos">Operadores lógicos</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">bool activo = true;
+<pre class="highlight"><code class="language-dart" data-lang="dart">bool activo = true;
 bool verificado = false;
 
 // NOT lógico
@@ -3013,11 +2524,11 @@ print(x &gt;&gt; 1);  // 2   (desplazamiento derecha: 0010)</code></pre>
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_operadores_de_tipo">Operadores de tipo</h4>
+<div class="sect4">
+<h5 id="_operadores_de_tipo">Operadores de tipo</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// is - verifica si es de un tipo
+<pre class="highlight"><code class="language-dart" data-lang="dart">// is - verifica si es de un tipo
 Object valor = 'Hola';
 
 if (valor is String) {
@@ -3059,11 +2570,11 @@ void manejarDato(dynamic dato) {
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_operador_condicional_ternario">Operador condicional (ternario)</h4>
+<div class="sect4">
+<h5 id="_operador_condicional_ternario">Operador condicional (ternario)</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// Sintaxis: condición ? valorSiTrue : valorSiFalse
+<pre class="highlight"><code class="language-dart" data-lang="dart">// Sintaxis: condición ? valorSiTrue : valorSiFalse
 int edad = 20;
 String estado = edad &gt;= 18 ? 'Mayor de edad' : 'Menor de edad';
 print(estado);  // Mayor de edad
@@ -3098,11 +2609,11 @@ class Usuario {
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_operador_cascade">Operador cascade (..)</h4>
+<div class="sect4">
+<h5 id="_operador_cascade">Operador cascade (..)</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">class Persona {
+<pre class="highlight"><code class="language-dart" data-lang="dart">class Persona {
   String nombre = '';
   int edad = 0;
   String ciudad = '';
@@ -3166,13 +2677,13 @@ personaNula
 <hr>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_3_control_de_flujo">3. Control de Flujo</h3>
 <div class="sect3">
-<h4 id="_if_else">if-else</h4>
+<h4 id="_3_control_de_flujo">3. Control de Flujo</h4>
+<div class="sect4">
+<h5 id="_if_else">if-else</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// If simple
+<pre class="highlight"><code class="language-dart" data-lang="dart">// If simple
 int edad = 20;
 
 if (edad &gt;= 18) {
@@ -3219,11 +2730,11 @@ if (baseDatosDisponible ?? cacheDisponible ?? false) {
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_switch_case">switch-case</h4>
+<div class="sect4">
+<h5 id="_switch_case">switch-case</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// Switch básico
+<pre class="highlight"><code class="language-dart" data-lang="dart">// Switch básico
 String dia = 'lunes';
 
 switch (dia) {
@@ -3314,11 +2825,11 @@ void tiempoEstimado(Transporte t) {
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_bucles_for">Bucles: for</h4>
+<div class="sect4">
+<h5 id="_bucles_for">Bucles: for</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// For básico
+<pre class="highlight"><code class="language-dart" data-lang="dart">// For básico
 for (int i = 0; i &lt; 5; i++) {
   print('Iteración $i');
 }
@@ -3365,11 +2876,11 @@ for (int i = 1; i &lt;= 3; i++) {
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_bucles_while_y_do_while">Bucles: while y do-while</h4>
+<div class="sect4">
+<h5 id="_bucles_while_y_do_while">Bucles: while y do-while</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// While - ejecuta mientras la condición sea true
+<pre class="highlight"><code class="language-dart" data-lang="dart">// While - ejecuta mientras la condición sea true
 int contador = 0;
 while (contador &lt; 5) {
   print('Contador: $contador');
@@ -3419,11 +2930,11 @@ while (true) {
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_break_y_continue">break y continue</h4>
+<div class="sect4">
+<h5 id="_break_y_continue">break y continue</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// break - sale del bucle completamente
+<pre class="highlight"><code class="language-dart" data-lang="dart">// break - sale del bucle completamente
 for (int i = 0; i &lt; 10; i++) {
   if (i == 5) {
     print('Deteniendo en $i');
@@ -3467,11 +2978,11 @@ for (int i = 0; i &lt; 5; i++) {
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_assert">assert</h4>
+<div class="sect4">
+<h5 id="_assert">assert</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// Assert verifica condiciones en desarrollo
+<pre class="highlight"><code class="language-dart" data-lang="dart">// Assert verifica condiciones en desarrollo
 int edad = 25;
 assert(edad &gt;= 0, 'La edad no puede ser negativa');
 assert(edad &lt; 150, 'Edad no válida');
@@ -3506,13 +3017,13 @@ class Persona {
 <hr>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_4_funciones">4. Funciones</h3>
 <div class="sect3">
-<h4 id="_declaración_de_funciones">Declaración de funciones</h4>
+<h4 id="_4_funciones">4. Funciones</h4>
+<div class="sect4">
+<h5 id="_declaración_de_funciones">Declaración de funciones</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// Función básica
+<pre class="highlight"><code class="language-dart" data-lang="dart">// Función básica
 int sumar(int a, int b) {
   return a + b;
 }
@@ -3541,11 +3052,11 @@ String clasificarNota(int nota) {
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_parámetros">Parámetros</h4>
+<div class="sect4">
+<h5 id="_parámetros">Parámetros</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// Parámetros posicionales requeridos
+<pre class="highlight"><code class="language-dart" data-lang="dart">// Parámetros posicionales requeridos
 int sumar(int a, int b) =&gt; a + b;
 print(sumar(5, 3));  // 8
 
@@ -3615,11 +3126,11 @@ void mostrarFecha({DateTime? fecha}) {
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_funciones_como_objetos_de_primera_clase">Funciones como objetos de primera clase</h4>
+<div class="sect4">
+<h5 id="_funciones_como_objetos_de_primera_clase">Funciones como objetos de primera clase</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// Asignar función a variable
+<pre class="highlight"><code class="language-dart" data-lang="dart">// Asignar función a variable
 int sumar(int a, int b) =&gt; a + b;
 var operacion = sumar;
 print(operacion(5, 3));  // 8
@@ -3655,11 +3166,11 @@ print(operaciones['sumar']!(5, 3));  // 8</code></pre>
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_funciones_anónimas_y_closures">Funciones anónimas y closures</h4>
+<div class="sect4">
+<h5 id="_funciones_anónimas_y_closures">Funciones anónimas y closures</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// Función anónima (lambda)
+<pre class="highlight"><code class="language-dart" data-lang="dart">// Función anónima (lambda)
 var lista = [1, 2, 3, 4, 5];
 
 // Con función anónima completa
@@ -3723,11 +3234,11 @@ void crearBotones() {
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_funciones_asíncronas">Funciones asíncronas</h4>
+<div class="sect4">
+<h5 id="_funciones_asíncronas">Funciones asíncronas</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">import 'dart:async';
+<pre class="highlight"><code class="language-dart" data-lang="dart">import 'dart:async';
 
 // async y await
 Future&lt;String&gt; obtenerDatos() async {
@@ -3795,13 +3306,13 @@ Future&lt;void&gt; escucharStream() async {
 <hr>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_5_programación_orientada_a_objetos">5. Programación Orientada a Objetos</h3>
 <div class="sect3">
-<h4 id="_clases_básicas">Clases básicas</h4>
+<h4 id="_5_programación_orientada_a_objetos">5. Programación Orientada a Objetos</h4>
+<div class="sect4">
+<h5 id="_clases_básicas">Clases básicas</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">class Persona {
+<pre class="highlight"><code class="language-dart" data-lang="dart">class Persona {
   // Propiedades (campos)
   String nombre;
   int edad;
@@ -3855,11 +3366,11 @@ print(persona1.edad);  // 30</code></pre>
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_propiedades">Propiedades</h4>
+<div class="sect4">
+<h5 id="_propiedades">Propiedades</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">class Punto {
+<pre class="highlight"><code class="language-dart" data-lang="dart">class Punto {
   // Propiedades privadas (convención: _prefijo)
   double _x;
   double _y;
@@ -3891,11 +3402,11 @@ import 'dart:math' show sqrt;</code></pre>
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_constructores">Constructores</h4>
+<div class="sect4">
+<h5 id="_constructores">Constructores</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">class Punto2D {
+<pre class="highlight"><code class="language-dart" data-lang="dart">class Punto2D {
   final double x;
   final double y;
 
@@ -3942,11 +3453,11 @@ var p5 = Punto2D.cero();</code></pre>
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_herencia">Herencia</h4>
+<div class="sect4">
+<h5 id="_herencia">Herencia</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// Clase padre
+<pre class="highlight"><code class="language-dart" data-lang="dart">// Clase padre
 class Animal {
   String nombre;
   int edad;
@@ -4014,11 +3525,11 @@ gato.ronronear();     // Michi ronronea</code></pre>
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_interfaces_y_clases_abstractas">Interfaces y clases abstractas</h4>
+<div class="sect4">
+<h5 id="_interfaces_y_clases_abstractas">Interfaces y clases abstractas</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// Clase abstracta
+<pre class="highlight"><code class="language-dart" data-lang="dart">// Clase abstracta
 abstract class Forma {
   String nombre;
 
@@ -4098,11 +3609,11 @@ class Cuadrado implements Dibujable {
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_mixins">Mixins</h4>
+<div class="sect4">
+<h5 id="_mixins">Mixins</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// Mixin básico
+<pre class="highlight"><code class="language-dart" data-lang="dart">// Mixin básico
 mixin Logger {
   void log(String mensaje) {
     print('[LOG] $mensaje - ${DateTime.now()}');
@@ -4160,11 +3671,11 @@ class Aguila extends Animal with Volador2 {
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_enums">Enums</h4>
+<div class="sect4">
+<h5 id="_enums">Enums</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// Enum simple
+<pre class="highlight"><code class="language-dart" data-lang="dart">// Enum simple
 enum Estado {
   pendiente,
   enProgreso,
@@ -4242,13 +3753,13 @@ enum DiaSemana {
 <hr>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_6_manejo_de_excepciones">6. Manejo de Excepciones</h3>
 <div class="sect3">
-<h4 id="_try_catch_finally">try-catch-finally</h4>
+<h4 id="_6_manejo_de_excepciones">6. Manejo de Excepciones</h4>
+<div class="sect4">
+<h5 id="_try_catch_finally">try-catch-finally</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// Try-catch básico
+<pre class="highlight"><code class="language-dart" data-lang="dart">// Try-catch básico
 try {
   var resultado = 100 ~/ 0;  // División por cero
   print(resultado);
@@ -4289,11 +3800,11 @@ try {
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_throw">throw</h4>
+<div class="sect4">
+<h5 id="_throw">throw</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// Lanzar excepción
+<pre class="highlight"><code class="language-dart" data-lang="dart">// Lanzar excepción
 void verificarEdad(int edad) {
   if (edad &lt; 0) {
     throw ArgumentError('La edad no puede ser negativa');
@@ -4338,11 +3849,11 @@ try {
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_ejemplo_práctico_validación">Ejemplo práctico: Validación</h4>
+<div class="sect4">
+<h5 id="_ejemplo_práctico_validación">Ejemplo práctico: Validación</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">class ValidacionException implements Exception {
+<pre class="highlight"><code class="language-dart" data-lang="dart">class ValidacionException implements Exception {
   final String campo;
   final String mensaje;
 
@@ -4396,13 +3907,13 @@ void crearUsuario() {
 <hr>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_7_null_safety">7. Null Safety</h3>
 <div class="sect3">
-<h4 id="_conceptos_básicos">Conceptos básicos</h4>
+<h4 id="_7_null_safety">7. Null Safety</h4>
+<div class="sect4">
+<h5 id="_conceptos_básicos">Conceptos básicos</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// Tipos no anulables por defecto
+<pre class="highlight"><code class="language-dart" data-lang="dart">// Tipos no anulables por defecto
 String nombre = 'Ana';
 // nombre = null;  // Error - String no puede ser null
 
@@ -4426,11 +3937,11 @@ print(nombre2);  // Por defecto</code></pre>
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_aserción_de_no_null">Aserción de no-null (!)</h4>
+<div class="sect4">
+<h5 id="_aserción_de_no_null">Aserción de no-null (!)</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">String? obtenerNombre() {
+<pre class="highlight"><code class="language-dart" data-lang="dart">String? obtenerNombre() {
   // Puede retornar null
   return 'Carlos';
 }
@@ -4451,11 +3962,11 @@ String? texto;
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_late">late</h4>
+<div class="sect4">
+<h5 id="_late">late</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// late - inicialización diferida
+<pre class="highlight"><code class="language-dart" data-lang="dart">// late - inicialización diferida
 class Usuario {
   late String nombre;
   late int edad;
@@ -4496,11 +4007,11 @@ class Controlador {
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_patrones_comunes">Patrones comunes</h4>
+<div class="sect4">
+<h5 id="_patrones_comunes">Patrones comunes</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// Verificación de null antes de uso
+<pre class="highlight"><code class="language-dart" data-lang="dart">// Verificación de null antes de uso
 String? nombre;
 if (nombre != null) {
   // Dentro del if, nombre es String (no String?)
@@ -4549,13 +4060,13 @@ Future&lt;void&gt; procesarStream() async {
 <hr>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_8_asincronía">8. Asincronía</h3>
 <div class="sect3">
-<h4 id="_future">Future</h4>
+<h4 id="_8_asincronía">8. Asincronía</h4>
+<div class="sect4">
+<h5 id="_future">Future</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">import 'dart:async';
+<pre class="highlight"><code class="language-dart" data-lang="dart">import 'dart:async';
 
 // Crear un Future
 Future&lt;String&gt; obtenerNombre() {
@@ -4620,11 +4131,11 @@ Future&lt;int&gt; procesoEncadenado() async {
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_asyncawait">async/await</h4>
+<div class="sect4">
+<h5 id="_asyncawait">async/await</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// Función async
+<pre class="highlight"><code class="language-dart" data-lang="dart">// Función async
 Future&lt;String&gt; obtenerDatos() async {
   await Future.delayed(Duration(seconds: 1));
   return 'Datos';
@@ -4680,11 +4191,11 @@ Future&lt;void&gt; procesarParalelo() async {
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_stream">Stream</h4>
+<div class="sect4">
+<h5 id="_stream">Stream</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">import 'dart:async';
+<pre class="highlight"><code class="language-dart" data-lang="dart">import 'dart:async';
 
 // Crear Stream con StreamController
 StreamController&lt;int&gt; controlador = StreamController&lt;int&gt;();
@@ -4754,13 +4265,13 @@ void broadcastStream() {
 <hr>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_9_ejercicios_prácticos">9. Ejercicios Prácticos</h3>
 <div class="sect3">
-<h4 id="_ejercicio_1_gestión_de_usuarios">Ejercicio 1: Gestión de usuarios</h4>
+<h4 id="_9_ejercicios_prácticos">9. Ejercicios Prácticos</h4>
+<div class="sect4">
+<h5 id="_ejercicio_1_gestión_de_usuarios">Ejercicio 1: Gestión de usuarios</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">class Usuario {
+<pre class="highlight"><code class="language-dart" data-lang="dart">class Usuario {
   final int id;
   final String nombre;
   final String email;
@@ -4832,11 +4343,11 @@ class GestorUsuarios {
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_ejercicio_2_calculadora_con_validación">Ejercicio 2: Calculadora con validación</h4>
+<div class="sect4">
+<h5 id="_ejercicio_2_calculadora_con_validación">Ejercicio 2: Calculadora con validación</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">class Calculadora {
+<pre class="highlight"><code class="language-dart" data-lang="dart">class Calculadora {
   double sumar(double a, double b) =&gt; a + b;
 
   double restar(double a, double b) =&gt; a - b;
@@ -4878,11 +4389,11 @@ class GestorUsuarios {
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_ejercicio_3_sistema_de_reservas">Ejercicio 3: Sistema de reservas</h4>
+<div class="sect4">
+<h5 id="_ejercicio_3_sistema_de_reservas">Ejercicio 3: Sistema de reservas</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">enum EstadoReserva {
+<pre class="highlight"><code class="language-dart" data-lang="dart">enum EstadoReserva {
   pendiente,
   confirmada,
   cancelada,
@@ -4969,16 +4480,18 @@ try-catch-finally ✅ Null safety: tipos anulables, late, aserciones ✅
 Programación asíncrona: Future, Stream, async/await</p>
 </div>
 <div class="paragraph">
-<p><strong>Próximo módulo:</strong> Widgets Básicos y Layout## Módulo 3: Widgets Básicos y
-Layout (4 horas)</p>
+<p><strong>Próximo módulo:</strong> Widgets Básicos y Layout</p>
 </div>
 <hr>
 </div>
 </div>
+</div>
 <div class="sect2">
-<h3 id="_1_statelesswidget_vs_statefulwidget">1. StatelessWidget vs StatefulWidget</h3>
+<h3 id="_módulo_3_widgets_básicos_y_layout_4_horas">Módulo 3: Widgets Básicos y Layout (4 horas)</h3>
 <div class="sect3">
-<h4 id="_statelesswidget">StatelessWidget</h4>
+<h4 id="_1_statelesswidget_vs_statefulwidget">1. StatelessWidget vs StatefulWidget</h4>
+<div class="sect4">
+<h5 id="_statelesswidget">StatelessWidget</h5>
 <div class="paragraph">
 <p>Un <code>StatelessWidget</code> es un widget que no tiene estado mutable. Su
 apariencia depende únicamente de sus parámetros de configuración.</p>
@@ -4993,7 +4506,7 @@ widgets de presentación (textos, iconos, tarjetas)</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">class TarjetaUsuario extends StatelessWidget {
+<pre class="highlight"><code class="language-dart" data-lang="dart">class TarjetaUsuario extends StatelessWidget {
   // Parámetros inmutables
   final String nombre;
   final String email;
@@ -5055,11 +4568,11 @@ widgets de presentación (textos, iconos, tarjetas)</p>
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_statefulwidget">StatefulWidget</h4>
+<div class="sect4">
+<h5 id="_statefulwidget">StatefulWidget</h5>
 <div class="paragraph">
-<p>Un <code>StatefulWidget</code> es un widget que tiene estado mutable. Puede cambiar
-su apariencia en respuesta a eventos.</p>
+<p>Un <code>StatefulWidget</code> es un widget que tiene estado mutable. Puede
+cambiar su apariencia en respuesta a eventos.</p>
 </div>
 <div class="paragraph">
 <p><strong>Características:</strong> - Mutable: el estado puede cambiar durante la vida
@@ -5072,7 +4585,7 @@ animaciones</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">class ContadorWidget extends StatefulWidget {
+<pre class="highlight"><code class="language-dart" data-lang="dart">class ContadorWidget extends StatefulWidget {
   // Parámetros inmutables
   final int valorInicial;
   final int paso;
@@ -5153,11 +4666,11 @@ class _ContadorWidgetState extends State&lt;ContadorWidget&gt; {
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_ciclo_de_vida_del_statefulwidget">Ciclo de vida del StatefulWidget</h4>
+<div class="sect4">
+<h5 id="_ciclo_de_vida_del_statefulwidget">Ciclo de vida del StatefulWidget</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">class CicloVidaWidget extends StatefulWidget {
+<pre class="highlight"><code class="language-dart" data-lang="dart">class CicloVidaWidget extends StatefulWidget {
   const CicloVidaWidget({super.key});
 
   @override
@@ -5228,16 +4741,16 @@ class _CicloVidaWidgetState extends State&lt;CicloVidaWidget&gt; {
 <hr>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_2_widgets_de_texto_imágenes_e_iconos">2. Widgets de texto, imágenes e iconos</h3>
 <div class="sect3">
-<h4 id="_text">Text</h4>
+<h4 id="_2_widgets_de_texto_imágenes_e_iconos">2. Widgets de texto, imágenes e iconos</h4>
+<div class="sect4">
+<h5 id="_text">Text</h5>
 <div class="paragraph">
 <p>El widget <code>Text</code> muestra una cadena de texto con estilo opcional.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// Texto básico
+<pre class="highlight"><code class="language-dart" data-lang="dart">// Texto básico
 const Text('Hola Mundo');
 
 // Texto con estilo
@@ -5292,14 +4805,14 @@ const SelectableText(
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_image">Image</h4>
+<div class="sect4">
+<h5 id="_image">Image</h5>
 <div class="paragraph">
 <p>El widget <code>Image</code> muestra imágenes desde diversas fuentes.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// Imagen desde assets (carpeta assets/)
+<pre class="highlight"><code class="language-dart" data-lang="dart">// Imagen desde assets (carpeta assets/)
 // Primero añadir en pubspec.yaml:
 // flutter:
 //   assets:
@@ -5352,14 +4865,14 @@ Image.memory(
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_icon">Icon</h4>
+<div class="sect4">
+<h5 id="_icon">Icon</h5>
 <div class="paragraph">
 <p>El widget <code>Icon</code> muestra íconos Material Design.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// Icono básico
+<pre class="highlight"><code class="language-dart" data-lang="dart">// Icono básico
 const Icon(Icons.favorite);
 
 // Icono con tamaño y color
@@ -5405,17 +4918,17 @@ IconButton(
 <hr>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_3_container_padding_center_align">3. Container, Padding, Center, Align</h3>
 <div class="sect3">
-<h4 id="_container">Container</h4>
+<h4 id="_3_container_padding_center_align">3. Container, Padding, Center, Align</h4>
+<div class="sect4">
+<h5 id="_container">Container</h5>
 <div class="paragraph">
-<p>El widget <code>Container</code> es un versátil contenedor que puede tener padding,
-bordes, márgenes, color de fondo, etc.</p>
+<p>El widget <code>Container</code> es un versátil contenedor que puede tener
+padding, bordes, márgenes, color de fondo, etc.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// Container básico
+<pre class="highlight"><code class="language-dart" data-lang="dart">// Container básico
 Container(
   width: 200,
   height: 100,
@@ -5494,14 +5007,14 @@ Container(
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_padding">Padding</h4>
+<div class="sect4">
+<h5 id="_padding">Padding</h5>
 <div class="paragraph">
 <p>El widget <code>Padding</code> añade espacio alrededor de su hijo.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// Padding básico
+<pre class="highlight"><code class="language-dart" data-lang="dart">// Padding básico
 const Padding(
   padding: EdgeInsets.all(16),
   child: Text('Con padding'),
@@ -5538,14 +5051,14 @@ Padding(
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_center">Center</h4>
+<div class="sect4">
+<h5 id="_center">Center</h5>
 <div class="paragraph">
 <p>El widget <code>Center</code> centra su hijo dentro de sí mismo.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// Centro absoluto
+<pre class="highlight"><code class="language-dart" data-lang="dart">// Centro absoluto
 const Center(
   child: Text('Centrado'),
 );
@@ -5562,14 +5075,14 @@ Center(
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_align">Align</h4>
+<div class="sect4">
+<h5 id="_align">Align</h5>
 <div class="paragraph">
 <p>El widget <code>Align</code> alinea su hijo en una posición específica.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// Alineación en diferentes posiciones
+<pre class="highlight"><code class="language-dart" data-lang="dart">// Alineación en diferentes posiciones
 const Align(
   alignment: Alignment.topLeft,
   child: Text('Arriba izquierda'),
@@ -5601,16 +5114,16 @@ const Align(
 <hr>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_4_column_row_stack_wrap">4. Column, Row, Stack, Wrap</h3>
 <div class="sect3">
-<h4 id="_column">Column</h4>
+<h4 id="_4_column_row_stack_wrap">4. Column, Row, Stack, Wrap</h4>
+<div class="sect4">
+<h5 id="_column">Column</h5>
 <div class="paragraph">
 <p>El widget <code>Column</code> organiza widgets verticalmente.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// Column básico
+<pre class="highlight"><code class="language-dart" data-lang="dart">// Column básico
 const Column(
   children: [
     Text('Primero'),
@@ -5673,14 +5186,14 @@ const SingleChildScrollView(
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_row">Row</h4>
+<div class="sect4">
+<h5 id="_row">Row</h5>
 <div class="paragraph">
 <p>El widget <code>Row</code> organiza widgets horizontalmente.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// Row básico
+<pre class="highlight"><code class="language-dart" data-lang="dart">// Row básico
 const Row(
   children: [
     Icon(Icons.star),
@@ -5729,14 +5242,14 @@ const SingleChildScrollView(
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_stack">Stack</h4>
+<div class="sect4">
+<h5 id="_stack">Stack</h5>
 <div class="paragraph">
 <p>El widget <code>Stack</code> superpone widgets unos sobre otros.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// Stack básico
+<pre class="highlight"><code class="language-dart" data-lang="dart">// Stack básico
 Stack(
   children: [
     Container(
@@ -5854,14 +5367,14 @@ Container(
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_wrap">Wrap</h4>
+<div class="sect4">
+<h5 id="_wrap">Wrap</h5>
 <div class="paragraph">
 <p>El widget <code>Wrap</code> organiza widgets en múltiples líneas cuando no caben.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// Wrap básico
+<pre class="highlight"><code class="language-dart" data-lang="dart">// Wrap básico
 Wrap(
   spacing: 8, // Espacio horizontal entre items
   runSpacing: 4, // Espacio vertical entre líneas
@@ -5912,16 +5425,16 @@ Wrap(
 <hr>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_5_listview_gridview_singlechildscrollview">5. ListView, GridView, SingleChildScrollView</h3>
 <div class="sect3">
-<h4 id="_listview">ListView</h4>
+<h4 id="_5_listview_gridview_singlechildscrollview">5. ListView, GridView, SingleChildScrollView</h4>
+<div class="sect4">
+<h5 id="_listview">ListView</h5>
 <div class="paragraph">
 <p>El widget <code>ListView</code> muestra una lista desplazable de widgets.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// ListView básico
+<pre class="highlight"><code class="language-dart" data-lang="dart">// ListView básico
 ListView(
   children: [
     ListTile(title: Text('Item 1')),
@@ -5974,14 +5487,14 @@ RefreshIndicator(
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_gridview">GridView</h4>
+<div class="sect4">
+<h5 id="_gridview">GridView</h5>
 <div class="paragraph">
 <p>El widget <code>GridView</code> muestra una cuadrícula de widgets.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// GridView.count (número fijo de columnas)
+<pre class="highlight"><code class="language-dart" data-lang="dart">// GridView.count (número fijo de columnas)
 GridView.count(
   crossAxisCount: 2, // Número de columnas
   mainAxisSpacing: 10, // Espacio vertical
@@ -6054,15 +5567,15 @@ GridView.builder(
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_singlechildscrollview">SingleChildScrollView</h4>
+<div class="sect4">
+<h5 id="_singlechildscrollview">SingleChildScrollView</h5>
 <div class="paragraph">
 <p>El widget <code>SingleChildScrollView</code> permite hacer scroll cuando el
 contenido excede el tamaño.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// SingleChildScrollView básico
+<pre class="highlight"><code class="language-dart" data-lang="dart">// SingleChildScrollView básico
 SingleChildScrollView(
   child: Column(
     children: List.generate(50, (index) {
@@ -6127,17 +5640,17 @@ SingleChildScrollView(
 <hr>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_6_scaffold_appbar_drawer_bottomnavigationbar">6. Scaffold, AppBar, Drawer, BottomNavigationBar</h3>
 <div class="sect3">
-<h4 id="_scaffold">Scaffold</h4>
+<h4 id="_6_scaffold_appbar_drawer_bottomnavigationbar">6. Scaffold, AppBar, Drawer, BottomNavigationBar</h4>
+<div class="sect4">
+<h5 id="_scaffold">Scaffold</h5>
 <div class="paragraph">
 <p>El widget <code>Scaffold</code> proporciona la estructura básica de una pantalla
 Material Design.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">Scaffold(
+<pre class="highlight"><code class="language-dart" data-lang="dart">Scaffold(
   // Barra superior
   appBar: AppBar(
     title: const Text('Mi App'),
@@ -6192,11 +5705,11 @@ Material Design.</p>
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_appbar">AppBar</h4>
+<div class="sect4">
+<h5 id="_appbar">AppBar</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">AppBar(
+<pre class="highlight"><code class="language-dart" data-lang="dart">AppBar(
   // Título
   title: const Text('Mi App'),
 
@@ -6241,11 +5754,11 @@ Material Design.</p>
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_drawer">Drawer</h4>
+<div class="sect4">
+<h5 id="_drawer">Drawer</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">Drawer(
+<pre class="highlight"><code class="language-dart" data-lang="dart">Drawer(
   child: ListView(
     padding: EdgeInsets.zero,
     children: [
@@ -6312,11 +5825,11 @@ Material Design.</p>
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_bottomnavigationbar">BottomNavigationBar</h4>
+<div class="sect4">
+<h5 id="_bottomnavigationbar">BottomNavigationBar</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">class MyApp extends StatefulWidget {
+<pre class="highlight"><code class="language-dart" data-lang="dart">class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
   @override
@@ -6369,10 +5882,10 @@ class _MyAppState extends State&lt;MyApp&gt; {
 <hr>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_7_ejercicios_prácticos_del_módulo_3">7. Ejercicios prácticos del Módulo 3</h3>
 <div class="sect3">
-<h4 id="_ejercicio_1_perfil_de_usuario">Ejercicio 1: Perfil de usuario</h4>
+<h4 id="_7_ejercicios_prácticos_del_módulo_3">7. Ejercicios prácticos del Módulo 3</h4>
+<div class="sect4">
+<h5 id="_ejercicio_1_perfil_de_usuario">Ejercicio 1: Perfil de usuario</h5>
 <div class="paragraph">
 <p>Crear una tarjeta de perfil con: - Avatar circular - Nombre y email -
 Botones de acción - Estadísticas en fila</p>
@@ -6382,7 +5895,7 @@ Botones de acción - Estadísticas en fila</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">class PerfilUsuario extends StatelessWidget {
+<pre class="highlight"><code class="language-dart" data-lang="dart">class PerfilUsuario extends StatelessWidget {
   const PerfilUsuario({super.key});
 
   @override
@@ -6495,8 +6008,8 @@ Botones de acción - Estadísticas en fila</p>
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_ejercicio_2_lista_de_productos">Ejercicio 2: Lista de productos</h4>
+<div class="sect4">
+<h5 id="_ejercicio_2_lista_de_productos">Ejercicio 2: Lista de productos</h5>
 <div class="paragraph">
 <p>Crear una lista de productos con: - Imagen, título, precio - Rating con
 estrellas - Botón de añadir al carrito</p>
@@ -6506,7 +6019,7 @@ estrellas - Botón de añadir al carrito</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">class Producto {
+<pre class="highlight"><code class="language-dart" data-lang="dart">class Producto {
   final String nombre;
   final double precio;
   final String imagen;
@@ -6634,10 +6147,10 @@ integrando todo lo aprendido</p>
 <hr>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_1_gestión_de_estado_local">1. Gestión de estado local</h3>
 <div class="sect3">
-<h4 id="_qué_es_el_estado">¿Qué es el estado?</h4>
+<h4 id="_1_gestión_de_estado_local">1. Gestión de estado local</h4>
+<div class="sect4">
+<h5 id="_qué_es_el_estado">¿Qué es el estado?</h5>
 <div class="paragraph">
 <p>El <strong>estado</strong> (state) son los datos que pueden cambiar durante la vida de
 una aplicación y que afectan a lo que el usuario ve.</p>
@@ -6649,15 +6162,15 @@ tema, usuario logueado) - <strong>Estado global</strong>: Compartido entre múlt
 pantallas (ej: carrito, sesión)</p>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_setstate_y_reconstrucción">setState y reconstrucción</h4>
+<div class="sect4">
+<h5 id="_setstate_y_reconstrucción">setState y reconstrucción</h5>
 <div class="paragraph">
-<p>El método <code>setState</code> marca el widget como ``sucio'' y programa una
+<p>El método <code>setState</code> marca el widget como &#8220;sucio&#8221; y programa una
 reconstrucción:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">class ContadorPage extends StatefulWidget {
+<pre class="highlight"><code class="language-dart" data-lang="dart">class ContadorPage extends StatefulWidget {
   const ContadorPage({super.key});
 
   @override
@@ -6698,7 +6211,7 @@ class _ContadorPageState extends State&lt;ContadorPage&gt; {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// ✅ Correcto: setState solo con cambios de estado
+<pre class="highlight"><code class="language-dart" data-lang="dart">// ✅ Correcto: setState solo con cambios de estado
 void _correcto() {
   setState(() {
     _contador++;
@@ -6745,15 +6258,15 @@ void initState() {
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_lifting_state_up_elevar_el_estado">Lifting State Up (Elevar el estado)</h4>
+<div class="sect4">
+<h5 id="_lifting_state_up_elevar_el_estado">Lifting State Up (Elevar el estado)</h5>
 <div class="paragraph">
-<p>Cuando múltiples widgets necesitan compartir estado, se ``eleva'' al
+<p>Cuando múltiples widgets necesitan compartir estado, se &#8220;eleva&#8221; al
 ancestro común más cercano:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// Ejemplo: Lista de tareas compartida entre widgets
+<pre class="highlight"><code class="language-dart" data-lang="dart">// Ejemplo: Lista de tareas compartida entre widgets
 
 class Tarea {
   final String id;
@@ -6942,17 +6455,17 @@ class _TareasInputState extends State&lt;TareasInput&gt; {
 <hr>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_2_navegación_básica">2. Navegación básica</h3>
 <div class="sect3">
-<h4 id="_navigator_push_y_navigator_pop">Navigator.push y Navigator.pop</h4>
+<h4 id="_2_navegación_básica">2. Navegación básica</h4>
+<div class="sect4">
+<h5 id="_navigator_push_y_navigator_pop">Navigator.push y Navigator.pop</h5>
 <div class="paragraph">
 <p>Flutter usa una pila de navegación (stack) donde cada pantalla es una
-``ruta'':</p>
+&#8220;ruta&#8221;:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// Navegación básica
+<pre class="highlight"><code class="language-dart" data-lang="dart">// Navegación básica
 class PrimeraPantalla extends StatelessWidget {
   const PrimeraPantalla({super.key});
 
@@ -7000,11 +6513,11 @@ class SegundaPantalla extends StatelessWidget {
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_pasar_datos_entre_pantallas">Pasar datos entre pantallas</h4>
+<div class="sect4">
+<h5 id="_pasar_datos_entre_pantallas">Pasar datos entre pantallas</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// Pantalla que envía datos
+<pre class="highlight"><code class="language-dart" data-lang="dart">// Pantalla que envía datos
 class DetalleProductoPage extends StatelessWidget {
   final String productoId;
   final String nombre;
@@ -7052,11 +6565,11 @@ Navigator.push(
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_recibir_datos_de_vuelta">Recibir datos de vuelta</h4>
+<div class="sect4">
+<h5 id="_recibir_datos_de_vuelta">Recibir datos de vuelta</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// Pantalla que espera resultado
+<pre class="highlight"><code class="language-dart" data-lang="dart">// Pantalla que espera resultado
 class SeleccionColorPage extends StatelessWidget {
   const SeleccionColorPage({super.key});
 
@@ -7100,13 +6613,13 @@ Future&lt;void&gt; _seleccionarColor(BuildContext context) async {
 <hr>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_3_rutas_nombradas">3. Rutas nombradas</h3>
 <div class="sect3">
-<h4 id="_configuración_de_rutas">Configuración de rutas</h4>
+<h4 id="_3_rutas_nombradas">3. Rutas nombradas</h4>
+<div class="sect4">
+<h5 id="_configuración_de_rutas">Configuración de rutas</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">class MyApp extends StatelessWidget {
+<pre class="highlight"><code class="language-dart" data-lang="dart">class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   @override
@@ -7149,11 +6662,11 @@ Future&lt;void&gt; _seleccionarColor(BuildContext context) async {
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_navegación_con_rutas_nombradas">Navegación con rutas nombradas</h4>
+<div class="sect4">
+<h5 id="_navegación_con_rutas_nombradas">Navegación con rutas nombradas</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// Navegar a una ruta
+<pre class="highlight"><code class="language-dart" data-lang="dart">// Navegar a una ruta
 Navigator.pushNamed(context, '/productos');
 
 // Navegar y reemplazar (no se puede volver)
@@ -7198,11 +6711,11 @@ Navigator.pop(context, 'resultado');</code></pre>
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_ongenerateroute_para_argumentos_tipados">onGenerateRoute para argumentos tipados</h4>
+<div class="sect4">
+<h5 id="_ongenerateroute_para_argumentos_tipados">onGenerateRoute para argumentos tipados</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// Definir clase para argumentos
+<pre class="highlight"><code class="language-dart" data-lang="dart">// Definir clase para argumentos
 class ProductoArguments {
   final String id;
   final String nombre;
@@ -7237,16 +6750,16 @@ Navigator.pushNamed(
 <hr>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_4_hero_animations">4. Hero animations</h3>
 <div class="sect3">
-<h4 id="_hero_básico">Hero básico</h4>
+<h4 id="_4_hero_animations">4. Hero animations</h4>
+<div class="sect4">
+<h5 id="_hero_básico">Hero básico</h5>
 <div class="paragraph">
 <p>Las animaciones Hero permiten compartir elementos entre pantallas:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// Primera pantalla
+<pre class="highlight"><code class="language-dart" data-lang="dart">// Primera pantalla
 class ProductosPage extends StatelessWidget {
   const ProductosPage({super.key});
 
@@ -7308,11 +6821,11 @@ class DetalleProductoPage extends StatelessWidget {
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_hero_con_placeholder">Hero con placeholder</h4>
+<div class="sect4">
+<h5 id="_hero_con_placeholder">Hero con placeholder</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">Hero(
+<pre class="highlight"><code class="language-dart" data-lang="dart">Hero(
   tag: 'producto-${producto.id}',
   // Placeholder mientras se carga
   placeholderBuilder: (context, heroSize, child) {
@@ -7331,11 +6844,11 @@ class DetalleProductoPage extends StatelessWidget {
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_hero_con_flightshuttlebuilder">Hero con flightShuttleBuilder</h4>
+<div class="sect4">
+<h5 id="_hero_con_flightshuttlebuilder">Hero con flightShuttleBuilder</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">Hero(
+<pre class="highlight"><code class="language-dart" data-lang="dart">Hero(
   tag: 'producto-${producto.id}',
   flightShuttleBuilder: (flightContext, animation, flightDirection, fromHeroContext, toHeroContext) {
     // Widget personalizado durante la transición
@@ -7363,13 +6876,13 @@ class DetalleProductoPage extends StatelessWidget {
 <hr>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_5_formularios">5. Formularios</h3>
 <div class="sect3">
-<h4 id="_textfield_y_texteditingcontroller">TextField y TextEditingController</h4>
+<h4 id="_5_formularios">5. Formularios</h4>
+<div class="sect4">
+<h5 id="_textfield_y_texteditingcontroller">TextField y TextEditingController</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">class FormularioBasico extends StatefulWidget {
+<pre class="highlight"><code class="language-dart" data-lang="dart">class FormularioBasico extends StatefulWidget {
   const FormularioBasico({super.key});
 
   @override
@@ -7437,11 +6950,11 @@ class _FormularioBasicoState extends State&lt;FormularioBasico&gt; {
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_form_y_formfield">Form y FormField</h4>
+<div class="sect4">
+<h5 id="_form_y_formfield">Form y FormField</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">class FormularioValidado extends StatefulWidget {
+<pre class="highlight"><code class="language-dart" data-lang="dart">class FormularioValidado extends StatefulWidget {
   const FormularioValidado({super.key});
 
   @override
@@ -7563,11 +7076,11 @@ class _FormularioValidadoState extends State&lt;FormularioValidado&gt; {
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_focusnode_y_focus_management">FocusNode y Focus management</h4>
+<div class="sect4">
+<h5 id="_focusnode_y_focus_management">FocusNode y Focus management</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">class FocusExample extends StatefulWidget {
+<pre class="highlight"><code class="language-dart" data-lang="dart">class FocusExample extends StatefulWidget {
   const FocusExample({super.key});
 
   @override
@@ -7643,13 +7156,13 @@ class _FocusExampleState extends State&lt;FocusExample&gt; {
 <hr>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_6_diálogos_y_sheets">6. Diálogos y sheets</h3>
 <div class="sect3">
-<h4 id="_alertdialog">AlertDialog</h4>
+<h4 id="_6_diálogos_y_sheets">6. Diálogos y sheets</h4>
+<div class="sect4">
+<h5 id="_alertdialog">AlertDialog</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// Diálogo de confirmación
+<pre class="highlight"><code class="language-dart" data-lang="dart">// Diálogo de confirmación
 Future&lt;bool?&gt; _mostrarConfirmacion(BuildContext context) async {
   return await showDialog&lt;bool&gt;(
     context: context,
@@ -7706,11 +7219,11 @@ Future&lt;String?&gt; _mostrarInputDialog(BuildContext context) async {
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_bottomsheet">BottomSheet</h4>
+<div class="sect4">
+<h5 id="_bottomsheet">BottomSheet</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// BottomSheet simple
+<pre class="highlight"><code class="language-dart" data-lang="dart">// BottomSheet simple
 void _mostrarBottomSheet(BuildContext context) {
   showModalBottomSheet(
     context: context,
@@ -7780,11 +7293,11 @@ void _mostrarBottomSheetGrande(BuildContext context) {
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_snackbar">SnackBar</h4>
+<div class="sect4">
+<h5 id="_snackbar">SnackBar</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">void _mostrarSnackBar(BuildContext context) {
+<pre class="highlight"><code class="language-dart" data-lang="dart">void _mostrarSnackBar(BuildContext context) {
   ScaffoldMessenger.of(context).showSnackBar(
     const SnackBar(
       content: Text('Operación completada'),
@@ -7824,10 +7337,10 @@ void _mostrarSnackBarPersonalizado(BuildContext context) {
 <hr>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_7_ejercicios_prácticos_del_módulo_4">7. Ejercicios prácticos del Módulo 4</h3>
 <div class="sect3">
-<h4 id="_ejercicio_1_app_de_notas">Ejercicio 1: App de notas</h4>
+<h4 id="_7_ejercicios_prácticos_del_módulo_4">7. Ejercicios prácticos del Módulo 4</h4>
+<div class="sect4">
+<h5 id="_ejercicio_1_app_de_notas">Ejercicio 1: App de notas</h5>
 <div class="paragraph">
 <p>Crear una app de notas con: - Lista de notas - Añadir notas - Editar
 notas - Eliminar notas (con confirmación)</p>
@@ -7837,7 +7350,7 @@ notas - Eliminar notas (con confirmación)</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">class Nota {
+<pre class="highlight"><code class="language-dart" data-lang="dart">class Nota {
   final String id;
   String titulo;
   String contenido;
@@ -8083,16 +7596,16 @@ Validación (3 horas)</p>
 <hr>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_1_textformfield_y_formfield">1. TextFormField y FormField</h3>
 <div class="sect3">
-<h4 id="_textformfield_básico">TextFormField básico</h4>
+<h4 id="_1_textformfield_y_formfield">1. TextFormField y FormField</h4>
+<div class="sect4">
+<h5 id="_textformfield_básico">TextFormField básico</h5>
 <div class="paragraph">
 <p><code>TextFormField</code> es un <code>TextField</code> que sabe trabajar con <code>Form</code>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">class FormularioTextFormField extends StatefulWidget {
+<pre class="highlight"><code class="language-dart" data-lang="dart">class FormularioTextFormField extends StatefulWidget {
   const FormularioTextFormField({super.key});
 
   @override
@@ -8201,11 +7714,11 @@ class _FormularioTextFormFieldState extends State&lt;FormularioTextFormField&gt;
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_inputdecoration_completo">InputDecoration completo</h4>
+<div class="sect4">
+<h5 id="_inputdecoration_completo">InputDecoration completo</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">TextFormField(
+<pre class="highlight"><code class="language-dart" data-lang="dart">TextFormField(
   decoration: InputDecoration(
     // Etiqueta flotante
     labelText: 'Email',
@@ -8274,11 +7787,11 @@ class _FormularioTextFormFieldState extends State&lt;FormularioTextFormField&gt;
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_textformfield_con_controlador">TextFormField con controlador</h4>
+<div class="sect4">
+<h5 id="_textformfield_con_controlador">TextFormField con controlador</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">class TextFormFieldConControlador extends StatefulWidget {
+<pre class="highlight"><code class="language-dart" data-lang="dart">class TextFormFieldConControlador extends StatefulWidget {
   const TextFormFieldConControlador({super.key});
 
   @override
@@ -8361,13 +7874,13 @@ class _TextFormFieldConControladorState extends State&lt;TextFormFieldConControl
 <hr>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_2_validación_personalizada">2. Validación personalizada</h3>
 <div class="sect3">
-<h4 id="_validadores_reutilizables">Validadores reutilizables</h4>
+<h4 id="_2_validación_personalizada">2. Validación personalizada</h4>
+<div class="sect4">
+<h5 id="_validadores_reutilizables">Validadores reutilizables</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// archivo: validators.dart
+<pre class="highlight"><code class="language-dart" data-lang="dart">// archivo: validators.dart
 
 class Validators {
   // Validador de campo requerido
@@ -8483,11 +7996,11 @@ class Validators {
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_uso_de_validadores_personalizados">Uso de validadores personalizados</h4>
+<div class="sect4">
+<h5 id="_uso_de_validadores_personalizados">Uso de validadores personalizados</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">class FormularioConValidadores extends StatefulWidget {
+<pre class="highlight"><code class="language-dart" data-lang="dart">class FormularioConValidadores extends StatefulWidget {
   const FormularioConValidadores({super.key});
 
   @override
@@ -8647,13 +8160,13 @@ class _FormularioConValidadoresState extends State&lt;FormularioConValidadores&g
 <hr>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_3_formularios_complejos">3. Formularios complejos</h3>
 <div class="sect3">
-<h4 id="_checkbox_radio_y_switch">Checkbox, Radio y Switch</h4>
+<h4 id="_3_formularios_complejos">3. Formularios complejos</h4>
+<div class="sect4">
+<h5 id="_checkbox_radio_y_switch">Checkbox, Radio y Switch</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">class FormularioCheckboxRadio extends StatefulWidget {
+<pre class="highlight"><code class="language-dart" data-lang="dart">class FormularioCheckboxRadio extends StatefulWidget {
   const FormularioCheckboxRadio({super.key});
 
   @override
@@ -8843,11 +8356,11 @@ class _FormularioCheckboxRadioState extends State&lt;FormularioCheckboxRadio&gt;
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_dropdown_y_select">Dropdown y Select</h4>
+<div class="sect4">
+<h5 id="_dropdown_y_select">Dropdown y Select</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">class FormularioDropdown extends StatefulWidget {
+<pre class="highlight"><code class="language-dart" data-lang="dart">class FormularioDropdown extends StatefulWidget {
   const FormularioDropdown({super.key});
 
   @override
@@ -9035,11 +8548,11 @@ class _FormularioDropdownState extends State&lt;FormularioDropdown&gt; {
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_date_y_time_picker">Date y Time Picker</h4>
+<div class="sect4">
+<h5 id="_date_y_time_picker">Date y Time Picker</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">class FormularioFechaHora extends StatefulWidget {
+<pre class="highlight"><code class="language-dart" data-lang="dart">class FormularioFechaHora extends StatefulWidget {
   const FormularioFechaHora({super.key});
 
   @override
@@ -9216,10 +8729,10 @@ class _FormularioFechaHoraState extends State&lt;FormularioFechaHora&gt; {
 <hr>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_4_ejercicios_prácticos_del_módulo_5">4. Ejercicios prácticos del Módulo 5</h3>
 <div class="sect3">
-<h4 id="_ejercicio_formulario_de_registro_completo">Ejercicio: Formulario de registro completo</h4>
+<h4 id="_4_ejercicios_prácticos_del_módulo_5">4. Ejercicios prácticos del Módulo 5</h4>
+<div class="sect4">
+<h5 id="_ejercicio_formulario_de_registro_completo">Ejercicio: Formulario de registro completo</h5>
 <div class="paragraph">
 <p>Crear un formulario de registro con: - Validación completa - Selección
 de fecha de nacimiento - Selección de país/ciudad dependientes -
@@ -9230,7 +8743,7 @@ Checkbox de términos - Guardar y limpiar formulario</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">class UsuarioRegistro {
+<pre class="highlight"><code class="language-dart" data-lang="dart">class UsuarioRegistro {
   String nombre;
   String email;
   String password;
@@ -9563,34 +9076,34 @@ horas)</p>
 <hr>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_1_paquete_http">1. Paquete http</h3>
 <div class="sect3">
-<h4 id="_instalación">Instalación</h4>
+<h4 id="_1_paquete_http">1. Paquete http</h4>
+<div class="sect4">
+<h5 id="_instalación">Instalación</h5>
 <div class="paragraph">
 <p>Añadir en <code>pubspec.yaml</code>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">dependencies:
+<pre class="highlight"><code class="language-yaml" data-lang="yaml">dependencies:
   http: ^1.1.0</code></pre>
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_importar">Importar</h4>
+<div class="sect4">
+<h5 id="_importar">Importar</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">import 'package:http/http.dart' as http;
+<pre class="highlight"><code class="language-dart" data-lang="dart">import 'package:http/http.dart' as http;
 import 'dart:convert';</code></pre>
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_get_request">GET request</h4>
+<div class="sect4">
+<h5 id="_get_request">GET request</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// GET simple
+<pre class="highlight"><code class="language-dart" data-lang="dart">// GET simple
 Future&lt;void&gt; obtenerUsuarios() async {
   try {
     final response = await http.get(
@@ -9643,11 +9156,11 @@ Future&lt;void&gt; obtenerDatosProtegidos() async {
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_post_request">POST request</h4>
+<div class="sect4">
+<h5 id="_post_request">POST request</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// POST con JSON
+<pre class="highlight"><code class="language-dart" data-lang="dart">// POST con JSON
 Future&lt;void&gt; crearUsuario(String nombre, String email) async {
   try {
     final response = await http.post(
@@ -9710,11 +9223,11 @@ Future&lt;void&gt; subirArchivo(File archivo) async {
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_put_y_patch">PUT y PATCH</h4>
+<div class="sect4">
+<h5 id="_put_y_patch">PUT y PATCH</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// PUT - Reemplazar recurso completo
+<pre class="highlight"><code class="language-dart" data-lang="dart">// PUT - Reemplazar recurso completo
 Future&lt;void&gt; actualizarUsuario(int id, String nombre, String email) async {
   final response = await http.put(
     Uri.parse('https://jsonplaceholder.typicode.com/users/$id'),
@@ -9746,11 +9259,11 @@ Future&lt;void&gt; actualizarEmail(int id, String nuevoEmail) async {
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_delete">DELETE</h4>
+<div class="sect4">
+<h5 id="_delete">DELETE</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">Future&lt;void&gt; eliminarUsuario(int id) async {
+<pre class="highlight"><code class="language-dart" data-lang="dart">Future&lt;void&gt; eliminarUsuario(int id) async {
   final response = await http.delete(
     Uri.parse('https://jsonplaceholder.typicode.com/users/$id'),
   );
@@ -9764,13 +9277,13 @@ Future&lt;void&gt; actualizarEmail(int id, String nuevoEmail) async {
 <hr>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_2_modelos_de_datos">2. Modelos de datos</h3>
 <div class="sect3">
-<h4 id="_clase_modelo_básica">Clase modelo básica</h4>
+<h4 id="_2_modelos_de_datos">2. Modelos de datos</h4>
+<div class="sect4">
+<h5 id="_clase_modelo_básica">Clase modelo básica</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">class Usuario {
+<pre class="highlight"><code class="language-dart" data-lang="dart">class Usuario {
   final int id;
   final String name;
   final String username;
@@ -9911,14 +9424,14 @@ class Empresa {
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_modelo_con_json_serializable">Modelo con json_serializable</h4>
+<div class="sect4">
+<h5 id="_modelo_con_json_serializable">Modelo con json_serializable</h5>
 <div class="paragraph">
 <p>Instalar dependencias en <code>pubspec.yaml</code>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">dependencies:
+<pre class="highlight"><code class="language-yaml" data-lang="yaml">dependencies:
   json_annotation: ^4.8.0
 
 dev_dependencies:
@@ -9931,7 +9444,7 @@ dev_dependencies:
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">import 'package:json_annotation/json_annotation.dart';
+<pre class="highlight"><code class="language-dart" data-lang="dart">import 'package:json_annotation/json_annotation.dart';
 
 part 'producto.g.dart';
 
@@ -9976,19 +9489,19 @@ class Rating {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">flutter pub run build_runner build</code></pre>
+<pre class="highlight"><code class="language-bash" data-lang="bash">flutter pub run build_runner build</code></pre>
 </div>
 </div>
 <hr>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_3_servicio_api">3. Servicio API</h3>
 <div class="sect3">
-<h4 id="_servicio_genérico">Servicio genérico</h4>
+<h4 id="_3_servicio_api">3. Servicio API</h4>
+<div class="sect4">
+<h5 id="_servicio_genérico">Servicio genérico</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">class ApiService {
+<pre class="highlight"><code class="language-dart" data-lang="dart">class ApiService {
   final String baseUrl;
   final Map&lt;String, String&gt;? defaultHeaders;
 
@@ -10158,11 +9671,11 @@ class NetworkException implements Exception {
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_servicio_específico">Servicio específico</h4>
+<div class="sect4">
+<h5 id="_servicio_específico">Servicio específico</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">class UsuarioService {
+<pre class="highlight"><code class="language-dart" data-lang="dart">class UsuarioService {
   final ApiService _api;
 
   UsuarioService({ApiService? api}) : _api = api ?? ApiService();
@@ -10206,13 +9719,13 @@ class NetworkException implements Exception {
 <hr>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_4_loading_states_y_errores">4. Loading states y errores</h3>
 <div class="sect3">
-<h4 id="_estados_de_carga">Estados de carga</h4>
+<h4 id="_4_loading_states_y_errores">4. Loading states y errores</h4>
+<div class="sect4">
+<h5 id="_estados_de_carga">Estados de carga</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">enum EstadoCarga { inicial, cargando, cargado, error }
+<pre class="highlight"><code class="language-dart" data-lang="dart">enum EstadoCarga { inicial, cargando, cargado, error }
 
 class UsuariosPage extends StatefulWidget {
   const UsuariosPage({super.key});
@@ -10323,11 +9836,11 @@ class _UsuariosPageState extends State&lt;UsuariosPage&gt; {
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_widget_de_loading_reutilizable">Widget de loading reutilizable</h4>
+<div class="sect4">
+<h5 id="_widget_de_loading_reutilizable">Widget de loading reutilizable</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">class LoadingOverlay extends StatelessWidget {
+<pre class="highlight"><code class="language-dart" data-lang="dart">class LoadingOverlay extends StatelessWidget {
   final bool isLoading;
   final Widget child;
   final String? message;
@@ -10379,10 +9892,10 @@ LoadingOverlay(
 <hr>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_5_ejercicios_prácticos_del_módulo_6">5. Ejercicios prácticos del Módulo 6</h3>
 <div class="sect3">
-<h4 id="_ejercicio_app_de_productos_con_api">Ejercicio: App de productos con API</h4>
+<h4 id="_5_ejercicios_prácticos_del_módulo_6">5. Ejercicios prácticos del Módulo 6</h4>
+<div class="sect4">
+<h5 id="_ejercicio_app_de_productos_con_api">Ejercicio: App de productos con API</h5>
 <div class="paragraph">
 <p>Crear una app que: - Obtiene productos de una API REST - Muestra lista
 con estados de carga - Permite ver detalles - Implementa búsqueda</p>
@@ -10392,7 +9905,7 @@ con estados de carga - Permite ver detalles - Implementa búsqueda</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// models/producto.dart
+<pre class="highlight"><code class="language-dart" data-lang="dart">// models/producto.dart
 class Producto {
   final int id;
   final String title;
@@ -10803,31 +10316,31 @@ Datos (3 horas)</p>
 <hr>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_1_sharedpreferences">1. SharedPreferences</h3>
 <div class="sect3">
-<h4 id="_instalación_2">Instalación</h4>
+<h4 id="_1_sharedpreferences">1. SharedPreferences</h4>
+<div class="sect4">
+<h5 id="_instalación_2">Instalación</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">dependencies:
+<pre class="highlight"><code class="language-yaml" data-lang="yaml">dependencies:
   shared_preferences: ^2.2.0</code></pre>
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_conceptos_básicos_2">Conceptos básicos</h4>
+<div class="sect4">
+<h5 id="_conceptos_básicos_2">Conceptos básicos</h5>
 <div class="paragraph">
 <p><code>SharedPreferences</code> permite almacenar datos simples de forma
-persistente: - Tipos: <code>String</code>, <code>int</code>, <code>double</code>, <code>bool</code>, <code>List&lt;String&gt;</code>
-- Almacenamiento: clave-valor - Uso ideal: preferencias,
-configuraciones, flags</p>
+persistente: - Tipos: <code>String</code>, <code>int</code>, <code>double</code>, <code>bool</code>,
+<code>List&lt;String&gt;</code> - Almacenamiento: clave-valor - Uso ideal:
+preferencias, configuraciones, flags</p>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_servicio_de_sharedpreferences">Servicio de SharedPreferences</h4>
+<div class="sect4">
+<h5 id="_servicio_de_sharedpreferences">Servicio de SharedPreferences</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">class PreferenciasService {
+<pre class="highlight"><code class="language-dart" data-lang="dart">class PreferenciasService {
   static const String _keyTema = 'tema';
   static const String _keyIdioma = 'idioma';
   static const String _keyNotificaciones = 'notificaciones';
@@ -10872,11 +10385,11 @@ configuraciones, flags</p>
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_uso_en_la_app">Uso en la app</h4>
+<div class="sect4">
+<h5 id="_uso_en_la_app">Uso en la app</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// main.dart
+<pre class="highlight"><code class="language-dart" data-lang="dart">// main.dart
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -10951,11 +10464,11 @@ class _MyAppState extends State&lt;MyApp&gt; {
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_página_de_configuración">Página de configuración</h4>
+<div class="sect4">
+<h5 id="_página_de_configuración">Página de configuración</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">class ConfiguracionPage extends StatefulWidget {
+<pre class="highlight"><code class="language-dart" data-lang="dart">class ConfiguracionPage extends StatefulWidget {
   final PreferenciasService prefsService;
 
   const ConfiguracionPage({super.key, required this.prefsService});
@@ -11163,23 +10676,23 @@ class _ConfiguracionPageState extends State&lt;ConfiguracionPage&gt; {
 <hr>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_2_sqlite_con_sqflite">2. SQLite con sqflite</h3>
 <div class="sect3">
-<h4 id="_instalación_3">Instalación</h4>
+<h4 id="_2_sqlite_con_sqflite">2. SQLite con sqflite</h4>
+<div class="sect4">
+<h5 id="_instalación_3">Instalación</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">dependencies:
+<pre class="highlight"><code class="language-yaml" data-lang="yaml">dependencies:
   sqflite: ^2.3.0
   path: ^1.8.0</code></pre>
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_modelo_de_datos">Modelo de datos</h4>
+<div class="sect4">
+<h5 id="_modelo_de_datos">Modelo de datos</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">class Tarea {
+<pre class="highlight"><code class="language-dart" data-lang="dart">class Tarea {
   final int? id;
   final String titulo;
   final String? descripcion;
@@ -11247,11 +10760,11 @@ class _ConfiguracionPageState extends State&lt;ConfiguracionPage&gt; {
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_servicio_de_base_de_datos">Servicio de base de datos</h4>
+<div class="sect4">
+<h5 id="_servicio_de_base_de_datos">Servicio de base de datos</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">import 'package:sqflite/sqflite.dart';
+<pre class="highlight"><code class="language-dart" data-lang="dart">import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
 class DatabaseService {
@@ -11306,11 +10819,11 @@ class DatabaseService {
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_repositorio_de_tareas">Repositorio de tareas</h4>
+<div class="sect4">
+<h5 id="_repositorio_de_tareas">Repositorio de tareas</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">class TareasRepository {
+<pre class="highlight"><code class="language-dart" data-lang="dart">class TareasRepository {
   final DatabaseService _dbService;
   static const String _tableName = 'tareas';
 
@@ -11444,11 +10957,11 @@ class DatabaseService {
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_página_de_tareas_con_sqlite">Página de tareas con SQLite</h4>
+<div class="sect4">
+<h5 id="_página_de_tareas_con_sqlite">Página de tareas con SQLite</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">class TareasSQLitePage extends StatefulWidget {
+<pre class="highlight"><code class="language-dart" data-lang="dart">class TareasSQLitePage extends StatefulWidget {
   const TareasSQLitePage({super.key});
 
   @override
@@ -11685,23 +11198,23 @@ class _TareasSQLitePageState extends State&lt;TareasSQLitePage&gt; {
 <hr>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_3_hive_nosql">3. Hive (NoSQL)</h3>
 <div class="sect3">
-<h4 id="_instalación_4">Instalación</h4>
+<h4 id="_3_hive_nosql">3. Hive (NoSQL)</h4>
+<div class="sect4">
+<h5 id="_instalación_4">Instalación</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">dependencies:
+<pre class="highlight"><code class="language-yaml" data-lang="yaml">dependencies:
   hive: ^2.2.3
   hive_flutter: ^1.1.0</code></pre>
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_inicialización">Inicialización</h4>
+<div class="sect4">
+<h5 id="_inicialización">Inicialización</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">void main() async {
+<pre class="highlight"><code class="language-dart" data-lang="dart">void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
   Hive.registerAdapter(ProductoHiveAdapter());
@@ -11712,11 +11225,11 @@ class _TareasSQLitePageState extends State&lt;TareasSQLitePage&gt; {
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_modelo_con_hive">Modelo con Hive</h4>
+<div class="sect4">
+<h5 id="_modelo_con_hive">Modelo con Hive</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">part 'producto_hive.g.dart';
+<pre class="highlight"><code class="language-dart" data-lang="dart">part 'producto_hive.g.dart';
 
 @HiveType(typeId: 0)
 class ProductoHive extends HiveObject {
@@ -11754,11 +11267,11 @@ class ProductoHive extends HiveObject {
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_servicio_con_hive">Servicio con Hive</h4>
+<div class="sect4">
+<h5 id="_servicio_con_hive">Servicio con Hive</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">class ProductoHiveService {
+<pre class="highlight"><code class="language-dart" data-lang="dart">class ProductoHiveService {
   static const String _boxName = 'productos';
   Box&lt;ProductoHive&gt;? _box;
 
@@ -11805,13 +11318,13 @@ class ProductoHive extends HiveObject {
 <hr>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_4_almacenamiento_de_archivos">4. Almacenamiento de archivos</h3>
 <div class="sect3">
-<h4 id="_escribir_y_leer_archivos">Escribir y leer archivos</h4>
+<h4 id="_4_almacenamiento_de_archivos">4. Almacenamiento de archivos</h4>
+<div class="sect4">
+<h5 id="_escribir_y_leer_archivos">Escribir y leer archivos</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">class ArchivoService {
+<pre class="highlight"><code class="language-dart" data-lang="dart">class ArchivoService {
   final Future&lt;Directory&gt; Function() _getDirectorio;
 
   ArchivoService({Future&lt;Directory&gt; Function()? getDirectorio})
@@ -11875,10 +11388,10 @@ class ProductoHive extends HiveObject {
 <hr>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_5_ejercicios_prácticos_del_módulo_7">5. Ejercicios prácticos del Módulo 7</h3>
 <div class="sect3">
-<h4 id="_ejercicio_app_de_notas_con_sqlite">Ejercicio: App de notas con SQLite</h4>
+<h4 id="_5_ejercicios_prácticos_del_módulo_7">5. Ejercicios prácticos del Módulo 7</h4>
+<div class="sect4">
+<h5 id="_ejercicio_app_de_notas_con_sqlite">Ejercicio: App de notas con SQLite</h5>
 <div class="paragraph">
 <p>Crear una app de notas con: - CRUD completo (Crear, Leer, Actualizar,
 Eliminar) - Búsqueda por título - Filtros por categoría - Ordenamiento
@@ -11908,10 +11421,10 @@ Patrones (4 horas)</p>
 <hr>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_1_separación_de_responsabilidades">1. Separación de responsabilidades</h3>
 <div class="sect3">
-<h4 id="_estructura_de_carpetas_recomendada">Estructura de carpetas recomendada</h4>
+<h4 id="_1_separación_de_responsabilidades">1. Separación de responsabilidades</h4>
+<div class="sect4">
+<h5 id="_estructura_de_carpetas_recomendada">Estructura de carpetas recomendada</h5>
 <div class="literalblock">
 <div class="content">
 <pre>lib/
@@ -11949,8 +11462,8 @@ Patrones (4 horas)</p>
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_ejemplo_práctico_app_de_productos">Ejemplo práctico: App de productos</h4>
+<div class="sect4">
+<h5 id="_ejemplo_práctico_app_de_productos">Ejemplo práctico: App de productos</h5>
 <div class="literalblock">
 <div class="content">
 <pre>lib/
@@ -12021,20 +11534,20 @@ Patrones (4 horas)</p>
 <hr>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_2_patrón_repository">2. Patrón Repository</h3>
 <div class="sect3">
-<h4 id="_definición">Definición</h4>
+<h4 id="_2_patrón_repository">2. Patrón Repository</h4>
+<div class="sect4">
+<h5 id="_definición">Definición</h5>
 <div class="paragraph">
 <p>El patrón Repository separa la lógica de acceso a datos de la lógica de
 negocio.</p>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_implementación">Implementación</h4>
+<div class="sect4">
+<h5 id="_implementación">Implementación</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// domain/repositories/producto_repository.dart
+<pre class="highlight"><code class="language-dart" data-lang="dart">// domain/repositories/producto_repository.dart
 abstract class ProductoRepository {
   Future&lt;List&lt;Producto&gt;&gt; obtenerTodos();
   Future&lt;Producto&gt; obtenerPorId(int id);
@@ -12158,22 +11671,22 @@ class ProductoRepositoryImpl implements ProductoRepository {
 <hr>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_3_provider_para_estado">3. Provider para estado</h3>
 <div class="sect3">
-<h4 id="_instalación_5">Instalación</h4>
+<h4 id="_3_provider_para_estado">3. Provider para estado</h4>
+<div class="sect4">
+<h5 id="_instalación_5">Instalación</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">dependencies:
+<pre class="highlight"><code class="language-yaml" data-lang="yaml">dependencies:
   provider: ^6.1.0</code></pre>
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_changenotifier_básico">ChangeNotifier básico</h4>
+<div class="sect4">
+<h5 id="_changenotifier_básico">ChangeNotifier básico</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">class ProductoProvider extends ChangeNotifier {
+<pre class="highlight"><code class="language-dart" data-lang="dart">class ProductoProvider extends ChangeNotifier {
   final ProductoRepository repository;
 
   List&lt;Producto&gt; _productos = [];
@@ -12223,11 +11736,11 @@ enum EstadoCarga { inicial, cargando, cargado, error }</code></pre>
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_multiprovider">MultiProvider</h4>
+<div class="sect4">
+<h5 id="_multiprovider">MultiProvider</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">void main() {
+<pre class="highlight"><code class="language-dart" data-lang="dart">void main() {
   runApp(
     MultiProvider(
       providers: [
@@ -12254,11 +11767,11 @@ enum EstadoCarga { inicial, cargando, cargado, error }</code></pre>
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_consumo_en_widgets">Consumo en widgets</h4>
+<div class="sect4">
+<h5 id="_consumo_en_widgets">Consumo en widgets</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">class ProductoListPage extends StatelessWidget {
+<pre class="highlight"><code class="language-dart" data-lang="dart">class ProductoListPage extends StatelessWidget {
   const ProductoListPage({super.key});
 
   @override
@@ -12315,23 +11828,23 @@ enum EstadoCarga { inicial, cargando, cargado, error }</code></pre>
 <hr>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_4_bloccubit">4. BLoC/Cubit</h3>
 <div class="sect3">
-<h4 id="_instalación_6">Instalación</h4>
+<h4 id="_4_bloccubit">4. BLoC/Cubit</h4>
+<div class="sect4">
+<h5 id="_instalación_6">Instalación</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">dependencies:
+<pre class="highlight"><code class="language-yaml" data-lang="yaml">dependencies:
   flutter_bloc: ^8.1.0
   equatable: ^2.0.5</code></pre>
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_estados_con_equatable">Estados con Equatable</h4>
+<div class="sect4">
+<h5 id="_estados_con_equatable">Estados con Equatable</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">abstract class ProductoState extends Equatable {
+<pre class="highlight"><code class="language-dart" data-lang="dart">abstract class ProductoState extends Equatable {
   const ProductoState();
 
   @override
@@ -12362,11 +11875,11 @@ class ProductoError extends ProductoState {
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_eventos">Eventos</h4>
+<div class="sect4">
+<h5 id="_eventos">Eventos</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">abstract class ProductoEvent extends Equatable {
+<pre class="highlight"><code class="language-dart" data-lang="dart">abstract class ProductoEvent extends Equatable {
   const ProductoEvent();
 
   @override
@@ -12404,11 +11917,11 @@ class SearchProductos extends ProductoEvent {
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_bloc">BLoC</h4>
+<div class="sect4">
+<h5 id="_bloc">BLoC</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">class ProductoBloc extends Bloc&lt;ProductoEvent, ProductoState&gt; {
+<pre class="highlight"><code class="language-dart" data-lang="dart">class ProductoBloc extends Bloc&lt;ProductoEvent, ProductoState&gt; {
   final ProductoRepository repository;
 
   ProductoBloc({required this.repository}) : super(ProductoInitial()) {
@@ -12482,11 +11995,11 @@ class SearchProductos extends ProductoEvent {
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_cubit_versión_simplificada">Cubit (versión simplificada)</h4>
+<div class="sect4">
+<h5 id="_cubit_versión_simplificada">Cubit (versión simplificada)</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">class ProductoCubit extends Cubit&lt;ProductoState&gt; {
+<pre class="highlight"><code class="language-dart" data-lang="dart">class ProductoCubit extends Cubit&lt;ProductoState&gt; {
   final ProductoRepository repository;
 
   ProductoCubit({required this.repository}) : super(ProductoInitial());
@@ -12530,11 +12043,11 @@ class SearchProductos extends ProductoEvent {
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_uso_en_widgets_con_blocbuilder">Uso en widgets con BlocBuilder</h4>
+<div class="sect4">
+<h5 id="_uso_en_widgets_con_blocbuilder">Uso en widgets con BlocBuilder</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">class ProductoListPage extends StatelessWidget {
+<pre class="highlight"><code class="language-dart" data-lang="dart">class ProductoListPage extends StatelessWidget {
   const ProductoListPage({super.key});
 
   @override
@@ -12585,10 +12098,10 @@ class SearchProductos extends ProductoEvent {
 <hr>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_5_clean_architecture_opcional">5. Clean Architecture (opcional)</h3>
 <div class="sect3">
-<h4 id="_estructura">Estructura</h4>
+<h4 id="_5_clean_architecture_opcional">5. Clean Architecture (opcional)</h4>
+<div class="sect4">
+<h5 id="_estructura">Estructura</h5>
 <div class="literalblock">
 <div class="content">
 <pre>lib/
@@ -12617,11 +12130,11 @@ class SearchProductos extends ProductoEvent {
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_entidad_de_dominio">Entidad de dominio</h4>
+<div class="sect4">
+<h5 id="_entidad_de_dominio">Entidad de dominio</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">class Producto {
+<pre class="highlight"><code class="language-dart" data-lang="dart">class Producto {
   final int id;
   final String nombre;
   final double precio;
@@ -12639,11 +12152,11 @@ class SearchProductos extends ProductoEvent {
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_caso_de_uso">Caso de uso</h4>
+<div class="sect4">
+<h5 id="_caso_de_uso">Caso de uso</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">class GetProductos {
+<pre class="highlight"><code class="language-dart" data-lang="dart">class GetProductos {
   final ProductoRepository repository;
 
   GetProductos(this.repository);
@@ -12667,10 +12180,10 @@ class AddProducto {
 <hr>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_6_ejercicios_prácticos_del_módulo_8">6. Ejercicios prácticos del Módulo 8</h3>
 <div class="sect3">
-<h4 id="_ejercicio_app_con_arquitectura_completa">Ejercicio: App con arquitectura completa</h4>
+<h4 id="_6_ejercicios_prácticos_del_módulo_8">6. Ejercicios prácticos del Módulo 8</h4>
+<div class="sect4">
+<h5 id="_ejercicio_app_con_arquitectura_completa">Ejercicio: App con arquitectura completa</h5>
 <div class="paragraph">
 <p>Crear una app de tareas con: - Patrón Repository - Provider o BLoC para
 estado - Clean Architecture</p>
@@ -12719,8 +12232,8 @@ completa</p>
 <hr>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_1_tipos_de_tests_en_flutter">1. Tipos de tests en Flutter</h3>
+<div class="sect3">
+<h4 id="_1_tipos_de_tests_en_flutter">1. Tipos de tests en Flutter</h4>
 <div class="paragraph">
 <p>Flutter tiene tres niveles de testing:</p>
 </div>
@@ -12762,13 +12275,13 @@ completa</p>
 </table>
 <hr>
 </div>
-<div class="sect2">
-<h3 id="_2_unit_tests">2. Unit Tests</h3>
 <div class="sect3">
-<h4 id="_estructura_de_tests">Estructura de tests</h4>
+<h4 id="_2_unit_tests">2. Unit Tests</h4>
+<div class="sect4">
+<h5 id="_estructura_de_tests">Estructura de tests</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// test/models/usuario_test.dart
+<pre class="highlight"><code class="language-dart" data-lang="dart">// test/models/usuario_test.dart
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mi_app/models/usuario.dart';
 
@@ -12838,11 +12351,11 @@ void main() {
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_test_de_servicios">Test de servicios</h4>
+<div class="sect4">
+<h5 id="_test_de_servicios">Test de servicios</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// test/services/producto_service_test.dart
+<pre class="highlight"><code class="language-dart" data-lang="dart">// test/services/producto_service_test.dart
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:mocktail/mocktail.dart';
@@ -12924,11 +12437,11 @@ void main() {
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_test_de_validadores">Test de validadores</h4>
+<div class="sect4">
+<h5 id="_test_de_validadores">Test de validadores</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// test/utils/validators_test.dart
+<pre class="highlight"><code class="language-dart" data-lang="dart">// test/utils/validators_test.dart
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mi_app/utils/validators.dart';
 
@@ -13003,13 +12516,13 @@ void main() {
 <hr>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_3_widget_tests">3. Widget Tests</h3>
 <div class="sect3">
-<h4 id="_test_básico_de_widget">Test básico de widget</h4>
+<h4 id="_3_widget_tests">3. Widget Tests</h4>
+<div class="sect4">
+<h5 id="_test_básico_de_widget">Test básico de widget</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// test/widgets/producto_card_test.dart
+<pre class="highlight"><code class="language-dart" data-lang="dart">// test/widgets/producto_card_test.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mi_app/models/producto.dart';
@@ -13081,11 +12594,11 @@ void main() {
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_test_de_formularios">Test de formularios</h4>
+<div class="sect4">
+<h5 id="_test_de_formularios">Test de formularios</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// test/widgets/login_form_test.dart
+<pre class="highlight"><code class="language-dart" data-lang="dart">// test/widgets/login_form_test.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mi_app/widgets/login_form.dart';
@@ -13198,11 +12711,11 @@ void main() {
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_test_de_navegación">Test de navegación</h4>
+<div class="sect4">
+<h5 id="_test_de_navegación">Test de navegación</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// test/widgets/navegacion_test.dart
+<pre class="highlight"><code class="language-dart" data-lang="dart">// test/widgets/navegacion_test.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mi_app/pages/home_page.dart';
@@ -13257,13 +12770,13 @@ void main() {
 <hr>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_4_integration_tests">4. Integration Tests</h3>
 <div class="sect3">
-<h4 id="_configuración">Configuración</h4>
+<h4 id="_4_integration_tests">4. Integration Tests</h4>
+<div class="sect4">
+<h5 id="_configuración">Configuración</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml"># pubspec.yaml
+<pre class="highlight"><code class="language-yaml" data-lang="yaml"># pubspec.yaml
 dev_dependencies:
   integration_test:
     sdk: flutter
@@ -13272,11 +12785,11 @@ dev_dependencies:
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_test_de_integración">Test de integración</h4>
+<div class="sect4">
+<h5 id="_test_de_integración">Test de integración</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// integration_test/app_test.dart
+<pre class="highlight"><code class="language-dart" data-lang="dart">// integration_test/app_test.dart
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:mi_app/main.dart' as app;
@@ -13361,13 +12874,13 @@ void main() {
 <hr>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_5_mocking_con_mocktail">5. Mocking con Mocktail</h3>
 <div class="sect3">
-<h4 id="_mock_de_dependencias">Mock de dependencias</h4>
+<h4 id="_5_mocking_con_mocktail">5. Mocking con Mocktail</h4>
+<div class="sect4">
+<h5 id="_mock_de_dependencias">Mock de dependencias</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// test/mocks/mocks.dart
+<pre class="highlight"><code class="language-dart" data-lang="dart">// test/mocks/mocks.dart
 import 'package:mocktail/mocktail.dart';
 import 'package:mi_app/services/api_service.dart';
 import 'package:mi_app/services/storage_service.dart';
@@ -13390,11 +12903,11 @@ void main() {
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_test_con_mocks">Test con mocks</h4>
+<div class="sect4">
+<h5 id="_test_con_mocks">Test con mocks</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// test/providers/producto_provider_test.dart
+<pre class="highlight"><code class="language-dart" data-lang="dart">// test/providers/producto_provider_test.dart
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:mi_app/providers/producto_provider.dart';
@@ -13473,46 +12986,46 @@ void main() {
 <hr>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_6_cobertura_de_tests">6. Cobertura de tests</h3>
 <div class="sect3">
-<h4 id="_ejecutar_tests_con_cobertura">Ejecutar tests con cobertura</h4>
+<h4 id="_6_cobertura_de_tests">6. Cobertura de tests</h4>
+<div class="sect4">
+<h5 id="_ejecutar_tests_con_cobertura">Ejecutar tests con cobertura</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">flutter test --coverage
+<pre class="highlight"><code class="language-bash" data-lang="bash">flutter test --coverage
 genhtml coverage/lcov.info -o coverage/html
 open coverage/html/index.html</code></pre>
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_configuración_de_coverage">Configuración de coverage</h4>
+<div class="sect4">
+<h5 id="_configuración_de_coverage">Configuración de coverage</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml"># pubspec.yaml
+<pre class="highlight"><code class="language-yaml" data-lang="yaml"># pubspec.yaml
 dev_dependencies:
   coverage: ^1.6.0</code></pre>
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_excluir_archivos_de_cobertura">Excluir archivos de cobertura</h4>
+<div class="sect4">
+<h5 id="_excluir_archivos_de_cobertura">Excluir archivos de cobertura</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// coverage.dart
+<pre class="highlight"><code class="language-dart" data-lang="dart">// coverage.dart
 // Archivos a excluir en analysis_options.yaml</code></pre>
 </div>
 </div>
 <hr>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_7_good_practices">7. Good Practices</h3>
 <div class="sect3">
-<h4 id="_nombrar_tests_descriptivamente">Nombrar tests descriptivamente</h4>
+<h4 id="_7_good_practices">7. Good Practices</h4>
+<div class="sect4">
+<h5 id="_nombrar_tests_descriptivamente">Nombrar tests descriptivamente</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">void main() {
+<pre class="highlight"><code class="language-dart" data-lang="dart">void main() {
   group('ProductoRepository', () {
     group('obtenerTodos', () {
       test('retorna lista de productos cuando la API responde correctamente', () {
@@ -13536,11 +13049,11 @@ dev_dependencies:
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_usaraaa_pattern">UsarAAA pattern</h4>
+<div class="sect4">
+<h5 id="_usaraaa_pattern">UsarAAA pattern</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">test('descripcion del test', () async {
+<pre class="highlight"><code class="language-dart" data-lang="dart">test('descripcion del test', () async {
   // Arrange (preparar)
   final producto = Producto(id: 1, nombre: 'Test', precio: 100);
   when(() =&gt; mockRepo.guardar(any())).thenAnswer((_) async =&gt; true);
@@ -13555,11 +13068,11 @@ dev_dependencies:
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_tests_independientes">Tests independientes</h4>
+<div class="sect4">
+<h5 id="_tests_independientes">Tests independientes</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">void main() {
+<pre class="highlight"><code class="language-dart" data-lang="dart">void main() {
   late Service service;
   late MockRepo mockRepo;
 
@@ -13585,10 +13098,10 @@ dev_dependencies:
 <hr>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_8_ejercicios_prácticos_del_módulo_9">8. Ejercicios prácticos del Módulo 9</h3>
 <div class="sect3">
-<h4 id="_ejercicio_tests_completos_para_una_app_de_tareas">Ejercicio: Tests completos para una app de tareas</h4>
+<h4 id="_8_ejercicios_prácticos_del_módulo_9">8. Ejercicios prácticos del Módulo 9</h4>
+<div class="sect4">
+<h5 id="_ejercicio_tests_completos_para_una_app_de_tareas">Ejercicio: Tests completos para una app de tareas</h5>
 <div class="paragraph">
 <p>Crear tests para: 1. Modelos (fromJson, toJson, copyWith) 2. Repositorio
 (CRUD con mocks) 3. Provider (estados y transiciones) 4. Widgets
@@ -13616,29 +13129,27 @@ practices y patrones AAA</p>
 </div>
 </div>
 </div>
-</div>
-<div class="sect1">
-<h2 id="_módulo_10_publicación_3_horas">Módulo 10: Publicación (3 horas)</h2>
-<div class="sectionbody">
-<hr>
 <div class="sect2">
-<h3 id="_1_preparación_para_producción">1. Preparación para producción</h3>
+<h3 id="_módulo_10_publicación_3_horas">Módulo 10: Publicación (3 horas)</h3>
+<hr>
 <div class="sect3">
-<h4 id="_configurar_versiones_y_build_numbers">Configurar versiones y build numbers</h4>
+<h4 id="_1_preparación_para_producción">1. Preparación para producción</h4>
+<div class="sect4">
+<h5 id="_configurar_versiones_y_build_numbers">Configurar versiones y build numbers</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml"># pubspec.yaml
+<pre class="highlight"><code class="language-yaml" data-lang="yaml"># pubspec.yaml
 version: 1.0.0+1
 # Formato: version.major.minor.patch+buildNumber
 # version: 1.2.3+45 significa versión 1.2.3 build 45</code></pre>
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_modos_de_compilación">Modos de compilación</h4>
+<div class="sect4">
+<h5 id="_modos_de_compilación">Modos de compilación</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># Debug (desarrollo)
+<pre class="highlight"><code class="language-bash" data-lang="bash"># Debug (desarrollo)
 flutter run
 
 # Profile (rendimiento)
@@ -13649,11 +13160,11 @@ flutter run --release</code></pre>
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_limpiar_proyecto_antes_de_publicar">Limpiar proyecto antes de publicar</h4>
+<div class="sect4">
+<h5 id="_limpiar_proyecto_antes_de_publicar">Limpiar proyecto antes de publicar</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># Limpiar build anterior
+<pre class="highlight"><code class="language-bash" data-lang="bash"># Limpiar build anterior
 flutter clean
 
 # Obtener dependencias
@@ -13673,16 +13184,16 @@ flutter build ios --release</code></pre>
 <hr>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_2_firmado_de_apps_signing">2. Firmado de apps (Signing)</h3>
 <div class="sect3">
-<h4 id="_android">Android</h4>
+<h4 id="_2_firmado_de_apps_signing">2. Firmado de apps (Signing)</h4>
+<div class="sect4">
+<h5 id="_android">Android</h5>
 <div class="paragraph">
 <p><strong>Generar keystore:</strong></p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">keytool -genkey -v -keystore mi-app-key.jks \
+<pre class="highlight"><code class="language-bash" data-lang="bash">keytool -genkey -v -keystore mi-app-key.jks \
   -keyalg RSA -keysize 2048 -validity 10000 \
   -alias mi-app-alias</code></pre>
 </div>
@@ -13692,7 +13203,7 @@ flutter build ios --release</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-properties hljs" data-lang="properties">storePassword=mi_password
+<pre class="highlight"><code class="language-properties" data-lang="properties">storePassword=mi_password
 keyPassword=mi_key_password
 keyAlias=mi-app-alias
 storeFile=../mi-app-key.jks</code></pre>
@@ -13703,7 +13214,7 @@ storeFile=../mi-app-key.jks</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-groovy hljs" data-lang="groovy">// Al inicio del archivo
+<pre class="highlight"><code class="language-groovy" data-lang="groovy">// Al inicio del archivo
 def keystoreProperties = new Properties()
 def keystorePropertiesFile = rootProject.file('key.properties')
 if (keystorePropertiesFile.exists()) {
@@ -13738,7 +13249,7 @@ android {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-proguard hljs" data-lang="proguard"># Flutter
+<pre class="highlight"><code class="language-proguard" data-lang="proguard"># Flutter
 -keep class io.flutter.app.** { *; }
 -keep class io.flutter.plugin.** { *; }
 -keep class io.flutter.util.** { *; }
@@ -13755,7 +13266,7 @@ android {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># APK para testing
+<pre class="highlight"><code class="language-bash" data-lang="bash"># APK para testing
 flutter build apk --release
 
 # App Bundle para Google Play
@@ -13763,8 +13274,8 @@ flutter build appbundle --release</code></pre>
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_ios">iOS</h4>
+<div class="sect4">
+<h5 id="_ios">iOS</h5>
 <div class="paragraph">
 <p><strong>Configurar en Xcode:</strong></p>
 </div>
@@ -13792,7 +13303,7 @@ flutter build appbundle --release</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;key&gt;CFBundleIdentifier&lt;/key&gt;
+<pre class="highlight"><code class="language-xml" data-lang="xml">&lt;key&gt;CFBundleIdentifier&lt;/key&gt;
 &lt;string&gt;com.miempresa.miapp&lt;/string&gt;</code></pre>
 </div>
 </div>
@@ -13801,7 +13312,7 @@ flutter build appbundle --release</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># Build sin firmar
+<pre class="highlight"><code class="language-bash" data-lang="bash"># Build sin firmar
 flutter build ios --release
 
 # Build con firmado automático
@@ -13813,7 +13324,7 @@ flutter build ios --release --codesign</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># Abrir Xcode
+<pre class="highlight"><code class="language-bash" data-lang="bash"># Abrir Xcode
 open ios/Runner.xcworkspace
 
 # En Xcode: Product &gt; Archive &gt; Distribute App</code></pre>
@@ -13822,10 +13333,10 @@ open ios/Runner.xcworkspace
 <hr>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_3_google_play_store">3. Google Play Store</h3>
 <div class="sect3">
-<h4 id="_requisitos">Requisitos</h4>
+<h4 id="_3_google_play_store">3. Google Play Store</h4>
+<div class="sect4">
+<h5 id="_requisitos">Requisitos</h5>
 <div class="ulist">
 <ul>
 <li>
@@ -13859,14 +13370,14 @@ open ios/Runner.xcworkspace
 </ul>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_preparar_recursos">Preparar recursos</h4>
+<div class="sect4">
+<h5 id="_preparar_recursos">Preparar recursos</h5>
 <div class="paragraph">
 <p><strong>Icono de la app:</strong></p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml"># pubspec.yaml
+<pre class="highlight"><code class="language-yaml" data-lang="yaml"># pubspec.yaml
 flutter_launcher_icons:
   android: true
   ios: true
@@ -13880,7 +13391,7 @@ flutter_launcher_icons:
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">flutter pub run flutter_launcher_icons</code></pre>
+<pre class="highlight"><code class="language-bash" data-lang="bash">flutter pub run flutter_launcher_icons</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -13903,8 +13414,8 @@ flutter_launcher_icons:
 </ul>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_subir_a_google_play_console">Subir a Google Play Console</h4>
+<div class="sect4">
+<h5 id="_subir_a_google_play_console">Subir a Google Play Console</h5>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -13944,7 +13455,7 @@ flutter_launcher_icons:
 <div class="ulist">
 <ul>
 <li>
-<p>Ir a ``Lanzamientos de producción''</p>
+<p>Ir a &#8220;Lanzamientos de producción&#8221;</p>
 </li>
 <li>
 <p>Crear nuevo lanzamiento</p>
@@ -13987,11 +13498,11 @@ flutter_launcher_icons:
 </ol>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_configurar_firmado_automático">Configurar firmado automático</h4>
+<div class="sect4">
+<h5 id="_configurar_firmado_automático">Configurar firmado automático</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml"># .github/workflows/release.yml
+<pre class="highlight"><code class="language-yaml" data-lang="yaml"># .github/workflows/release.yml
 name: Release to Google Play
 
 on:
@@ -14031,10 +13542,10 @@ jobs:
 <hr>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_4_app_store_ios">4. App Store (iOS)</h3>
 <div class="sect3">
-<h4 id="_requisitos_2">Requisitos</h4>
+<h4 id="_4_app_store_ios">4. App Store (iOS)</h4>
+<div class="sect4">
+<h5 id="_requisitos_2">Requisitos</h5>
 <div class="ulist">
 <ul>
 <li>
@@ -14065,8 +13576,8 @@ jobs:
 </ul>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_app_store_connect">App Store Connect</h4>
+<div class="sect4">
+<h5 id="_app_store_connect">App Store Connect</h5>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -14146,11 +13657,11 @@ jobs:
 </ol>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_fastlane_para_ios">Fastlane para iOS</h4>
+<div class="sect4">
+<h5 id="_fastlane_para_ios">Fastlane para iOS</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-ruby hljs" data-lang="ruby"># ios/fastlane/Fastfile
+<pre class="highlight"><code class="language-ruby" data-lang="ruby"># ios/fastlane/Fastfile
 default_platform(:ios)
 
 platform :ios do
@@ -14183,13 +13694,13 @@ end</code></pre>
 <hr>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_5_cicd_con_github_actions">5. CI/CD con GitHub Actions</h3>
 <div class="sect3">
-<h4 id="_workflow_completo">Workflow completo</h4>
+<h4 id="_5_cicd_con_github_actions">5. CI/CD con GitHub Actions</h4>
+<div class="sect4">
+<h5 id="_workflow_completo">Workflow completo</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml"># .github/workflows/ci-cd.yml
+<pre class="highlight"><code class="language-yaml" data-lang="yaml"># .github/workflows/ci-cd.yml
 name: Flutter CI/CD
 
 on:
@@ -14320,10 +13831,10 @@ jobs:
 <hr>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_6_actualizaciones_y_versionado">6. Actualizaciones y versionado</h3>
 <div class="sect3">
-<h4 id="_versionado_semántico">Versionado semántico</h4>
+<h4 id="_6_actualizaciones_y_versionado">6. Actualizaciones y versionado</h4>
+<div class="sect4">
+<h5 id="_versionado_semántico">Versionado semántico</h5>
 <div class="literalblock">
 <div class="content">
 <pre>MAJOR.MINOR.PATCH+BUILD
@@ -14335,17 +13846,17 @@ BUILD: Número de build incremental</pre>
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_actualizar_versión">Actualizar versión</h4>
+<div class="sect4">
+<h5 id="_actualizar_versión">Actualizar versión</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml"># pubspec.yaml
+<pre class="highlight"><code class="language-yaml" data-lang="yaml"># pubspec.yaml
 version: 1.2.3+45</code></pre>
 </div>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// Obtener versión programáticamente
+<pre class="highlight"><code class="language-dart" data-lang="dart">// Obtener versión programáticamente
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -14362,16 +13873,16 @@ class VersionService {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">dependencies:
+<pre class="highlight"><code class="language-yaml" data-lang="yaml">dependencies:
   package_info_plus: ^4.0.0</code></pre>
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_changelog">Changelog</h4>
+<div class="sect4">
+<h5 id="_changelog">Changelog</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-markdown hljs" data-lang="markdown"># CHANGELOG.md
+<pre class="highlight"><code class="language-markdown" data-lang="markdown"># CHANGELOG.md
 
 ## [1.2.0] - 2024-01-15
 
@@ -14397,19 +13908,19 @@ class VersionService {
 <hr>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_7_monetización">7. Monetización</h3>
 <div class="sect3">
-<h4 id="_ads_con_admob">Ads con AdMob</h4>
+<h4 id="_7_monetización">7. Monetización</h4>
+<div class="sect4">
+<h5 id="_ads_con_admob">Ads con AdMob</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">dependencies:
+<pre class="highlight"><code class="language-yaml" data-lang="yaml">dependencies:
   google_mobile_ads: ^4.0.0</code></pre>
 </div>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">import 'package:google_mobile_ads/google_mobile_ads.dart';
+<pre class="highlight"><code class="language-dart" data-lang="dart">import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 class AdService {
   static const String bannerAdUnitId = 'ca-app-pub-xxx/yyy';
@@ -14458,17 +13969,17 @@ class AdService {
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_compras_dentro_de_la_app_in_app_purchases">Compras dentro de la app (In-App Purchases)</h4>
+<div class="sect4">
+<h5 id="_compras_dentro_de_la_app_in_app_purchases">Compras dentro de la app (In-App Purchases)</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">dependencies:
+<pre class="highlight"><code class="language-yaml" data-lang="yaml">dependencies:
   in_app_purchase: ^3.1.0</code></pre>
 </div>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">import 'package:in_app_purchase/in_app_purchase.dart';
+<pre class="highlight"><code class="language-dart" data-lang="dart">import 'package:in_app_purchase/in_app_purchase.dart';
 
 class PurchaseService {
   final InAppPurchase _inAppPurchase = InAppPurchase.instance;
@@ -14533,19 +14044,19 @@ class PurchaseService {
 <hr>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_8_analytics_y_crashlytics">8. Analytics y Crashlytics</h3>
 <div class="sect3">
-<h4 id="_firebase_analytics">Firebase Analytics</h4>
+<h4 id="_8_analytics_y_crashlytics">8. Analytics y Crashlytics</h4>
+<div class="sect4">
+<h5 id="_firebase_analytics">Firebase Analytics</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">dependencies:
+<pre class="highlight"><code class="language-yaml" data-lang="yaml">dependencies:
   firebase_analytics: ^10.0.0</code></pre>
 </div>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">import 'package:firebase_analytics/firebase_analytics.dart';
+<pre class="highlight"><code class="language-dart" data-lang="dart">import 'package:firebase_analytics/firebase_analytics.dart';
 
 class AnalyticsService {
   final FirebaseAnalytics _analytics = FirebaseAnalytics.instance;
@@ -14598,17 +14109,17 @@ class AnalyticsService {
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_firebase_crashlytics">Firebase Crashlytics</h4>
+<div class="sect4">
+<h5 id="_firebase_crashlytics">Firebase Crashlytics</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">dependencies:
+<pre class="highlight"><code class="language-yaml" data-lang="yaml">dependencies:
   firebase_crashlytics: ^3.0.0</code></pre>
 </div>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+<pre class="highlight"><code class="language-dart" data-lang="dart">import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -14656,10 +14167,10 @@ class CrashlyticsService {
 <hr>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_9_ejercicios_prácticos_del_módulo_10">9. Ejercicios prácticos del Módulo 10</h3>
 <div class="sect3">
-<h4 id="_ejercicio_preparar_app_para_producción">Ejercicio: Preparar app para producción</h4>
+<h4 id="_9_ejercicios_prácticos_del_módulo_10">9. Ejercicios prácticos del Módulo 10</h4>
+<div class="sect4">
+<h5 id="_ejercicio_preparar_app_para_producción">Ejercicio: Preparar app para producción</h5>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -14690,7 +14201,7 @@ class CrashlyticsService {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-markdown hljs" data-lang="markdown">## Pre-Publicación Checklist
+<pre class="highlight"><code class="language-markdown" data-lang="markdown">## Pre-Publicación Checklist
 
 ### Configuración
 - [ ] Versión actualizada en pubspec.yaml
@@ -14738,10 +14249,8 @@ Crashlytics</p>
 </div>
 </div>
 </div>
-</div>
-<div class="sect1">
-<h2 id="_cierre_del_temario_flutter_30h">Cierre del Temario Flutter 30h</h2>
-<div class="sectionbody">
+<div class="sect2">
+<h3 id="_cierre_del_temario_flutter_30h">Cierre del Temario Flutter 30h</h3>
 <div class="paragraph">
 <p><strong>Resumen del curso completo:</strong></p>
 </div>
@@ -14813,18 +14322,10 @@ Crashlytics</p>
 </table>
 </div>
 </div>
-</div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-06-22 08:24:24 +0200
+Last updated 2026-07-06 07:47:18 +0200
 </div>
 </div>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.3/highlight.min.js"></script>
-<script>
-if (!hljs.initHighlighting.called) {
-  hljs.initHighlighting.called = true
-  ;[].slice.call(document.querySelectorAll('pre.highlight > code[data-lang]')).forEach(function (el) { hljs.highlightBlock(el) })
-}
-</script>
 </body>
 </html>

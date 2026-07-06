@@ -1,0 +1,3470 @@
+:source-highlighter: pygments
+:pygments-style: friendly
+:pygments-css: class
+
+== Módulo Completo: Navegación en Flutter
+
+=== Índice
+
+[arabic]
+. link:#introducción-a-la-navegación[Introducción a la Navegación]
+. link:#taxonomía-de-navegación[Taxonomía de Navegación]
+. link:#navegación-básica-con-navigator[Navegación Básica con Navigator]
+. link:#gestión-de-la-pila-de-navegación[Gestión de la Pila de
+Navegación]
+. link:#paso-de-datos-entre-pantallas[Paso de Datos entre Pantallas]
+. link:#rutas-nombradas[Rutas Nombradas]
+. link:++#drawer---menú-lateral++[Drawer - Menú Lateral]
+. link:++#bottomnavigationbar---navegación-inferior++[BottomNavigationBar
+- Navegación Inferior]
+. link:++#tabbar---pestañas++[TabBar - Pestañas]
+. link:#navegación-anidada[Navegación Anidada]
+. link:++#gorouter---navegación-declarativa++[GoRouter - Navegación
+Declarativa]
+. link:#deep-linking[Deep Linking]
+. link:#animaciones-de-transición[Animaciones de Transición]
+. link:#patrones-de-navegación[Patrones de Navegación]
+. link:#ejemplos-prácticos-completos[Ejemplos Prácticos Completos]
+. link:#mejores-prácticas[Mejores Prácticas]
+
+'''''
+
+=== Introducción a la Navegación
+
+==== ¿Qué es la Navegación?
+
+La navegación en Flutter es el proceso de moverse entre diferentes
+pantallas (rutas) dentro de una aplicación. Flutter proporciona un
+sistema de navegación basado en una pila (stack), donde las pantallas se
+apilan y desapilan según el usuario navega.
+
+==== Conceptos Fundamentales
+
+....
+┌─────────────────────────────────────────┐
+│           Pila de Navegación              │
+├─────────────────────────────────────────┤
+│  ┌─────────────────────────────────────┐ │
+│  │     Pantalla C (tope)                │ │
+│  ├─────────────────────────────────────┤ │
+│  │     Pantalla B                       │ │
+│  ├─────────────────────────────────────┤ │
+│  │     Pantalla A (base)                │ │
+│  └─────────────────────────────────────┘ │
+└─────────────────────────────────────────┘
+
+Navigator.push()   → Añade pantalla a la pila
+Navigator.pop()    → Elimina pantalla del tope
+....
+
+==== Tipos de Navegación
+
+[cols=",,",options="header",]
+|===
+|Tipo |Descripción |Ejemplo
+|Lineal |Secuencia de pantallas |Wizard, Onboarding
+|Jerárquica |Estructura de árbol |Configuración → Subconfiguración
+|Tab |Navegación entre pestañas |Bottom nav, Tab bar
+|Drawer |Menú lateral |Menú hamburguesa
+|Modal |Pantalla temporal |Diálogos, Bottom sheets
+|Declarativa |Rutas definidas |GoRouter, auto_route
+|===
+
+'''''
+
+=== Taxonomía de Navegación
+
+==== Elementos de Navegación
+
+....
+Navegación
+├── Implícita (Navigator)
+│   ├── push / pop
+│   ├── pushNamed / popNamed
+│   ├── pushReplacement
+│   ├── pushAndRemoveUntil
+│   └── popUntil
+│
+├── Declarativa (Rutas)
+│   ├── Rutas nombradas (onGenerateRoute)
+│   ├── GoRouter
+│   ├── auto_route
+│   └── beamer
+│
+├── Estructuras
+│   ├── Lineal (pila simple)
+│   ├── Tab-based (BottomNavigationBar)
+│   ├── Drawer-based (menú lateral)
+│   ├── Híbrida (tabs + drawer)
+│   └── Anidada (navigator interno)
+│
+├── Componentes
+│   ├── AppBar (botones de acción)
+│   ├── Drawer (menú lateral)
+│   ├── BottomNavigationBar (tabs inferiores)
+│   ├── TabBar (pestañas superiores)
+│   └── FloatingActionButton (acción rápida)
+│
+└── Especiales
+    ├── Deep linking (URLs)
+    ├── Modal routes (diálogos)
+    ├── Authentication flow
+    └── Onboarding flow
+....
+
+==== Decisiones de Navegación
+
+....
+┌─────────────────────────────────────────────────────────────┐
+│                   ¿Cómo navegar?                             │
+├─────────────────────────────────────────────────────────────┤
+│                                                              │
+│  ¿Navegación simple?  ──→ Navigator.push/pop                │
+│                                                              │
+│  ¿Múltiples secciones? ──→ BottomNavigationBar              │
+│                                                              │
+│  ¿Menú extenso? ──→ Drawer                                   │
+│                                                              │
+│  ¿Pestañas en contexto? ──→ TabBar                          │
+│                                                              │
+│  ¿Navegación compleja? ──→ GoRouter                         │
+│                                                              │
+│  ¿Deep links? ──→ GoRouter + deep linking                   │
+│                                                              │
+│  ¿Auth flow? ──→ GoRouter + guards                          │
+│                                                              │
+└─────────────────────────────────────────────────────────────┘
+....
+
+'''''
+
+=== Navegación Básica con Navigator
+
+==== Navigator.push y Navigator.pop
+
+[source,dart]
+----
+// Pantalla inicial (Home)
+class HomeScreen extends StatelessWidget {
+  const HomeScreen({super.key});
+  
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Inicio')),
+      body: Center(
+        child: ElevatedButton(
+          onPressed: () {
+            // Navegar a una nueva pantalla
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const DetailScreen(),
+              ),
+            );
+          },
+          child: const Text('Ir a Detalles'),
+        ),
+      ),
+    );
+  }
+}
+
+// Pantalla de detalle
+class DetailScreen extends StatelessWidget {
+  const DetailScreen({super.key});
+  
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Detalles'),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            // Volver a la pantalla anterior
+            Navigator.pop(context);
+          },
+        ),
+      ),
+      body: Center(
+        child: ElevatedButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          child: const Text('Volver'),
+        ),
+      ),
+    );
+  }
+}
+----
+
+==== Tipos de Push
+
+[source,dart]
+----
+class NavigationExamples extends StatelessWidget {
+  const NavigationExamples({super.key});
+  
+  void _basicPush(BuildContext context) {
+    // Push simple: añade a la pila
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const ScreenA()),
+    );
+    // Pila: [Home, ScreenA]
+  }
+  
+  void _pushReplacement(BuildContext context) {
+    // PushReplacement: reemplaza la pantalla actual
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => const ScreenB()),
+    );
+    // Pila: [Home] → [ScreenB]
+    // Útil para: login → home, splash → main
+  }
+  
+  void _pushAndRemoveUntil(BuildContext context) {
+    // PushAndRemoveUntil: añade y elimina todo hasta cierta ruta
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (context) => const HomeScreen()),
+      (route) => false, // Elimina todas las rutas anteriores
+    );
+    // Pila: [HomeScreen]
+    // Útil para: logout, completar wizard, resetear navegación
+  }
+  
+  void _pushAndRemoveUntilCondition(BuildContext context) {
+    // PushAndRemoveUntil con condición
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (context) => const ScreenC()),
+      (route) => route.isFirst, // Mantiene solo la primera ruta
+    );
+    // Pila: [Home, ScreenC]
+    // Útil para: volver a home después de flujo complejo
+  }
+  
+  void _popUntil(BuildContext context) {
+    // PopUntil: retrocede hasta cierta condición
+    Navigator.popUntil(
+      context,
+      (route) => route.isFirst, // Retrocede al inicio
+    );
+    // Pila: [Home]
+    // Útil para: cancelar flujo múltiple
+  }
+  
+  void _popUntilNamed(BuildContext context) {
+    // PopUntil con ruta nombrada
+    Navigator.popUntil(
+      context,
+      ModalRoute.withName('/home'),
+    );
+  }
+  
+  void _maybePop(BuildContext context) {
+    // MaybePop: solo hace pop si es posible
+    // Útil para manejar botón back en Android
+    Navigator.maybePop(context);
+  }
+  
+  void _canPop(BuildContext context) {
+    // Verificar si se puede hacer pop
+    if (Navigator.canPop(context)) {
+      Navigator.pop(context);
+    }
+  }
+  
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: ListView(
+        children: [
+          ListTile(
+            title: const Text('Push básico'),
+            onTap: () => _basicPush(context),
+          ),
+          ListTile(
+            title: const Text('Push replacement'),
+            onTap: () => _pushReplacement(context),
+          ),
+          ListTile(
+            title: const Text('Push and remove all'),
+            onTap: () => _pushAndRemoveUntil(context),
+          ),
+          ListTile(
+            title: const Text('Push and keep first'),
+            onTap: () => _pushAndRemoveUntilCondition(context),
+          ),
+          ListTile(
+            title: const Text('Pop until home'),
+            onTap: () => _popUntil(context),
+          ),
+        ],
+      ),
+    );
+  }
+}
+----
+
+==== Pop con Resultado
+
+[source,dart]
+----
+// Pantalla que espera resultado
+class SelectionScreen extends StatefulWidget {
+  const SelectionScreen({super.key});
+  
+  @override
+  State<SelectionScreen> createState() => _SelectionScreenState();
+}
+
+class _SelectionScreenState extends State<SelectionScreen> {
+  String? _selectedItem;
+  
+  Future<void> _navigateAndSelect(BuildContext context) async {
+    // Navegar y esperar resultado
+    final result = await Navigator.push<String>(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const ItemListScreen(),
+        fullscreenDialog: true, // Se muestra como diálogo en iOS
+      ),
+    );
+    
+    // Procesar resultado
+    if (result != null) {
+      setState(() {
+        _selectedItem = result;
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Seleccionado: $result')),
+      );
+    }
+  }
+  
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Selección')),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text('Seleccionado: ${_selectedItem ?? "Ninguno"}'),
+            const SizedBox(height: 16),
+            ElevatedButton(
+              onPressed: () => _navigateAndSelect(context),
+              child: const Text('Seleccionar item'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// Pantalla que devuelve resultado
+class ItemListScreen extends StatelessWidget {
+  const ItemListScreen({super.key});
+  
+  @override
+  Widget build(BuildContext context) {
+    final items = ['Item 1', 'Item 2', 'Item 3', 'Item 4'];
+    
+    return Scaffold(
+      appBar: AppBar(title: const Text('Lista de Items')),
+      body: ListView.builder(
+        itemCount: items.length,
+        itemBuilder: (context, index) {
+          return ListTile(
+            title: Text(items[index]),
+            onTap: () {
+              // Devolver resultado y cerrar
+              Navigator.pop(context, items[index]);
+            },
+          );
+        },
+      ),
+    );
+  }
+}
+----
+
+'''''
+
+=== Gestión de la Pila de Navegación
+
+==== Entendiendo la Pila
+
+[source,dart]
+----
+class NavigationStackExample extends StatefulWidget {
+  const NavigationStackExample({super.key});
+  
+  @override
+  State<NavigationStackExample> createState() => _NavigationStackExampleState();
+}
+
+class _NavigationStackExampleState extends State<NavigationStackExample> {
+  List<String> _navigationStack = ['Home'];
+  
+  void _updateStack() {
+    setState(() {
+      // Obtener información de la pila actual
+      final routes = <String>[];
+      Navigator.of(context).widget;
+      // Nota: Flutter no expone directamente la pila, 
+      // esto es ilustrativo
+    });
+  }
+  
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Pila de Navegación'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.list),
+            onPressed: () => _showStack(context),
+          ),
+        ],
+      ),
+      body: ListView(
+        children: [
+          _buildStackItem('Home', 'Pantalla base'),
+          _buildStackItem('Screen A', 'Nivel 1'),
+          _buildStackItem('Screen B', 'Nivel 2'),
+          _buildStackItem('Screen C', 'Nivel 3'),
+        ],
+      ),
+    );
+  }
+  
+  Widget _buildStackItem(String screen, String description) {
+    return Card(
+      margin: const EdgeInsets.all(8),
+      child: ListTile(
+        leading: const Icon(Icons.layers),
+        title: Text(screen),
+        subtitle: Text(description),
+        trailing: const Icon(Icons.arrow_forward),
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => _ScreenBuilder(screen, description),
+            ),
+          );
+        },
+      ),
+    );
+  }
+  
+  void _showStack(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Pila Actual'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Text('Simulación de la pila:'),
+              const SizedBox(height: 8),
+              ...['Screen C', 'Screen B', 'Screen A', 'Home']
+                  .map((s) => Chip(label: Text(s))),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('Cerrar'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+}
+
+Widget _ScreenBuilder(String title, String description) {
+  return Scaffold(
+    appBar: AppBar(title: Text(title)),
+    body: Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(title, style: const TextStyle(fontSize: 24)),
+          Text(description),
+          const SizedBox(height: 24),
+          ElevatedButton(
+            onPressed: () {},
+            child: const Text('Push Next'),
+          ),
+          ElevatedButton(
+            onPressed: () {},
+            child: const Text('Pop'),
+          ),
+        ],
+      ),
+    ),
+  );
+}
+----
+
+==== WillPopScope - Controlar Botón Back
+
+[source,dart]
+----
+class BackButtonControl extends StatefulWidget {
+  const BackButtonControl({super.key});
+  
+  @override
+  State<BackButtonControl> createState() => _BackButtonControlState();
+}
+
+class _BackButtonControlState extends State<BackButtonControl> {
+  bool _hasUnsavedChanges = false;
+  final TextEditingController _controller = TextEditingController();
+  
+  @override
+  void initState() {
+    super.initState();
+    _controller.addListener(() {
+      setState(() {
+        _hasUnsavedChanges = _controller.text.isNotEmpty;
+      });
+    });
+  }
+  
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+  
+  Future<bool> _onWillPop() async {
+    if (!_hasUnsavedChanges) {
+      return true; // Permitir salir
+    }
+    
+    // Mostrar diálogo de confirmación
+    final shouldPop = await showDialog<bool>(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('¿Descartar cambios?'),
+          content: const Text(
+            'Tienes cambios sin guardar. ¿Estás seguro de que quieres salir?',
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context, false),
+              child: const Text('Cancelar'),
+            ),
+            ElevatedButton(
+              onPressed: () => Navigator.pop(context, true),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.red,
+              ),
+              child: const Text('Descartar'),
+            ),
+          ],
+        );
+      },
+    );
+    
+    return shouldPop ?? false;
+  }
+  
+  @override
+  Widget build(BuildContext context) {
+    return PopScope(
+      canPop: !_hasUnsavedChanges,
+      onPopInvokedWithResult: (didPop, result) async {
+        if (didPop) {
+          return;
+        }
+        
+        final shouldPop = await _onWillPop();
+        if (shouldPop && context.mounted) {
+          Navigator.pop(context);
+        }
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Control de Back'),
+        ),
+        body: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            children: [
+              TextField(
+                controller: _controller,
+                decoration: const InputDecoration(
+                  labelText: 'Escribe algo...',
+                  helperText: 'Intenta salir con cambios',
+                ),
+              ),
+              if (_hasUnsavedChanges)
+                const Padding(
+                  padding: EdgeInsets.only(top: 16),
+                  child: Text(
+                    'Presiona back para ver el diálogo',
+                    style: TextStyle(color: Colors.orange),
+                  ),
+                ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+----
+
+==== Navegación con Argumentos
+
+[source,dart]
+----
+// Definir argumentos tipados
+class ProductDetailArgs {
+  final int productId;
+  final String? productName;
+  final bool isEditable;
+  
+  const ProductDetailArgs({
+    required this.productId,
+    this.productName,
+    this.isEditable = false,
+  });
+}
+
+// Pantalla que recibe argumentos
+class ProductDetailScreen extends StatelessWidget {
+  final ProductDetailArgs args;
+  
+  const ProductDetailScreen({
+    super.key,
+    required this.args,
+  });
+  
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(args.productName ?? 'Producto ${args.productId}'),
+        actions: [
+          if (args.isEditable)
+            IconButton(
+              icon: const Icon(Icons.edit),
+              onPressed: () {
+                // Editar producto
+              },
+            ),
+        ],
+      ),
+      body: Center(
+        child: Text('Producto ID: ${args.productId}'),
+      ),
+    );
+  }
+}
+
+// Navegación con argumentos
+class ProductListScreen extends StatelessWidget {
+  const ProductListScreen({super.key});
+  
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Productos')),
+      body: ListView.builder(
+        itemCount: 10,
+        itemBuilder: (context, index) {
+          return ListTile(
+            title: Text('Producto ${index + 1}'),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ProductDetailScreen(
+                    args: ProductDetailArgs(
+                      productId: index + 1,
+                      productName: 'Producto ${index + 1}',
+                      isEditable: index % 2 == 0,
+                    ),
+                  ),
+                ),
+              );
+            },
+          );
+        },
+      ),
+    );
+  }
+}
+----
+
+'''''
+
+=== Paso de Datos entre Pantallas
+
+==== Datos Directos (Constructor)
+
+[source,dart]
+----
+// Enviar datos vía constructor
+class SenderScreen extends StatelessWidget {
+  const SenderScreen({super.key});
+  
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Enviar Datos')),
+      body: Center(
+        child: ElevatedButton(
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ReceiverScreen(
+                  title: 'Datos Recibidos',
+                  message: 'Hola desde otra pantalla',
+                  count: 42,
+                  items: ['Item 1', 'Item 2', 'Item 3'],
+                ),
+              ),
+            );
+          },
+          child: const Text('Enviar datos'),
+        ),
+      ),
+    );
+  }
+}
+
+class ReceiverScreen extends StatelessWidget {
+  final String title;
+  final String message;
+  final int count;
+  final List<String> items;
+  
+  const ReceiverScreen({
+    super.key,
+    required this.title,
+    required this.message,
+    required this.count,
+    required this.items,
+  });
+  
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text(title)),
+      body: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('Mensaje: $message'),
+            Text('Contador: $count'),
+            const SizedBox(height: 16),
+            const Text('Items:'),
+            ...items.map((item) => Text('• $item')),
+          ],
+        ),
+      ),
+    );
+  }
+}
+----
+
+==== Datos con Callbacks
+
+[source,dart]
+----
+class FormScreen extends StatefulWidget {
+  final Function(User) onUserCreated;
+  final User? initialUser;
+  
+  const FormScreen({
+    super.key,
+    required this.onUserCreated,
+    this.initialUser,
+  });
+  
+  @override
+  State<FormScreen> createState() => _FormScreenState();
+}
+
+class _FormScreenState extends State<FormScreen> {
+  final _formKey = GlobalKey<FormState>();
+  late TextEditingController _nameController;
+  late TextEditingController _emailController;
+  
+  @override
+  void initState() {
+    super.initState();
+    _nameController = TextEditingController(text: widget.initialUser?.name ?? '');
+    _emailController = TextEditingController(text: widget.initialUser?.email ?? '');
+  }
+  
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _emailController.dispose();
+    super.dispose();
+  }
+  
+  void _submit() {
+    if (_formKey.currentState!.validate()) {
+      final user = User(
+        id: widget.initialUser?.id ?? DateTime.now().millisecondsSinceEpoch,
+        name: _nameController.text,
+        email: _emailController.text,
+      );
+      
+      // Llamar callback
+      widget.onUserCreated(user);
+      
+      // Volver
+      Navigator.pop(context);
+    }
+  }
+  
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(widget.initialUser != null ? 'Editar Usuario' : 'Nuevo Usuario'),
+      ),
+      body: Form(
+        key: _formKey,
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            children: [
+              TextFormField(
+                controller: _nameController,
+                decoration: const InputDecoration(labelText: 'Nombre'),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Por favor introduce tu nombre';
+                  }
+                  return null;
+                },
+              ),
+              TextFormField(
+                controller: _emailController,
+                decoration: const InputDecoration(labelText: 'Email'),
+                validator: (value) {
+                  if (value == null || !value.contains('@')) {
+                    return 'Email no válido';
+                  }
+                  return null;
+                },
+              ),
+              const SizedBox(height: 24),
+              ElevatedButton(
+                onPressed: _submit,
+                child: const Text('Guardar'),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+// Uso
+class UserListScreen extends StatefulWidget {
+  const UserListScreen({super.key});
+  
+  @override
+  State<UserListScreen> createState() => _UserListScreenState();
+}
+
+class _UserListScreenState extends State<UserListScreen> {
+  final List<User> _users = [];
+  
+  void _addUser(User user) {
+    setState(() {
+      _users.add(user);
+    });
+  }
+  
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Usuarios')),
+      body: _users.isEmpty
+          ? const Center(child: Text('No hay usuarios'))
+          : ListView.builder(
+              itemCount: _users.length,
+              itemBuilder: (context, index) {
+                final user = _users[index];
+                return ListTile(
+                  title: Text(user.name),
+                  subtitle: Text(user.email),
+                );
+              },
+            ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => FormScreen(
+                onUserCreated: _addUser,
+              ),
+            ),
+          );
+        },
+        child: const Icon(Icons.add),
+      ),
+    );
+  }
+}
+----
+
+==== Datos con Provider/Riverpod
+
+[source,dart]
+----
+// Con Provider
+class UserModel extends ChangeNotifier {
+  List<User> _users = [];
+  
+  List<User> get users => _users;
+  
+  void addUser(User user) {
+    _users.add(user);
+    notifyListeners();
+  }
+  
+  void updateUser(User user) {
+    final index = _users.indexWhere((u) => u.id == user.id);
+    if (index != -1) {
+      _users[index] = user;
+      notifyListeners();
+    }
+  }
+  
+  void deleteUser(int id) {
+    _users.removeWhere((u) => u.id == id);
+    notifyListeners();
+  }
+}
+
+// Provider setup
+void main() {
+  runApp(
+    ChangeNotifierProvider(
+      create: (_) => UserModel(),
+      child: const MyApp(),
+    ),
+  );
+}
+
+// Pantalla de lista
+class UserListScreen extends StatelessWidget {
+  const UserListScreen({super.key});
+  
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Usuarios')),
+      body: Consumer<UserModel>(
+        builder: (context, userModel, child) {
+          if (userModel.users.isEmpty) {
+            return const Center(child: Text('No hay usuarios'));
+          }
+          
+          return ListView.builder(
+            itemCount: userModel.users.length,
+            itemBuilder: (context, index) {
+              final user = userModel.users[index];
+              return ListTile(
+                title: Text(user.name),
+                subtitle: Text(user.email),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => UserDetailScreen(userId: user.id),
+                    ),
+                  );
+                },
+              );
+            },
+          );
+        },
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const UserFormScreen(),
+            ),
+          );
+        },
+        child: const Icon(Icons.add),
+      ),
+    );
+  }
+}
+
+// Pantalla de detalle
+class UserDetailScreen extends StatelessWidget {
+  final int userId;
+  
+  const UserDetailScreen({super.key, required this.userId});
+  
+  @override
+  Widget build(BuildContext context) {
+    final userModel = Provider.of<UserModel>(context);
+    final user = userModel.users.firstWhere((u) => u.id == userId);
+    
+    return Scaffold(
+      appBar: AppBar(title: Text(user.name)),
+      body: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          children: [
+            Text('Email: ${user.email}'),
+            const SizedBox(height: 24),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => UserFormScreen(userId: userId),
+                  ),
+                );
+              },
+              child: const Text('Editar'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+----
+
+'''''
+
+=== Rutas Nombradas
+
+==== Configuración Básica
+
+[source,dart]
+----
+// Definir rutas
+class AppRoutes {
+  static const String home = '/';
+  static const String login = '/login';
+  static const String register = '/register';
+  static const String dashboard = '/dashboard';
+  static const String profile = '/profile';
+  static const String settings = '/settings';
+  static const String productDetail = '/product/:id';
+  static const String userDetail = '/user/:id';
+}
+
+// Configuración en MaterialApp
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+  
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Mi App',
+      initialRoute: AppRoutes.home,
+      routes: {
+        AppRoutes.home: (context) => const HomeScreen(),
+        AppRoutes.login: (context) => const LoginScreen(),
+        AppRoutes.register: (context) => const RegisterScreen(),
+        AppRoutes.dashboard: (context) => const DashboardScreen(),
+        AppRoutes.profile: (context) => const ProfileScreen(),
+        AppRoutes.settings: (context) => const SettingsScreen(),
+      },
+      onGenerateRoute: _onGenerateRoute,
+      onUnknownRoute: _onUnknownRoute,
+    );
+  }
+  
+  static Route<dynamic>? _onGenerateRoute(RouteSettings settings) {
+    // Manejar rutas con argumentos
+    if (settings.name == AppRoutes.productDetail) {
+      final args = settings.arguments as Map<String, dynamic>?;
+      return MaterialPageRoute(
+        builder: (context) => ProductDetailScreen(
+          productId: args?['id'] ?? 0,
+        ),
+      );
+    }
+    
+    if (settings.name == AppRoutes.userDetail) {
+      final args = settings.arguments as Map<String, dynamic>?;
+      return MaterialPageRoute(
+        builder: (context) => UserDetailScreen(
+          userId: args?['id'] ?? 0,
+        ),
+      );
+    }
+    
+    return null;
+  }
+  
+  static Route<dynamic>? _onUnknownRoute(RouteSettings settings) {
+    return MaterialPageRoute(
+      builder: (context) => const NotFoundScreen(),
+    );
+  }
+}
+
+// Uso de rutas nombradas
+class HomeScreen extends StatelessWidget {
+  const HomeScreen({super.key});
+  
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Inicio')),
+      body: ListView(
+        children: [
+          ListTile(
+            title: const Text('Ir a Login'),
+            onTap: () {
+              Navigator.pushNamed(context, AppRoutes.login);
+            },
+          ),
+          ListTile(
+            title: const Text('Ir a Dashboard'),
+            onTap: () {
+              Navigator.pushNamed(context, AppRoutes.dashboard);
+            },
+          ),
+          ListTile(
+            title: const Text('Ver Producto 1'),
+            onTap: () {
+              Navigator.pushNamed(
+                context,
+                AppRoutes.productDetail,
+                arguments: {'id': 1},
+              );
+            },
+          ),
+        ],
+      ),
+    );
+  }
+}
+----
+
+==== Rutas con Argumentos Tipados
+
+[source,dart]
+----
+// Clase para argumentos
+class ProductDetailArguments {
+  final int productId;
+  final String? productName;
+  final bool showReviews;
+  
+  const ProductDetailArguments({
+    required this.productId,
+    this.productName,
+    this.showReviews = false,
+  });
+}
+
+// Definición de ruta con argumentos
+class AppRouter {
+  static Route<dynamic> generateRoute(RouteSettings settings) {
+    switch (settings.name) {
+      case AppRoutes.home:
+        return MaterialPageRoute(
+          builder: (_) => const HomeScreen(),
+        );
+        
+      case AppRoutes.productDetail:
+        final args = settings.arguments as ProductDetailArguments?;
+        return MaterialPageRoute(
+          builder: (_) => ProductDetailScreen(
+            productId: args?.productId ?? 0,
+            productName: args?.productName,
+            showReviews: args?.showReviews ?? false,
+          ),
+        );
+        
+      case AppRoutes.userDetail:
+        final args = settings.arguments as UserDetailArguments?;
+        return MaterialPageRoute(
+          builder: (_) => UserDetailScreen(
+            userId: args?.userId ?? 0,
+          ),
+        );
+        
+      default:
+        return MaterialPageRoute(
+          builder: (_) => const NotFoundScreen(),
+        );
+    }
+  }
+}
+
+// Uso
+Navigator.pushNamed(
+  context,
+  AppRoutes.productDetail,
+  arguments: ProductDetailArguments(
+    productId: 123,
+    productName: 'Producto Ejemplo',
+    showReviews: true,
+  ),
+);
+----
+
+'''''
+
+=== Drawer - Menú Lateral
+
+==== Drawer Básico
+
+[source,dart]
+----
+class DrawerExample extends StatelessWidget {
+  const DrawerExample({super.key});
+  
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Drawer Example'),
+      ),
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: [
+            // Header del drawer
+            const DrawerHeader(
+              decoration: BoxDecoration(
+                color: Colors.blue,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  CircleAvatar(
+                    radius: 30,
+                    backgroundImage: NetworkImage('https://example.com/avatar.jpg'),
+                  ),
+                  SizedBox(height: 8),
+                  Text(
+                    'Juan García',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                    ),
+                  ),
+                  Text(
+                    'juan@email.com',
+                    style: TextStyle(
+                      color: Colors.white70,
+                      fontSize: 14,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            
+            // Opciones del menú
+            ListTile(
+              leading: const Icon(Icons.home),
+              title: const Text('Inicio'),
+              selected: true,
+              onTap: () {
+                Navigator.pop(context);
+                // Navegar a inicio
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.person),
+              title: const Text('Perfil'),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.pushNamed(context, '/profile');
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.settings),
+              title: const Text('Ajustes'),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.pushNamed(context, '/settings');
+              },
+            ),
+            const Divider(),
+            ListTile(
+              leading: const Icon(Icons.help),
+              title: const Text('Ayuda'),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.pushNamed(context, '/help');
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.info),
+              title: const Text('Acerca de'),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.pushNamed(context, '/about');
+              },
+            ),
+            const Divider(),
+            ListTile(
+              leading: const Icon(Icons.logout),
+              title: const Text('Cerrar sesión'),
+              onTap: () {
+                Navigator.pop(context);
+                _showLogoutDialog(context);
+              },
+            ),
+          ],
+        ),
+      ),
+      body: const Center(
+        child: Text('Contenido principal'),
+      ),
+    );
+  }
+  
+  void _showLogoutDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Cerrar sesión'),
+          content: const Text('¿Estás seguro de que quieres cerrar sesión?'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('Cancelar'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pop(context);
+                Navigator.pushNamedAndRemoveUntil(
+                  context,
+                  '/login',
+                  (route) => false,
+                );
+              },
+              child: const Text('Cerrar sesión'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+}
+----
+
+==== Drawer con UserAccountsDrawerHeader
+
+[source,dart]
+----
+class UserDrawerExample extends StatelessWidget {
+  const UserDrawerExample({super.key});
+  
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('User Drawer'),
+      ),
+      drawer: Drawer(
+        child: Column(
+          children: [
+            // Header con información de usuario
+            UserAccountsDrawerHeader(
+              accountName: const Text('Juan García'),
+              accountEmail: const Text('juan@email.com'),
+              currentAccountPicture: CircleAvatar(
+                backgroundImage: const NetworkImage('https://example.com/avatar.jpg'),
+                child: const Icon(Icons.person, size: 40),
+              ),
+              otherAccountsPictures: [
+                CircleAvatar(
+                  child: IconButton(
+                    icon: const Icon(Icons.add),
+                    onPressed: () {
+                      // Añadir cuenta
+                    },
+                  ),
+                ),
+              ],
+              decoration: BoxDecoration(
+                color: Colors.blue.shade700,
+              ),
+            ),
+            
+            // Opciones principales
+            ListTile(
+              leading: const Icon(Icons.inbox),
+              title: const Text('Bandeja de entrada'),
+              trailing: const Badge(child: Text('5')),
+              onTap: () {},
+            ),
+            ListTile(
+              leading: const Icon(Icons.star),
+              title: const Text('Destacados'),
+              onTap: () {},
+            ),
+            ListTile(
+              leading: const Icon(Icons.send),
+              title: const Text('Enviados'),
+              onTap: () {},
+            ),
+            ListTile(
+              leading: const Icon(Icons.drafts),
+              title: const Text('Borradores'),
+              onTap: () {},
+            ),
+            ListTile(
+              leading: const Icon(Icons.delete),
+              title: const Text('Papelera'),
+              onTap: () {},
+            ),
+            
+            const Divider(),
+            
+            // Etiquetas
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  'Etiquetas',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Colors.grey,
+                  ),
+                ),
+              ),
+            ),
+            ListTile(
+              leading: const Icon(Icons.label, color: Colors.red),
+              title: const Text('Importante'),
+              onTap: () {},
+            ),
+            ListTile(
+              leading: const Icon(Icons.label, color: Colors.orange),
+              title: const Text('Trabajo'),
+              onTap: () {},
+            ),
+            ListTile(
+              leading: const Icon(Icons.label, color: Colors.green),
+              title: const Text('Personal'),
+              onTap: () {},
+            ),
+            
+            const Spacer(),
+            
+            // Opciones inferiores
+            const Divider(),
+            ListTile(
+              leading: const Icon(Icons.settings),
+              title: const Text('Ajustes'),
+              onTap: () {},
+            ),
+            ListTile(
+              leading: const Icon(Icons.help_outline),
+              title: const Text('Ayuda y comentarios'),
+              onTap: () {},
+            ),
+          ],
+        ),
+      ),
+      body: const Center(
+        child: Text('Contenido principal'),
+      ),
+    );
+  }
+}
+----
+
+==== Drawer con Estado
+
+[source,dart]
+----
+class StatefulDrawerExample extends StatefulWidget {
+  const StatefulDrawerExample({super.key});
+  
+  @override
+  State<StatefulDrawerExample> createState() => _StatefulDrawerExampleState();
+}
+
+class _StatefulDrawerExampleState extends State<StatefulDrawerExample> {
+  int _selectedIndex = 0;
+  String _selectedSection = 'home';
+  
+  final List<MenuItem> _menuItems = [
+    MenuItem(icon: Icons.home, title: 'Inicio', section: 'home'),
+    MenuItem(icon: Icons.person, title: 'Perfil', section: 'profile'),
+    MenuItem(icon: Icons.shopping_cart, title: 'Carrito', section: 'cart'),
+    MenuItem(icon: Icons.history, title: 'Historial', section: 'history'),
+    MenuItem(icon: Icons.favorite, title: 'Favoritos', section: 'favorites'),
+  ];
+  
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(_menuItems[_selectedIndex].title),
+      ),
+      drawer: Drawer(
+        child: Column(
+          children: [
+            DrawerHeader(
+              decoration: BoxDecoration(
+                color: Theme.of(context).primaryColor,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  const CircleAvatar(
+                    radius: 30,
+                    child: Icon(Icons.person, size: 40),
+                  ),
+                  const SizedBox(height: 8),
+                  const Text(
+                    'Usuario',
+                    style: TextStyle(color: Colors.white, fontSize: 18),
+                  ),
+                  Text(
+                    'usuario@email.com',
+                    style: TextStyle(color: Colors.white.withOpacity(0.8)),
+                  ),
+                ],
+              ),
+            ),
+            
+            // Items del menú
+            Expanded(
+              child: ListView.builder(
+                itemCount: _menuItems.length,
+                itemBuilder: (context, index) {
+                  final item = _menuItems[index];
+                  return ListTile(
+                    leading: Icon(item.icon),
+                    title: Text(item.title),
+                    selected: _selectedIndex == index,
+                    selectedTileColor: Theme.of(context).primaryColor.withOpacity(0.1),
+                    onTap: () {
+                      setState(() {
+                        _selectedIndex = index;
+                        _selectedSection = item.section;
+                      });
+                      Navigator.pop(context);
+                    },
+                  );
+                },
+              ),
+            ),
+            
+            const Divider(),
+            
+            // Opción de cerrar sesión
+            ListTile(
+              leading: const Icon(Icons.logout),
+              title: const Text('Cerrar sesión'),
+              onTap: () {
+                Navigator.pop(context);
+                _logout(context);
+              },
+            ),
+          ],
+        ),
+      ),
+      body: _buildBody(),
+    );
+  }
+  
+  Widget _buildBody() {
+    switch (_selectedSection) {
+      case 'home':
+        return const HomeContent();
+      case 'profile':
+        return const ProfileContent();
+      case 'cart':
+        return const CartContent();
+      case 'history':
+        return const HistoryContent();
+      case 'favorites':
+        return const FavoritesContent();
+      default:
+        return const HomeContent();
+    }
+  }
+  
+  void _logout(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Cerrar sesión'),
+          content: const Text('¿Seguro que quieres cerrar sesión?'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('Cancelar'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pop(context);
+                // Navegar a login y limpiar pila
+              },
+              child: const Text('Cerrar sesión'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+}
+
+class MenuItem {
+  final IconData icon;
+  final String title;
+  final String section;
+  
+  const MenuItem({
+    required this.icon,
+    required this.title,
+    required this.section,
+  });
+}
+----
+
+'''''
+
+=== BottomNavigationBar - Navegación Inferior
+
+==== BottomNavigationBar Básico
+
+[source,dart]
+----
+class BottomNavExample extends StatefulWidget {
+  const BottomNavExample({super.key});
+  
+  @override
+  State<BottomNavExample> createState() => _BottomNavExampleState();
+}
+
+class _BottomNavExampleState extends State<BottomNavExample> {
+  int _currentIndex = 0;
+  
+  final List<Widget> _screens = [
+    const HomeScreen(),
+    const SearchScreen(),
+    const FavoritesScreen(),
+    const ProfileScreen(),
+  ];
+  
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: _screens[_currentIndex],
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _currentIndex,
+        onTap: (index) {
+          setState(() {
+            _currentIndex = index;
+          });
+        },
+        type: BottomNavigationBarType.fixed,
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Inicio',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.search),
+            label: 'Buscar',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.favorite),
+            label: 'Favoritos',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: 'Perfil',
+          ),
+        ],
+      ),
+    );
+  }
+}
+----
+
+==== BottomNavigationBar con Estilos
+
+[source,dart]
+----
+class StyledBottomNav extends StatefulWidget {
+  const StyledBottomNav({super.key});
+  
+  @override
+  State<StyledBottomNav> createState() => _StyledBottomNavState();
+}
+
+class _StyledBottomNavState extends State<StyledBottomNav> {
+  int _currentIndex = 0;
+  
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: IndexedStack(
+        index: _currentIndex,
+        children: const [
+          HomeScreen(),
+          SearchScreen(),
+          FavoritesScreen(),
+          ProfileScreen(),
+        ],
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _currentIndex,
+        onTap: (index) {
+          setState(() {
+            _currentIndex = index;
+          });
+        },
+        type: BottomNavigationBarType.shifting,
+        selectedItemColor: Theme.of(context).primaryColor,
+        unselectedItemColor: Colors.grey,
+        selectedFontSize: 12,
+        unselectedFontSize: 12,
+        showUnselectedLabels: true,
+        elevation: 16,
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home_outlined),
+            activeIcon: Icon(Icons.home),
+            label: 'Inicio',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.search_outlined),
+            activeIcon: Icon(Icons.search),
+            label: 'Buscar',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.favorite_outline),
+            activeIcon: Icon(Icons.favorite),
+            label: 'Favoritos',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person_outline),
+            activeIcon: Icon(Icons.person),
+            label: 'Perfil',
+          ),
+        ],
+      ),
+    );
+  }
+}
+----
+
+==== BottomNavigationBar con Badge
+
+[source,dart]
+----
+class BadgeBottomNav extends StatefulWidget {
+  const BadgeBottomNav({super.key});
+  
+  @override
+  State<BadgeBottomNav> createState() => _BadgeBottomNavState();
+}
+
+class _BadgeBottomNavState extends State<BadgeBottomNav> {
+  int _currentIndex = 0;
+  int _cartCount = 3;
+  int _notificationsCount = 12;
+  
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: IndexedStack(
+        index: _currentIndex,
+        children: const [
+          HomeScreen(),
+          SearchScreen(),
+          CartScreen(),
+          ProfileScreen(),
+        ],
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _currentIndex,
+        onTap: (index) {
+          setState(() {
+            _currentIndex = index;
+          });
+        },
+        type: BottomNavigationBarType.fixed,
+        items: [
+          const BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Inicio',
+          ),
+          const BottomNavigationBarItem(
+            icon: Icon(Icons.search),
+            label: 'Buscar',
+          ),
+          BottomNavigationBarItem(
+            icon: Badge(
+              label: Text('$_cartCount'),
+              child: const Icon(Icons.shopping_cart),
+            ),
+            label: 'Carrito',
+          ),
+          BottomNavigationBarItem(
+            icon: Badge(
+              label: Text('$_notificationsCount'),
+              child: const Icon(Icons.notifications),
+            ),
+            label: 'Notificaciones',
+          ),
+        ],
+      ),
+    );
+  }
+}
+----
+
+==== BottomNavigationBar con FAB
+
+[source,dart]
+----
+class BottomNavWithFAB extends StatefulWidget {
+  const BottomNavWithFAB({super.key});
+  
+  @override
+  State<BottomNavWithFAB> createState() => _BottomNavWithFABState();
+}
+
+class _BottomNavWithFABState extends State<BottomNavWithFAB> {
+  int _currentIndex = 0;
+  
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: IndexedStack(
+        index: _currentIndex,
+        children: const [
+          HomeScreen(),
+          SearchScreen(),
+          AddScreen(),
+          FavoritesScreen(),
+          ProfileScreen(),
+        ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          setState(() {
+            _currentIndex = 2; // Ir a la pantalla de "Añadir"
+          });
+        },
+        child: const Icon(Icons.add),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      bottomNavigationBar: BottomAppBar(
+        shape: const CircularNotchedRectangle(),
+        notchMargin: 8,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            IconButton(
+              icon: Icon(
+                Icons.home,
+                color: _currentIndex == 0 ? Colors.blue : Colors.grey,
+              ),
+              onPressed: () {
+                setState(() {
+                  _currentIndex = 0;
+                });
+              },
+            ),
+            IconButton(
+              icon: Icon(
+                Icons.search,
+                color: _currentIndex == 1 ? Colors.blue : Colors.grey,
+              ),
+              onPressed: () {
+                setState(() {
+                  _currentIndex = 1;
+                });
+              },
+            ),
+            const SizedBox(width: 48), // Espacio para el FAB
+            IconButton(
+              icon: Icon(
+                Icons.favorite,
+                color: _currentIndex == 3 ? Colors.blue : Colors.grey,
+              ),
+              onPressed: () {
+                setState(() {
+                  _currentIndex = 3;
+                });
+              },
+            ),
+            IconButton(
+              icon: Icon(
+                Icons.person,
+                color: _currentIndex == 4 ? Colors.blue : Colors.grey,
+              ),
+              onPressed: () {
+                setState(() {
+                  _currentIndex = 4;
+                });
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+----
+
+'''''
+
+=== TabBar - Pestañas
+
+==== TabBar Básico
+
+[source,dart]
+----
+class TabBarExample extends StatelessWidget {
+  const TabBarExample({super.key});
+  
+  @override
+  Widget build(BuildContext context) {
+    return DefaultTabController(
+      length: 3,
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('TabBar Example'),
+          bottom: const TabBar(
+            tabs: [
+              Tab(icon: Icon(Icons.home), text: 'Inicio'),
+              Tab(icon: Icon(Icons.search), text: 'Buscar'),
+              Tab(icon: Icon(Icons.person), text: 'Perfil'),
+            ],
+          ),
+        ),
+        body: const TabBarView(
+          children: [
+            Center(child: Text('Contenido de Inicio')),
+            Center(child: Text('Contenido de Búsqueda')),
+            Center(child: Text('Contenido de Perfil')),
+          ],
+        ),
+      ),
+    );
+  }
+}
+----
+
+==== TabBar con TabController
+
+[source,dart]
+----
+class TabControllerExample extends StatefulWidget {
+  const TabControllerExample({super.key});
+  
+  @override
+  State<TabControllerExample> createState() => _TabControllerExampleState();
+}
+
+class _TabControllerExampleState extends State<TabControllerExample>
+    with SingleTickerProviderStateMixin {
+  late TabController _tabController;
+  
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 4, vsync: this);
+    
+    // Escuchar cambios de pestaña
+    _tabController.addListener(() {
+      if (_tabController.indexIsChanging) {
+        print('Cambiando a pestaña: ${_tabController.index}');
+      }
+    });
+  }
+  
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
+  
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('TabController Example'),
+        bottom: TabBar(
+          controller: _tabController,
+          tabs: const [
+            Tab(text: 'Todos'),
+            Tab(text: 'Pendientes'),
+            Tab(text: 'En progreso'),
+            Tab(text: 'Completados'),
+          ],
+        ),
+      ),
+      body: TabBarView(
+        controller: _tabController,
+        children: [
+          _buildTasksList(TaskFilter.all),
+          _buildTasksList(TaskFilter.pending),
+          _buildTasksList(TaskFilter.inProgress),
+          _buildTasksList(TaskFilter.completed),
+        ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          // Cambiar a la primera pestaña
+          _tabController.animateTo(0);
+        },
+        child: const Icon(Icons.add),
+      ),
+    );
+  }
+  
+  Widget _buildTasksList(TaskFilter filter) {
+    return ListView.builder(
+      itemCount: 10,
+      itemBuilder: (context, index) {
+        return ListTile(
+          title: Text('Tarea $index'),
+          subtitle: Text('Filtro: ${filter.name}'),
+        );
+      },
+    );
+  }
+}
+
+enum TaskFilter { all, pending, inProgress, completed }
+----
+
+==== TabBar Personalizado
+
+[source,dart]
+----
+class CustomTabBar extends StatefulWidget {
+  const CustomTabBar({super.key});
+  
+  @override
+  State<CustomTabBar> createState() => _CustomTabBarState();
+}
+
+class _CustomTabBarState extends State<CustomTabBar>
+    with SingleTickerProviderStateMixin {
+  late TabController _tabController;
+  
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 3, vsync: this);
+  }
+  
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
+  
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Custom TabBar'),
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(48),
+          child: Container(
+            color: Theme.of(context).primaryColor,
+            child: TabBar(
+              controller: _tabController,
+              indicator: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(8),
+              ),
+              indicatorSize: TabBarIndicatorSize.label,
+              indicatorPadding: const EdgeInsets.symmetric(horizontal: 4),
+              labelColor: Theme.of(context).primaryColor,
+              unselectedLabelColor: Colors.white70,
+              tabs: const [
+                Tab(text: 'Inicio'),
+                Tab(text: 'Buscar'),
+                Tab(text: 'Perfil'),
+              ],
+            ),
+          ),
+        ),
+      ),
+      body: TabBarView(
+        controller: _tabController,
+        children: const [
+          Center(child: Text('Contenido Inicio')),
+          Center(child: Text('Contenido Buscar')),
+          Center(child: Text('Contenido Perfil')),
+        ],
+      ),
+    );
+  }
+}
+----
+
+==== TabBar con Scroll
+
+[source,dart]
+----
+class ScrollableTabBar extends StatelessWidget {
+  const ScrollableTabBar({super.key});
+  
+  final List<String> categories = const [
+    'Todos',
+    'Electrónica',
+    'Ropa',
+    'Hogar',
+    'Deportes',
+    'Juguetes',
+    'Libros',
+    'Música',
+    'Películas',
+    'Juegos',
+  ];
+  
+  @override
+  Widget build(BuildContext context) {
+    return DefaultTabController(
+      length: categories.length,
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Categorías'),
+          bottom: TabBar(
+            isScrollable: true,
+            tabs: categories.map((category) => Tab(text: category)).toList(),
+            indicator: BoxDecoration(
+              border: Border(
+                bottom: BorderSide(
+                  color: Theme.of(context).primaryColor,
+                  width: 3,
+                ),
+              ),
+            ),
+          ),
+        ),
+        body: TabBarView(
+          children: categories.map((category) {
+            return Center(child: Text('Contenido de $category'));
+          }).toList(),
+        ),
+      ),
+    );
+  }
+}
+----
+
+'''''
+
+=== Navegación Anidada
+
+==== Navigator Anidado
+
+[source,dart]
+----
+class NestedNavigationExample extends StatefulWidget {
+  const NestedNavigationExample({super.key});
+  
+  @override
+  State<NestedNavigationExample> createState() => _NestedNavigationExampleState();
+}
+
+class _NestedNavigationExampleState extends State<NestedNavigationExample> {
+  int _currentIndex = 0;
+  
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: IndexedStack(
+        index: _currentIndex,
+        children: [
+          _HomeNavigator(),
+          _SearchNavigator(),
+          _ProfileNavigator(),
+        ],
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _currentIndex,
+        onTap: (index) {
+          setState(() {
+            _currentIndex = index;
+          });
+        },
+        items: const [
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Inicio'),
+          BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Buscar'),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Perfil'),
+        ],
+      ),
+    );
+  }
+}
+
+// Navegador de Home
+class _HomeNavigator extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Navigator(
+      onGenerateRoute: (settings) {
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (context) {
+            switch (settings.name) {
+              case '/':
+                return const HomeMainScreen();
+              case '/details':
+                return const HomeDetailScreen();
+              default:
+                return const HomeMainScreen();
+            }
+          },
+        );
+      },
+    );
+  }
+}
+
+class HomeMainScreen extends StatelessWidget {
+  const HomeMainScreen({super.key});
+  
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Inicio')),
+      body: Center(
+        child: ElevatedButton(
+          onPressed: () {
+            Navigator.pushNamed(context, '/details');
+          },
+          child: const Text('Ir a Detalles'),
+        ),
+      ),
+    );
+  }
+}
+
+class HomeDetailScreen extends StatelessWidget {
+  const HomeDetailScreen({super.key});
+  
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Detalles del Inicio')),
+      body: const Center(child: Text('Detalles')),
+    );
+  }
+}
+
+// Navegador de Search
+class _SearchNavigator extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Navigator(
+      onGenerateRoute: (settings) {
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (context) {
+            switch (settings.name) {
+              case '/':
+                return const SearchMainScreen();
+              case '/results':
+                return const SearchResultsScreen();
+              default:
+                return const SearchMainScreen();
+            }
+          },
+        );
+      },
+    );
+  }
+}
+
+class SearchMainScreen extends StatelessWidget {
+  const SearchMainScreen({super.key});
+  
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Buscar')),
+      body: Center(
+        child: ElevatedButton(
+          onPressed: () {
+            Navigator.pushNamed(context, '/results');
+          },
+          child: const Text('Ver Resultados'),
+        ),
+      ),
+    );
+  }
+}
+
+class SearchResultsScreen extends StatelessWidget {
+  const SearchResultsScreen({super.key});
+  
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Resultados')),
+      body: const Center(child: Text('Resultados de búsqueda')),
+    );
+  }
+}
+
+// Navegador de Profile
+class _ProfileNavigator extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Navigator(
+      onGenerateRoute: (settings) {
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (context) {
+            return const ProfileMainScreen();
+          },
+        );
+      },
+    );
+  }
+}
+
+class ProfileMainScreen extends StatelessWidget {
+  const ProfileMainScreen({super.key});
+  
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Perfil')),
+      body: const Center(child: Text('Perfil de usuario')),
+    );
+  }
+}
+----
+
+'''''
+
+=== GoRouter - Navegación Declarativa
+
+==== Configuración de GoRouter
+
+[source,dart]
+----
+import 'package:go_router/go_router.dart';
+
+// Definir rutas
+final GoRouter _router = GoRouter(
+  routes: [
+    GoRoute(
+      path: '/',
+      name: 'home',
+      builder: (context, state) => const HomeScreen(),
+    ),
+    GoRoute(
+      path: '/login',
+      name: 'login',
+      builder: (context, state) => const LoginScreen(),
+    ),
+    GoRoute(
+      path: '/dashboard',
+      name: 'dashboard',
+      builder: (context, state) => const DashboardScreen(),
+      routes: [
+        GoRoute(
+          path: 'profile',
+          name: 'profile',
+          builder: (context, state) => const ProfileScreen(),
+        ),
+        GoRoute(
+          path: 'settings',
+          name: 'settings',
+          builder: (context, state) => const SettingsScreen(),
+        ),
+      ],
+    ),
+    GoRoute(
+      path: '/product/:id',
+      name: 'product',
+      builder: (context, state) {
+        final id = state.pathParameters['id']!;
+        return ProductDetailScreen(productId: int.parse(id));
+      },
+    ),
+    GoRoute(
+      path: '/user/:id',
+      name: 'user',
+      builder: (context, state) {
+        final id = state.pathParameters['id']!;
+        final extra = state.extraData as Map<String, dynamic>?;
+        return UserDetailScreen(
+          userId: int.parse(id),
+          userData: extra,
+        );
+      },
+    ),
+  ],
+  errorBuilder: (context, state) => const NotFoundScreen(),
+  redirect: (context, state) {
+    // Lógica de redirección
+    final isLoggedIn = false; // Obtener de Provider
+    final isGoingToLogin = state.matchedLocation == '/login';
+    
+    if (!isLoggedIn && !isGoingToLogin) {
+      return '/login';
+    }
+    
+    if (isLoggedIn && isGoingToLogin) {
+      return '/dashboard';
+    }
+    
+    return null;
+  },
+);
+
+// Usar en MaterialApp
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+  
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp.router(
+      routerConfig: _router,
+    );
+  }
+}
+----
+
+==== Navegación con GoRouter
+
+[source,dart]
+----
+class HomeScreen extends StatelessWidget {
+  const HomeScreen({super.key});
+  
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Inicio')),
+      body: ListView(
+        children: [
+          ListTile(
+            title: const Text('Ir a Dashboard'),
+            onTap: () {
+              // Navegación simple
+              context.go('/dashboard');
+            },
+          ),
+          ListTile(
+            title: const Text('Ir a Perfil'),
+            onTap: () {
+              // Navegación con parámetros
+              context.go('/dashboard/profile');
+            },
+          ),
+          ListTile(
+            title: const Text('Ver Producto 1'),
+            onTap: () {
+              // Navegación con ID
+              context.go('/product/1');
+            },
+          ),
+          ListTile(
+            title: const Text('Ver Usuario con datos'),
+            onTap: () {
+              // Navegación con datos extra
+              context.go(
+                '/user/123',
+                extra: {
+                  'name': 'Juan García',
+                  'email': 'juan@email.com',
+                },
+              );
+            },
+          ),
+          ListTile(
+            title: const Text('Push a Dashboard'),
+            onTap: () {
+              // Push (añade a la pila)
+              context.push('/dashboard');
+            },
+          ),
+          ListTile(
+            title: const Text('Push Named'),
+            onTap: () {
+              // Push por nombre
+              context.pushNamed('dashboard');
+            },
+          ),
+        ],
+      ),
+    );
+  }
+}
+----
+
+==== ShellRoute para Tabs
+
+[source,dart]
+----
+final GoRouter _router = GoRouter(
+  routes: [
+    ShellRoute(
+      builder: (context, state, child) {
+        return ScaffoldWithNavBar(child: child);
+      },
+      routes: [
+        GoRoute(
+          path: '/home',
+          name: 'home',
+          builder: (context, state) => const HomeContent(),
+        ),
+        GoRoute(
+          path: '/search',
+          name: 'search',
+          builder: (context, state) => const SearchContent(),
+        ),
+        GoRoute(
+          path: '/favorites',
+          name: 'favorites',
+          builder: (context, state) => const FavoritesContent(),
+        ),
+        GoRoute(
+          path: '/profile',
+          name: 'profile',
+          builder: (context, state) => const ProfileContent(),
+        ),
+      ],
+    ),
+    GoRoute(
+      path: '/login',
+      name: 'login',
+      builder: (context, state) => const LoginScreen(),
+    ),
+  ],
+);
+
+class ScaffoldWithNavBar extends StatelessWidget {
+  final Widget child;
+  
+  const ScaffoldWithNavBar({
+    super.key,
+    required this.child,
+  });
+  
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: child,
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _calculateSelectedIndex(context),
+        onTap: (index) => _onItemTapped(index, context),
+        items: const [
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Inicio'),
+          BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Buscar'),
+          BottomNavigationBarItem(icon: Icon(Icons.favorite), label: 'Favoritos'),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Perfil'),
+        ],
+      ),
+    );
+  }
+  
+  int _calculateSelectedIndex(BuildContext context) {
+    final String location = GoRouterState.of(context).matchedLocation;
+    if (location.startsWith('/home')) return 0;
+    if (location.startsWith('/search')) return 1;
+    if (location.startsWith('/favorites')) return 2;
+    if (location.startsWith('/profile')) return 3;
+    return 0;
+  }
+  
+  void _onItemTapped(int index, BuildContext context) {
+    switch (index) {
+      case 0:
+        GoRouter.of(context).go('/home');
+        break;
+      case 1:
+        GoRouter.of(context).go('/search');
+        break;
+      case 2:
+        GoRouter.of(context).go('/favorites');
+        break;
+      case 3:
+        GoRouter.of(context).go('/profile');
+        break;
+    }
+  }
+}
+----
+
+'''''
+
+=== Deep Linking
+
+==== Configuración de Deep Links
+
+[source,dart]
+----
+// Android: android/app/src/main/AndroidManifest.xml
+/*
+<activity ...>
+  <intent-filter>
+    <action android:name="android.intent.action.VIEW" />
+    <category android:name="android.intent.category.DEFAULT" />
+    <category android:name="android.intent.category.BROWSABLE" />
+    <data android:scheme="myapp" />
+  </intent-filter>
+  <intent-filter>
+    <action android:name="android.intent.action.VIEW" />
+    <category android:name="android.intent.category.DEFAULT" />
+    <category android:name="android.intent.category.BROWSABLE" />
+    <data android:scheme="https" android:host="myapp.com" />
+  </intent-filter>
+</activity>
+*/
+
+// iOS: ios/Runner/Info.plist
+/*
+<key>CFBundleURLTypes</key>
+<array>
+  <dict>
+    <key>CFBundleTypeRole</key>
+    <string>Editor</string>
+    <key>CFBundleURLName</key>
+    <string>myapp</string>
+    <key>CFBundleURLSchemes</key>
+    <array>
+      <string>myapp</string>
+    </array>
+  </dict>
+</array>
+*/
+
+// Configuración en GoRouter
+final GoRouter _router = GoRouter(
+  routes: [
+    GoRoute(
+      path: '/',
+      builder: (context, state) => const HomeScreen(),
+    ),
+    GoRoute(
+      path: '/product/:id',
+      builder: (context, state) {
+        final id = state.pathParameters['id']!;
+        return ProductDetailScreen(productId: int.parse(id));
+      },
+    ),
+    GoRoute(
+      path: '/user/:id',
+      builder: (context, state) {
+        final id = state.pathParameters['id']!;
+        return UserDetailScreen(userId: int.parse(id));
+      },
+    ),
+  ],
+);
+
+// Uso de deep links
+// myapp:///product/123
+// https://myapp.com/product/123
+----
+
+'''''
+
+=== Animaciones de Transición
+
+==== Transiciones Personalizadas
+
+[source,dart]
+----
+class CustomPageRoute<T> extends PageRouteBuilder<T> {
+  final Widget page;
+  final String routeName;
+  
+  CustomPageRoute({
+    required this.page,
+    required this.routeName,
+  }) : super(
+    settings: RouteSettings(name: routeName),
+    pageBuilder: (context, animation, secondaryAnimation) => page,
+    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+      // SlideTransition
+      const begin = Offset(1.0, 0.0);
+      const end = Offset.zero;
+      const curve = Curves.easeInOut;
+      
+      final tween = Tween(begin: begin, end: end).chain(
+        CurveTween(curve: curve),
+      );
+      
+      final offsetAnimation = animation.drive(tween);
+      
+      return SlideTransition(
+        position: offsetAnimation,
+        child: child,
+      );
+    },
+  );
+}
+
+// Uso
+Navigator.push(
+  context,
+  CustomPageRoute(
+    page: const DetailScreen(),
+    routeName: '/detail',
+  ),
+);
+
+// FadeTransition
+class FadePageRoute<T> extends PageRouteBuilder<T> {
+  final Widget page;
+  
+  FadePageRoute({required this.page})
+      : super(
+          pageBuilder: (context, animation, secondaryAnimation) => page,
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            return FadeTransition(
+              opacity: animation,
+              child: child,
+            );
+          },
+        );
+}
+
+// ScaleTransition
+class ScalePageRoute<T> extends PageRouteBuilder<T> {
+  final Widget page;
+  
+  ScalePageRoute({required this.page})
+      : super(
+          pageBuilder: (context, animation, secondaryAnimation) => page,
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            return ScaleTransition(
+              scale: Tween<double>(begin: 0.0, end: 1.0).animate(
+                CurvedAnimation(parent: animation, curve: Curves.fastOutSlowIn),
+              ),
+              child: child,
+            );
+          },
+        );
+}
+
+// RotationTransition
+class RotationPageRoute<T> extends PageRouteBuilder<T> {
+  final Widget page;
+  
+  RotationPageRoute({required this.page})
+      : super(
+          pageBuilder: (context, animation, secondaryAnimation) => page,
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            return RotationTransition(
+              turns: Tween<double>(begin: 0.5, end: 1.0).animate(animation),
+              child: child,
+            );
+          },
+        );
+}
+
+// Combinación de transiciones
+class CombinedPageRoute<T> extends PageRouteBuilder<T> {
+  final Widget page;
+  
+  CombinedPageRoute({required this.page})
+      : super(
+          pageBuilder: (context, animation, secondaryAnimation) => page,
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            return SlideTransition(
+              position: Tween<Offset>(
+                begin: const Offset(1.0, 0.0),
+                end: Offset.zero,
+              ).animate(CurvedAnimation(
+                parent: animation,
+                curve: Curves.easeInOut,
+              )),
+              child: FadeTransition(
+                opacity: animation,
+                child: ScaleTransition(
+                  scale: Tween<double>(begin: 0.8, end: 1.0).animate(animation),
+                  child: child,
+                ),
+              ),
+            );
+          },
+        );
+}
+----
+
+'''''
+
+=== Patrones de Navegación
+
+==== Patrón Autenticación
+
+[source,dart]
+----
+class AuthNavigation extends StatefulWidget {
+  const AuthNavigation({super.key});
+  
+  @override
+  State<AuthNavigation> createState() => _AuthNavigationState();
+}
+
+class _AuthNavigationState extends State<AuthNavigation> {
+  bool _isLoggedIn = false;
+  
+  @override
+  Widget build(BuildContext context) {
+    if (_isLoggedIn) {
+      return const MainNavigation();
+    } else {
+      return LoginScreen(
+        onLogin: () {
+          setState(() {
+            _isLoggedIn = true;
+          });
+        },
+      );
+    }
+  }
+}
+
+class LoginScreen extends StatelessWidget {
+  final VoidCallback onLogin;
+  
+  const LoginScreen({super.key, required this.onLogin});
+  
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Login')),
+      body: Center(
+        child: ElevatedButton(
+          onPressed: onLogin,
+          child: const Text('Iniciar sesión'),
+        ),
+      ),
+    );
+  }
+}
+
+class MainNavigation extends StatefulWidget {
+  const MainNavigation({super.key});
+  
+  @override
+  State<MainNavigation> createState() => _MainNavigationState();
+}
+
+class _MainNavigationState extends State<MainNavigation> {
+  int _currentIndex = 0;
+  
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: IndexedStack(
+        index: _currentIndex,
+        children: const [
+          HomeScreen(),
+          SearchScreen(),
+          ProfileScreen(),
+        ],
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _currentIndex,
+        onTap: (index) {
+          setState(() {
+            _currentIndex = index;
+          });
+        },
+        items: const [
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Inicio'),
+          BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Buscar'),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Perfil'),
+        ],
+      ),
+    );
+  }
+}
+----
+
+==== Patrón Onboarding
+
+[source,dart]
+----
+class OnboardingNavigation extends StatefulWidget {
+  const OnboardingNavigation({super.key});
+  
+  @override
+  State<OnboardingNavigation> createState() => _OnboardingNavigationState();
+}
+
+class _OnboardingNavigationState extends State<OnboardingNavigation> {
+  bool _hasSeenOnboarding = false;
+  
+  @override
+  void initState() {
+    super.initState();
+    _checkOnboarding();
+  }
+  
+  Future<void> _checkOnboarding() async {
+    // Verificar si ya vio el onboarding
+    final prefs = await SharedPreferences.getInstance();
+    final seen = prefs.getBool('has_seen_onboarding') ?? false;
+    setState(() {
+      _hasSeenOnboarding = seen;
+    });
+  }
+  
+  Future<void> _completeOnboarding() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('has_seen_onboarding', true);
+    setState(() {
+      _hasSeenOnboarding = true;
+    });
+  }
+  
+  @override
+  Widget build(BuildContext context) {
+    if (!_hasSeenOnboarding) {
+      return OnboardingScreen(
+        onComplete: _completeOnboarding,
+      );
+    }
+    
+    return const MainNavigation();
+  }
+}
+
+class OnboardingScreen extends StatefulWidget {
+  final VoidCallback onComplete;
+  
+  const OnboardingScreen({super.key, required this.onComplete});
+  
+  @override
+  State<OnboardingScreen> createState() => _OnboardingScreenState();
+}
+
+class _OnboardingScreenState extends State<OnboardingScreen> {
+  final PageController _pageController = PageController();
+  int _currentPage = 0;
+  
+  final List<OnboardingPage> _pages = [
+    OnboardingPage(
+      title: 'Bienvenido',
+      description: 'Esta es tu nueva aplicación favorita',
+      icon: Icons.welcome,
+      color: Colors.blue,
+    ),
+    OnboardingPage(
+      title: 'Explora',
+      description: 'Descubre todas las funciones disponibles',
+      icon: Icons.explore,
+      color: Colors.green,
+    ),
+    OnboardingPage(
+      title: 'Comienza',
+      description: '¡Estás listo para comenzar!',
+      icon: Icons.rocket_launch,
+      color: Colors.purple,
+    ),
+  ];
+  
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
+  
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Column(
+        children: [
+          Expanded(
+            child: PageView.builder(
+              controller: _pageController,
+              onPageChanged: (index) {
+                setState(() {
+                  _currentPage = index;
+                });
+              },
+              itemCount: _pages.length,
+              itemBuilder: (context, index) {
+                return _buildPage(_pages[index]);
+              },
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(24),
+            child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: List.generate(
+                    _pages.length,
+                    (index) => Container(
+                      margin: const EdgeInsets.symmetric(horizontal: 4),
+                      width: _currentPage == index ? 24 : 8,
+                      height: 8,
+                      decoration: BoxDecoration(
+                        color: _currentPage == index
+                            ? Theme.of(context).primaryColor
+                            : Colors.grey,
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 24),
+                if (_currentPage < _pages.length - 1)
+                  Row(
+                    children: [
+                      TextButton(
+                        onPressed: widget.onComplete,
+                        child: const Text('Omitir'),
+                      ),
+                      const Spacer(),
+                      ElevatedButton(
+                        onPressed: () {
+                          _pageController.nextPage(
+                            duration: const Duration(milliseconds: 300),
+                            curve: Curves.easeInOut,
+                          );
+                        },
+                        child: const Text('Siguiente'),
+                      ),
+                    ],
+                  )
+                else
+                  ElevatedButton(
+                    onPressed: widget.onComplete,
+                    child: const Text('Comenzar'),
+                  ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+  
+  Widget _buildPage(OnboardingPage page) {
+    return Container(
+      color: page.color.withOpacity(0.1),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(page.icon, size: 100, color: page.color),
+          const SizedBox(height: 32),
+          Text(
+            page.title,
+            style: const TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 16),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 32),
+            child: Text(
+              page.description,
+              textAlign: TextAlign.center,
+              style: const TextStyle(fontSize: 18, color: Colors.grey),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class OnboardingPage {
+  final String title;
+  final String description;
+  final IconData icon;
+  final Color color;
+  
+  const OnboardingPage({
+    required this.title,
+    required this.description,
+    required this.icon,
+    required this.color,
+  });
+}
+----
+
+'''''
+
+=== Ejemplos Prácticos Completos
+
+==== Ejemplo: App de Comercio con Navegación Compleja
+
+[source,dart]
+----
+class CommerceApp extends StatefulWidget {
+  const CommerceApp({super.key});
+  
+  @override
+  State<CommerceApp> createState() => _CommerceAppState();
+}
+
+class _CommerceAppState extends State<CommerceApp> {
+  int _currentIndex = 0;
+  final List<int> _cartItems = [];
+  
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Mi Tienda'),
+        actions: [
+          Stack(
+            children: [
+              IconButton(
+                icon: const Icon(Icons.shopping_cart),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => CartScreen(items: _cartItems),
+                    ),
+                  );
+                },
+              ),
+              if (_cartItems.isNotEmpty)
+                Positioned(
+                  right: 8,
+                  top: 8,
+                  child: Container(
+                    padding: const EdgeInsets.all(4),
+                    decoration: const BoxDecoration(
+                      color: Colors.red,
+                      shape: BoxShape.circle,
+                    ),
+                    child: Text(
+                      '${_cartItems.length}',
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 10,
+                      ),
+                    ),
+                  ),
+                ),
+            ],
+          ),
+        ],
+      ),
+      drawer: _buildDrawer(context),
+      body: _buildBody(),
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _currentIndex,
+        onTap: (index) {
+          setState(() {
+            _currentIndex = index;
+          });
+        },
+        items: const [
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Inicio'),
+          BottomNavigationBarItem(icon: Icon(Icons.category), label: 'Categorías'),
+          BottomNavigationBarItem(icon: Icon(Icons.favorite), label: 'Favoritos'),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Perfil'),
+        ],
+      ),
+    );
+  }
+  
+  Widget _buildDrawer(BuildContext context) {
+    return Drawer(
+      child: Column(
+        children: [
+          const UserAccountsDrawerHeader(
+            accountName: Text('Usuario'),
+            accountEmail: Text('usuario@email.com'),
+            currentAccountPicture: CircleAvatar(child: Icon(Icons.person)),
+          ),
+          ListTile(
+            leading: const Icon(Icons.home),
+            title: const Text('Inicio'),
+            onTap: () {
+              Navigator.pop(context);
+              setState(() => _currentIndex = 0);
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.category),
+            title: const Text('Categorías'),
+            onTap: () {
+              Navigator.pop(context);
+              setState(() => _currentIndex = 1);
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.favorite),
+            title: const Text('Favoritos'),
+            onTap: () {
+              Navigator.pop(context);
+              setState(() => _currentIndex = 2);
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.shopping_cart),
+            title: const Text('Carrito'),
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => CartScreen(items: _cartItems),
+                ),
+              );
+            },
+          ),
+          const Divider(),
+          ListTile(
+            leading: const Icon(Icons.settings),
+            title: const Text('Ajustes'),
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.pushNamed(context, '/settings');
+            },
+          ),
+          const Spacer(),
+          ListTile(
+            leading: const Icon(Icons.logout),
+            title: const Text('Cerrar sesión'),
+            onTap: () {
+              Navigator.pop(context);
+              // Cerrar sesión
+            },
+          ),
+        ],
+      ),
+    );
+  }
+  
+  Widget _buildBody() {
+    switch (_currentIndex) {
+      case 0:
+        return HomeContent(
+          onProductTap: (productId) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ProductDetailScreen(productId: productId),
+              ),
+            );
+          },
+        );
+      case 1:
+        return const CategoriesContent();
+      case 2:
+        return const FavoritesContent();
+      case 3:
+        return const ProfileContent();
+      default:
+        return const HomeContent();
+    }
+  }
+}
+----
+
+'''''
+
+=== Mejores Prácticas
+
+==== 1. Usar Rutas Nombradas para Navegación Compleja
+
+[source,dart]
+----
+// ❌ Malo: Strings hardcodeados
+Navigator.pushNamed(context, '/product/123');
+
+// ✅ Bueno: Constantes
+class Routes {
+  static const home = '/';
+  static const product = '/product/:id';
+  
+  static String productWithId(int id) => '/product/$id';
+}
+
+Navigator.pushNamed(context, Routes.productWithId(123));
+----
+
+==== 2. Mantener la Pila de Navegación Limpia
+
+[source,dart]
+----
+// ❌ Malo: Acumular muchas pantallas
+// Home → Product → Product → Product...
+
+// ✅ Bueno: Reemplazar cuando es apropiado
+Navigator.pushReplacementNamed(context, Routes.product);
+
+// ✅ Bueno: Limpiar pila al navegar a home
+Navigator.pushNamedAndRemoveUntil(
+  context,
+  Routes.home,
+  (route) => false,
+);
+----
+
+==== 3. Gestionar el Estado de Navegación
+
+[source,dart]
+----
+// ✅ Usar IndexedStack para mantener estado
+class MainScreen extends StatefulWidget {
+  @override
+  State<MainScreen> createState() => _MainScreenState();
+}
+
+class _MainScreenState extends State<MainScreen> {
+  int _currentIndex = 0;
+  
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: IndexedStack(
+        index: _currentIndex,
+        children: [
+          HomeScreen(),
+          SearchScreen(),
+          ProfileScreen(),
+        ],
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _currentIndex,
+        onTap: (index) => setState(() => _currentIndex = index),
+        items: [...],
+      ),
+    );
+  }
+}
+----
+
+==== 4. Manejar el Botón Back Correctamente
+
+[source,dart]
+----
+// ✅ Usar PopScope para manejar el back
+@override
+Widget build(BuildContext context) {
+  return PopScope(
+    canPop: !_hasUnsavedChanges,
+    onPopInvokedWithResult: (didPop, result) async {
+      if (didPop) return;
+      
+      final shouldPop = await _showConfirmationDialog(context);
+      if (shouldPop && context.mounted) {
+        Navigator.pop(context);
+      }
+    },
+    child: Scaffold(...),
+  );
+}
+----
+
+==== 5. Pasar Datos de Forma Tipada
+
+[source,dart]
+----
+// ❌ Malo: Datos sin tipo
+Navigator.pushNamed(context, '/product', arguments: {'id': 123});
+
+// ✅ Bueno: Clase de argumentos
+class ProductDetailArgs {
+  final int productId;
+  final String? source;
+  
+  const ProductDetailArgs({
+    required this.productId,
+    this.source,
+  });
+}
+
+Navigator.pushNamed(
+  context,
+  Routes.product,
+  arguments: ProductDetailArgs(productId: 123, source: 'home'),
+);
+----
+
+==== 6. Limpiar Controladores
+
+[source,dart]
+----
+class _MyScreenState extends State<MyScreen> {
+  late PageController _pageController;
+  
+  @override
+  void initState() {
+    super.initState();
+    _pageController = PageController();
+  }
+  
+  @override
+  void dispose() {
+    _pageController.dispose(); // ✅ Siempre disposear
+    super.dispose();
+  }
+  
+  @override
+  Widget build(BuildContext context) {
+    return PageView(controller: _pageController, children: [...]);
+  }
+}
+----
+
+'''''
+
+=== Conclusión
+
+La navegación en Flutter es un sistema flexible y potente basado en
+pilas. Los puntos clave son:
+
+[arabic]
+. *Navigator.push/pop*: Para navegación básica
+. *Rutas Nombradas*: Para navegación declarativa
+. *Drawer/BottomNav*: Para estructuras complejas
+. *TabBar*: Para contenido organizado en pestañas
+. *GoRouter*: Para navegación declarativa moderna
+. *Deep Linking*: Para enlaces externos
+. *Animaciones*: Para transiciones personalizadas
+
+'''''
+
+*Versión del documento*: 1.0 +
+*Flutter versión*: 3.24.0 +
+*Última actualización*: Julio 2025

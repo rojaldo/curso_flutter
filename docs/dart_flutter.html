@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 2.0.26">
-<title>Dart para Flutter: Guía Completa</title>
+<title>📋 TEMARIO COMPLETO: DART PARA FLUTTER</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
 /*! Asciidoctor default stylesheet | MIT License | https://asciidoctor.org */
@@ -433,85 +433,13 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 #footer-text{color:rgba(0,0,0,.6);font-size:.9em}}
 @media amzn-kf8{#header,#content,#footnotes,#footer{padding:0}}
 </style>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.3/styles/github.min.css">
 </head>
-<body class="article toc2 toc-left">
+<body class="article">
 <div id="header">
-<h1>Dart para Flutter: Guía Completa</h1>
-<div id="toc" class="toc2">
-<div id="toctitle">Contenidos</div>
-<ul class="sectlevel1">
-<li><a href="#_dart_para_flutter">DART PARA FLUTTER</a>
-<ul class="sectlevel2">
-<li><a href="#_guía_de_estudio">📖 Guía de Estudio</a></li>
-<li><a href="#_tabla_de_contenidos">Tabla de Contenidos</a></li>
-<li><a href="#_bloque_1_fundamentos_de_dart">🎯 BLOQUE 1: FUNDAMENTOS DE DART</a>
-<ul class="sectlevel3">
-<li><a href="#_1_1_introducción_y_configuración_del_entorno">1.1 Introducción y Configuración del Entorno</a></li>
-<li><a href="#_1_2_variables_y_tipos_de_datos">1.2 Variables y Tipos de Datos</a></li>
-<li><a href="#_1_3_colecciones_list_set_y_map">1.3 Colecciones: List, Set y Map</a></li>
-<li><a href="#_1_4_funciones">1.4 Funciones</a></li>
-<li><a href="#_1_5_control_de_flujo">1.5 Control de Flujo</a></li>
-</ul>
-</li>
-<li><a href="#_bloque_2_programación_orientada_a_objetos">🎯 BLOQUE 2: PROGRAMACIÓN ORIENTADA A OBJETOS</a>
-<ul class="sectlevel3">
-<li><a href="#_2_1_clases_y_objetos">2.1 Clases y Objetos</a></li>
-<li><a href="#_2_2_herencia_y_polimorfismo">2.2 Herencia y Polimorfismo</a></li>
-<li><a href="#_2_3_encapsulamiento">2.3 Encapsulamiento</a></li>
-</ul>
-</li>
-<li><a href="#_bloque_3_asincronía_en_dart">🎯 BLOQUE 3: ASINCRONÍA EN DART</a>
-<ul class="sectlevel3">
-<li><a href="#_3_1_futures_y_asyncawait">3.1 Futures y async/await</a></li>
-<li><a href="#_3_2_streams">3.2 Streams</a></li>
-<li><a href="#_3_3_casos_prácticos_en_flutter">3.3 Casos prácticos en Flutter</a></li>
-</ul>
-</li>
-<li><a href="#_bloque_4_null_safety">🎯 BLOQUE 4: NULL SAFETY</a>
-<ul class="sectlevel3">
-<li><a href="#_4_1_tipos_anulables">4.1 Tipos Anulables</a></li>
-<li><a href="#_4_2_patrones_de_null_safety">4.2 Patrones de Null Safety</a></li>
-</ul>
-</li>
-<li><a href="#_bloque_5_características_avanzadas">🎯 BLOQUE 5: CARACTERÍSTICAS AVANZADAS</a>
-<ul class="sectlevel3">
-<li><a href="#_5_1_extensiones">5.1 Extensiones</a></li>
-<li><a href="#_5_2_generics">5.2 Generics</a></li>
-<li><a href="#_5_3_patterns_dart_3">5.3 Patterns (Dart 3+)</a></li>
-</ul>
-</li>
-<li><a href="#_bloque_6_dart_específico_para_flutter">🎯 BLOQUE 6: DART ESPECÍFICO PARA FLUTTER</a>
-<ul class="sectlevel3">
-<li><a href="#_6_1_widgets_y_estado">6.1 Widgets y Estado</a></li>
-<li><a href="#_6_2_gestión_de_estado_con_provider">6.2 Gestión de Estado con Provider</a></li>
-<li><a href="#_6_3_keys_y_rendimiento">6.3 Keys y Rendimiento</a></li>
-</ul>
-</li>
-<li><a href="#_ejercicios_prácticos_detallados">📝 EJERCICIOS PRÁCTICOS DETALLADOS</a>
-<ul class="sectlevel3">
-<li><a href="#_ejercicio_1_calculadora_cli">Ejercicio 1: Calculadora CLI</a></li>
-<li><a href="#_ejercicio_2_sistema_de_vehículos_con_herencia">Ejercicio 2: Sistema de Vehículos con Herencia</a></li>
-<li><a href="#_ejercicio_3_app_de_tareas_con_provider">Ejercicio 3: App de Tareas con Provider</a></li>
-</ul>
-</li>
-<li><a href="#_recursos_y_referencias">📚 RECURSOS Y REFERENCIAS</a>
-<ul class="sectlevel3">
-<li><a href="#_documentación_oficial">Documentación Oficial</a></li>
-<li><a href="#_paquetes_recomendados">Paquetes Recomendados</a></li>
-<li><a href="#_libros_y_tutoriales">Libros y Tutoriales</a></li>
-</ul>
-</li>
-<li><a href="#_resumen_de_tiempo">📊 RESUMEN DE TIEMPO</a></li>
-</ul>
-</li>
-</ul>
-</div>
 </div>
 <div id="content">
 <div class="sect1">
-<h2 id="_dart_para_flutter">DART PARA FLUTTER</h2>
+<h2 id="_temario_completo_dart_para_flutter">📋 TEMARIO COMPLETO: DART PARA FLUTTER</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p><strong>Duración recomendada:</strong> 12-15 horas (sesión extendida o dividida en 4-5
@@ -704,7 +632,7 @@ programación: el null pointer exception</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">dart --version</code></pre>
+<pre class="highlight"><code class="language-bash" data-lang="bash">dart --version</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -718,7 +646,7 @@ programación: el null pointer exception</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># Instalar Homebrew si no lo tienes
+<pre class="highlight"><code class="language-bash" data-lang="bash"># Instalar Homebrew si no lo tienes
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
 # Instalar Dart
@@ -731,7 +659,7 @@ brew install dart</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-powershell hljs" data-lang="powershell"># Instalar Chocolatey si no lo tienes
+<pre class="highlight"><code class="language-powershell" data-lang="powershell"># Instalar Chocolatey si no lo tienes
 Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
 
 # Instalar Dart
@@ -743,7 +671,7 @@ choco install dart-sdk</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># Agregar repositorio de Dart
+<pre class="highlight"><code class="language-bash" data-lang="bash"># Agregar repositorio de Dart
 sudo apt-get update
 sudo apt-get install apt-transport-https
 wget -qO- https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo gpg --dearmor -o /usr/share/keyrings/dart.gpg
@@ -759,7 +687,7 @@ sudo apt-get install dart</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">dart --version
+<pre class="highlight"><code class="language-bash" data-lang="bash">dart --version
 # Deberías ver: Dart SDK version: 3.x.x (stable) on "macos/windows/linux"</code></pre>
 </div>
 </div>
@@ -771,7 +699,7 @@ sudo apt-get install dart</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># Crear archivo
+<pre class="highlight"><code class="language-bash" data-lang="bash"># Crear archivo
 echo "void main() { print('Hola, mundo'); }" &gt; hola.dart
 
 # Ejecutar
@@ -784,7 +712,7 @@ dart run hola.dart
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># Crear proyecto
+<pre class="highlight"><code class="language-bash" data-lang="bash"># Crear proyecto
 dart create mi_primer_app
 
 # Entrar al directorio
@@ -807,7 +735,7 @@ dart run
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// bin/mi_primer_app.dart
+<pre class="highlight"><code class="language-dart" data-lang="dart">// bin/mi_primer_app.dart
 
 // Función main: punto de entrada de todo programa Dart
 // - Es obligatoria
@@ -828,7 +756,7 @@ void main() {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// Versión más simple
+<pre class="highlight"><code class="language-dart" data-lang="dart">// Versión más simple
 void main() {
   print('Hola');
 }
@@ -860,7 +788,7 @@ aplicación - Dependencias (paquetes externos) - Configuración del SDK</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml"># pubspec.yaml
+<pre class="highlight"><code class="language-yaml" data-lang="yaml"># pubspec.yaml
 
 # ============================================
 # METADATOS DEL PAQUETE
@@ -963,7 +891,7 @@ dev_dependencies:
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># Descargar/actualizar dependencias
+<pre class="highlight"><code class="language-bash" data-lang="bash"># Descargar/actualizar dependencias
 dart pub get
 
 # Ver dependencias instaladas
@@ -987,7 +915,7 @@ dart pub publish --dry-run</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml"># analysis_options.yaml
+<pre class="highlight"><code class="language-yaml" data-lang="yaml"># analysis_options.yaml
 
 include: package:lints/recommended.yaml
 
@@ -1045,7 +973,7 @@ Dart, las variables tienen:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// Declaración: reservar espacio para la variable
+<pre class="highlight"><code class="language-dart" data-lang="dart">// Declaración: reservar espacio para la variable
 String nombre;
 
 // Inicialización: asignar un valor
@@ -1067,7 +995,7 @@ propósito específico:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// Dart infiere el tipo automáticamente
+<pre class="highlight"><code class="language-dart" data-lang="dart">// Dart infiere el tipo automáticamente
 var nombre = 'Juan';        // Tipo: String
 var edad = 25;             // Tipo: int
 var altura = 1.75;         // Tipo: double
@@ -1093,7 +1021,7 @@ tipo es obvio por el valor - Para reducir verbosidad en código simple</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// final: valor que no puede cambiar después de inicializarse
+<pre class="highlight"><code class="language-dart" data-lang="dart">// final: valor que no puede cambiar después de inicializarse
 // Se determina en TIEMPO DE EJECUCIÓN (runtime)
 
 final String nombre;
@@ -1118,7 +1046,7 @@ que se asignan en el constructor</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// const: valor conocido en TIEMPO DE COMPILACIÓN
+<pre class="highlight"><code class="language-dart" data-lang="dart">// const: valor conocido en TIEMPO DE COMPILACIÓN
 // Debe poder calcularse durante la compilación
 
 const pi = 3.14159;
@@ -1153,7 +1081,7 @@ instancias const)</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// late: variable que se inicializará más tarde
+<pre class="highlight"><code class="language-dart" data-lang="dart">// late: variable que se inicializará más tarde
 // Se usa cuando NO puedes inicializar en el constructor
 // pero sabes que tendrá valor antes de usarse
 
@@ -1199,7 +1127,7 @@ loading) - Cuando el valor depende de otro que aún no existe</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// Especificar el tipo manualmente
+<pre class="highlight"><code class="language-dart" data-lang="dart">// Especificar el tipo manualmente
 String nombre = 'Juan';
 int edad = 25;
 double altura = 1.75;
@@ -1269,7 +1197,7 @@ String? apellido; // Puede ser null</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// ❌ Error 1: Variable no inicializada (sin late)
+<pre class="highlight"><code class="language-dart" data-lang="dart">// ❌ Error 1: Variable no inicializada (sin late)
 String nombre;
 print(nombre); // Error: Non-nullable variable must be initialized
 
@@ -1316,7 +1244,7 @@ lista.add(4); // OK</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// Declaración
+<pre class="highlight"><code class="language-dart" data-lang="dart">// Declaración
 int edad = 25;
 int year = 2024;
 int negativo = -100;
@@ -1387,7 +1315,7 @@ valor.isFinite;         // true (¿es finito?)</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// Declaración
+<pre class="highlight"><code class="language-dart" data-lang="dart">// Declaración
 double precio = 99.99;
 double pi = 3.14159;
 double cientifico = 1.5e10; // 15000000000.0
@@ -1459,7 +1387,7 @@ valor.toStringAsPrecision(3);  // '3.14' (3 dígitos significativos)</code></pre
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// num acepta int o double
+<pre class="highlight"><code class="language-dart" data-lang="dart">// num acepta int o double
 num valor = 42;      // int
 valor = 3.14;        // double (OK)
 
@@ -1481,7 +1409,7 @@ n.toDouble();         // double (42.0)</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// Ejemplo: Cálculo de IVA
+<pre class="highlight"><code class="language-dart" data-lang="dart">// Ejemplo: Cálculo de IVA
 double calcularIVA(double precio, double tasaIVA) {
   return precio * tasaIVA / 100;
 }
@@ -1531,7 +1459,7 @@ UTF-16.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// Comillas simples o dobles (equivalentes)
+<pre class="highlight"><code class="language-dart" data-lang="dart">// Comillas simples o dobles (equivalentes)
 String nombre1 = 'Juan';
 String nombre2 = "Juan";
 
@@ -1558,7 +1486,7 @@ String regex = r'\d+\.\d+';
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// Interpolación básica con $
+<pre class="highlight"><code class="language-dart" data-lang="dart">// Interpolación básica con $
 String nombre = 'Juan';
 int edad = 25;
 
@@ -1583,7 +1511,7 @@ String mayusculas = 'Nombre en mayúsculas: ${nombre.toUpperCase()}';</code></pr
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// Concatenación con +
+<pre class="highlight"><code class="language-dart" data-lang="dart">// Concatenación con +
 String completo = 'Hola' + ' ' + 'Mundo'; // 'Hola Mundo'
 
 // Concatenación adyacente (solo literales)
@@ -1612,7 +1540,7 @@ String resultado = buffer.toString();
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">String texto = '  Hola Mundo  ';
+<pre class="highlight"><code class="language-dart" data-lang="dart">String texto = '  Hola Mundo  ';
 
 // Propiedades
 texto.length;              // 13 (longitud)
@@ -1665,7 +1593,7 @@ texto.trim().startsWith('Hola'); // true</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// Escapes comunes
+<pre class="highlight"><code class="language-dart" data-lang="dart">// Escapes comunes
 String saltoLinea = 'Línea 1\nLínea 2';      // \n = nueva línea
 String tabulacion = 'Col1\tCol2';             // \t = tabulador
 String comillas = 'Ella dijo: "Hola"';        // \" = comillas
@@ -1686,7 +1614,7 @@ String nulo = 'Texto\u0000con nulo';         // Carácter nulo</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// Ejemplo: Validación de email
+<pre class="highlight"><code class="language-dart" data-lang="dart">// Ejemplo: Validación de email
 bool esEmailValido(String email) {
   if (email.isEmpty) return false;
 
@@ -1754,7 +1682,7 @@ print(ocultar('juan@email.com', visiblesFinal: 4)); // 'ju*****.com'</code></pre
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// Declaración
+<pre class="highlight"><code class="language-dart" data-lang="dart">// Declaración
 bool activo = true;
 bool completado = false;
 
@@ -1799,7 +1727,7 @@ void main() {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// Desde otros tipos
+<pre class="highlight"><code class="language-dart" data-lang="dart">// Desde otros tipos
 int numero = 1;
 bool esPositivo = numero &gt; 0; // true
 
@@ -1824,7 +1752,7 @@ bool esEntradaValida(String? input) {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// En JavaScript/Python, algunos valores son "falsy":
+<pre class="highlight"><code class="language-dart" data-lang="dart">// En JavaScript/Python, algunos valores son "falsy":
 // null, undefined, 0, "", [], false
 
 // ❌ En Dart NO existe este concepto:
@@ -1850,7 +1778,7 @@ bool tieneElementos = lista?.isNotEmpty ?? false; // false</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// Ejemplo: Validar formulario
+<pre class="highlight"><code class="language-dart" data-lang="dart">// Ejemplo: Validar formulario
 class FormularioValidacion {
   String? email;
   String? password;
@@ -1923,7 +1851,7 @@ ofrece tres tipos principales:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// Lista literal
+<pre class="highlight"><code class="language-dart" data-lang="dart">// Lista literal
 List&lt;int&gt; numeros = [1, 2, 3, 4, 5];
 var frutas = ['manzana', 'banana', 'naranja']; // Tipo inferido: List&lt;String&gt;
 
@@ -1951,7 +1879,7 @@ const List&lt;int&gt; inmutable = [1, 2, 3];
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">List&lt;String&gt; frutas = ['manzana', 'banana', 'naranja', 'uva'];
+<pre class="highlight"><code class="language-dart" data-lang="dart">List&lt;String&gt; frutas = ['manzana', 'banana', 'naranja', 'uva'];
 
 // Por índice (0-based)
 frutas[0];               // 'manzana'
@@ -1982,7 +1910,7 @@ frutas.getRange(1, 3);   // Iterable: ('banana', 'naranja')</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">List&lt;String&gt; frutas = ['manzana'];
+<pre class="highlight"><code class="language-dart" data-lang="dart">List&lt;String&gt; frutas = ['manzana'];
 
 // Añadir al final
 frutas.add('banana');          // ['manzana', 'banana']
@@ -2019,7 +1947,7 @@ var combinada = ['fresa', ...?nullable]; // ['fresa'] (nullable se ignora)</code
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">List&lt;int&gt; numeros = [1, 2, 3, 4, 5, 3, 2, 1];
+<pre class="highlight"><code class="language-dart" data-lang="dart">List&lt;int&gt; numeros = [1, 2, 3, 4, 5, 3, 2, 1];
 
 // Búsqueda
 numeros.indexOf(3);            // 2 (primer índice de 3)
@@ -2046,7 +1974,7 @@ numeros.singleWhere((n) =&gt; n == 5); // 5 (error si hay más de uno)</code></p
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">List&lt;int&gt; numeros = [3, 1, 4, 1, 5, 9, 2, 6];
+<pre class="highlight"><code class="language-dart" data-lang="dart">List&lt;int&gt; numeros = [3, 1, 4, 1, 5, 9, 2, 6];
 
 // Ordenar in-place (modifica la lista original)
 numeros.sort(); // [1, 1, 2, 3, 4, 5, 6, 9]
@@ -2085,7 +2013,7 @@ usuarios.sort((a, b) =&gt; a.nombre.compareTo(b.nombre));</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">List&lt;String&gt; frutas = ['manzana', 'banana', 'naranja'];
+<pre class="highlight"><code class="language-dart" data-lang="dart">List&lt;String&gt; frutas = ['manzana', 'banana', 'naranja'];
 
 // For-each
 frutas.forEach((fruta) {
@@ -2114,7 +2042,7 @@ while (iter.moveNext()) {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">List&lt;int&gt; numeros = [1, 2, 3, 4, 5];
+<pre class="highlight"><code class="language-dart" data-lang="dart">List&lt;int&gt; numeros = [1, 2, 3, 4, 5];
 
 // map: transforma cada elemento
 var cuadrados = numeros.map((n) =&gt; n * n).toList();
@@ -2169,7 +2097,7 @@ var unicos = conDuplicados.toSet().toList();
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// Ejemplo 1: Gestión de tareas
+<pre class="highlight"><code class="language-dart" data-lang="dart">// Ejemplo 1: Gestión de tareas
 class GestorTareas {
   List&lt;String&gt; _tareas = [];
 
@@ -2253,7 +2181,7 @@ Es útil cuando necesitas garantizar unicidad.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// Creación de Sets
+<pre class="highlight"><code class="language-dart" data-lang="dart">// Creación de Sets
 Set&lt;int&gt; numeros = {1, 2, 3, 4, 5};
 var frutas = &lt;String&gt;{'manzana', 'banana'}; // Tipo inferido
 
@@ -2299,7 +2227,7 @@ setA.contains(1);             // true</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// Ejemplo 1: Eliminar duplicados de una lista
+<pre class="highlight"><code class="language-dart" data-lang="dart">// Ejemplo 1: Eliminar duplicados de una lista
 List&lt;int&gt; conRepetidos = [1, 2, 2, 3, 3, 3, 4];
 List&lt;int&gt; sinRepetidos = conRepetidos.toSet().toList();
 // [1, 2, 3, 4] (orden no garantizado)
@@ -2359,7 +2287,7 @@ class ComparadorListas {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// Creación de Maps
+<pre class="highlight"><code class="language-dart" data-lang="dart">// Creación de Maps
 Map&lt;String, int&gt; edades = {
   'Juan': 25,
   'Ana': 30,
@@ -2432,7 +2360,7 @@ for (var clave in edades.keys) {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// map: transformar valores
+<pre class="highlight"><code class="language-dart" data-lang="dart">// map: transformar valores
 var precios = {'a': 10, 'b': 20, 'c': 30};
 var conIVA = precios.map((k, v) =&gt; MapEntry(k, v * 1.21));
 // {'a': 12.1, 'b': 24.2, 'c': 36.3}
@@ -2476,7 +2404,7 @@ var agrupados = usuarios.fold&lt;Map&lt;int, List&lt;String&gt;&gt;&gt;(
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// Ejemplo 1: Cache simple
+<pre class="highlight"><code class="language-dart" data-lang="dart">// Ejemplo 1: Cache simple
 class Cache&lt;T&gt; {
   final Map&lt;String, T&gt; _cache = {};
   final Duration expiracion;
@@ -2559,7 +2487,7 @@ funciones.</p>
 <h5 id="_declaración_básica">Declaración básica</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// Función simple
+<pre class="highlight"><code class="language-dart" data-lang="dart">// Función simple
 void saludar() {
   print('Hola, mundo!');
 }
@@ -2590,7 +2518,7 @@ void mostrarMensaje(String mensaje) {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// Parámetros en orden específico
+<pre class="highlight"><code class="language-dart" data-lang="dart">// Parámetros en orden específico
 void presentar(String nombre, int edad, String ciudad) {
   print('$nombre tiene $edad años y vive en $ciudad');
 }
@@ -2604,7 +2532,7 @@ presentar('Juan', 25, 'Madrid'); // Correcto
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// Parámetros entre [] son opcionales
+<pre class="highlight"><code class="language-dart" data-lang="dart">// Parámetros entre [] son opcionales
 void formato(String texto, [String prefijo = '', String sufijo = '']) {
   print('$prefijo$texto$sufijo');
 }
@@ -2627,7 +2555,7 @@ void presentacion(String nombre, [int? edad]) {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// Parámetros entre {} son nombrados
+<pre class="highlight"><code class="language-dart" data-lang="dart">// Parámetros entre {} son nombrados
 void configurar({
   String host = 'localhost',
   int puerto = 8080,
@@ -2659,7 +2587,7 @@ crearUsuario(nombre: 'Juan', email: 'juan@email.com'); // edad = 0
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">void procesar(
+<pre class="highlight"><code class="language-dart" data-lang="dart">void procesar(
   int id,                          // Posicional obligatorio
   String nombre,                    // Posicional obligatorio
   {String? descripcion,            // Nombrado opcional
@@ -2684,7 +2612,7 @@ procesar(
 <h5 id="_funciones_como_valores">Funciones como valores</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// Asignar función a variable
+<pre class="highlight"><code class="language-dart" data-lang="dart">// Asignar función a variable
 var operacion = sumar;
 var resultado = operacion(5, 3); // 8
 
@@ -2715,7 +2643,7 @@ print(calcular(3, 4)); // {suma: 7, producto: 12}</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// Función que toma otra función como parámetro
+<pre class="highlight"><code class="language-dart" data-lang="dart">// Función que toma otra función como parámetro
 void ejecutarOperacion(int a, int b, int Function(int, int) operacion) {
   var resultado = operacion(a, b);
   print('Resultado: $resultado');
@@ -2755,7 +2683,7 @@ desordenados.sort((a, b) =&gt; a.compareTo(b));
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// Función que crea funciones
+<pre class="highlight"><code class="language-dart" data-lang="dart">// Función que crea funciones
 int Function(int) crearMultiplicador(int factor) {
   return (int n) =&gt; n * factor;
 }
@@ -2796,7 +2724,7 @@ print(formatearHTML('Hola')); // &lt;p&gt;Hola&lt;/p&gt;</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// Closure simple
+<pre class="highlight"><code class="language-dart" data-lang="dart">// Closure simple
 Function crearContador() {
   int cuenta = 0; // Variable capturada
 
@@ -2848,7 +2776,7 @@ print(saludarIngles('John'));   // Hello, John!</code></pre>
 <h5 id="_funciones_recursivas">Funciones recursivas</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// Factorial con recursión
+<pre class="highlight"><code class="language-dart" data-lang="dart">// Factorial con recursión
 int factorial(int n) {
   if (n &lt;= 1) return 1;
   return n * factorial(n - 1);
@@ -2882,7 +2810,7 @@ print(fibonacciMemo(40)); // Rápido</code></pre>
 <h5 id="_ejemplos_prácticos_de_funciones">Ejemplos prácticos de funciones</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// Ejemplo 1: Validador de formularios
+<pre class="highlight"><code class="language-dart" data-lang="dart">// Ejemplo 1: Validador de formularios
 class Validador {
   static String? requerido(String? valor) {
     if (valor == null || valor.isEmpty) {
@@ -2985,7 +2913,7 @@ void buscarConDebounce(String query, Function(String) onBuscar) {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">var edad = 18;
+<pre class="highlight"><code class="language-dart" data-lang="dart">var edad = 18;
 
 // if simple
 if (edad &gt;= 18) {
@@ -3027,7 +2955,7 @@ var categoria = edad &lt; 12 ? 'Niño'
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">String? nombre;
+<pre class="highlight"><code class="language-dart" data-lang="dart">String? nombre;
 
 // Operador ??
 var mostrar = nombre ?? 'Anónimo'; // Si nombre es null, usa 'Anónimo'
@@ -3062,7 +2990,7 @@ var longitudSegura = nombre?.length ?? 0; // Si nombre es null, usa 0</code></pr
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">var dia = 1;
+<pre class="highlight"><code class="language-dart" data-lang="dart">var dia = 1;
 
 // Switch tradicional
 switch (dia) {
@@ -3122,7 +3050,7 @@ var tipo = switch (objeto) {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// Bucle for básico
+<pre class="highlight"><code class="language-dart" data-lang="dart">// Bucle for básico
 for (var i = 0; i &lt; 5; i++) {
   print(i);
 }
@@ -3156,7 +3084,7 @@ for (var entrada in frutas.asMap().entries) {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// Iterar sobre lista
+<pre class="highlight"><code class="language-dart" data-lang="dart">// Iterar sobre lista
 var frutas = ['manzana', 'banana', 'naranja'];
 for (var fruta in frutas) {
   print(fruta);
@@ -3191,7 +3119,7 @@ for (var i in [1, 2, 3, 4, 5].where((n) =&gt; n.isEven)) {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// While: verifica condición antes de ejecutar
+<pre class="highlight"><code class="language-dart" data-lang="dart">// While: verifica condición antes de ejecutar
 var contador = 0;
 while (contador &lt; 5) {
   print(contador);
@@ -3217,7 +3145,7 @@ while (iterador.moveNext()) {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// break: salir del bucle
+<pre class="highlight"><code class="language-dart" data-lang="dart">// break: salir del bucle
 for (var i = 0; i &lt; 10; i++) {
   if (i == 5) break;
   print(i);
@@ -3256,7 +3184,7 @@ for (var i = 0; i &lt; 3; i++) {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// Collection if: incluir elementos condicionalmente
+<pre class="highlight"><code class="language-dart" data-lang="dart">// Collection if: incluir elementos condicionalmente
 var mostrarExtras = true;
 var menu = [
   'Plato principal',
@@ -3291,7 +3219,7 @@ var matriz = [
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// Ejemplo 1: Procesar archivo línea por línea
+<pre class="highlight"><code class="language-dart" data-lang="dart">// Ejemplo 1: Procesar archivo línea por línea
 Future&lt;void&gt; procesarArchivo(List&lt;String&gt; lineas) async {
   var numeroLinea = 1;
   for (var linea in lineas) {
@@ -3367,7 +3295,7 @@ void imprimirTablaMultiplicar(int maximo) {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// Assert: verificación en modo debug
+<pre class="highlight"><code class="language-dart" data-lang="dart">// Assert: verificación en modo debug
 void dividir(int a, int b) {
   assert(b != 0, 'El divisor no puede ser cero');
   print(a / b);
@@ -3419,7 +3347,7 @@ una clase.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">class Usuario {
+<pre class="highlight"><code class="language-dart" data-lang="dart">class Usuario {
   // ========================================
   // PROPIEDADES (CAMPOS DE INSTANCIA)
   // ========================================
@@ -3539,7 +3467,7 @@ una clase.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">void main() {
+<pre class="highlight"><code class="language-dart" data-lang="dart">void main() {
   // Crear instancia
   var usuario = Usuario('Juan', 25, 'juan@email.com', id: '123');
 
@@ -3584,7 +3512,7 @@ una clase.</p>
 <h5 id="_constructores_en_profundidad">Constructores en profundidad</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">class Punto {
+<pre class="highlight"><code class="language-dart" data-lang="dart">class Punto {
   final double x;
   final double y;
 
@@ -3644,7 +3572,7 @@ void main() {
 <h5 id="_inmutabilidad_y_copywith">Inmutabilidad y copyWith</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">class UsuarioInmutable {
+<pre class="highlight"><code class="language-dart" data-lang="dart">class UsuarioInmutable {
   final String nombre;
   final String email;
   final int edad;
@@ -3724,7 +3652,7 @@ void main() {
 <h5 id="_extensión_de_clases">Extensión de clases</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// Clase base
+<pre class="highlight"><code class="language-dart" data-lang="dart">// Clase base
 class Animal {
   String nombre;
   int edad;
@@ -3828,7 +3756,7 @@ void main() {
 <h5 id="_clases_abstractas">Clases abstractas</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// Clase abstracta: no se puede instanciar
+<pre class="highlight"><code class="language-dart" data-lang="dart">// Clase abstracta: no se puede instanciar
 class Figura {
   String nombre;
 
@@ -3911,7 +3839,7 @@ void main() {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// Interface implícita
+<pre class="highlight"><code class="language-dart" data-lang="dart">// Interface implícita
 class Volador {
   void volar() {
     print('Volando...');
@@ -3988,7 +3916,7 @@ class Murcielago implements Volador, Animal {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// Mixin básico
+<pre class="highlight"><code class="language-dart" data-lang="dart">// Mixin básico
 mixin Nadador {
   void nadar() {
     print('$runtimeType nada');
@@ -4089,7 +4017,7 @@ acceso como <code>public</code>/<code>private</code>.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// Encapsulamiento con guion bajo
+<pre class="highlight"><code class="language-dart" data-lang="dart">// Encapsulamiento con guion bajo
 
 class CuentaBancaria {
   // Propiedades privadas (convención: _ prefijo)
@@ -4203,7 +4131,7 @@ resultado.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// Síncrono: bloquea hasta completar
+<pre class="highlight"><code class="language-dart" data-lang="dart">// Síncrono: bloquea hasta completar
 String leerArchivoSync(String ruta) {
   // El programa se detiene aquí hasta leer el archivo
   return File(ruta).readAsStringSync();
@@ -4224,7 +4152,7 @@ Future&lt;String&gt; leerArchivoAsync(String ruta) async {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// Crear un Future
+<pre class="highlight"><code class="language-dart" data-lang="dart">// Crear un Future
 Future&lt;String&gt; obtenerNombre() {
   return Future.value('Juan'); // Completado inmediatamente
 }
@@ -4262,7 +4190,7 @@ hasta que el Future se complete.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// Función async
+<pre class="highlight"><code class="language-dart" data-lang="dart">// Función async
 Future&lt;String&gt; obtenerDatos() async {
   // await pausa hasta completar
   var datos = await obtenerDeRed();
@@ -4298,7 +4226,7 @@ Future&lt;List&lt;String&gt;&gt; obtenerDatosParalelos() async {
 <h5 id="_manejo_de_errores">Manejo de errores</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// Try-catch en async
+<pre class="highlight"><code class="language-dart" data-lang="dart">// Try-catch en async
 Future&lt;void&gt; manejoErrores() async {
   try {
     var resultado = await dividir(10, 0);
@@ -4335,7 +4263,7 @@ tiempo.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// Crear un Stream con async*
+<pre class="highlight"><code class="language-dart" data-lang="dart">// Crear un Stream con async*
 Stream&lt;int&gt; contar(int hasta) async* {
   for (var i = 1; i &lt;= hasta; i++) {
     await Future.delayed(Duration(seconds: 1));
@@ -4376,7 +4304,7 @@ Future&lt;void&gt; esperarStream() async {
 <h5 id="_streamcontroller">StreamController</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">import 'dart:async';
+<pre class="highlight"><code class="language-dart" data-lang="dart">import 'dart:async';
 
 class Emisor {
   final StreamController&lt;String&gt; _controller = StreamController&lt;String&gt;();
@@ -4417,7 +4345,7 @@ void main() {
 <h5 id="_transformadores_de_streams">Transformadores de Streams</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">Stream&lt;int&gt; numeros() async* {
+<pre class="highlight"><code class="language-dart" data-lang="dart">Stream&lt;int&gt; numeros() async* {
   for (var i = 0; i &lt; 10; i++) {
     await Future.delayed(Duration(milliseconds: 100));
     yield i;
@@ -4460,7 +4388,7 @@ Future&lt;void&gt; transformaciones() async {
 <h5 id="_llamadas_http">Llamadas HTTP</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">import 'package:http/http.dart' as http;
+<pre class="highlight"><code class="language-dart" data-lang="dart">import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class ApiService {
@@ -4511,7 +4439,7 @@ class ApiService {
 <h5 id="_widget_con_carga_de_datos">Widget con carga de datos</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">import 'package:flutter/material.dart';
+<pre class="highlight"><code class="language-dart" data-lang="dart">import 'package:flutter/material.dart';
 
 class UsuarioWidget extends StatefulWidget {
   final int usuarioId;
@@ -4594,7 +4522,7 @@ class _UsuarioWidgetState extends State&lt;UsuarioWidget&gt; {
 <h4 id="_4_1_tipos_anulables">4.1 Tipos Anulables</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// Tipo no anulable: nunca puede ser null
+<pre class="highlight"><code class="language-dart" data-lang="dart">// Tipo no anulable: nunca puede ser null
 String nombre = 'Juan';
 // nombre = null; // ❌ Error
 
@@ -4621,7 +4549,7 @@ apellido ??= 'Por defecto'; // Si apellido es null, asigna</code></pre>
 <h4 id="_4_2_patrones_de_null_safety">4.2 Patrones de Null Safety</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// Evitar el operador ! excesivo
+<pre class="highlight"><code class="language-dart" data-lang="dart">// Evitar el operador ! excesivo
 // ❌ Malo
 void proceso(String? texto) {
   print(texto!.length); // Peligroso
@@ -4676,7 +4604,7 @@ class Usuario {
 <h4 id="_5_1_extensiones">5.1 Extensiones</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// Extensión sobre String
+<pre class="highlight"><code class="language-dart" data-lang="dart">// Extensión sobre String
 extension StringExtension on String {
   String capitalizar() {
     if (isEmpty) return this;
@@ -4702,7 +4630,7 @@ print(texto.truncar(4)); // 'hola...'</code></pre>
 <h4 id="_5_2_generics">5.2 Generics</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// Clase genérica
+<pre class="highlight"><code class="language-dart" data-lang="dart">// Clase genérica
 class Contenedor&lt;T&gt; {
   final T valor;
 
@@ -4727,7 +4655,7 @@ print(longitud); // 4</code></pre>
 <h4 id="_5_3_patterns_dart_3">5.3 Patterns (Dart 3+)</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// Pattern matching con switch
+<pre class="highlight"><code class="language-dart" data-lang="dart">// Pattern matching con switch
 String clasificar(dynamic valor) {
   return switch (valor) {
     int n when n &lt; 0 =&gt; 'Negativo',
@@ -4773,7 +4701,7 @@ class Error&lt;T&gt; extends Resultado&lt;T&gt; {
 <h4 id="_6_1_widgets_y_estado">6.1 Widgets y Estado</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// StatelessWidget
+<pre class="highlight"><code class="language-dart" data-lang="dart">// StatelessWidget
 class MiWidget extends StatelessWidget {
   final String titulo;
   final String? subtitulo;
@@ -4840,7 +4768,7 @@ class _ContadorWidgetState extends State&lt;ContadorWidget&gt; {
 <h4 id="_6_2_gestión_de_estado_con_provider">6.2 Gestión de Estado con Provider</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">import 'package:provider/provider.dart';
+<pre class="highlight"><code class="language-dart" data-lang="dart">import 'package:provider/provider.dart';
 
 // Modelo con ChangeNotifier
 class ContadorModel extends ChangeNotifier {
@@ -4895,7 +4823,7 @@ class ContadorWidget extends StatelessWidget {
 <h4 id="_6_3_keys_y_rendimiento">6.3 Keys y Rendimiento</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">// Key para identificar widgets en listas
+<pre class="highlight"><code class="language-dart" data-lang="dart">// Key para identificar widgets en listas
 class ListaWidget extends StatelessWidget {
   final List&lt;String&gt; items;
 
@@ -4931,7 +4859,7 @@ Text('Hola'); // Se reconstruye cada vez</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">import 'dart:io';
+<pre class="highlight"><code class="language-dart" data-lang="dart">import 'dart:io';
 
 class Calculadora {
   double sumar(double a, double b) =&gt; a + b;
@@ -4988,7 +4916,7 @@ void main() {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">abstract class Vehiculo {
+<pre class="highlight"><code class="language-dart" data-lang="dart">abstract class Vehiculo {
   String marca;
   String modelo;
   int year;
@@ -5076,7 +5004,7 @@ void main() {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-dart hljs" data-lang="dart">import 'package:flutter/material.dart';
+<pre class="highlight"><code class="language-dart" data-lang="dart">import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 // Modelo
@@ -5349,15 +5277,8 @@ class ListaTareas extends StatelessWidget {
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-06-22 08:23:00 +0200
+Last updated 2026-07-06 07:47:14 +0200
 </div>
 </div>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.3/highlight.min.js"></script>
-<script>
-if (!hljs.initHighlighting.called) {
-  hljs.initHighlighting.called = true
-  ;[].slice.call(document.querySelectorAll('pre.highlight > code[data-lang]')).forEach(function (el) { hljs.highlightBlock(el) })
-}
-</script>
 </body>
 </html>

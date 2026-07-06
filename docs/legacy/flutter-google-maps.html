@@ -1,0 +1,3070 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.26">
+<title>Módulo: Google Maps para Flutter</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
+<style>
+/*! Asciidoctor default stylesheet | MIT License | https://asciidoctor.org */
+/* Uncomment the following line when using as a custom stylesheet */
+/* @import "https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700"; */
+html{font-family:sans-serif;-webkit-text-size-adjust:100%}
+a{background:none}
+a:focus{outline:thin dotted}
+a:active,a:hover{outline:0}
+h1{font-size:2em;margin:.67em 0}
+b,strong{font-weight:bold}
+abbr{font-size:.9em}
+abbr[title]{cursor:help;border-bottom:1px dotted #dddddf;text-decoration:none}
+dfn{font-style:italic}
+hr{height:0}
+mark{background:#ff0;color:#000}
+code,kbd,pre,samp{font-family:monospace;font-size:1em}
+pre{white-space:pre-wrap}
+q{quotes:"\201C" "\201D" "\2018" "\2019"}
+small{font-size:80%}
+sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}
+sup{top:-.5em}
+sub{bottom:-.25em}
+img{border:0}
+svg:not(:root){overflow:hidden}
+figure{margin:0}
+audio,video{display:inline-block}
+audio:not([controls]){display:none;height:0}
+fieldset{border:1px solid silver;margin:0 2px;padding:.35em .625em .75em}
+legend{border:0;padding:0}
+button,input,select,textarea{font-family:inherit;font-size:100%;margin:0}
+button,input{line-height:normal}
+button,select{text-transform:none}
+button,html input[type=button],input[type=reset],input[type=submit]{-webkit-appearance:button;cursor:pointer}
+button[disabled],html input[disabled]{cursor:default}
+input[type=checkbox],input[type=radio]{padding:0}
+button::-moz-focus-inner,input::-moz-focus-inner{border:0;padding:0}
+textarea{overflow:auto;vertical-align:top}
+table{border-collapse:collapse;border-spacing:0}
+*,::before,::after{box-sizing:border-box}
+html,body{font-size:100%}
+body{background:#fff;color:rgba(0,0,0,.8);padding:0;margin:0;font-family:"Noto Serif","DejaVu Serif",serif;line-height:1;position:relative;cursor:auto;-moz-tab-size:4;-o-tab-size:4;tab-size:4;word-wrap:anywhere;-moz-osx-font-smoothing:grayscale;-webkit-font-smoothing:antialiased}
+a:hover{cursor:pointer}
+img,object,embed{max-width:100%;height:auto}
+object,embed{height:100%}
+img{-ms-interpolation-mode:bicubic}
+.left{float:left!important}
+.right{float:right!important}
+.text-left{text-align:left!important}
+.text-right{text-align:right!important}
+.text-center{text-align:center!important}
+.text-justify{text-align:justify!important}
+.hide{display:none}
+img,object,svg{display:inline-block;vertical-align:middle}
+textarea{height:auto;min-height:50px}
+select{width:100%}
+.subheader,.admonitionblock td.content>.title,.audioblock>.title,.exampleblock>.title,.imageblock>.title,.listingblock>.title,.literalblock>.title,.stemblock>.title,.openblock>.title,.paragraph>.title,.quoteblock>.title,table.tableblock>.title,.verseblock>.title,.videoblock>.title,.dlist>.title,.olist>.title,.ulist>.title,.qlist>.title,.hdlist>.title{line-height:1.45;color:#7a2518;font-weight:400;margin-top:0;margin-bottom:.25em}
+div,dl,dt,dd,ul,ol,li,h1,h2,h3,#toctitle,.sidebarblock>.content>.title,h4,h5,h6,pre,form,p,blockquote,th,td{margin:0;padding:0}
+a{color:#2156a5;text-decoration:underline;line-height:inherit}
+a:hover,a:focus{color:#1d4b8f}
+a img{border:0}
+p{line-height:1.6;margin-bottom:1.25em;text-rendering:optimizeLegibility}
+p aside{font-size:.875em;line-height:1.35;font-style:italic}
+h1,h2,h3,#toctitle,.sidebarblock>.content>.title,h4,h5,h6{font-family:"Open Sans","DejaVu Sans",sans-serif;font-weight:300;font-style:normal;color:#ba3925;text-rendering:optimizeLegibility;margin-top:1em;margin-bottom:.5em;line-height:1.0125em}
+h1 small,h2 small,h3 small,#toctitle small,.sidebarblock>.content>.title small,h4 small,h5 small,h6 small{font-size:60%;color:#e99b8f;line-height:0}
+h1{font-size:2.125em}
+h2{font-size:1.6875em}
+h3,#toctitle,.sidebarblock>.content>.title{font-size:1.375em}
+h4,h5{font-size:1.125em}
+h6{font-size:1em}
+hr{border:solid #dddddf;border-width:1px 0 0;clear:both;margin:1.25em 0 1.1875em}
+em,i{font-style:italic;line-height:inherit}
+strong,b{font-weight:bold;line-height:inherit}
+small{font-size:60%;line-height:inherit}
+code{font-family:"Droid Sans Mono","DejaVu Sans Mono",monospace;font-weight:400;color:rgba(0,0,0,.9)}
+ul,ol,dl{line-height:1.6;margin-bottom:1.25em;list-style-position:outside;font-family:inherit}
+ul,ol{margin-left:1.5em}
+ul li ul,ul li ol{margin-left:1.25em;margin-bottom:0}
+ul.circle{list-style-type:circle}
+ul.disc{list-style-type:disc}
+ul.square{list-style-type:square}
+ul.circle ul:not([class]),ul.disc ul:not([class]),ul.square ul:not([class]){list-style:inherit}
+ol li ul,ol li ol{margin-left:1.25em;margin-bottom:0}
+dl dt{margin-bottom:.3125em;font-weight:bold}
+dl dd{margin-bottom:1.25em}
+blockquote{margin:0 0 1.25em;padding:.5625em 1.25em 0 1.1875em;border-left:1px solid #ddd}
+blockquote,blockquote p{line-height:1.6;color:rgba(0,0,0,.85)}
+@media screen and (min-width:768px){h1,h2,h3,#toctitle,.sidebarblock>.content>.title,h4,h5,h6{line-height:1.2}
+h1{font-size:2.75em}
+h2{font-size:2.3125em}
+h3,#toctitle,.sidebarblock>.content>.title{font-size:1.6875em}
+h4{font-size:1.4375em}}
+table{background:#fff;margin-bottom:1.25em;border:1px solid #dedede;word-wrap:normal}
+table thead,table tfoot{background:#f7f8f7}
+table thead tr th,table thead tr td,table tfoot tr th,table tfoot tr td{padding:.5em .625em .625em;font-size:inherit;color:rgba(0,0,0,.8);text-align:left}
+table tr th,table tr td{padding:.5625em .625em;font-size:inherit;color:rgba(0,0,0,.8)}
+table tr.even,table tr.alt{background:#f8f8f7}
+table thead tr th,table tfoot tr th,table tbody tr td,table tr td,table tfoot tr td{line-height:1.6}
+h1,h2,h3,#toctitle,.sidebarblock>.content>.title,h4,h5,h6{line-height:1.2;word-spacing:-.05em}
+h1 strong,h2 strong,h3 strong,#toctitle strong,.sidebarblock>.content>.title strong,h4 strong,h5 strong,h6 strong{font-weight:400}
+.center{margin-left:auto;margin-right:auto}
+.stretch{width:100%}
+.clearfix::before,.clearfix::after,.float-group::before,.float-group::after{content:" ";display:table}
+.clearfix::after,.float-group::after{clear:both}
+:not(pre).nobreak{word-wrap:normal}
+:not(pre).nowrap{white-space:nowrap}
+:not(pre).pre-wrap{white-space:pre-wrap}
+:not(pre):not([class^=L])>code{font-size:.9375em;font-style:normal!important;letter-spacing:0;padding:.1em .5ex;word-spacing:-.15em;background:#f7f7f8;border-radius:4px;line-height:1.45;text-rendering:optimizeSpeed}
+pre{color:rgba(0,0,0,.9);font-family:"Droid Sans Mono","DejaVu Sans Mono",monospace;line-height:1.45;text-rendering:optimizeSpeed}
+pre code,pre pre{color:inherit;font-size:inherit;line-height:inherit}
+pre.nowrap,pre.nowrap pre{white-space:pre;word-wrap:normal}
+em em{font-style:normal}
+strong strong{font-weight:400}
+.keyseq{color:rgba(51,51,51,.8)}
+kbd{font-family:"Droid Sans Mono","DejaVu Sans Mono",monospace;display:inline-block;color:rgba(0,0,0,.8);font-size:.65em;line-height:1.45;background:#f7f7f7;border:1px solid #ccc;border-radius:3px;box-shadow:0 1px 0 rgba(0,0,0,.2),inset 0 0 0 .1em #fff;margin:0 .15em;padding:.2em .5em;vertical-align:middle;position:relative;top:-.1em;white-space:nowrap}
+.keyseq kbd:first-child{margin-left:0}
+.keyseq kbd:last-child{margin-right:0}
+.menuseq,.menuref{color:#000}
+.menuseq b:not(.caret),.menuref{font-weight:inherit}
+.menuseq{word-spacing:-.02em}
+.menuseq b.caret{font-size:1.25em;line-height:.8}
+.menuseq i.caret{font-weight:bold;text-align:center;width:.45em}
+b.button::before,b.button::after{position:relative;top:-1px;font-weight:400}
+b.button::before{content:"[";padding:0 3px 0 2px}
+b.button::after{content:"]";padding:0 2px 0 3px}
+p a>code:hover{color:rgba(0,0,0,.9)}
+#header,#content,#footnotes,#footer{width:100%;margin:0 auto;max-width:62.5em;*zoom:1;position:relative;padding-left:.9375em;padding-right:.9375em}
+#header::before,#header::after,#content::before,#content::after,#footnotes::before,#footnotes::after,#footer::before,#footer::after{content:" ";display:table}
+#header::after,#content::after,#footnotes::after,#footer::after{clear:both}
+#content{margin-top:1.25em}
+#content::before{content:none}
+#header>h1:first-child{color:rgba(0,0,0,.85);margin-top:2.25rem;margin-bottom:0}
+#header>h1:first-child+#toc{margin-top:8px;border-top:1px solid #dddddf}
+#header>h1:only-child{border-bottom:1px solid #dddddf;padding-bottom:8px}
+#header .details{border-bottom:1px solid #dddddf;line-height:1.45;padding-top:.25em;padding-bottom:.25em;padding-left:.25em;color:rgba(0,0,0,.6);display:flex;flex-flow:row wrap}
+#header .details span:first-child{margin-left:-.125em}
+#header .details span.email a{color:rgba(0,0,0,.85)}
+#header .details br{display:none}
+#header .details br+span::before{content:"\00a0\2013\00a0"}
+#header .details br+span.author::before{content:"\00a0\22c5\00a0";color:rgba(0,0,0,.85)}
+#header .details br+span#revremark::before{content:"\00a0|\00a0"}
+#header #revnumber{text-transform:capitalize}
+#header #revnumber::after{content:"\00a0"}
+#content>h1:first-child:not([class]){color:rgba(0,0,0,.85);border-bottom:1px solid #dddddf;padding-bottom:8px;margin-top:0;padding-top:1rem;margin-bottom:1.25rem}
+#toc{border-bottom:1px solid #e7e7e9;padding-bottom:.5em}
+#toc>ul{margin-left:.125em}
+#toc ul.sectlevel0>li>a{font-style:italic}
+#toc ul.sectlevel0 ul.sectlevel1{margin:.5em 0}
+#toc ul{font-family:"Open Sans","DejaVu Sans",sans-serif;list-style-type:none}
+#toc li{line-height:1.3334;margin-top:.3334em}
+#toc a{text-decoration:none}
+#toc a:active{text-decoration:underline}
+#toctitle{color:#7a2518;font-size:1.2em}
+@media screen and (min-width:768px){#toctitle{font-size:1.375em}
+body.toc2{padding-left:15em;padding-right:0}
+body.toc2 #header>h1:nth-last-child(2){border-bottom:1px solid #dddddf;padding-bottom:8px}
+#toc.toc2{margin-top:0!important;background:#f8f8f7;position:fixed;width:15em;left:0;top:0;border-right:1px solid #e7e7e9;border-top-width:0!important;border-bottom-width:0!important;z-index:1000;padding:1.25em 1em;height:100%;overflow:auto}
+#toc.toc2 #toctitle{margin-top:0;margin-bottom:.8rem;font-size:1.2em}
+#toc.toc2>ul{font-size:.9em;margin-bottom:0}
+#toc.toc2 ul ul{margin-left:0;padding-left:1em}
+#toc.toc2 ul.sectlevel0 ul.sectlevel1{padding-left:0;margin-top:.5em;margin-bottom:.5em}
+body.toc2.toc-right{padding-left:0;padding-right:15em}
+body.toc2.toc-right #toc.toc2{border-right-width:0;border-left:1px solid #e7e7e9;left:auto;right:0}}
+@media screen and (min-width:1280px){body.toc2{padding-left:20em;padding-right:0}
+#toc.toc2{width:20em}
+#toc.toc2 #toctitle{font-size:1.375em}
+#toc.toc2>ul{font-size:.95em}
+#toc.toc2 ul ul{padding-left:1.25em}
+body.toc2.toc-right{padding-left:0;padding-right:20em}}
+#content #toc{border:1px solid #e0e0dc;margin-bottom:1.25em;padding:1.25em;background:#f8f8f7;border-radius:4px}
+#content #toc>:first-child{margin-top:0}
+#content #toc>:last-child{margin-bottom:0}
+#footer{max-width:none;background:rgba(0,0,0,.8);padding:1.25em}
+#footer-text{color:hsla(0,0%,100%,.8);line-height:1.44}
+#content{margin-bottom:.625em}
+.sect1{padding-bottom:.625em}
+@media screen and (min-width:768px){#content{margin-bottom:1.25em}
+.sect1{padding-bottom:1.25em}}
+.sect1:last-child{padding-bottom:0}
+.sect1+.sect1{border-top:1px solid #e7e7e9}
+#content h1>a.anchor,h2>a.anchor,h3>a.anchor,#toctitle>a.anchor,.sidebarblock>.content>.title>a.anchor,h4>a.anchor,h5>a.anchor,h6>a.anchor{position:absolute;z-index:1001;width:1.5ex;margin-left:-1.5ex;display:block;text-decoration:none!important;visibility:hidden;text-align:center;font-weight:400}
+#content h1>a.anchor::before,h2>a.anchor::before,h3>a.anchor::before,#toctitle>a.anchor::before,.sidebarblock>.content>.title>a.anchor::before,h4>a.anchor::before,h5>a.anchor::before,h6>a.anchor::before{content:"\00A7";font-size:.85em;display:block;padding-top:.1em}
+#content h1:hover>a.anchor,#content h1>a.anchor:hover,h2:hover>a.anchor,h2>a.anchor:hover,h3:hover>a.anchor,#toctitle:hover>a.anchor,.sidebarblock>.content>.title:hover>a.anchor,h3>a.anchor:hover,#toctitle>a.anchor:hover,.sidebarblock>.content>.title>a.anchor:hover,h4:hover>a.anchor,h4>a.anchor:hover,h5:hover>a.anchor,h5>a.anchor:hover,h6:hover>a.anchor,h6>a.anchor:hover{visibility:visible}
+#content h1>a.link,h2>a.link,h3>a.link,#toctitle>a.link,.sidebarblock>.content>.title>a.link,h4>a.link,h5>a.link,h6>a.link{color:#ba3925;text-decoration:none}
+#content h1>a.link:hover,h2>a.link:hover,h3>a.link:hover,#toctitle>a.link:hover,.sidebarblock>.content>.title>a.link:hover,h4>a.link:hover,h5>a.link:hover,h6>a.link:hover{color:#a53221}
+details,.audioblock,.imageblock,.literalblock,.listingblock,.stemblock,.videoblock{margin-bottom:1.25em}
+details{margin-left:1.25rem}
+details>summary{cursor:pointer;display:block;position:relative;line-height:1.6;margin-bottom:.625rem;outline:none;-webkit-tap-highlight-color:transparent}
+details>summary::-webkit-details-marker{display:none}
+details>summary::before{content:"";border:solid transparent;border-left:solid;border-width:.3em 0 .3em .5em;position:absolute;top:.5em;left:-1.25rem;transform:translateX(15%)}
+details[open]>summary::before{border:solid transparent;border-top:solid;border-width:.5em .3em 0;transform:translateY(15%)}
+details>summary::after{content:"";width:1.25rem;height:1em;position:absolute;top:.3em;left:-1.25rem}
+.admonitionblock td.content>.title,.audioblock>.title,.exampleblock>.title,.imageblock>.title,.listingblock>.title,.literalblock>.title,.stemblock>.title,.openblock>.title,.paragraph>.title,.quoteblock>.title,table.tableblock>.title,.verseblock>.title,.videoblock>.title,.dlist>.title,.olist>.title,.ulist>.title,.qlist>.title,.hdlist>.title{text-rendering:optimizeLegibility;text-align:left;font-family:"Noto Serif","DejaVu Serif",serif;font-size:1rem;font-style:italic}
+table.tableblock.fit-content>caption.title{white-space:nowrap;width:0}
+.paragraph.lead>p,#preamble>.sectionbody>[class=paragraph]:first-of-type p{font-size:1.21875em;line-height:1.6;color:rgba(0,0,0,.85)}
+.admonitionblock>table{border-collapse:separate;border:0;background:none;width:100%}
+.admonitionblock>table td.icon{text-align:center;width:80px}
+.admonitionblock>table td.icon img{max-width:none}
+.admonitionblock>table td.icon .title{font-weight:bold;font-family:"Open Sans","DejaVu Sans",sans-serif;text-transform:uppercase}
+.admonitionblock>table td.content{padding-left:1.125em;padding-right:1.25em;border-left:1px solid #dddddf;color:rgba(0,0,0,.6);word-wrap:anywhere}
+.admonitionblock>table td.content>:last-child>:last-child{margin-bottom:0}
+.exampleblock>.content{border:1px solid #e6e6e6;margin-bottom:1.25em;padding:1.25em;background:#fff;border-radius:4px}
+.sidebarblock{border:1px solid #dbdbd6;margin-bottom:1.25em;padding:1.25em;background:#f3f3f2;border-radius:4px}
+.sidebarblock>.content>.title{color:#7a2518;margin-top:0;text-align:center}
+.exampleblock>.content>:first-child,.sidebarblock>.content>:first-child{margin-top:0}
+.exampleblock>.content>:last-child,.exampleblock>.content>:last-child>:last-child,.exampleblock>.content .olist>ol>li:last-child>:last-child,.exampleblock>.content .ulist>ul>li:last-child>:last-child,.exampleblock>.content .qlist>ol>li:last-child>:last-child,.sidebarblock>.content>:last-child,.sidebarblock>.content>:last-child>:last-child,.sidebarblock>.content .olist>ol>li:last-child>:last-child,.sidebarblock>.content .ulist>ul>li:last-child>:last-child,.sidebarblock>.content .qlist>ol>li:last-child>:last-child{margin-bottom:0}
+.literalblock pre,.listingblock>.content>pre{border-radius:4px;overflow-x:auto;padding:1em;font-size:.8125em}
+@media screen and (min-width:768px){.literalblock pre,.listingblock>.content>pre{font-size:.90625em}}
+@media screen and (min-width:1280px){.literalblock pre,.listingblock>.content>pre{font-size:1em}}
+.literalblock pre,.listingblock>.content>pre:not(.highlight),.listingblock>.content>pre[class=highlight],.listingblock>.content>pre[class^="highlight "]{background:#f7f7f8}
+.literalblock.output pre{color:#f7f7f8;background:rgba(0,0,0,.9)}
+.listingblock>.content{position:relative}
+.listingblock pre>code{display:block}
+.listingblock code[data-lang]::before{display:none;content:attr(data-lang);position:absolute;font-size:.75em;top:.425rem;right:.5rem;line-height:1;text-transform:uppercase;color:inherit;opacity:.5}
+.listingblock:hover code[data-lang]::before{display:block}
+.listingblock.terminal pre .command::before{content:attr(data-prompt);padding-right:.5em;color:inherit;opacity:.5}
+.listingblock.terminal pre .command:not([data-prompt])::before{content:"$"}
+.listingblock pre.highlightjs{padding:0}
+.listingblock pre.highlightjs>code{padding:1em;border-radius:4px}
+.listingblock pre.prettyprint{border-width:0}
+.prettyprint{background:#f7f7f8}
+pre.prettyprint .linenums{line-height:1.45;margin-left:2em}
+pre.prettyprint li{background:none;list-style-type:inherit;padding-left:0}
+pre.prettyprint li code[data-lang]::before{opacity:1}
+pre.prettyprint li:not(:first-child) code[data-lang]::before{display:none}
+table.linenotable{border-collapse:separate;border:0;margin-bottom:0;background:none}
+table.linenotable td[class]{color:inherit;vertical-align:top;padding:0;line-height:inherit;white-space:normal}
+table.linenotable td.code{padding-left:.75em}
+table.linenotable td.linenos,pre.pygments .linenos{border-right:1px solid;opacity:.35;padding-right:.5em;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}
+pre.pygments span.linenos{display:inline-block;margin-right:.75em}
+.quoteblock{margin:0 1em 1.25em 1.5em;display:table}
+.quoteblock:not(.excerpt)>.title{margin-left:-1.5em;margin-bottom:.75em}
+.quoteblock blockquote,.quoteblock p{color:rgba(0,0,0,.85);font-size:1.15rem;line-height:1.75;word-spacing:.1em;letter-spacing:0;font-style:italic;text-align:justify}
+.quoteblock blockquote{margin:0;padding:0;border:0}
+.quoteblock blockquote::before{content:"\201c";float:left;font-size:2.75em;font-weight:bold;line-height:.6em;margin-left:-.6em;color:#7a2518;text-shadow:0 1px 2px rgba(0,0,0,.1)}
+.quoteblock blockquote>.paragraph:last-child p{margin-bottom:0}
+.quoteblock .attribution{margin-top:.75em;margin-right:.5ex;text-align:right}
+.verseblock{margin:0 1em 1.25em}
+.verseblock pre{font-family:"Open Sans","DejaVu Sans",sans-serif;font-size:1.15rem;color:rgba(0,0,0,.85);font-weight:300;text-rendering:optimizeLegibility}
+.verseblock pre strong{font-weight:400}
+.verseblock .attribution{margin-top:1.25rem;margin-left:.5ex}
+.quoteblock .attribution,.verseblock .attribution{font-size:.9375em;line-height:1.45;font-style:italic}
+.quoteblock .attribution br,.verseblock .attribution br{display:none}
+.quoteblock .attribution cite,.verseblock .attribution cite{display:block;letter-spacing:-.025em;color:rgba(0,0,0,.6)}
+.quoteblock.abstract blockquote::before,.quoteblock.excerpt blockquote::before,.quoteblock .quoteblock blockquote::before{display:none}
+.quoteblock.abstract blockquote,.quoteblock.abstract p,.quoteblock.excerpt blockquote,.quoteblock.excerpt p,.quoteblock .quoteblock blockquote,.quoteblock .quoteblock p{line-height:1.6;word-spacing:0}
+.quoteblock.abstract{margin:0 1em 1.25em;display:block}
+.quoteblock.abstract>.title{margin:0 0 .375em;font-size:1.15em;text-align:center}
+.quoteblock.excerpt>blockquote,.quoteblock .quoteblock{padding:0 0 .25em 1em;border-left:.25em solid #dddddf}
+.quoteblock.excerpt,.quoteblock .quoteblock{margin-left:0}
+.quoteblock.excerpt blockquote,.quoteblock.excerpt p,.quoteblock .quoteblock blockquote,.quoteblock .quoteblock p{color:inherit;font-size:1.0625rem}
+.quoteblock.excerpt .attribution,.quoteblock .quoteblock .attribution{color:inherit;font-size:.85rem;text-align:left;margin-right:0}
+p.tableblock:last-child{margin-bottom:0}
+td.tableblock>.content{margin-bottom:1.25em;word-wrap:anywhere}
+td.tableblock>.content>:last-child{margin-bottom:-1.25em}
+table.tableblock,th.tableblock,td.tableblock{border:0 solid #dedede}
+table.grid-all>*>tr>*{border-width:1px}
+table.grid-cols>*>tr>*{border-width:0 1px}
+table.grid-rows>*>tr>*{border-width:1px 0}
+table.frame-all{border-width:1px}
+table.frame-ends{border-width:1px 0}
+table.frame-sides{border-width:0 1px}
+table.frame-none>colgroup+*>:first-child>*,table.frame-sides>colgroup+*>:first-child>*{border-top-width:0}
+table.frame-none>:last-child>:last-child>*,table.frame-sides>:last-child>:last-child>*{border-bottom-width:0}
+table.frame-none>*>tr>:first-child,table.frame-ends>*>tr>:first-child{border-left-width:0}
+table.frame-none>*>tr>:last-child,table.frame-ends>*>tr>:last-child{border-right-width:0}
+table.stripes-all>*>tr,table.stripes-odd>*>tr:nth-of-type(odd),table.stripes-even>*>tr:nth-of-type(even),table.stripes-hover>*>tr:hover{background:#f8f8f7}
+th.halign-left,td.halign-left{text-align:left}
+th.halign-right,td.halign-right{text-align:right}
+th.halign-center,td.halign-center{text-align:center}
+th.valign-top,td.valign-top{vertical-align:top}
+th.valign-bottom,td.valign-bottom{vertical-align:bottom}
+th.valign-middle,td.valign-middle{vertical-align:middle}
+table thead th,table tfoot th{font-weight:bold}
+tbody tr th{background:#f7f8f7}
+tbody tr th,tbody tr th p,tfoot tr th,tfoot tr th p{color:rgba(0,0,0,.8);font-weight:bold}
+p.tableblock>code:only-child{background:none;padding:0}
+p.tableblock{font-size:1em}
+ol{margin-left:1.75em}
+ul li ol{margin-left:1.5em}
+dl dd{margin-left:1.125em}
+dl dd:last-child,dl dd:last-child>:last-child{margin-bottom:0}
+li p,ul dd,ol dd,.olist .olist,.ulist .ulist,.ulist .olist,.olist .ulist{margin-bottom:.625em}
+ul.checklist,ul.none,ol.none,ul.no-bullet,ol.no-bullet,ol.unnumbered,ul.unstyled,ol.unstyled{list-style-type:none}
+ul.no-bullet,ol.no-bullet,ol.unnumbered{margin-left:.625em}
+ul.unstyled,ol.unstyled{margin-left:0}
+li>p:empty:only-child::before{content:"";display:inline-block}
+ul.checklist>li>p:first-child{margin-left:-1em}
+ul.checklist>li>p:first-child>.fa-square-o:first-child,ul.checklist>li>p:first-child>.fa-check-square-o:first-child{width:1.25em;font-size:.8em;position:relative;bottom:.125em}
+ul.checklist>li>p:first-child>input[type=checkbox]:first-child{margin-right:.25em}
+ul.inline{display:flex;flex-flow:row wrap;list-style:none;margin:0 0 .625em -1.25em}
+ul.inline>li{margin-left:1.25em}
+.unstyled dl dt{font-weight:400;font-style:normal}
+ol.arabic{list-style-type:decimal}
+ol.decimal{list-style-type:decimal-leading-zero}
+ol.loweralpha{list-style-type:lower-alpha}
+ol.upperalpha{list-style-type:upper-alpha}
+ol.lowerroman{list-style-type:lower-roman}
+ol.upperroman{list-style-type:upper-roman}
+ol.lowergreek{list-style-type:lower-greek}
+.hdlist>table,.colist>table{border:0;background:none}
+.hdlist>table>tbody>tr,.colist>table>tbody>tr{background:none}
+td.hdlist1,td.hdlist2{vertical-align:top;padding:0 .625em}
+td.hdlist1{font-weight:bold;padding-bottom:1.25em}
+td.hdlist2{word-wrap:anywhere}
+.literalblock+.colist,.listingblock+.colist{margin-top:-.5em}
+.colist td:not([class]):first-child{padding:.4em .75em 0;line-height:1;vertical-align:top}
+.colist td:not([class]):first-child img{max-width:none}
+.colist td:not([class]):last-child{padding:.25em 0}
+.thumb,.th{line-height:0;display:inline-block;border:4px solid #fff;box-shadow:0 0 0 1px #ddd}
+.imageblock.left{margin:.25em .625em 1.25em 0}
+.imageblock.right{margin:.25em 0 1.25em .625em}
+.imageblock>.title{margin-bottom:0}
+.imageblock.thumb,.imageblock.th{border-width:6px}
+.imageblock.thumb>.title,.imageblock.th>.title{padding:0 .125em}
+.image.left,.image.right{margin-top:.25em;margin-bottom:.25em;display:inline-block;line-height:0}
+.image.left{margin-right:.625em}
+.image.right{margin-left:.625em}
+a.image{text-decoration:none;display:inline-block}
+a.image object{pointer-events:none}
+sup.footnote,sup.footnoteref{font-size:.875em;position:static;vertical-align:super}
+sup.footnote a,sup.footnoteref a{text-decoration:none}
+sup.footnote a:active,sup.footnoteref a:active,#footnotes .footnote a:first-of-type:active{text-decoration:underline}
+#footnotes{padding-top:.75em;padding-bottom:.75em;margin-bottom:.625em}
+#footnotes hr{width:20%;min-width:6.25em;margin:-.25em 0 .75em;border-width:1px 0 0}
+#footnotes .footnote{padding:0 .375em 0 .225em;line-height:1.3334;font-size:.875em;margin-left:1.2em;margin-bottom:.2em}
+#footnotes .footnote a:first-of-type{font-weight:bold;text-decoration:none;margin-left:-1.05em}
+#footnotes .footnote:last-of-type{margin-bottom:0}
+#content #footnotes{margin-top:-.625em;margin-bottom:0;padding:.75em 0}
+div.unbreakable{page-break-inside:avoid}
+.big{font-size:larger}
+.small{font-size:smaller}
+.underline{text-decoration:underline}
+.overline{text-decoration:overline}
+.line-through{text-decoration:line-through}
+.aqua{color:#00bfbf}
+.aqua-background{background:#00fafa}
+.black{color:#000}
+.black-background{background:#000}
+.blue{color:#0000bf}
+.blue-background{background:#0000fa}
+.fuchsia{color:#bf00bf}
+.fuchsia-background{background:#fa00fa}
+.gray{color:#606060}
+.gray-background{background:#7d7d7d}
+.green{color:#006000}
+.green-background{background:#007d00}
+.lime{color:#00bf00}
+.lime-background{background:#00fa00}
+.maroon{color:#600000}
+.maroon-background{background:#7d0000}
+.navy{color:#000060}
+.navy-background{background:#00007d}
+.olive{color:#606000}
+.olive-background{background:#7d7d00}
+.purple{color:#600060}
+.purple-background{background:#7d007d}
+.red{color:#bf0000}
+.red-background{background:#fa0000}
+.silver{color:#909090}
+.silver-background{background:#bcbcbc}
+.teal{color:#006060}
+.teal-background{background:#007d7d}
+.white{color:#bfbfbf}
+.white-background{background:#fafafa}
+.yellow{color:#bfbf00}
+.yellow-background{background:#fafa00}
+span.icon>.fa{cursor:default}
+a span.icon>.fa{cursor:inherit}
+.admonitionblock td.icon [class^="fa icon-"]{font-size:2.5em;text-shadow:1px 1px 2px rgba(0,0,0,.5);cursor:default}
+.admonitionblock td.icon .icon-note::before{content:"\f05a";color:#19407c}
+.admonitionblock td.icon .icon-tip::before{content:"\f0eb";text-shadow:1px 1px 2px rgba(155,155,0,.8);color:#111}
+.admonitionblock td.icon .icon-warning::before{content:"\f071";color:#bf6900}
+.admonitionblock td.icon .icon-caution::before{content:"\f06d";color:#bf3400}
+.admonitionblock td.icon .icon-important::before{content:"\f06a";color:#bf0000}
+.conum[data-value]{display:inline-block;color:#fff!important;background:rgba(0,0,0,.8);border-radius:50%;text-align:center;font-size:.75em;width:1.67em;height:1.67em;line-height:1.67em;font-family:"Open Sans","DejaVu Sans",sans-serif;font-style:normal;font-weight:bold}
+.conum[data-value] *{color:#fff!important}
+.conum[data-value]+b{display:none}
+.conum[data-value]::after{content:attr(data-value)}
+pre .conum[data-value]{position:relative;top:-.125em}
+b.conum *{color:inherit!important}
+.conum:not([data-value]):empty{display:none}
+dt,th.tableblock,td.content,div.footnote{text-rendering:optimizeLegibility}
+h1,h2,p,td.content,span.alt,summary{letter-spacing:-.01em}
+p strong,td.content strong,div.footnote strong{letter-spacing:-.005em}
+p,blockquote,dt,td.content,td.hdlist1,span.alt,summary{font-size:1.0625rem}
+p{margin-bottom:1.25rem}
+.sidebarblock p,.sidebarblock dt,.sidebarblock td.content,p.tableblock{font-size:1em}
+.exampleblock>.content{background:#fffef7;border-color:#e0e0dc;box-shadow:0 1px 4px #e0e0dc}
+.print-only{display:none!important}
+@page{margin:1.25cm .75cm}
+@media print{*{box-shadow:none!important;text-shadow:none!important}
+html{font-size:80%}
+a{color:inherit!important;text-decoration:underline!important}
+a.bare,a[href^="#"],a[href^="mailto:"]{text-decoration:none!important}
+a[href^="http:"]:not(.bare)::after,a[href^="https:"]:not(.bare)::after{content:"(" attr(href) ")";display:inline-block;font-size:.875em;padding-left:.25em}
+abbr[title]{border-bottom:1px dotted}
+abbr[title]::after{content:" (" attr(title) ")"}
+pre,blockquote,tr,img,object,svg{page-break-inside:avoid}
+thead{display:table-header-group}
+svg{max-width:100%}
+p,blockquote,dt,td.content{font-size:1em;orphans:3;widows:3}
+h2,h3,#toctitle,.sidebarblock>.content>.title{page-break-after:avoid}
+#header,#content,#footnotes,#footer{max-width:none}
+#toc,.sidebarblock,.exampleblock>.content{background:none!important}
+#toc{border-bottom:1px solid #dddddf!important;padding-bottom:0!important}
+body.book #header{text-align:center}
+body.book #header>h1:first-child{border:0!important;margin:2.5em 0 1em}
+body.book #header .details{border:0!important;display:block;padding:0!important}
+body.book #header .details span:first-child{margin-left:0!important}
+body.book #header .details br{display:block}
+body.book #header .details br+span::before{content:none!important}
+body.book #toc{border:0!important;text-align:left!important;padding:0!important;margin:0!important}
+body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-break-before:always}
+.listingblock code[data-lang]::before{display:block}
+#footer{padding:0 .9375em}
+.hide-on-print{display:none!important}
+.print-only{display:block!important}
+.hide-for-print{display:none!important}
+.show-for-print{display:inherit!important}}
+@media amzn-kf8,print{#header>h1:first-child{margin-top:1.25rem}
+.sect1{padding:0!important}
+.sect1+.sect1{border:0}
+#footer{background:none}
+#footer-text{color:rgba(0,0,0,.6);font-size:.9em}}
+@media amzn-kf8{#header,#content,#footnotes,#footer{padding:0}}
+</style>
+</head>
+<body class="article">
+<div id="header">
+</div>
+<div id="content">
+<div class="sect1">
+<h2 id="_módulo_google_maps_para_flutter">Módulo: Google Maps para Flutter</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_introducción">Introducción</h3>
+<div class="paragraph">
+<p>Este módulo te guiará a través de todos los aspectos relacionados con la
+integración de <strong>Google Maps en aplicaciones Flutter</strong> para iOS y Android.
+Aprenderás desde la configuración inicial hasta técnicas avanzadas de
+geolocalización y rutas.</p>
+</div>
+<hr>
+</div>
+<div class="sect2">
+<h3 id="_índice_de_contenidos">Índice de Contenidos</h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><a href="#1-conceptos-fundamentales">Conceptos Fundamentales</a></p>
+</li>
+<li>
+<p><a href="#2-configuración-del-proyecto-flutter">Configuración del Proyecto
+Flutter</a></p>
+</li>
+<li>
+<p><a href="#3-api-keys---android-e-ios">API Keys - Android e iOS</a></p>
+</li>
+<li>
+<p><a href="#4-primer-mapa-en-flutter">Primer Mapa en Flutter</a></p>
+</li>
+<li>
+<p><a href="#5-marcadores-markers">Marcadores (Markers)</a></p>
+</li>
+<li>
+<p><a href="#6-polilíneas-y-polígonos">Polilíneas y Polígonos</a></p>
+</li>
+<li>
+<p><a href="#7-ventanas-de-información-infowindows">Ventanas de Información
+(InfoWindows)</a></p>
+</li>
+<li>
+<p><a href="#8-geolocalización-del-usuario">Geolocalización del Usuario</a></p>
+</li>
+<li>
+<p><a href="#9-geocoding-y-reverse-geocoding">Geocoding y Reverse Geocoding</a></p>
+</li>
+<li>
+<p><a href="#10-places-api-y-autocompletado">Places API y Autocompletado</a></p>
+</li>
+<li>
+<p><a href="#11-direcciones-y-rutas">Direcciones y Rutas</a></p>
+</li>
+<li>
+<p><a href="#12-personalización-del-mapa">Personalización del Mapa</a></p>
+</li>
+<li>
+<p><a href="#13-optimización-y-rendimiento">Optimización y Rendimiento</a></p>
+</li>
+<li>
+<p><a href="#14-buenas-prácticas">Buenas Prácticas</a></p>
+</li>
+<li>
+<p><a href="#15-proyecto-práctico-completo">Proyecto Práctico Completo</a></p>
+</li>
+</ol>
+</div>
+<hr>
+</div>
+<div class="sect2">
+<h3 id="_1_conceptos_fundamentales">1. Conceptos Fundamentales</h3>
+<div class="sect3">
+<h4 id="_1_1_sistema_de_coordenadas">1.1 Sistema de Coordenadas</h4>
+<div class="paragraph">
+<p>Google Maps utiliza coordenadas geográficas:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-dart" data-lang="dart">// Latitud: -90 a +90 (Sur a Norte)
+// Longitud: -180 a +180 (Oeste a Este)
+
+class Coordenada {
+  final double latitud;
+  final double longitud;
+
+  const Coordenada({
+    required this.latitud,
+    required this.longitud,
+  });
+
+  // Madrid, España
+  static const madrid = Coordenada(latitud: 40.4168, longitud: -3.7038);
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_1_2_latlng_y_cameraposition">1.2 LatLng y CameraPosition</h4>
+<div class="paragraph">
+<p>En Flutter, usamos las clases del package <code>google_maps_flutter</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-dart" data-lang="dart">import 'package:google_maps_flutter/google_maps_flutter.dart';
+
+// Coordenadas
+final LatLng posicion = LatLng(40.4168, -3.7038);
+
+// Posición de la cámara
+final CameraPosition posicionInicial = CameraPosition(
+  target: LatLng(40.4168, -3.7038),
+  zoom: 14.0,        // 0-21+ (mundo → edificio)
+  bearing: 0.0,      // Rotación en grados (0-360)
+  tilt: 0.0,         // Inclinación en grados (0-90)
+);</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_1_3_niveles_de_zoom">1.3 Niveles de Zoom</h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Zoom</th>
+<th class="tableblock halign-left valign-top">Escala</th>
+<th class="tableblock halign-left valign-top">Visibilidad</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">0-2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Mundial</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Continentes</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">3-5</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Continental</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Países grandes</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">6-10</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Regional</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Ciudades principales</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">11-14</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Ciudad</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Calles principales</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">15-18</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Calle</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Edificios, negocios</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">19-21+</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Edificio</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Detalles máximos</p></td>
+</tr>
+</tbody>
+</table>
+<hr>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_2_configuración_del_proyecto_flutter">2. Configuración del Proyecto Flutter</h3>
+<div class="sect3">
+<h4 id="_2_1_crear_proyecto">2.1 Crear Proyecto</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">flutter create mi_app_mapas
+cd mi_app_mapas</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_2_2_dependencias_en_pubspec_yaml">2.2 Dependencias en pubspec.yaml</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-yaml" data-lang="yaml">dependencies:
+  flutter:
+    sdk: flutter
+
+  # Google Maps
+  google_maps_flutter: ^2.5.0
+
+  # Geolocalización
+  geolocator: ^10.1.0
+
+  # Geocoding
+  geocoding: ^2.1.0
+
+  # HTTP para APIs
+  http: ^1.1.0
+
+  # Estado (opcional)
+  provider: ^6.1.0
+
+  # Utilidades
+  flutter_polyline_points: ^1.0.0</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_2_3_instalar_dependencias">2.3 Instalar Dependencias</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">flutter pub get</code></pre>
+</div>
+</div>
+<hr>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_3_api_keys_android_e_ios">3. API Keys - Android e iOS</h3>
+<div class="sect3">
+<h4 id="_3_1_google_cloud_console">3.1 Google Cloud Console</h4>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Ve a <a href="https://console.cloud.google.com/">Google Cloud Console</a></p>
+</li>
+<li>
+<p>Crea un nuevo proyecto o selecciona uno existente</p>
+</li>
+<li>
+<p>Habilita las APIs necesarias:</p>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Maps SDK for Android</strong></p>
+</li>
+<li>
+<p><strong>Maps SDK for iOS</strong></p>
+</li>
+<li>
+<p><strong>Places API</strong> (opcional)</p>
+</li>
+<li>
+<p><strong>Directions API</strong> (opcional)</p>
+</li>
+<li>
+<p><strong>Geocoding API</strong> (opcional)</p>
+</li>
+</ul>
+</div>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_3_2_crear_api_keys">3.2 Crear API Keys</h4>
+<div class="literalblock">
+<div class="content">
+<pre>APIs &amp; Services → Credentials → Create Credentials → API Key</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Crear <strong>dos keys separadas</strong>: - Una para Android - Una para iOS</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_3_3_configuración_android">3.3 Configuración Android</h4>
+<div class="sect4">
+<h5 id="_androidappsrcmainandroidmanifest_xml">android/app/src/main/AndroidManifest.xml</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-xml" data-lang="xml">&lt;manifest xmlns:android="http://schemas.android.com/apk/res/android"&gt;
+    &lt;application&gt;
+        &lt;!-- Google Maps API Key --&gt;
+        &lt;meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="TU_API_KEY_ANDROID"/&gt;
+
+        &lt;!-- Permisos de ubicación --&gt;
+        &lt;uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/&gt;
+        &lt;uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/&gt;
+    &lt;/application&gt;
+&lt;/manifest&gt;</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_androidappbuild_gradle">android/app/build.gradle</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-gradle" data-lang="gradle">android {
+    defaultConfig {
+        minSdkVersion 21  // Mínimo para Google Maps
+    }
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_3_4_configuración_ios">3.4 Configuración iOS</h4>
+<div class="sect4">
+<h5 id="_iosrunnerappdelegate_swift">ios/Runner/AppDelegate.swift</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-swift" data-lang="swift">import UIKit
+import Flutter
+import GoogleMaps
+
+@UIApplicationMain
+@objc class AppDelegate: FlutterAppDelegate {
+  override func application(
+    _ application: UIApplication,
+    didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
+  ) -&gt; Bool {
+    // Configurar API Key
+    GMSServices.provideAPIKey("TU_API_KEY_IOS")
+
+    GeneratedPluginRegistrant.register(with: self)
+    return super.application(application, didFinishLaunchingWithOptions: launchOptions)
+  }
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_iosrunnerinfo_plist">ios/Runner/Info.plist</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-xml" data-lang="xml">&lt;dict&gt;
+    &lt;!-- Permisos de ubicación --&gt;
+    &lt;key&gt;NSLocationWhenInUseUsageDescription&lt;/key&gt;
+    &lt;string&gt;Esta app necesita tu ubicación para mostrar el mapa&lt;/string&gt;
+
+    &lt;key&gt;NSLocationAlwaysUsageDescription&lt;/key&gt;
+    &lt;string&gt;Esta app necesita acceso a tu ubicación en segundo plano&lt;/string&gt;
+
+    &lt;key&gt;NSLocationAlwaysAndWhenInUseUsageDescription&lt;/key&gt;
+    &lt;string&gt;Esta app necesita acceso a tu ubicación para funcionar correctamente&lt;/string&gt;
+&lt;/dict&gt;</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_3_5_restricciones_de_seguridad">3.5 Restricciones de Seguridad</h4>
+<div class="paragraph">
+<p><strong>⚠️ IMPORTANTE</strong>: Aplica restricciones a cada API Key</p>
+</div>
+<div class="sect4">
+<h5 id="_para_android">Para Android:</h5>
+<div class="literalblock">
+<div class="content">
+<pre>Application restrictions: Android apps
+Package name: com.tuempresa.mi_app_mapas
+SHA-1 fingerprint: (obtener con keytool)</pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash"># Obtener SHA-1
+keytool -list -v -keystore ~/.android/debug.keystore -alias androiddebugkey -storepass android -keypass android</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_para_ios">Para iOS:</h5>
+<div class="literalblock">
+<div class="content">
+<pre>Application restrictions: iOS apps
+Bundle identifier: com.tuempresa.mi_app_mapas</pre>
+</div>
+</div>
+<hr>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_4_primer_mapa_en_flutter">4. Primer Mapa en Flutter</h3>
+<div class="sect3">
+<h4 id="_4_1_widget_básico">4.1 Widget Básico</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-dart" data-lang="dart">import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+
+class MapaScreen extends StatefulWidget {
+  const MapaScreen({super.key});
+
+  @override
+  State&lt;MapaScreen&gt; createState() =&gt; _MapaScreenState();
+}
+
+class _MapaScreenState extends State&lt;MapaScreen&gt; {
+  // Controlador del mapa
+  GoogleMapController? _mapController;
+
+  // Posición inicial: Madrid
+  static const LatLng _posicionInicial = LatLng(40.4168, -3.7038);
+
+  // Posición de la cámara
+  static const CameraPosition _kMadrid = CameraPosition(
+    target: _posicionInicial,
+    zoom: 14.0,
+  );
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Mi Primer Mapa')),
+      body: GoogleMap(
+        mapType: MapType.normal,
+        initialCameraPosition: _kMadrid,
+        onMapCreated: (GoogleMapController controller) {
+          _mapController = controller;
+        },
+      ),
+    );
+  }
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_4_2_opciones_del_mapa">4.2 Opciones del Mapa</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-dart" data-lang="dart">GoogleMap(
+  mapType: MapType.normal,  // normal, satellite, terrain, hybrid
+  initialCameraPosition: _posicionInicial,
+  onMapCreated: _onMapCreated,
+
+  // Controles UI
+  zoomControlsEnabled: true,
+  zoomGesturesEnabled: true,
+  mapToolbarEnabled: true,
+  compassEnabled: true,
+  myLocationButtonEnabled: true,
+  myLocationEnabled: true,
+
+  // Gestos
+  scrollGesturesEnabled: true,
+  tiltGesturesEnabled: true,
+  rotateGesturesEnabled: true,
+
+  // Padding
+  padding: EdgeInsets.only(bottom: 100),
+
+  // Callbacks
+  onTap: (LatLng posicion) {
+    print('Tap en: $posicion');
+  },
+  onLongPress: (LatLng posicion) {
+    print('Long press en: $posicion');
+  },
+  onCameraMove: (CameraPosition posicion) {
+    print('Cámara movida a: ${posicion.target}');
+  },
+  onCameraIdle: () {
+    print('Cámara detenida');
+  },
+);</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_4_3_controlar_la_cámara">4.3 Controlar la Cámara</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-dart" data-lang="dart">class _MapaScreenState extends State&lt;MapaScreen&gt; {
+  GoogleMapController? _mapController;
+
+  // Mover la cámara a una posición
+  Future&lt;void&gt; moverCamara(LatLng destino, {double zoom = 14.0}) async {
+    await _mapController?.animateCamera(
+      CameraUpdate.newCameraPosition(
+        CameraPosition(target: destino, zoom: zoom),
+      ),
+    );
+  }
+
+  // Zoom in
+  Future&lt;void&gt; zoomIn() async {
+    await _mapController?.animateCamera(CameraUpdate.zoomIn());
+  }
+
+  // Zoom out
+  Future&lt;void&gt; zoomOut() async {
+    await _mapController?.animateCamera(CameraUpdate.zoomOut());
+  }
+
+  // Ajustar para ver todos los puntos
+  Future&lt;void&gt; ajustarLimites(List&lt;LatLng&gt; puntos) async {
+    final bounds = _calcularBounds(puntos);
+    await _mapController?.animateCamera(
+      CameraUpdate.newLatLngBounds(bounds, 50.0),
+    );
+  }
+
+  LatLngBounds _calcularBounds(List&lt;LatLng&gt; puntos) {
+    double minLat = puntos.first.latitude;
+    double maxLat = puntos.first.latitude;
+    double minLng = puntos.first.longitude;
+    double maxLng = puntos.first.longitude;
+
+    for (final punto in puntos) {
+      if (punto.latitude &lt; minLat) minLat = punto.latitude;
+      if (punto.latitude &gt; maxLat) maxLat = punto.latitude;
+      if (punto.longitude &lt; minLng) minLng = punto.longitude;
+      if (punto.longitude &gt; maxLng) maxLng = punto.longitude;
+    }
+
+    return LatLngBounds(
+      southwest: LatLng(minLat, minLng),
+      northeast: LatLng(maxLat, maxLng),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: GoogleMap(
+        initialCameraPosition: _posicionInicial,
+        onMapCreated: (controller) =&gt; _mapController = controller,
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () =&gt; moverCamara(LatLng(41.3851, 2.1734)), // Barcelona
+        child: const Icon(Icons.location_city),
+      ),
+    );
+  }
+}</code></pre>
+</div>
+</div>
+<hr>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_5_marcadores_markers">5. Marcadores (Markers)</h3>
+<div class="sect3">
+<h4 id="_5_1_marcador_básico">5.1 Marcador Básico</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-dart" data-lang="dart">Set&lt;Marker&gt; _markers = {};
+
+// Añadir marcador
+void _añadirMarcador(LatLng posicion) {
+  final markerId = MarkerId(posicion.toString());
+
+  setState(() {
+    _markers.add(
+      Marker(
+        markerId: markerId,
+        position: posicion,
+        infoWindow: InfoWindow(
+          title: 'Mi ubicación',
+          snippet: 'Descripción del lugar',
+        ),
+      ),
+    );
+  });
+}
+
+// En el widget
+GoogleMap(
+  markers: _markers,
+  onTap: (LatLng posicion) {
+    _añadirMarcador(posicion);
+  },
+);</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_5_2_marcador_personalizado_con_icono">5.2 Marcador Personalizado con Icono</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-dart" data-lang="dart">import 'dart:ui' as ui;
+import 'package:flutter/material.dart';
+
+class MarcadorPersonalizado {
+  static Future&lt;BitmapDescriptor&gt; crearDesdeAsset(String assetPath, {int width = 100}) async {
+    final ImageStream stream = AssetImage(assetPath).resolve(ImageConfiguration.empty);
+    final Completer&lt;BitmapDescriptor&gt; completer = Completer&lt;BitmapDescriptor&gt;();
+
+    final listener = ImageStreamListener(
+      (ImageInfo info, bool _) async {
+        final ByteData? bytes = await info.image.toByteData(
+          format: ImageByteFormat.png,
+        );
+        if (bytes != null) {
+          completer.complete(BitmapDescriptor.fromBytes(bytes.buffer.asUint8List()));
+        }
+      },
+    );
+
+    stream.addListener(listener);
+    return completer.future;
+  }
+}
+
+// Uso
+BitmapDescriptor? _iconoPersonalizado;
+
+@override
+void initState() {
+  super.initState();
+  _cargarIconos();
+}
+
+Future&lt;void&gt; _cargarIconos() async {
+  _iconoPersonalizado = await MarcadorPersonalizado.crearDesdeAsset(
+    'assets/marcador.png',
+    width: 120,
+  );
+  setState(() {});
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_5_3_marcadores_con_colores">5.3 Marcadores con Colores</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-dart" data-lang="dart">Marker(
+  markerId: MarkerId('id'),
+  position: posicion,
+  icon: BitmapDescriptor.defaultMarkerWithHue(
+    BitmapDescriptor.hueRed,      // Rojo (default)
+    // BitmapDescriptor.hueOrange, // Naranja
+    // BitmapDescriptor.hueYellow, // Amarillo
+    // BitmapDescriptor.hueGreen,  // Verde
+    // BitmapDescriptor.hueCyan,   // Cian
+    // BitmapDescriptor.hueAzure,  // Azul claro
+    // BitmapDescriptor.hueBlue,   // Azul
+    // BitmapDescriptor.hueViolet, // Violeta
+    // BitmapDescriptor.hueMagenta,// Magenta
+    // BitmapDescriptor.hueRose,   // Rosa
+  ),
+);</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_5_4_marcador_arrastrable">5.4 Marcador Arrastrable</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-dart" data-lang="dart">Marker(
+  markerId: MarkerId('draggable'),
+  position: posicion,
+  draggable: true,
+  onDragStart: (LatLng posicion) {
+    print('Drag start: $posicion');
+  },
+  onDrag: (LatLng posicion) {
+    print('Dragging: $posicion');
+  },
+  onDragEnd: (LatLng posicion) {
+    print('Drag end: $posicion');
+    // Actualizar posición en tu estado
+    setState(() {
+      // ...
+    });
+  },
+);</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_5_5_gestión_de_múltiples_marcadores">5.5 Gestión de Múltiples Marcadores</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-dart" data-lang="dart">class MarcadorManager {
+  final Set&lt;Marker&gt; _markers = {};
+  final Map&lt;String, Marker&gt; _markersPorId = {};
+
+  void añadirMarcador({
+    required String id,
+    required LatLng posicion,
+    String? titulo,
+    String? descripcion,
+    BitmapDescriptor? icono,
+    VoidCallback? onTap,
+  }) {
+    final marker = Marker(
+      markerId: MarkerId(id),
+      position: posicion,
+      icon: icono ?? BitmapDescriptor.defaultMarker,
+      infoWindow: InfoWindow(
+        title: titulo,
+        snippet: descripcion,
+      ),
+      onTap: onTap,
+    );
+
+    _markersPorId[id] = marker;
+    _markers.add(marker);
+  }
+
+  void eliminarMarcador(String id) {
+    final marker = _markersPorId[id];
+    if (marker != null) {
+      _markers.remove(marker);
+      _markersPorId.remove(id);
+    }
+  }
+
+  void actualizarPosicion(String id, LatLng nuevaPosicion) {
+    eliminarMarcador(id);
+    añadirMarcador(id: id, posicion: nuevaPosicion);
+  }
+
+  void limpiarTodo() {
+    _markers.clear();
+    _markersPorId.clear();
+  }
+
+  Set&lt;Marker&gt; get markers =&gt; Set.from(_markers);
+}</code></pre>
+</div>
+</div>
+<hr>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_6_polilíneas_y_polígonos">6. Polilíneas y Polígonos</h3>
+<div class="sect3">
+<h4 id="_6_1_polilínea_ruta">6.1 Polilínea (Ruta)</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-dart" data-lang="dart">Set&lt;Polyline&gt; _polylines = {};
+
+void _dibujarRuta(List&lt;LatLng&gt; puntos) {
+  final polylineId = PolylineId('ruta_1');
+
+  setState(() {
+    _polylines.add(
+      Polyline(
+        polylineId: polylineId,
+        points: puntos,
+        color: Colors.blue,
+        width: 5,
+        patterns: [PatternItem.dash(10), PatternItem.gap(5)], // Línea discontinua
+        jointType: JointType.round,  // Unión redondeada
+        startCap: Cap.roundCap,       // Inicio redondeado
+        endCap: Cap.roundCap,         // Fin redondeado
+        geodesic: true,              // Sigue la curvatura de la Tierra
+        zIndex: 1,
+      ),
+    );
+  });
+}
+
+GoogleMap(
+  polylines: _polylines,
+);
+
+// Ejemplo de uso
+final ruta = [
+  LatLng(40.4168, -3.7038),  // Madrid
+  LatLng(41.3851, 2.1734),   // Barcelona
+  LatLng(39.4699, -0.3763),  // Valencia
+];
+_dibujarRuta(ruta);</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_6_2_polígono_área">6.2 Polígono (Área)</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-dart" data-lang="dart">Set&lt;Polygon&gt; _polygons = {};
+
+void _dibujarArea(List&lt;LatLng&gt; puntos) {
+  final polygonId = PolygonId('area_1');
+
+  setState(() {
+    _polygons.add(
+      Polygon(
+        polygonId: polygonId,
+        points: puntos,
+        strokeColor: Colors.red,
+        strokeWidth: 3,
+        fillColor: Colors.red.withOpacity(0.3),
+        geodesic: true,
+        clickable: true,
+        onTap: () {
+          print('Polígono tocado');
+        },
+      ),
+    );
+  });
+}
+
+GoogleMap(
+  polygons: _polygons,
+);
+
+// Ejemplo: Zona circular
+List&lt;LatLng&gt; _crearPoligonoCircular(LatLng centro, double radioMetros, int lados) {
+  final puntos = &lt;LatLng&gt;[];
+  final double earthRadius = 6371000; // metros
+
+  for (int i = 0; i &lt; lados; i++) {
+    final double bearing = 360 * i / lados;
+    final double lat1 = centro.latitude * (pi / 180);
+    final double lng1 = centro.longitude * (pi / 180);
+    final double angularDistance = radioMetros / earthRadius;
+    final double bearingRad = bearing * (pi / 180);
+
+    final double lat2 = asin(sin(lat1) * cos(angularDistance) +
+        cos(lat1) * sin(angularDistance) * cos(bearingRad));
+    final double lng2 = lng1 + atan2(
+        sin(bearingRad) * sin(angularDistance) * cos(lat1),
+        cos(angularDistance) - sin(lat1) * sin(lat2));
+
+    puntos.add(LatLng(lat2 * (180 / pi), lng2 * (180 / pi)));
+  }
+
+  return puntos;
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_6_3_círculo">6.3 Círculo</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-dart" data-lang="dart">Set&lt;Circle&gt; _circles = {};
+
+void _dibujarCirculo(LatLng centro, double radioMetros) {
+  setState(() {
+    _circles.add(
+      Circle(
+        circleId: CircleId('circulo_1'),
+        center: centro,
+        radius: radioMetros,
+        strokeColor: Colors.blue,
+        strokeWidth: 2,
+        fillColor: Colors.blue.withOpacity(0.2),
+        clickable: true,
+        onTap: () {
+          print('Círculo tocado');
+        },
+      ),
+    );
+  });
+}
+
+GoogleMap(
+  circles: _circles,
+);
+
+// Ejemplo: Radio de 500m
+_dibujarCirculo(LatLng(40.4168, -3.7038), 500);</code></pre>
+</div>
+</div>
+<hr>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_7_ventanas_de_información_infowindows">7. Ventanas de Información (InfoWindows)</h3>
+<div class="sect3">
+<h4 id="_7_1_infowindow_básico">7.1 InfoWindow Básico</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-dart" data-lang="dart">Marker(
+  markerId: MarkerId('info_marker'),
+  position: posicion,
+  infoWindow: InfoWindow(
+    title: 'Título del lugar',
+    snippet: 'Descripción corta del lugar',
+    anchor: const Offset(0.5, 0.0),  // Punto de anclaje
+    onTap: () {
+      print('InfoWindow tocado');
+    },
+  ),
+);</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_7_2_infowindow_personalizado_custom">7.2 InfoWindow Personalizado (Custom)</h4>
+<div class="paragraph">
+<p>Para InfoWindows más complejos, necesitamos un enfoque diferente:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-dart" data-lang="dart">import 'dart:ui' as ui;
+
+class CustomInfoWindow {
+  static Future&lt;BitmapDescriptor&gt; crearInfoWindow({
+    required String titulo,
+    required String descripcion,
+    required Color color,
+  }) async {
+    final recorder = ui.PictureRecorder();
+    final canvas = Canvas(recorder);
+    final paint = Paint()..color = color;
+
+    // Dimensiones
+    const width = 300.0;
+    const height = 100.0;
+
+    // Dibujar fondo
+    final rect = Rect.fromLTWH(0, 0, width, height);
+    canvas.drawRRect(
+      RRect.fromRectAndRadius(rect, const Radius.circular(10)),
+      paint,
+    );
+
+    // Dibujar texto (simplificado, en producción usar TextPainter)
+    // ...
+
+    final picture = recorder.endRecording();
+    final image = await picture.toImage(width.toInt(), height.toInt());
+    final bytes = await image.toByteData(format: ui.ImageByteFormat.png);
+
+    return BitmapDescriptor.fromBytes(bytes!.buffer.asUint8List());
+  }
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_7_3_widget_infowindow_alternativo">7.3 Widget InfoWindow Alternativo</h4>
+<div class="paragraph">
+<p>Para InfoWindows completamente personalizados:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-dart" data-lang="dart">class MapaConInfoWindow extends StatefulWidget {
+  const MapaConInfoWindow({super.key});
+
+  @override
+  State&lt;MapaConInfoWindow&gt; createState() =&gt; _MapaConInfoWindowState();
+}
+
+class _MapaConInfoWindowState extends State&lt;MapaConInfoWindow&gt; {
+  GoogleMapController? _mapController;
+  LatLng? _markerSeleccionado;
+  final Map&lt;String, MarkerData&gt; _markerData = {};
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        GoogleMap(
+          initialCameraPosition: _posicionInicial,
+          markers: _crearMarcadores(),
+          onMapCreated: (controller) =&gt; _mapController = controller,
+          onTap: (_) {
+            setState(() {
+              _markerSeleccionado = null;
+            });
+          },
+        ),
+        if (_markerSeleccionado != null &amp;&amp; _markerData[_markerSeleccionado.toString()] != null)
+          Positioned(
+            top: 100,
+            left: 20,
+            right: 20,
+            child: _CustomInfoWindowWidget(
+              data: _markerData[_markerSeleccionado.toString()]!,
+              onClose: () {
+                setState(() {
+                  _markerSeleccionado = null;
+                });
+              },
+            ),
+          ),
+      ],
+    );
+  }
+
+  Set&lt;Marker&gt; _crearMarcadores() {
+    return _markerData.entries.map((entry) {
+      return Marker(
+        markerId: MarkerId(entry.key),
+        position: entry.value.posicion,
+        onTap: () {
+          setState(() {
+            _markerSeleccionado = entry.value.posicion;
+          });
+        },
+      );
+    }).toSet();
+  }
+}
+
+class MarkerData {
+  final LatLng posicion;
+  final String titulo;
+  final String descripcion;
+  final String? imagenUrl;
+
+  MarkerData({
+    required this.posicion,
+    required this.titulo,
+    required this.descripcion,
+    this.imagenUrl,
+  });
+}
+
+class _CustomInfoWindowWidget extends StatelessWidget {
+  final MarkerData data;
+  final VoidCallback onClose;
+
+  const _CustomInfoWindowWidget({
+    required this.data,
+    required this.onClose,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      elevation: 8,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  data.titulo,
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                IconButton(
+                  icon: const Icon(Icons.close),
+                  onPressed: onClose,
+                ),
+              ],
+            ),
+            const SizedBox(height: 8),
+            Text(data.descripcion),
+            if (data.imagenUrl != null) ...[
+              const SizedBox(height: 8),
+              ClipRRect(
+                borderRadius: BorderRadius.circular(8),
+                child: Image.network(
+                  data.imagenUrl!,
+                  height: 100,
+                  width: double.infinity,
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ],
+          ],
+        ),
+      ),
+    );
+  }
+}</code></pre>
+</div>
+</div>
+<hr>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_8_geolocalización_del_usuario">8. Geolocalización del Usuario</h3>
+<div class="sect3">
+<h4 id="_8_1_configurar_permisos">8.1 Configurar Permisos</h4>
+<div class="sect4">
+<h5 id="_android_androidmanifest_xml">Android (AndroidManifest.xml)</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-xml" data-lang="xml">&lt;uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/&gt;
+&lt;uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/&gt;</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_ios_info_plist">iOS (Info.plist)</h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-xml" data-lang="xml">&lt;key&gt;NSLocationWhenInUseUsageDescription&lt;/key&gt;
+&lt;string&gt;Esta app necesita tu ubicación para mostrar el mapa&lt;/string&gt;
+&lt;key&gt;NSLocationAlwaysUsageDescription&lt;/key&gt;
+&lt;string&gt;Esta app necesita tu ubicación para funciones en segundo plano&lt;/key&gt;</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_8_2_obtener_ubicación_actual">8.2 Obtener Ubicación Actual</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-dart" data-lang="dart">import 'package:geolocator/geolocator.dart';
+
+class UbicacionService {
+  Future&lt;Position?&gt; obtenerUbicacionActual() async {
+    bool servicioHabilitado = await Geolocator.isLocationServiceEnabled();
+    if (!servicioHabilitado) {
+      return Future.error('El servicio de ubicación está deshabilitado');
+    }
+
+    LocationPermission permiso = await Geolocator.checkPermission();
+    if (permiso == LocationPermission.denied) {
+      permiso = await Geolocator.requestPermission();
+      if (permiso == LocationPermission.denied) {
+        return Future.error('Permisos de ubicación denegados');
+      }
+    }
+
+    if (permiso == LocationPermission.deniedForever) {
+      return Future.error('Permisos denegados permanentemente');
+    }
+
+    return await Geolocator.getCurrentPosition(
+      desiredAccuracy: LocationAccuracy.high,
+    );
+  }
+
+  Stream&lt;Position&gt; seguirUbicacion() {
+    return Geolocator.getPositionStream(
+      locationSettings: const LocationSettings(
+        accuracy: LocationAccuracy.high,
+        distanceFilter: 10, // Actualizar cada 10 metros
+      ),
+    );
+  }
+
+  Future&lt;double&gt; distanciaEntre(LatLng punto1, LatLng punto2) async {
+    return Geolocator.distanceBetween(
+      punto1.latitude,
+      punto1.longitude,
+      punto2.latitude,
+      punto2.longitude,
+    );
+  }
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_8_3_usar_en_el_mapa">8.3 Usar en el Mapa</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-dart" data-lang="dart">class MapaConUbicacion extends StatefulWidget {
+  const MapaConUbicacion({super.key});
+
+  @override
+  State&lt;MapaConUbicacion&gt; createState() =&gt; _MapaConUbicacionState();
+}
+
+class _MapaConUbicacionState extends State&lt;MapaConUbicacion&gt; {
+  GoogleMapController? _mapController;
+  Position? _ubicacionActual;
+  StreamSubscription&lt;Position&gt;? _ubicacionSubscription;
+
+  @override
+  void initState() {
+    super.initState();
+    _obtenerUbicacion();
+    _seguirUbicacion();
+  }
+
+  @override
+  void dispose() {
+    _ubicacionSubscription?.cancel();
+    _mapController?.dispose();
+    super.dispose();
+  }
+
+  Future&lt;void&gt; _obtenerUbicacion() async {
+    final ubicacion = await UbicacionService().obtenerUbicacionActual();
+    if (ubicacion != null &amp;&amp; mounted) {
+      setState(() {
+        _ubicacionActual = ubicacion;
+      });
+      _moverAUbicacion(ubicacion);
+    }
+  }
+
+  void _seguirUbicacion() {
+    _ubicacionSubscription = UbicacionService().seguirUbicacion().listen(
+      (Position posicion) {
+        if (mounted) {
+          setState(() {
+            _ubicacionActual = posicion;
+          });
+        }
+      },
+    );
+  }
+
+  Future&lt;void&gt; _moverAUbicacion(Position posicion) async {
+    await _mapController?.animateCamera(
+      CameraUpdate.newCameraPosition(
+        CameraPosition(
+          target: LatLng(posicion.latitude, posicion.longitude),
+          zoom: 16.0,
+        ),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: GoogleMap(
+        initialCameraPosition: const CameraPosition(
+          target: LatLng(0, 0),  // Se actualizará
+          zoom: 14.0,
+        ),
+        onMapCreated: (controller) {
+          _mapController = controller;
+          if (_ubicacionActual != null) {
+            _moverAUbicacion(_ubicacionActual!);
+          }
+        },
+        myLocationEnabled: true,
+        myLocationButtonEnabled: true,
+      ),
+    );
+  }
+}</code></pre>
+</div>
+</div>
+<hr>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_9_geocoding_y_reverse_geocoding">9. Geocoding y Reverse Geocoding</h3>
+<div class="sect3">
+<h4 id="_9_1_configurar_dependencia">9.1 Configurar Dependencia</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-yaml" data-lang="yaml">dependencies:
+  geocoding: ^2.1.0</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_9_2_geocoding_dirección_coordenadas">9.2 Geocoding (Dirección → Coordenadas)</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-dart" data-lang="dart">import 'package:geocoding/geocoding.dart';
+
+class GeocodingService {
+  Future&lt;List&lt;Location&gt;&gt; direccionACoordenadas(String direccion) async {
+    try {
+      return await locationFromAddress(direccion);
+    } catch (e) {
+      return [];
+    }
+  }
+
+  Future&lt;LatLng?&gt; buscarPrimeraCoincidencia(String direccion) async {
+    final ubicaciones = await direccionACoordenadas(direccion);
+    if (ubicaciones.isNotEmpty) {
+      return LatLng(ubicaciones.first.latitude, ubicaciones.first.longitude);
+    }
+    return null;
+  }
+}
+
+// Uso
+final geocoding = GeocodingService();
+final coordenadas = await geocoding.buscarPrimeraCoincidencia(
+  'Plaza Mayor, Madrid, España',
+);
+if (coordenadas != null) {
+  print('Latitud: ${coordenadas.latitude}');
+  print('Longitud: ${coordenadas.longitude}');
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_9_3_reverse_geocoding_coordenadas_dirección">9.3 Reverse Geocoding (Coordenadas → Dirección)</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-dart" data-lang="dart">class GeocodingService {
+  Future&lt;List&lt;Placemark&gt;&gt; coordenadasADireccion(double lat, double lng) async {
+    try {
+      return await placemarkFromCoordinates(lat, lng);
+    } catch (e) {
+      return [];
+    }
+  }
+
+  Future&lt;String?&gt; obtenerDireccion(double lat, double lng) async {
+    final placemarks = await coordenadasADireccion(lat, lng);
+    if (placemarks.isNotEmpty) {
+      final place = placemarks.first;
+      return '${place.street}, ${place.locality}, ${place.country}';
+    }
+    return null;
+  }
+}
+
+// Uso
+final direccion = await GeocodingService().obtenerDireccion(40.4168, -3.7038);
+print('Dirección: $direccion');
+// Output: "Calle Mayor, Madrid, España"</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_9_4_geocoding_con_google_maps_api_alternativa">9.4 Geocoding con Google Maps API (Alternativa)</h4>
+<div class="paragraph">
+<p>Para más precisión o uso comercial:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-dart" data-lang="dart">import 'package:http/http.dart' as http;
+import 'dart:convert';
+
+class GoogleGeocodingService {
+  final String apiKey;
+
+  GoogleGeocodingService({required this.apiKey});
+
+  Future&lt;LatLng?&gt; geocodificar(String direccion) async {
+    final url = Uri.parse(
+      'https://maps.googleapis.com/maps/api/geocode/json'
+      '?address=${Uri.encodeQueryComponent(direccion)}'
+      '&amp;key=$apiKey',
+    );
+
+    final response = await http.get(url);
+    final data = json.decode(response.body);
+
+    if (data['status'] == 'OK' &amp;&amp; data['results'].isNotEmpty) {
+      final location = data['results'][0]['geometry']['location'];
+      return LatLng(location['lat'], location['lng']);
+    }
+    return null;
+  }
+
+  Future&lt;String?&gt; reverseGeocodificar(double lat, double lng) async {
+    final url = Uri.parse(
+      'https://maps.googleapis.com/maps/api/geocode/json'
+      '?latlng=$lat,$lng'
+      '&amp;key=$apiKey',
+    );
+
+    final response = await http.get(url);
+    final data = json.decode(response.body);
+
+    if (data['status'] == 'OK' &amp;&amp; data['results'].isNotEmpty) {
+      return data['results'][0]['formatted_address'];
+    }
+    return null;
+  }
+}</code></pre>
+</div>
+</div>
+<hr>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_10_places_api_y_autocompletado">10. Places API y Autocompletado</h3>
+<div class="sect3">
+<h4 id="_10_1_configurar_dependencia">10.1 Configurar Dependencia</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-yaml" data-lang="yaml">dependencies:
+  google_places_flutter: ^2.0.0
+  # O alternativamente:
+  flutter_google_places: ^0.3.0</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_10_2_autocompletado_de_lugares">10.2 Autocompletado de Lugares</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-dart" data-lang="dart">import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:google_places_flutter/google_places_flutter.dart';
+
+class BuscadorLugares extends StatefulWidget {
+  const BuscadorLugares({super.key});
+
+  @override
+  State&lt;BuscadorLugares&gt; createState() =&gt; _BuscadorLugaresState();
+}
+
+class _BuscadorLugaresState extends State&lt;BuscadorLugares&gt; {
+  final TextEditingController _controller = TextEditingController();
+  final String _apiKey = 'TU_API_KEY';
+  GoogleMapController? _mapController;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Column(
+        children: [
+          // Campo de búsqueda con autocompletado
+          GooglePlaceAutoCompleteTextField(
+            textEditingController: _controller,
+            googleAPIKey: _apiKey,
+            inputDecoration: const InputDecoration(
+              hintText: 'Buscar lugar...',
+              prefixIcon: Icon(Icons.search),
+            ),
+            debounceDuration: const Duration(milliseconds: 500),
+            countries: ['es'], // Restringir a España
+            isCrossBtnShown: true,
+            getPlaceDetailWithLatLng: (Place place) {
+              // Resultado seleccionado
+              final lat = double.parse(place.lat ?? '0');
+              final lng = double.parse(place.lng ?? '0');
+              _moverAlugar(LatLng(lat, lng));
+            },
+            itemClick: (Place place) {
+              _controller.text = place.description ?? '';
+            },
+          ),
+          // Mapa
+          Expanded(
+            child: GoogleMap(
+              initialCameraPosition: const CameraPosition(
+                target: LatLng(40.4168, -3.7038),
+                zoom: 14.0,
+              ),
+              onMapCreated: (controller) {
+                _mapController = controller;
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _moverAlugar(LatLng posicion) {
+    _mapController?.animateCamera(
+      CameraUpdate.newCameraPosition(
+        CameraPosition(target: posicion, zoom: 16.0),
+      ),
+    );
+  }
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_10_3_places_api_manual">10.3 Places API Manual</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-dart" data-lang="dart">import 'package:http/http.dart' as http;
+import 'dart:convert';
+
+class PlacesService {
+  final String apiKey;
+
+  PlacesService({required this.apiKey});
+
+  Future&lt;List&lt;PlaceResult&gt;&gt; buscarLugares({
+    required String query,
+    String? location,
+    int? radius,
+  }) async {
+    var url = Uri.parse(
+      'https://maps.googleapis.com/maps/api/place/textsearch/json'
+      '?query=${Uri.encodeQueryComponent(query)}'
+      '&amp;key=$apiKey',
+    );
+
+    if (location != null) {
+      url = url.replace(query: '${url.query}&amp;location=$location');
+    }
+    if (radius != null) {
+      url = url.replace(query: '${url.query}&amp;radius=$radius');
+    }
+
+    final response = await http.get(url);
+    final data = json.decode(response.body);
+
+    if (data['status'] == 'OK') {
+      return (data['results'] as List)
+          .map((result) =&gt; PlaceResult.fromJson(result))
+          .toList();
+    }
+    return [];
+  }
+
+  Future&lt;PlaceDetail?&gt; obtenerDetalles(String placeId) async {
+    final url = Uri.parse(
+      'https://maps.googleapis.com/maps/api/place/details/json'
+      '?place_id=$placeId'
+      '&amp;key=$apiKey',
+    );
+
+    final response = await http.get(url);
+    final data = json.decode(response.body);
+
+    if (data['status'] == 'OK') {
+      return PlaceDetail.fromJson(data['result']);
+    }
+    return null;
+  }
+}
+
+class PlaceResult {
+  final String id;
+  final String name;
+  final String? address;
+  final double lat;
+  final double lng;
+  final double? rating;
+
+  PlaceResult({
+    required this.id,
+    required this.name,
+    this.address,
+    required this.lat,
+    required this.lng,
+    this.rating,
+  });
+
+  factory PlaceResult.fromJson(Map&lt;String, dynamic&gt; json) {
+    return PlaceResult(
+      id: json['place_id'],
+      name: json['name'],
+      address: json['formatted_address'],
+      lat: json['geometry']['location']['lat'],
+      lng: json['geometry']['location']['lng'],
+      rating: json['rating']?.toDouble(),
+    );
+  }
+}
+
+class PlaceDetail {
+  final String name;
+  final String address;
+  final String? phone;
+  final String? website;
+  final List&lt;String&gt; openingHours;
+
+  PlaceDetail({
+    required this.name,
+    required this.address,
+    this.phone,
+    this.website,
+    this.openingHours = const [],
+  });
+
+  factory PlaceDetail.fromJson(Map&lt;String, dynamic&gt; json) {
+    return PlaceDetail(
+      name: json['name'],
+      address: json['formatted_address'] ?? '',
+      phone: json['formatted_phone_number'],
+      website: json['website'],
+      openingHours: json['opening_hours']?['weekday_text'] ?? [],
+    );
+  }
+}</code></pre>
+</div>
+</div>
+<hr>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_11_direcciones_y_rutas">11. Direcciones y Rutas</h3>
+<div class="sect3">
+<h4 id="_11_1_usando_directions_api">11.1 Usando Directions API</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-dart" data-lang="dart">import 'package:http/http.dart' as http;
+import 'dart:convert';
+
+class DirectionsService {
+  final String apiKey;
+
+  DirectionsService({required this.apiKey});
+
+  Future&lt;DirectionsResult?&gt; obtenerRuta({
+    required LatLng origen,
+    required LatLng destino,
+    List&lt;LatLng&gt;? waypoints,
+    String travelMode = 'driving', // driving, walking, bicycling, transit
+  }) async {
+    final originStr = '${origen.latitude},${origen.longitude}';
+    final destStr = '${destino.latitude},${destino.longitude}';
+
+    var url = Uri.parse(
+      'https://maps.googleapis.com/maps/api/directions/json'
+      '?origin=$originStr'
+      '&amp;destination=$destStr'
+      '&amp;mode=$travelMode'
+      '&amp;key=$apiKey',
+    );
+
+    if (waypoints != null &amp;&amp; waypoints.isNotEmpty) {
+      final waypointsStr = waypoints
+          .map((p) =&gt; '${p.latitude},${p.longitude}')
+          .join('|');
+      url = Uri.parse('${url.toString()}&amp;waypoints=$waypointsStr');
+    }
+
+    final response = await http.get(url);
+    final data = json.decode(response.body);
+
+    if (data['status'] == 'OK') {
+      return DirectionsResult.fromJson(data);
+    }
+    return null;
+  }
+}
+
+class DirectionsResult {
+  final List&lt;LatLng&gt; polylinePoints;
+  final String distance;
+  final String duration;
+  final List&lt;RouteStep&gt; steps;
+
+  DirectionsResult({
+    required this.polylinePoints,
+    required this.distance,
+    required this.duration,
+    required this.steps,
+  });
+
+  factory DirectionsResult.fromJson(Map&lt;String, dynamic&gt; json) {
+    final route = json['routes'][0];
+    final leg = route['legs'][0];
+
+    // Decodificar polyline
+    final polyline = route['overview_polyline']['points'];
+    final points = _decodePolyline(polyline);
+
+    // Obtener pasos
+    final steps = (leg['steps'] as List)
+        .map((step) =&gt; RouteStep.fromJson(step))
+        .toList();
+
+    return DirectionsResult(
+      polylinePoints: points,
+      distance: leg['distance']['text'],
+      duration: leg['duration']['text'],
+      steps: steps,
+    );
+  }
+
+  static List&lt;LatLng&gt; _decodePolyline(String encoded) {
+    List&lt;LatLng&gt; points = [];
+    int index = 0;
+    int lat = 0;
+    int lng = 0;
+
+    while (index &lt; encoded.length) {
+      int b;
+      int shift = 0;
+      int result = 0;
+
+      do {
+        b = encoded.codeUnitAt(index++) - 63;
+        result |= (b &amp; 0x1F) &lt;&lt; shift;
+        shift += 5;
+      } while (b &gt;= 0x20);
+
+      int dlat = ((result &amp; 1) != 0 ? ~(result &gt;&gt; 1) : (result &gt;&gt; 1));
+      lat += dlat;
+
+      shift = 0;
+      result = 0;
+
+      do {
+        b = encoded.codeUnitAt(index++) - 63;
+        result |= (b &amp; 0x1F) &lt;&lt; shift;
+        shift += 5;
+      } while (b &gt;= 0x20);
+
+      int dlng = ((result &amp; 1) != 0 ? ~(result &gt;&gt; 1) : (result &gt;&gt; 1));
+      lng += dlng;
+
+      points.add(LatLng(lat / 1E5, lng / 1E5));
+    }
+
+    return points;
+  }
+}
+
+class RouteStep {
+  final String instruction;
+  final String distance;
+  final String duration;
+  final LatLng startLocation;
+  final LatLng endLocation;
+
+  RouteStep({
+    required this.instruction,
+    required this.distance,
+    required this.duration,
+    required this.startLocation,
+    required this.endLocation,
+  });
+
+  factory RouteStep.fromJson(Map&lt;String, dynamic&gt; json) {
+    return RouteStep(
+      instruction: json['html_instructions'],
+      distance: json['distance']['text'],
+      duration: json['duration']['text'],
+      startLocation: LatLng(
+        json['start_location']['lat'],
+        json['start_location']['lng'],
+      ),
+      endLocation: LatLng(
+        json['end_location']['lat'],
+        json['end_location']['lng'],
+      ),
+    );
+  }
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_11_2_mostrar_ruta_en_el_mapa">11.2 Mostrar Ruta en el Mapa</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-dart" data-lang="dart">class MapaConRuta extends StatefulWidget {
+  const MapaConRuta({super.key});
+
+  @override
+  State&lt;MapaConRuta&gt; createState() =&gt; _MapaConRutaState();
+}
+
+class _MapaConRutaState extends State&lt;MapaConRuta&gt; {
+  final DirectionsService _directionsService = DirectionsService(apiKey: 'TU_API_KEY');
+
+  Set&lt;Polyline&gt; _polylines = {};
+  Set&lt;Marker&gt; _markers = {};
+  String? _distancia;
+  String? _duracion;
+
+  Future&lt;void&gt; _calcularRuta(LatLng origen, LatLng destino) async {
+    final result = await _directionsService.obtenerRuta(
+      origen: origen,
+      destino: destino,
+    );
+
+    if (result != null) {
+      setState(() {
+        // Dibujar polyline
+        _polylines.clear();
+        _polylines.add(
+          Polyline(
+            polylineId: const PolylineId('ruta'),
+            points: result.polylinePoints,
+            color: Colors.blue,
+            width: 5,
+          ),
+        );
+
+        // Marcadores
+        _markers.clear();
+        _markers.add(
+          Marker(
+            markerId: const MarkerId('origen'),
+            position: origen,
+            icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen),
+          ),
+        );
+        _markers.add(
+          Marker(
+            markerId: const MarkerId('destino'),
+            position: destino,
+            icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed),
+          ),
+        );
+
+        _distancia = result.distance;
+        _duracion = result.duration;
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Column(
+        children: [
+          Expanded(
+            child: GoogleMap(
+              initialCameraPosition: const CameraPosition(
+                target: LatLng(40.4168, -3.7038),
+                zoom: 14.0,
+              ),
+              polylines: _polylines,
+              markers: _markers,
+            ),
+          ),
+          if (_distancia != null &amp;&amp; _duracion != null)
+            Container(
+              padding: const EdgeInsets.all(16),
+              color: Colors.white,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Row(
+                    children: [
+                      const Icon(Icons.route),
+                      const SizedBox(width: 8),
+                      Text('Distancia: $_distancia'),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      const Icon(Icons.access_time),
+                      const SizedBox(width: 8),
+                      Text('Tiempo: $_duracion'),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+}</code></pre>
+</div>
+</div>
+<hr>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_12_personalización_del_mapa">12. Personalización del Mapa</h3>
+<div class="sect3">
+<h4 id="_12_1_estilos_del_mapa">12.1 Estilos del Mapa</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-dart" data-lang="dart">// Estilo nocturno
+const String _mapStyleNight = '''
+[
+  {
+    "elementType": "geometry",
+    "stylers": [{"color": "#242f3e"}]
+  },
+  {
+    "elementType": "labels.text.stroke",
+    "stylers": [{"color": "#242f3e"}]
+  },
+  {
+    "elementType": "labels.text.fill",
+    "stylers": [{"color": "#746855"}]
+  },
+  {
+    "featureType": "road",
+    "elementType": "geometry",
+    "stylers": [{"color": "#38414e"}]
+  },
+  {
+    "featureType": "road",
+    "elementType": "geometry.stroke",
+    "stylers": [{"color": "#212a37"}]
+  },
+  {
+    "featureType": "water",
+    "elementType": "geometry",
+    "stylers": [{"color": "#17263c"}]
+  }
+]
+''';
+
+class _MapaScreenState extends State&lt;MapaScreen&gt; {
+  GoogleMapController? _mapController;
+
+  Future&lt;void&gt; _aplicarEstiloNocturno() async {
+    await _mapController?.setMapStyle(_mapStyleNight);
+  }
+
+  Future&lt;void&gt; _quitarEstilo() async {
+    await _mapController?.setMapStyle(null);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: GoogleMap(
+        initialCameraPosition: _posicionInicial,
+        onMapCreated: (controller) {
+          _mapController = controller;
+          _aplicarEstiloNocturno();
+        },
+      ),
+    );
+  }
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_12_2_generar_estilos_personalizados">12.2 Generar Estilos Personalizados</h4>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Ve a <a href="https://mapstyle.withgoogle.com/">Google Maps Styling Wizard</a></p>
+</li>
+<li>
+<p>Personaliza colores, visibilidad, etc.</p>
+</li>
+<li>
+<p>Exporta el JSON</p>
+</li>
+<li>
+<p>Copia el JSON en tu código</p>
+</li>
+</ol>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-dart" data-lang="dart">// Guardar en archivo separado: assets/map_styles.json
+// Cargar en runtime:
+Future&lt;String&gt; _cargarEstiloMapa() async {
+  return await rootBundle.loadString('assets/map_styles.json');
+}
+
+// Aplicar:
+final estilo = await _cargarEstiloMapa();
+await _mapController?.setMapStyle(estilo);</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_12_3_cambiar_tipo_de_mapa">12.3 Cambiar Tipo de Mapa</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-dart" data-lang="dart">class _MapaScreenState extends State&lt;MapaScreen&gt; {
+  MapType _mapType = MapType.normal;
+
+  void _cambiarTipoMapa() {
+    setState(() {
+      switch (_mapType) {
+        case MapType.normal:
+          _mapType = MapType.satellite;
+          break;
+        case MapType.satellite:
+          _mapType = MapType.terrain;
+          break;
+        case MapType.terrain:
+          _mapType = MapType.hybrid;
+          break;
+        case MapType.hybrid:
+          _mapType = MapType.normal;
+          break;
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: GoogleMap(
+        mapType: _mapType,
+        initialCameraPosition: _posicionInicial,
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _cambiarTipoMapa,
+        child: const Icon(Icons.layers),
+      ),
+    );
+  }
+}</code></pre>
+</div>
+</div>
+<hr>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_13_optimización_y_rendimiento">13. Optimización y Rendimiento</h3>
+<div class="sect3">
+<h4 id="_13_1_gestión_de_marcadores_eficiente">13.1 Gestión de Marcadores Eficiente</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-dart" data-lang="dart">class OptimizedMarkerManager {
+  final Map&lt;String, Marker&gt; _markers = {};
+  final int _maxMarkers = 100;
+
+  // Solo mostrar marcadores visibles
+  void updateVisibleMarkers(LatLngBounds bounds, List&lt;MarkerData&gt; allMarkers) {
+    final visibleMarkers = &lt;String, Marker&gt;{};
+
+    for (final data in allMarkers) {
+      if (_isInBounds(data.position, bounds)) {
+        visibleMarkers[data.id] = Marker(
+          markerId: MarkerId(data.id),
+          position: data.position,
+        );
+
+        if (visibleMarkers.length &gt;= _maxMarkers) break;
+      }
+    }
+
+    _markers.clear();
+    _markers.addAll(visibleMarkers);
+  }
+
+  bool _isInBounds(LatLng point, LatLngBounds bounds) {
+    return point.latitude &gt;= bounds.southwest.latitude &amp;&amp;
+        point.latitude &lt;= bounds.northeast.latitude &amp;&amp;
+        point.longitude &gt;= bounds.southwest.longitude &amp;&amp;
+        point.longitude &lt;= bounds.northeast.longitude;
+  }
+
+  Set&lt;Marker&gt; get markers =&gt; _markers.values.toSet();
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_13_2_cluster_de_marcadores">13.2 Cluster de Marcadores</h4>
+<div class="paragraph">
+<p>Para muchos marcadores, usar clustering:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-yaml" data-lang="yaml">dependencies:
+  google_maps_cluster_manager: ^2.0.0</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-dart" data-lang="dart">import 'package:google_maps_cluster_manager/google_maps_cluster_manager.dart';
+
+class Place with ClusterItem {
+  final String id;
+  final LatLng location;
+
+  Place({required this.id, required this.location});
+
+  @override
+  LatLng get location =&gt; location;
+}
+
+class _MapaScreenState extends State&lt;MapaScreen&gt; {
+  late ClusterManager _clusterManager;
+  Set&lt;Marker&gt; _markers = {};
+
+  @override
+  void initState() {
+    super.initState();
+    _initClusterManager();
+  }
+
+  void _initClusterManager() {
+    final items = _generatePlaces(); // Lista de Place
+
+    _clusterManager = ClusterManager(
+      items,
+      _updateMarkers,
+      stopClusteringZoom: 17.0,  // Zoom donde dejar de agrupar
+    );
+  }
+
+  void _updateMarkers(Set&lt;Marker&gt; markers) {
+    setState(() {
+      _markers = markers;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GoogleMap(
+      initialCameraPosition: _posicionInicial,
+      markers: _markers,
+      onCameraIdle: _clusterManager.updateMap,
+      onMapCreated: (controller) {
+        _clusterManager.setMapId(controller.mapId);
+      },
+    );
+  }
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_13_3_caché_de_imágenes_de_marcadores">13.3 Caché de Imágenes de Marcadores</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-dart" data-lang="dart">class MarcadorCache {
+  static final Map&lt;String, BitmapDescriptor&gt; _cache = {};
+
+  static Future&lt;BitmapDescriptor&gt; getIcon(String assetPath) async {
+    if (_cache.containsKey(assetPath)) {
+      return _cache[assetPath]!;
+    }
+
+    final icon = await _createIconFromAsset(assetPath);
+    _cache[assetPath] = icon;
+    return icon;
+  }
+
+  static Future&lt;BitmapDescriptor&gt; _createIconFromAsset(String assetPath) async {
+    // ... implementación
+  }
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_13_4_lazy_loading">13.4 Lazy Loading</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-dart" data-lang="dart">class LazyMapLoader {
+  bool _isLoading = false;
+  int _loadedPages = 0;
+
+  Future&lt;List&lt;MarkerData&gt;&gt; loadMoreMarkers(LatLngBounds bounds, int page) async {
+    if (_isLoading) return [];
+
+    _isLoading = true;
+    try {
+      // Cargar desde API
+      final markers = await _fetchMarkersFromApi(bounds, page);
+      _loadedPages++;
+      return markers;
+    } finally {
+      _isLoading = false;
+    }
+  }
+}</code></pre>
+</div>
+</div>
+<hr>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_14_buenas_prácticas">14. Buenas Prácticas</h3>
+<div class="sect3">
+<h4 id="_14_1_proteger_api_keys">14.1 Proteger API Keys</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-dart" data-lang="dart">// ❌ INCORRECTO - API key hardcodeada
+const String apiKey = 'AIzaSyXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX';
+
+// ✅ CORRECTO - Usar variables de entorno o config
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+
+Future&lt;void&gt; main() async {
+  await dotenv.load(fileName: ".env");
+  runApp(MyApp());
+}
+
+class Config {
+  static String get googleMapsKey {
+    return dotenv.env['GOOGLE_MAPS_KEY'] ?? '';
+  }
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_14_2_manejo_de_errores">14.2 Manejo de Errores</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-dart" data-lang="dart">class MapErrorWidget extends StatelessWidget {
+  final String error;
+  final VoidCallback onRetry;
+
+  const MapErrorWidget({
+    super.key,
+    required this.error,
+    required this.onRetry,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Icon(Icons.error_outline, size: 48, color: Colors.red),
+          const SizedBox(height: 16),
+          Text('Error: $error'),
+          const SizedBox(height: 16),
+          ElevatedButton(
+            onPressed: onRetry,
+            child: const Text('Reintentar'),
+          ),
+        ],
+      ),
+    );
+  }
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_14_3_gestión_del_ciclo_de_vida">14.3 Gestión del Ciclo de Vida</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-dart" data-lang="dart">class _MapaScreenState extends State&lt;MapaScreen&gt; with WidgetsBindingObserver {
+  GoogleMapController? _mapController;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    _mapController?.dispose();
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.paused) {
+      // Pausar actualizaciones de ubicación
+    } else if (state == AppLifecycleState.resumed) {
+      // Reanudar actualizaciones
+    }
+  }
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_14_4_testing">14.4 Testing</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-dart" data-lang="dart">// test/map_screen_test.dart
+import 'package:flutter/material.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+
+class MockGoogleMapController extends Mock implements GoogleMapController {}
+
+void main() {
+  testWidgets('Map renders correctly', (WidgetTester tester) async {
+    await tester.pumpWidget(
+      const MaterialApp(
+        home: Scaffold(
+          body: GoogleMap(
+            initialCameraPosition: CameraPosition(
+              target: LatLng(0, 0),
+              zoom: 10,
+            ),
+          ),
+        ),
+      ),
+    );
+
+    expect(find.byType(GoogleMap), findsOneWidget);
+  });
+}</code></pre>
+</div>
+</div>
+<hr>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_15_proyecto_práctico_completo">15. Proyecto Práctico Completo</h3>
+<div class="sect3">
+<h4 id="_app_buscador_de_restaurantes_con_rutas">App: Buscador de Restaurantes con Rutas</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-dart" data-lang="dart">// main.dart
+import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:geocoding/geocoding.dart';
+
+void main() {
+  runApp(const RestaurantFinderApp());
+}
+
+class RestaurantFinderApp extends StatelessWidget {
+  const RestaurantFinderApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Restaurant Finder',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+        useMaterial3: true,
+      ),
+      home: const MapScreen(),
+    );
+  }
+}
+
+class MapScreen extends StatefulWidget {
+  const MapScreen({super.key});
+
+  @override
+  State&lt;MapScreen&gt; createState() =&gt; _MapScreenState();
+}
+
+class _MapScreenState extends State&lt;MapScreen&gt; {
+  GoogleMapController? _mapController;
+  Position? _currentPosition;
+  final Set&lt;Marker&gt; _markers = {};
+  final Set&lt;Polyline&gt; _polylines = {};
+  LatLng? _selectedDestination;
+  String? _routeInfo;
+
+  @override
+  void initState() {
+    super.initState();
+    _getCurrentLocation();
+  }
+
+  Future&lt;void&gt; _getCurrentLocation() async {
+    bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      return Future.error('Ubicación deshabilitada');
+    }
+
+    LocationPermission permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+    }
+
+    if (permission == LocationPermission.deniedForever ||
+        permission == LocationPermission.denied) {
+      return Future.error('Permisos denegados');
+    }
+
+    final position = await Geolocator.getCurrentPosition(
+      desiredAccuracy: LocationAccuracy.high,
+    );
+
+    setState(() {
+      _currentPosition = position;
+    });
+
+    _mapController?.animateCamera(
+      CameraUpdate.newCameraPosition(
+        CameraPosition(
+          target: LatLng(position.latitude, position.longitude),
+          zoom: 16,
+        ),
+      ),
+    );
+
+    _addCurrentLocationMarker();
+  }
+
+  void _addCurrentLocationMarker() {
+    if (_currentPosition == null) return;
+
+    _markers.add(
+      Marker(
+        markerId: const MarkerId('current_location'),
+        position: LatLng(_currentPosition!.latitude, _currentPosition!.longitude),
+        icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
+        infoWindow: const InfoWindow(title: 'Mi ubicación'),
+      ),
+    );
+  }
+
+  void _onMapTap(LatLng position) {
+    setState(() {
+      _selectedDestination = position;
+      _markers.removeWhere((m) =&gt; m.markerId.value == 'destination');
+      _markers.add(
+        Marker(
+          markerId: const MarkerId('destination'),
+          position: position,
+          icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed),
+          infoWindow: const InfoWindow(title: 'Destino'),
+        ),
+      );
+    });
+  }
+
+  Future&lt;void&gt; _calculateRoute() async {
+    if (_currentPosition == null || _selectedDestination == null) return;
+
+    // Aquí llamarías al DirectionsService
+    // Por simplicidad, mostramos una polilínea recta
+    setState(() {
+      _polylines.clear();
+      _polylines.add(
+        Polyline(
+          polylineId: const PolylineId('route'),
+          points: [
+            LatLng(_currentPosition!.latitude, _currentPosition!.longitude),
+            _selectedDestination!,
+          ],
+          color: Colors.blue,
+          width: 5,
+        ),
+      );
+
+      final distance = Geolocator.distanceBetween(
+        _currentPosition!.latitude,
+        _currentPosition!.longitude,
+        _selectedDestination!.latitude,
+        _selectedDestination!.longitude,
+      );
+
+      _routeInfo = 'Distancia: ${(distance / 1000).toStringAsFixed(2)} km';
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Restaurant Finder'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.my_location),
+            onPressed: _getCurrentLocation,
+          ),
+        ],
+      ),
+      body: Stack(
+        children: [
+          GoogleMap(
+            initialCameraPosition: const CameraPosition(
+              target: LatLng(40.4168, -3.7038),
+              zoom: 14,
+            ),
+            onMapCreated: (controller) =&gt; _mapController = controller,
+            markers: _markers,
+            polylines: _polylines,
+            myLocationEnabled: true,
+            myLocationButtonEnabled: false,
+            onTap: _onMapTap,
+          ),
+          if (_routeInfo != null)
+            Positioned(
+              bottom: 100,
+              left: 20,
+              right: 20,
+              child: Card(
+                child: Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Text(
+                    _routeInfo!,
+                    style: const TextStyle(fontSize: 18),
+                  ),
+                ),
+              ),
+            ),
+        ],
+      ),
+      floatingActionButton: _selectedDestination != null
+          ? FloatingActionButton.extended(
+              onPressed: _calculateRoute,
+              icon: const Icon(Icons.directions),
+              label: const Text('Calcular ruta'),
+            )
+          : null,
+    );
+  }
+}</code></pre>
+</div>
+</div>
+<hr>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_recursos_adicionales">Recursos Adicionales</h3>
+<div class="sect3">
+<h4 id="_documentación_oficial">Documentación Oficial</h4>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://pub.dev/packages/google_maps_flutter">google_maps_flutter
+package</a></p>
+</li>
+<li>
+<p><a href="https://developers.google.com/maps/documentation">Google Maps Platform
+Documentation</a></p>
+</li>
+<li>
+<p><a href="https://codelabs.developers.google.com/codelabs/flutter-google-maps">Flutter
+Google Maps Codelab</a></p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_librerías_útiles">Librerías Útiles</h4>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://pub.dev/packages/google_maps_flutter">google_maps_flutter</a> -
+Widget oficial de Google Maps</p>
+</li>
+<li>
+<p><a href="https://pub.dev/packages/geolocator">geolocator</a> - Geolocalización</p>
+</li>
+<li>
+<p><a href="https://pub.dev/packages/geocoding">geocoding</a> - Geocoding</p>
+</li>
+<li>
+<p><a href="https://pub.dev/packages/flutter_google_places">flutter_google_places</a></p>
+<div class="ulist">
+<ul>
+<li>
+<p>Places autocompletado</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><a href="https://pub.dev/packages/google_maps_cluster_manager">google_maps_cluster_manager</a></p>
+<div class="ulist">
+<ul>
+<li>
+<p>Clustering de marcadores</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_herramientas">Herramientas</h4>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://console.cloud.google.com/">Google Cloud Console</a></p>
+</li>
+<li>
+<p><a href="https://mapstyle.withgoogle.com/">Google Maps Styling Wizard</a></p>
+</li>
+<li>
+<p><a href="https://github.com/googlemaps/android-maps-utils">API Key Checker</a></p>
+</li>
+</ul>
+</div>
+<hr>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_ejercicios_propuestos">Ejercicios Propuestos</h3>
+<div class="sect3">
+<h4 id="_ejercicio_1_mapa_con_mi_ubicación">Ejercicio 1: Mapa con Mi Ubicación</h4>
+<div class="paragraph">
+<p>Crear una app que: - Centre el mapa en la ubicación del usuario -
+Muestre un marcador azul en la posición actual - Permita actualizar la
+ubicación con un botón</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_ejercicio_2_buscador_de_lugares">Ejercicio 2: Buscador de Lugares</h4>
+<div class="paragraph">
+<p>Crear una app que: - Tenga un campo de búsqueda con autocompletado -
+Muestre resultados en el mapa - Permita ver detalles del lugar
+seleccionado</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_ejercicio_3_calculadora_de_rutas">Ejercicio 3: Calculadora de Rutas</h4>
+<div class="paragraph">
+<p>Crear una app que: - Permita seleccionar origen y destino - Calcule la
+ruta entre ambos puntos - Muestre distancia y tiempo estimado - Dibuje
+la polilínea en el mapa</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_ejercicio_4_app_de_tracking">Ejercicio 4: App de Tracking</h4>
+<div class="paragraph">
+<p>Crear una app que: - Rastree la ubicación del usuario en tiempo real -
+Dibuje una polilínea con el recorrido - Calcule la distancia total
+recorrida - Guarde el recorrido para verlo después</p>
+</div>
+<hr>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_conclusión">Conclusión</h3>
+<div class="paragraph">
+<p>Este módulo te ha proporcionado una base sólida para trabajar con
+<strong>Google Maps en Flutter</strong>. Los conceptos clave son:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><strong>Configuración</strong>: API Keys para Android e iOS con restricciones de
+seguridad</p>
+</li>
+<li>
+<p><strong>Mapas interactivos</strong>: GoogleMap widget, cámara, gestos</p>
+</li>
+<li>
+<p><strong>Marcadores</strong>: Iconos personalizados, InfoWindows, clustering</p>
+</li>
+<li>
+<p><strong>Overlays</strong>: Polilíneas, polígonos, círculos</p>
+</li>
+<li>
+<p><strong>Geolocalización</strong>: Permisos, ubicación actual, seguimiento</p>
+</li>
+<li>
+<p><strong>APIs</strong>: Geocoding, Places, Directions</p>
+</li>
+<li>
+<p><strong>Optimización</strong>: Gestión de marcadores, caché, lazy loading</p>
+</li>
+<li>
+<p><strong>Buenas prácticas</strong>: Seguridad, testing, ciclo de vida</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>Siguiente paso: Practica con los ejercicios y desarrolla tu propia app
+integrando mapas con tus necesidades específicas.</p>
+</div>
+<hr>
+<div class="paragraph">
+<p><strong>Autor</strong>: Bot-Bunnny<br>
+<strong>Fecha</strong>: Junio 2026<br>
+<strong>Versión</strong>: 1.0 - Flutter Edition</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2026-07-06 07:47:14 +0200
+</div>
+</div>
+</body>
+</html>

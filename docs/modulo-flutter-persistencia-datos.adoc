@@ -1,0 +1,3226 @@
+:source-highlighter: pygments
+:pygments-style: friendly
+:pygments-css: class
+
+== Módulo Completo: Persistencia de Datos en Flutter
+
+=== Índice
+
+[arabic]
+. link:#introducción-a-la-persistencia[Introducción a la Persistencia]
+. link:#sharedpreferences[SharedPreferences]
+. link:++#hive---base-de-datos-nosql++[Hive - Base de Datos NoSQL]
+. link:#sqlite-con-sqflite[SQLite con sqflite]
+. link:++#drift---orm-para-sqlite++[Drift - ORM para SQLite]
+. link:++#isar---base-de-datos-rápida++[Isar - Base de Datos Rápida]
+. link:#flutter-secure-storage[Flutter Secure Storage]
+. link:#comparativa-de-soluciones[Comparativa de Soluciones]
+. link:#patrones-y-mejores-prácticas[Patrones y Mejores Prácticas]
+. link:#ejemplos-prácticos-completos[Ejemplos Prácticos Completos]
+
+'''''
+
+=== Introducción a la Persistencia
+
+==== ¿Qué es la Persistencia de Datos?
+
+La persistencia de datos es la capacidad de almacenar información de
+forma que sobreviva a cierres de la aplicación, reinicios del
+dispositivo o actualizaciones de la app.
+
+....
+┌─────────────────────────────────────────────────────────────┐
+│              Tipos de Persistencia en Flutter              │
+├─────────────────────────────────────────────────────────────┤
+│                                                             │
+│  SharedPreferences                                          │
+│  ├── Datos simples (clave-valor)                           │
+│  ├── Ideal para preferencias, configuraciones              │
+│  ├── Almacenamiento: JSON en disco                         │
+│  └── Límite: ~100KB recomendado                             │
+│                                                             │
+│  Hive                                                       │
+│  ├── Base de datos NoSQL ligera                            │
+│  ├── Ideal para objetos, cache                              │
+│  ├── Rápido, sin dependencias nativas                      │
+│  └── Cifrado opcional                                       │
+│                                                             │
+│  SQLite (sqflite)                                           │
+│  ├── Base de datos relacional                              │
+│  ├── Ideal para datos estructurados, relaciones            │
+│  ├── Consultas SQL completas                                │
+│  └── Amplio soporte, bien documentado                       │
+│                                                             │
+│  Drift (ORM)                                                │
+│  ├── ORM sobre SQLite                                       │
+│  ├── Tipado seguro, migraciones automáticas                 │
+│  ├── Consultas tipadas, reactive                            │
+│  └── Ideal para apps complejas                              │
+│                                                             │
+│  Isar                                                       │
+│  ├── Base de datos NoSQL muy rápida                        │
+│  ├── Ideal para grandes volúmenes                           │
+│  ├── Consultas tipadas, índices                             │
+│  └── Sintaxis similar a Firestore                           │
+│                                                             │
+│  Secure Storage                                              │
+│  ├── Almacenamiento cifrado                                 │
+│  ├── Ideal para tokens, credenciales                        │
+│  ├── Usa Keychain (iOS) / Keystore (Android)                │
+│  └── Máxima seguridad                                       │
+│                                                             │
+└─────────────────────────────────────────────────────────────┘
+....
+
+==== Criterios de Selección
+
+[source,dart]
+----
+class StorageSelectionGuide {
+  static String recommend({
+    required bool needsEncryption,
+    required bool needsRelations,
+    required int dataSizeKB,
+    required bool needsSync,
+    required bool needsQuerying,
+  }) {
+    // Necesita cifrado alto
+    if (needsEncryption && dataSizeKB < 100) {
+      return 'Flutter Secure Storage';
+    }
+    
+    // Datos simples
+    if (dataSizeKB < 100 && !needsRelations && !needsQuerying) {
+      return 'SharedPreferences';
+    }
+    
+    // Necesita relaciones
+    if (needsRelations) {
+      return dataSizeKB > 10000 ? 'Drift' : 'sqflite';
+    }
+    
+    // Necesita consultas complejas
+    if (needsQuerying && needsSync) {
+      return 'Isar';
+    }
+    
+    // Datos medianos sin relaciones
+    if (dataSizeKB < 10000 && !needsRelations) {
+      return 'Hive';
+    }
+    
+    // Grandes volúmenes
+    return 'Isar';
+  }
+}
+----
+
+'''''
+
+=== SharedPreferences
+
+==== Instalación
+
+[source,yaml]
+----
+# pubspec.yaml
+dependencies:
+  shared_preferences: ^2.2.2
+----
+
+==== Uso Básico
+
+[source,dart]
+----
+import 'package:shared_preferences/shared_preferences.dart';
+
+class SharedPreferencesService {
+  late final SharedPreferences _prefs;
+  
+  // Inicializar (llamar en main)
+  Future<void> init() async {
+    _prefs = await SharedPreferences.getInstance();
+  }
+  
+  // ========== Tipos soportados ==========
+  
+  // String
+  Future<bool> setString(String key, String value) async {
+    return await _prefs.setString(key, value);
+  }
+  
+  String? getString(String key) {
+    return _prefs.getString(key);
+  }
+  
+  // Int
+  Future<bool> setInt(String key, int value) async {
+    return await _prefs.setInt(key, value);
+  }
+  
+  int? getInt(String key) {
+    return _prefs.getInt(key);
+  }
+  
+  // Double
+  Future<bool> setDouble(String key, double value) async {
+    return await _prefs.setDouble(key, value);
+  }
+  
+  double? getDouble(String key) {
+    return _prefs.getDouble(key);
+  }
+  
+  // Bool
+  Future<bool> setBool(String key, bool value) async {
+    return await _prefs.setBool(key, value);
+  }
+  
+  bool? getBool(String key) {
+    return _prefs.getBool(key);
+  }
+  
+  // List<String>
+  Future<bool> setStringList(String key, List<String> value) async {
+    return await _prefs.setStringList(key, value);
+  }
+  
+  List<String>? getStringList(String key) {
+    return _prefs.getStringList(key);
+  }
+  
+  // ========== Operaciones generales ==========
+  
+  // Verificar si existe
+  bool contains(String key) {
+    return _prefs.containsKey(key);
+  }
+  
+  // Obtener todas las claves
+  Set<String> getKeys() {
+    return _prefs.getKeys();
+  }
+  
+  // Eliminar
+  Future<bool> remove(String key) async {
+    return await _prefs.remove(key);
+  }
+  
+  // Limpiar todo
+  Future<bool> clear() async {
+    return await _prefs.clear();
+  }
+  
+  // Recargar desde disco
+  Future<void> reload() async {
+    await _prefs.reload();
+  }
+}
+----
+
+==== Casos de Uso Comunes
+
+[source,dart]
+----
+class PreferencesManager {
+  static const String _themeKey = 'app_theme';
+  static const String _localeKey = 'app_locale';
+  static const String _notificationsKey = 'notifications_enabled';
+  static const String _onboardingKey = 'onboarding_completed';
+  static const String _lastSyncKey = 'last_sync_timestamp';
+  static const String _recentSearchesKey = 'recent_searches';
+  static const String _userTokenKey = 'user_token';
+  
+  final SharedPreferencesService _service;
+  
+  PreferencesManager(this._service);
+  
+  // ========== Tema ==========
+  
+  Future<void> setTheme(ThemeMode mode) async {
+    await _service.setString(_themeKey, mode.name);
+  }
+  
+  ThemeMode getTheme() {
+    final name = _service.getString(_themeKey);
+    return ThemeMode.values.firstWhere(
+      (mode) => mode.name == name,
+      orElse: () => ThemeMode.system,
+    );
+  }
+  
+  // ========== Idioma ==========
+  
+  Future<void> setLocale(Locale locale) async {
+    await _service.setString(_localeKey, locale.languageCode);
+  }
+  
+  Locale getLocale() {
+    final code = _service.getString(_localeKey);
+    return code != null ? Locale(code) : const Locale('es');
+  }
+  
+  // ========== Notificaciones ==========
+  
+  Future<void> setNotificationsEnabled(bool enabled) async {
+    await _service.setBool(_notificationsKey, enabled);
+  }
+  
+  bool getNotificationsEnabled() {
+    return _service.getBool(_notificationsKey) ?? true;
+  }
+  
+  // ========== Onboarding ==========
+  
+  Future<void> setOnboardingCompleted(bool completed) async {
+    await _service.setBool(_onboardingKey, completed);
+  }
+  
+  bool getOnboardingCompleted() {
+    return _service.getBool(_onboardingKey) ?? false;
+  }
+  
+  // ========== Última sincronización ==========
+  
+  Future<void> setLastSync(DateTime dateTime) async {
+    await _service.setInt(_lastSyncKey, dateTime.millisecondsSinceEpoch);
+  }
+  
+  DateTime? getLastSync() {
+    final timestamp = _service.getInt(_lastSyncKey);
+    return timestamp != null ? DateTime.fromMillisecondsSinceEpoch(timestamp) : null;
+  }
+  
+  // ========== Búsquedas recientes ==========
+  
+  Future<void> addRecentSearch(String search) async {
+    final searches = getRecentSearches();
+    searches.remove(search); // Evitar duplicados
+    searches.insert(0, search);
+    
+    // Mantener solo las últimas 10
+    if (searches.length > 10) {
+      searches.removeRange(10, searches.length);
+    }
+    
+    await _service.setStringList(_recentSearchesKey, searches);
+  }
+  
+  List<String> getRecentSearches() {
+    return _service.getStringList(_recentSearchesKey) ?? [];
+  }
+  
+  Future<void> clearRecentSearches() async {
+    await _service.remove(_recentSearchesKey);
+  }
+  
+  // ========== Token (no seguro, solo para demo) ==========
+  
+  Future<void> setUserToken(String token) async {
+    await _service.setString(_userTokenKey, token);
+  }
+  
+  String? getUserToken() {
+    return _service.getString(_userTokenKey);
+  }
+  
+  Future<void> removeUserToken() async {
+    await _service.remove(_userTokenKey);
+  }
+}
+----
+
+==== Provider para SharedPreferences
+
+[source,dart]
+----
+final sharedPreferencesProvider = Provider<SharedPreferences>((ref) {
+  throw UnimplementedError('SharedPreferences not initialized');
+});
+
+final preferencesManagerProvider = Provider<PreferencesManager>((ref) {
+  return PreferencesManager(SharedPreferencesService(ref.watch(sharedPreferencesProvider)));
+});
+
+final themeProvider = StateNotifierProvider<ThemeNotifier, ThemeMode>((ref) {
+  return ThemeNotifier(ref.watch(preferencesManagerProvider));
+});
+
+class ThemeNotifier extends StateNotifier<ThemeMode> {
+  final PreferencesManager _preferences;
+  
+  ThemeNotifier(this._preferences) : super(_preferences.getTheme());
+  
+  Future<void> setTheme(ThemeMode mode) async {
+    await _preferences.setTheme(mode);
+    state = mode;
+  }
+}
+
+// Inicialización en main
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  
+  final prefs = await SharedPreferences.getInstance();
+  
+  runApp(ProviderScope(
+    overrides: [
+      sharedPreferencesProvider.overrideWithValue(prefs),
+    ],
+    child: const MyApp(),
+  ));
+}
+----
+
+'''''
+
+=== Hive - Base de Datos NoSQL
+
+==== Instalación
+
+[source,yaml]
+----
+# pubspec.yaml
+dependencies:
+  hive: ^2.2.3
+  hive_flutter: ^1.1.0
+
+dev_dependencies:
+  hive_generator: ^2.0.1
+  build_runner: ^2.4.7
+----
+
+==== Inicialización
+
+[source,dart]
+----
+import 'package:hive_flutter/hive_flutter.dart';
+
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  
+  await Hive.initFlutter();
+  
+  // Registrar adaptadores
+  Hive.registerAdapter(UserAdapter());
+  Hive.registerAdapter(TaskAdapter());
+  
+  // Abrir boxes
+  await Hive.openBox<User>('users');
+  await Hive.openBox<Task>('tasks');
+  await Hive.openBox('settings');
+  
+  runApp(const MyApp());
+}
+----
+
+==== Modelos con TypeAdapter
+
+[source,dart]
+----
+import 'package:hive/hive.dart';
+
+part 'user.g.dart';
+
+@HiveType(typeId: 0)
+class User extends HiveObject {
+  @HiveField(0)
+  String id;
+  
+  @HiveField(1)
+  String name;
+  
+  @HiveField(2)
+  String email;
+  
+  @HiveField(3)
+  int age;
+  
+  @HiveField(4)
+  DateTime createdAt;
+  
+  @HiveField(5)
+  bool isActive;
+  
+  @HiveField(6)
+  List<String> tags;
+  
+  @HiveField(7)
+  UserSettings? settings;
+  
+  User({
+    required this.id,
+    required this.name,
+    required this.email,
+    required this.age,
+    required this.createdAt,
+    this.isActive = true,
+    this.tags = const [],
+    this.settings,
+  });
+}
+
+@HiveType(typeId: 1)
+class UserSettings {
+  @HiveField(0)
+  bool darkMode;
+  
+  @HiveField(1)
+  String locale;
+  
+  @HiveField(2)
+  int fontSize;
+  
+  UserSettings({
+    this.darkMode = false,
+    this.locale = 'es',
+    this.fontSize = 14,
+  });
+}
+
+// Generar código con:
+// flutter packages pub run build_runner build
+----
+
+==== Operaciones CRUD
+
+[source,dart]
+----
+class HiveUserService {
+  late Box<User> _userBox;
+  
+  Future<void> init() async {
+    _userBox = await Hive.openBox<User>('users');
+  }
+  
+  // ========== CREATE ==========
+  
+  Future<void> addUser(User user) async {
+    await _userBox.put(user.id, user);
+  }
+  
+  Future<void> addUsers(List<User> users) async {
+    final Map<String, User> userMap = {
+      for (var user in users) user.id: user
+    };
+    await _userBox.putAll(userMap);
+  }
+  
+  // ========== READ ==========
+  
+  User? getUser(String id) {
+    return _userBox.get(id);
+  }
+  
+  List<User> getAllUsers() {
+    return _userBox.values.toList();
+  }
+  
+  List<User> getActiveUsers() {
+    return _userBox.values.where((user) => user.isActive).toList();
+  }
+  
+  List<User> searchUsers(String query) {
+    final lowerQuery = query.toLowerCase();
+    return _userBox.values.where((user) {
+      return user.name.toLowerCase().contains(lowerQuery) ||
+             user.email.toLowerCase().contains(lowerQuery);
+    }).toList();
+  }
+  
+  // ========== UPDATE ==========
+  
+  Future<void> updateUser(User user) async {
+    await user.save(); // HiveObject.save()
+  }
+  
+  Future<void> updateUserFields(String id, {
+    String? name,
+    String? email,
+    int? age,
+    bool? isActive,
+  }) async {
+    final user = _userBox.get(id);
+    if (user != null) {
+      if (name != null) user.name = name;
+      if (email != null) user.email = email;
+      if (age != null) user.age = age;
+      if (isActive != null) user.isActive = isActive;
+      await user.save();
+    }
+  }
+  
+  // ========== DELETE ==========
+  
+  Future<void> deleteUser(String id) async {
+    await _userBox.delete(id);
+  }
+  
+  Future<void> deleteAllUsers() async {
+    await _userBox.clear();
+  }
+  
+  // ========== UTILIDADES ==========
+  
+  int getUserCount() {
+    return _userBox.length;
+  }
+  
+  bool containsUser(String id) {
+    return _userBox.containsKey(id);
+  }
+  
+  Iterable<String> getAllKeys() {
+    return _userBox.keys;
+  }
+  
+  // ========== BATCH OPERATIONS ==========
+  
+  Future<void> batchUpdate(List<User> users) async {
+    await _userBox.putAll({
+      for (var user in users) user.id: user
+    });
+  }
+  
+  Future<void> batchDelete(List<String> ids) async {
+    for (var id in ids) {
+      await _userBox.delete(id);
+    }
+  }
+}
+----
+
+==== Consultas Avanzadas
+
+[source,dart]
+----
+class HiveQueryService {
+  final Box<User> _userBox;
+  
+  HiveQueryService(this._userBox);
+  
+  // Filtrar por edad
+  List<User> getUsersByAgeRange(int minAge, int maxAge) {
+    return _userBox.values.where((user) {
+      return user.age >= minAge && user.age <= maxAge;
+    }).toList();
+  }
+  
+  // Filtrar por tags
+  List<User> getUsersByTag(String tag) {
+    return _userBox.values.where((user) {
+      return user.tags.contains(tag);
+    }).toList();
+  }
+  
+  // Ordenar por nombre
+  List<User> getUsersSortedByName({bool ascending = true}) {
+    final users = _userBox.values.toList();
+    users.sort((a, b) => ascending
+        ? a.name.compareTo(b.name)
+        : b.name.compareTo(a.name));
+    return users;
+  }
+  
+  // Ordenar por fecha de creación
+  List<User> getUsersSortedByDate({bool ascending = true}) {
+    final users = _userBox.values.toList();
+    users.sort((a, b) => ascending
+        ? a.createdAt.compareTo(b.createdAt)
+        : b.createdAt.compareTo(a.createdAt));
+    return users;
+  }
+  
+  // Paginación
+  List<User> getUsersPaginated({int page = 0, int pageSize = 20}) {
+    final users = _userBox.values.toList();
+    final start = page * pageSize;
+    final end = start + pageSize;
+    
+    if (start >= users.length) return [];
+    
+    return users.sublist(
+      start,
+      end.clamp(0, users.length),
+    );
+  }
+  
+  // Búsqueda avanzada
+  List<User> advancedSearch({
+    String? name,
+    String? email,
+    int? minAge,
+    int? maxAge,
+    bool? isActive,
+    String? tag,
+  }) {
+    return _userBox.values.where((user) {
+      if (name != null && !user.name.toLowerCase().contains(name.toLowerCase())) {
+        return false;
+      }
+      if (email != null && !user.email.toLowerCase().contains(email.toLowerCase())) {
+        return false;
+      }
+      if (minAge != null && user.age < minAge) {
+        return false;
+      }
+      if (maxAge != null && user.age > maxAge) {
+        return false;
+      }
+      if (isActive != null && user.isActive != isActive) {
+        return false;
+      }
+      if (tag != null && !user.tags.contains(tag)) {
+        return false;
+      }
+      return true;
+    }).toList();
+  }
+  
+  // Contar
+  int countActiveUsers() {
+    return _userBox.values.where((user) => user.isActive).length;
+  }
+  
+  // Agrupar por tag
+  Map<String, List<User>> groupUsersByTag() {
+    final Map<String, List<User>> groups = {};
+    
+    for (var user in _userBox.values) {
+      for (var tag in user.tags) {
+        groups.putIfAbsent(tag, () => []);
+        groups[tag]!.add(user);
+      }
+    }
+    
+    return groups;
+  }
+}
+----
+
+==== Hive con Cifrado
+
+[source,dart]
+----
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:encrypt/encrypt.dart';
+
+class SecureHiveService {
+  static late Box _secureBox;
+  static late Key _encryptionKey;
+  
+  // Inicializar con clave de cifrado
+  static Future<void> init(String encryptionKey) async {
+    _encryptionKey = Key.fromUtf8(encryptionKey.padRight(32, '0').substring(0, 32));
+    
+    Hive.registerAdapter(SensitiveDataAdapter());
+    
+    // Abrir box cifrado
+    _secureBox = await Hive.openBox(
+      'secure_data',
+      encryptionCipher: HiveAesCipher(_encryptionKey.bytes),
+    );
+  }
+  
+  // Guardar datos sensibles
+  static Future<void> saveSecureData(String key, Map<String, dynamic> data) async {
+    await _secureBox.put(key, data);
+  }
+  
+  // Obtener datos sensibles
+  static Map<String, dynamic>? getSecureData(String key) {
+    return _secureBox.get(key);
+  }
+  
+  // Eliminar
+  static Future<void> deleteSecureData(String key) async {
+    await _secureBox.delete(key);
+  }
+  
+  // Limpiar todo
+  static Future<void> clearSecureData() async {
+    await _secureBox.clear();
+  }
+}
+
+@HiveType(typeId: 10)
+class SensitiveData extends HiveObject {
+  @HiveField(0)
+  String key;
+  
+  @HiveField(1)
+  String encryptedValue;
+  
+  @HiveField(2)
+  DateTime createdAt;
+  
+  SensitiveData({
+    required this.key,
+    required this.encryptedValue,
+    required this.createdAt,
+  });
+}
+----
+
+==== Lazy Box para Grandes Volúmenes
+
+[source,dart]
+----
+class LazyHiveService {
+  late LazyBox<User> _lazyBox;
+  
+  Future<void> init() async {
+    _lazyBox = await Hive.openLazyBox<User>('users_lazy');
+  }
+  
+  // Añadir usuario
+  Future<void> addUser(User user) async {
+    await _lazyBox.put(user.id, user);
+  }
+  
+  // Obtener usuario (carga perezosa)
+  Future<User?> getUser(String id) async {
+    return await _lazyBox.get(id);
+  }
+  
+  // Obtener todos (cuidado con memoria)
+  Future<List<User>> getAllUsers() async {
+    final List<User> users = [];
+    for (var key in _lazyBox.keys) {
+      final user = await _lazyBox.get(key);
+      if (user != null) {
+        users.add(user);
+      }
+    }
+    return users;
+  }
+  
+  // Iterar sin cargar todo en memoria
+  Future<void> forEachUser(Function(User) action) async {
+    for (var key in _lazyBox.keys) {
+      final user = await _lazyBox.get(key);
+      if (user != null) {
+        action(user);
+      }
+    }
+  }
+  
+  // Contar usuarios
+  int getUserCount() {
+    return _lazyBox.length;
+  }
+  
+  // Verificar existencia
+  bool containsUser(String id) {
+    return _lazyBox.containsKey(id);
+  }
+}
+----
+
+'''''
+
+=== SQLite con sqflite
+
+==== Instalación
+
+[source,yaml]
+----
+# pubspec.yaml
+dependencies:
+  sqflite: ^2.3.0
+  path: ^1.8.3
+
+# Para Android: No requiere configuración adicional
+# Para iOS: No requiere configuración adicional
+----
+
+==== Configuración Inicial
+
+[source,dart]
+----
+import 'package:sqflite/sqflite.dart';
+import 'package:path/path.dart';
+
+class DatabaseHelper {
+  static final DatabaseHelper _instance = DatabaseHelper._internal();
+  factory DatabaseHelper() => _instance;
+  DatabaseHelper._internal();
+  
+  static Database? _database;
+  
+  Future<Database> get database async {
+    if (_database != null) return _database!;
+    _database = await _initDatabase();
+    return _database!;
+  }
+  
+  Future<Database> _initDatabase() async {
+    final dbPath = await getDatabasesPath();
+    final path = join(dbPath, 'app_database.db');
+    
+    return await openDatabase(
+      path,
+      version: 1,
+      onCreate: _onCreate,
+      onUpgrade: _onUpgrade,
+      onDowngrade: _onDowngrade,
+    );
+  }
+  
+  Future<void> _onCreate(Database db, int version) async {
+    // Crear tablas
+    await db.execute('''
+      CREATE TABLE users (
+        id TEXT PRIMARY KEY,
+        name TEXT NOT NULL,
+        email TEXT NOT NULL UNIQUE,
+        age INTEGER,
+        is_active INTEGER DEFAULT 1,
+        created_at TEXT NOT NULL,
+        updated_at TEXT NOT NULL
+      )
+    ''');
+    
+    await db.execute('''
+      CREATE TABLE tasks (
+        id TEXT PRIMARY KEY,
+        title TEXT NOT NULL,
+        description TEXT,
+        status TEXT NOT NULL DEFAULT 'pending',
+        priority INTEGER DEFAULT 0,
+        user_id TEXT NOT NULL,
+        created_at TEXT NOT NULL,
+        due_date TEXT,
+        FOREIGN KEY (user_id) REFERENCES users (id)
+          ON DELETE CASCADE
+      )
+    ''');
+    
+    await db.execute('''
+      CREATE TABLE tags (
+        id TEXT PRIMARY KEY,
+        name TEXT NOT NULL UNIQUE,
+        color TEXT
+      )
+    ''');
+    
+    await db.execute('''
+      CREATE TABLE task_tags (
+        task_id TEXT NOT NULL,
+        tag_id TEXT NOT NULL,
+        PRIMARY KEY (task_id, tag_id),
+        FOREIGN KEY (task_id) REFERENCES tasks (id)
+          ON DELETE CASCADE,
+        FOREIGN KEY (tag_id) REFERENCES tags (id)
+          ON DELETE CASCADE
+      )
+    ''');
+    
+    // Crear índices
+    await db.execute('CREATE INDEX idx_tasks_user ON tasks (user_id)');
+    await db.execute('CREATE INDEX idx_tasks_status ON tasks (status)');
+    await db.execute('CREATE INDEX idx_tasks_due_date ON tasks (due_date)');
+  }
+  
+  Future<void> _onUpgrade(Database db, int oldVersion, int newVersion) async {
+    // Migraciones
+    if (oldVersion < 2) {
+      // Añadir columna
+      await db.execute('ALTER TABLE users ADD COLUMN avatar TEXT');
+    }
+    
+    if (oldVersion < 3) {
+      // Crear nueva tabla
+      await db.execute('''
+        CREATE TABLE categories (
+          id TEXT PRIMARY KEY,
+          name TEXT NOT NULL
+        )
+      ''');
+    }
+  }
+  
+  Future<void> _onDowngrade(Database db, int oldVersion, int newVersion) async {
+    // Downgrade (raro necesitarlo)
+  }
+}
+----
+
+==== Modelos
+
+[source,dart]
+----
+class User {
+  final String id;
+  final String name;
+  final String email;
+  final int age;
+  final bool isActive;
+  final DateTime createdAt;
+  final DateTime updatedAt;
+  
+  User({
+    required this.id,
+    required this.name,
+    required this.email,
+    required this.age,
+    this.isActive = true,
+    required this.createdAt,
+    required this.updatedAt,
+  });
+  
+  // Convertir de Map a User
+  factory User.fromMap(Map<String, dynamic> map) {
+    return User(
+      id: map['id'] as String,
+      name: map['name'] as String,
+      email: map['email'] as String,
+      age: map['age'] as int,
+      isActive: map['is_active'] == 1,
+      createdAt: DateTime.parse(map['created_at'] as String),
+      updatedAt: DateTime.parse(map['updated_at'] as String),
+    );
+  }
+  
+  // Convertir de User a Map
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'name': name,
+      'email': email,
+      'age': age,
+      'is_active': isActive ? 1 : 0,
+      'created_at': createdAt.toIso8601String(),
+      'updated_at': updatedAt.toIso8601String(),
+    };
+  }
+  
+  // Copiar con cambios
+  User copyWith({
+    String? id,
+    String? name,
+    String? email,
+    int? age,
+    bool? isActive,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+  }) {
+    return User(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      email: email ?? this.email,
+      age: age ?? this.age,
+      isActive: isActive ?? this.isActive,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+    );
+  }
+}
+
+class Task {
+  final String id;
+  final String title;
+  final String? description;
+  final String status;
+  final int priority;
+  final String userId;
+  final DateTime createdAt;
+  final DateTime? dueDate;
+  
+  Task({
+    required this.id,
+    required this.title,
+    this.description,
+    required this.status,
+    this.priority = 0,
+    required this.userId,
+    required this.createdAt,
+    this.dueDate,
+  });
+  
+  factory Task.fromMap(Map<String, dynamic> map) {
+    return Task(
+      id: map['id'] as String,
+      title: map['title'] as String,
+      description: map['description'] as String?,
+      status: map['status'] as String,
+      priority: map['priority'] as int,
+      userId: map['user_id'] as String,
+      createdAt: DateTime.parse(map['created_at'] as String),
+      dueDate: map['due_date'] != null 
+          ? DateTime.parse(map['due_date'] as String) 
+          : null,
+    );
+  }
+  
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'title': title,
+      'description': description,
+      'status': status,
+      'priority': priority,
+      'user_id': userId,
+      'created_at': createdAt.toIso8601String(),
+      'due_date': dueDate?.toIso8601String(),
+    };
+  }
+  
+  Task copyWith({
+    String? id,
+    String? title,
+    String? description,
+    String? status,
+    int? priority,
+    String? userId,
+    DateTime? createdAt,
+    DateTime? dueDate,
+  }) {
+    return Task(
+      id: id ?? this.id,
+      title: title ?? this.title,
+      description: description ?? this.description,
+      status: status ?? this.status,
+      priority: priority ?? this.priority,
+      userId: userId ?? this.userId,
+      createdAt: createdAt ?? this.createdAt,
+      dueDate: dueDate ?? this.dueDate,
+    );
+  }
+}
+----
+
+==== CRUD Operations
+
+[source,dart]
+----
+class UserRepository {
+  final DatabaseHelper _dbHelper = DatabaseHelper();
+  
+  // ========== CREATE ==========
+  
+  Future<void> insertUser(User user) async {
+    final db = await _dbHelper.database;
+    await db.insert(
+      'users',
+      user.toMap(),
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+  }
+  
+  Future<void> insertUsers(List<User> users) async {
+    final db = await _dbHelper.database;
+    final batch = db.batch();
+    
+    for (var user in users) {
+      batch.insert(
+        'users',
+        user.toMap(),
+        conflictAlgorithm: ConflictAlgorithm.replace,
+      );
+    }
+    
+    await batch.commit(noResult: true);
+  }
+  
+  // ========== READ ==========
+  
+  Future<User?> getUser(String id) async {
+    final db = await _dbHelper.database;
+    final List<Map<String, dynamic>> maps = await db.query(
+      'users',
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+    
+    if (maps.isEmpty) return null;
+    return User.fromMap(maps.first);
+  }
+  
+  Future<List<User>> getAllUsers() async {
+    final db = await _dbHelper.database;
+    final List<Map<String, dynamic>> maps = await db.query(
+      'users',
+      orderBy: 'name ASC',
+    );
+    
+    return maps.map((map) => User.fromMap(map)).toList();
+  }
+  
+  Future<List<User>> getActiveUsers() async {
+    final db = await _dbHelper.database;
+    final List<Map<String, dynamic>> maps = await db.query(
+      'users',
+      where: 'is_active = ?',
+      whereArgs: [1],
+      orderBy: 'name ASC',
+    );
+    
+    return maps.map((map) => User.fromMap(map)).toList();
+  }
+  
+  Future<List<User>> searchUsers(String query) async {
+    final db = await _dbHelper.database;
+    final List<Map<String, dynamic>> maps = await db.query(
+      'users',
+      where: 'name LIKE ? OR email LIKE ?',
+      whereArgs: ['%$query%', '%$query%'],
+      orderBy: 'name ASC',
+    );
+    
+    return maps.map((map) => User.fromMap(map)).toList();
+  }
+  
+  Future<List<User>> getUsersByAgeRange(int minAge, int maxAge) async {
+    final db = await _dbHelper.database;
+    final List<Map<String, dynamic>> maps = await db.query(
+      'users',
+      where: 'age >= ? AND age <= ?',
+      whereArgs: [minAge, maxAge],
+      orderBy: 'age ASC',
+    );
+    
+    return maps.map((map) => User.fromMap(map)).toList();
+  }
+  
+  // ========== UPDATE ==========
+  
+  Future<void> updateUser(User user) async {
+    final db = await _dbHelper.database;
+    await db.update(
+      'users',
+      user.toMap(),
+      where: 'id = ?',
+      whereArgs: [user.id],
+    );
+  }
+  
+  Future<void> updateUserFields(String id, Map<String, dynamic> fields) async {
+    final db = await _dbHelper.database;
+    fields['updated_at'] = DateTime.now().toIso8601String();
+    
+    await db.update(
+      'users',
+      fields,
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+  }
+  
+  Future<void> deactivateUser(String id) async {
+    await updateUserFields(id, {'is_active': 0});
+  }
+  
+  // ========== DELETE ==========
+  
+  Future<void> deleteUser(String id) async {
+    final db = await _dbHelper.database;
+    await db.delete(
+      'users',
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+  }
+  
+  Future<void> deleteAllUsers() async {
+    final db = await _dbHelper.database;
+    await db.delete('users');
+  }
+  
+  // ========== COUNT ==========
+  
+  Future<int> getUserCount() async {
+    final db = await _dbHelper.database;
+    final result = await db.rawQuery('SELECT COUNT(*) FROM users');
+    return Sqflite.firstIntValue(result) ?? 0;
+  }
+  
+  Future<int> getActiveUserCount() async {
+    final db = await _dbHelper.database;
+    final result = await db.rawQuery(
+      'SELECT COUNT(*) FROM users WHERE is_active = ?',
+      [1],
+    );
+    return Sqflite.firstIntValue(result) ?? 0;
+  }
+}
+----
+
+==== Consultas Complejas
+
+[source,dart]
+----
+class TaskRepository {
+  final DatabaseHelper _dbHelper = DatabaseHelper();
+  
+  // JOIN: Obtener tareas con usuario
+  Future<List<Map<String, dynamic>>> getTasksWithUser() async {
+    final db = await _dbHelper.database;
+    final results = await db.rawQuery('''
+      SELECT 
+        t.id as task_id,
+        t.title as task_title,
+        t.status as task_status,
+        t.due_date as task_due_date,
+        u.id as user_id,
+        u.name as user_name,
+        u.email as user_email
+      FROM tasks t
+      INNER JOIN users u ON t.user_id = u.id
+      ORDER BY t.created_at DESC
+    ''');
+    
+    return results;
+  }
+  
+  // LEFT JOIN: Obtener tareas con tags (puede no tener tags)
+  Future<List<Map<String, dynamic>>> getTasksWithTags() async {
+    final db = await _dbHelper.database;
+    final results = await db.rawQuery('''
+      SELECT 
+        t.id as task_id,
+        t.title as task_title,
+        GROUP_CONCAT(tg.name) as tag_names
+      FROM tasks t
+      LEFT JOIN task_tags tt ON t.id = tt.task_id
+      LEFT JOIN tags tg ON tt.tag_id = tg.id
+      GROUP BY t.id
+    ''');
+    
+    return results;
+  }
+  
+  // Subquery: Usuarios con más de 5 tareas
+  Future<List<User>> getUsersWithManyTasks() async {
+    final db = await _dbHelper.database;
+    final results = await db.rawQuery('''
+      SELECT u.*
+      FROM users u
+      WHERE (
+        SELECT COUNT(*)
+        FROM tasks t
+        WHERE t.user_id = u.id
+      ) > 5
+    ''');
+    
+    return results.map((map) => User.fromMap(map)).toList();
+  }
+  
+  // Aggregation: Estadísticas de tareas por usuario
+  Future<List<Map<String, dynamic>>> getTaskStatsPerUser() async {
+    final db = await _dbHelper.database;
+    final results = await db.rawQuery('''
+      SELECT 
+        u.id,
+        u.name,
+        COUNT(t.id) as total_tasks,
+        SUM(CASE WHEN t.status = 'completed' THEN 1 ELSE 0 END) as completed_tasks,
+        SUM(CASE WHEN t.status = 'pending' THEN 1 ELSE 0 END) as pending_tasks,
+        AVG(t.priority) as avg_priority
+      FROM users u
+      LEFT JOIN tasks t ON u.id = t.user_id
+      GROUP BY u.id
+      ORDER BY total_tasks DESC
+    ''');
+    
+    return results;
+  }
+  
+  // Transaction: Crear usuario y tareas iniciales
+  Future<void> createUserWithTasks(User user, List<Task> tasks) async {
+    final db = await _dbHelper.database;
+    
+    await db.transaction((txn) async {
+      // Insertar usuario
+      await txn.insert('users', user.toMap());
+      
+      // Insertar tareas
+      for (var task in tasks) {
+        await txn.insert('tasks', task.toMap());
+      }
+    });
+  }
+  
+  // Batch: Actualizar múltiples tareas
+  Future<void> updateTasksStatus(List<String> taskIds, String status) async {
+    final db = await _dbHelper.database;
+    
+    await db.transaction((txn) async {
+      for (var id in taskIds) {
+        await txn.update(
+          'tasks',
+          {
+            'status': status,
+            'updated_at': DateTime.now().toIso8601String(),
+          },
+          where: 'id = ?',
+          whereArgs: [id],
+        );
+      }
+    });
+  }
+  
+  // Full-text search: Buscar en tareas
+  Future<List<Task>> searchTasks(String query) async {
+    final db = await _dbHelper.database;
+    final results = await db.query(
+      'tasks',
+      where: 'title LIKE ? OR description LIKE ?',
+      whereArgs: ['%$query%', '%$query%'],
+      orderBy: 'created_at DESC',
+    );
+    
+    return results.map((map) => Task.fromMap(map)).toList();
+  }
+  
+  // Paginación
+  Future<List<Task>> getTasksPaginated({
+    required int page,
+    required int pageSize,
+    String? userId,
+    String? status,
+  }) async {
+    final db = await _dbHelper.database;
+    
+    String whereClause = '';
+    List<dynamic> whereArgs = [];
+    
+    if (userId != null && status != null) {
+      whereClause = 'user_id = ? AND status = ?';
+      whereArgs = [userId, status];
+    } else if (userId != null) {
+      whereClause = 'user_id = ?';
+      whereArgs = [userId];
+    } else if (status != null) {
+      whereClause = 'status = ?';
+      whereArgs = [status];
+    }
+    
+    final offset = page * pageSize;
+    
+    final results = await db.query(
+      'tasks',
+      where: whereClause.isEmpty ? null : whereClause,
+      whereArgs: whereArgs.isEmpty ? null : whereArgs,
+      orderBy: 'created_at DESC',
+      limit: pageSize,
+      offset: offset,
+    );
+    
+    return results.map((map) => Task.fromMap(map)).toList();
+  }
+}
+----
+
+'''''
+
+=== Drift - ORM para SQLite
+
+==== Instalación
+
+[source,yaml]
+----
+# pubspec.yaml
+dependencies:
+  drift: ^2.14.0
+  sqlite3_flutter_libs: ^0.5.0
+  path_provider: ^2.1.1
+  path: ^1.8.3
+
+dev_dependencies:
+  drift_dev: ^2.14.0
+  build_runner: ^2.4.7
+----
+
+==== Definición de Tablas
+
+[source,dart]
+----
+import 'package:drift/drift.dart';
+
+// Definir tabla de usuarios
+class Users extends Table {
+  TextColumn get id => text()();
+  TextColumn get name => text().withLength(min: 1, max: 100)();
+  TextColumn get email => text().unique()();
+  IntColumn get age => integer().nullable()();
+  BoolColumn get isActive => boolean().withDefault(const Constant(true))();
+  DateTimeColumn get createdAt => dateTime().withDefault(currentDateAndTime)();
+  DateTimeColumn get updatedAt => dateTime().nullable()();
+  
+  @override
+  Set<Column> get primaryKey => {id};
+}
+
+// Definir tabla de tareas
+class Tasks extends Table {
+  TextColumn get id => text()();
+  TextColumn get title => text().withLength(min: 1, max: 200)();
+  TextColumn get description => text().nullable()();
+  TextColumn get status => text().withDefault(const Constant('pending'))();
+  IntColumn get priority => integer().withDefault(const Constant(0))();
+  TextColumn get userId => text().references(Users, #id)();
+  DateTimeColumn get createdAt => dateTime().withDefault(currentDateAndTime)();
+  DateTimeColumn get dueDate => dateTime().nullable()();
+  
+  @override
+  Set<Column> get primaryKey => {id};
+}
+
+// Definir tabla de tags
+class Tags extends Table {
+  TextColumn get id => text()();
+  TextColumn get name => text().unique()();
+  TextColumn get color => text().nullable()();
+  
+  @override
+  Set<Column> get primaryKey => {id};
+}
+
+// Tabla de relación many-to-many
+class TaskTags extends Table {
+  TextColumn get taskId => text().references(Tasks, #id)();
+  TextColumn get tagId => text().references(Tags, #id)();
+  
+  @override
+  Set<Column> get primaryKey => {taskId, tagId};
+}
+----
+
+==== Database Class
+
+[source,dart]
+----
+import 'package:drift/drift.dart';
+import 'package:drift/native.dart';
+import 'package:path/path.dart' as p;
+import 'package:path_provider/path_provider.dart';
+import 'package:sqlite3_flutter_libs/sqlite3_flutter_libs.dart';
+
+import 'database.g.dart'; // Generado por drift
+
+@DriftDatabase(tables: [Users, Tasks, Tags, TaskTags])
+class AppDatabase extends _$AppDatabase {
+  AppDatabase() : super(_openConnection());
+  
+  AppDatabase.connect(DatabaseConnection connection) : super(connection);
+  
+  @override
+  int get schemaVersion => 1;
+  
+  @override
+  MigrationStrategy get migration {
+    return MigrationStrategy(
+      onCreate: (Migrator m) async {
+        await m.createAll();
+      },
+      onUpgrade: (Migrator m, int from, int to) async {
+        if (from < 2) {
+          // Añadir columna avatar
+          await m.addColumn(users, users.avatar);
+        }
+        if (from < 3) {
+          // Crear tabla categories
+          // await m.createTable(categories);
+        }
+      },
+    );
+  }
+}
+
+LazyDatabase _openConnection() {
+  return LazyDatabase(() async {
+    final dbFolder = await getApplicationDocumentsDirectory();
+    final file = File(p.join(dbFolder.path, 'app_drift.db'));
+    
+    // Para Flutter, usar sqlite3_flutter_libs
+    if (Platform.isAndroid || Platform.isIOS) {
+      await setupSqlite3FlutterLibs();
+    }
+    
+    return NativeDatabase.createInBackground(file);
+  });
+}
+
+// Generar código con:
+// flutter packages pub run build_runner build
+----
+
+==== DAOs (Data Access Objects)
+
+[source,dart]
+----
+import 'package:drift/drift.dart';
+
+part 'daos.g.dart'; // Generado por drift
+
+@DriftAccessor(tables: [Users])
+class UserDao extends DatabaseAccessor<AppDatabase> with _$UserDaoMixin {
+  UserDao(AppDatabase db) : super(db);
+  
+  // ========== CREATE ==========
+  
+  Future<void> insertUser(UsersCompanion user) async {
+    await into(users).insert(
+      user,
+      mode: InsertMode.insertOrReplace,
+    );
+  }
+  
+  Future<void> insertUsers(List<UsersCompanion> userList) async {
+    await batch((batch) {
+      batch.insertAll(
+        users,
+        userList,
+        mode: InsertMode.insertOrReplace,
+      );
+    });
+  }
+  
+  // ========== READ ==========
+  
+  Future<User?> getUser(String id) async {
+    return (select(users)..where((u) => u.id.equals(id))).getSingleOrNull();
+  }
+  
+  Future<List<User>> getAllUsers() async {
+    return (select(users)..orderBy([(u) => OrderingTerm.asc(u.name)])).get();
+  }
+  
+  Future<List<User>> getActiveUsers() async {
+    return (select(users)
+          ..where((u) => u.isActive.equals(true))
+          ..orderBy([(u) => OrderingTerm.asc(u.name)]))
+        .get();
+  }
+  
+  // Búsqueda
+  Future<List<User>> searchUsers(String query) async {
+    return (select(users)
+          ..where((u) => u.name.like('%$query%') | u.email.like('%$query%'))
+          ..orderBy([(u) => OrderingTerm.asc(u.name)]))
+        .get();
+  }
+  
+  // Stream de usuarios (reactivo)
+  Stream<List<User>> watchAllUsers() {
+    return (select(users)..orderBy([(u) => OrderingTerm.asc(u.name)])).watch();
+  }
+  
+  Stream<User?> watchUser(String id) {
+    return (select(users)..where((u) => u.id.equals(id))).watchSingleOrNull();
+  }
+  
+  // ========== UPDATE ==========
+  
+  Future<void> updateUser(UsersCompanion user) async {
+    await (update(users)..where((u) => u.id.equals(user.id.value))).write(user);
+  }
+  
+  Future<void> updateUserFields(String id, {String? name, String? email, int? age, bool? isActive}) async {
+    await (update(users)..where((u) => u.id.equals(id))).write(
+      UsersCompanion(
+        name: name != null ? Value(name) : const Value.absent(),
+        email: email != null ? Value(email) : const Value.absent(),
+        age: age != null ? Value(age) : const Value.absent(),
+        isActive: isActive != null ? Value(isActive) : const Value.absent(),
+        updatedAt: Value(DateTime.now()),
+      ),
+    );
+  }
+  
+  // ========== DELETE ==========
+  
+  Future<int> deleteUser(String id) async {
+    return await (delete(users)..where((u) => u.id.equals(id))).go();
+  }
+  
+  Future<int> deleteAllUsers() async {
+    return await delete(users).go();
+  }
+  
+  // ========== COUNT ==========
+  
+  Future<int> getUserCount() async {
+    return users.count().getSingle();
+  }
+  
+  Future<int> getActiveUserCount() async {
+    return (users.count()..where((u) => u.isActive.equals(true))).getSingle();
+  }
+}
+
+@DriftAccessor(tables: [Tasks, TaskTags, Tags])
+class TaskDao extends DatabaseAccessor<AppDatabase> with _$TaskDaoMixin {
+  TaskDao(AppDatabase db) : super(db);
+  
+  // ========== CREATE ==========
+  
+  Future<void> insertTask(TasksCompanion task) async {
+    await into(tasks).insert(task, mode: InsertMode.insertOrReplace);
+  }
+  
+  Future<void> insertTasks(List<TasksCompanion> taskList) async {
+    await batch((batch) {
+      batch.insertAll(tasks, taskList, mode: InsertMode.insertOrReplace);
+    });
+  }
+  
+  Future<void> addTagToTask(String taskId, String tagId) async {
+    await into(taskTags).insert(
+      TaskTagsCompanion(
+        taskId: Value(taskId),
+        tagId: Value(tagId),
+      ),
+    );
+  }
+  
+  // ========== READ ==========
+  
+  Future<Task?> getTask(String id) async {
+    return (select(tasks)..where((t) => t.id.equals(id))).getSingleOrNull();
+  }
+  
+  Future<List<Task>> getAllTasks() async {
+    return (select(tasks)..orderBy([(t) => OrderingTerm.desc(t.createdAt)])).get();
+  }
+  
+  Future<List<Task>> getTasksByUser(String userId) async {
+    return (select(tasks)
+          ..where((t) => t.userId.equals(userId))
+          ..orderBy([(t) => OrderingTerm.desc(t.createdAt)]))
+        .get();
+  }
+  
+  Future<List<Task>> getTasksByStatus(String status) async {
+    return (select(tasks)
+          ..where((t) => t.status.equals(status))
+          ..orderBy([(t) => OrderingTerm.desc(t.createdAt)]))
+        .get();
+  }
+  
+  // JOIN: Tareas con usuario
+  Future<List<TaskWithUser>> getTasksWithUser() async {
+    return (select(tasks).join([
+      innerJoin(users, users.id.equals(tasks.userId)),
+    ])
+          ..orderBy([(t) => OrderingTerm.desc(t.createdAt)]))
+        .get()
+        .map((row) => TaskWithUser(
+          task: row.readTable(tasks),
+          user: row.readTable(users),
+        ))
+        .toList();
+  }
+  
+  // Tareas con tags
+  Future<List<TaskWithTags>> getTasksWithTags() async {
+    final query = select(tasks).join([
+      leftJoin(taskTags, taskTags.taskId.equals(tasks.id)),
+      leftJoin(tags, tags.id.equals(taskTags.tagId)),
+    ]);
+    
+    final results = await query.get();
+    final Map<String, TaskWithTagsBuilder> taskMap = {};
+    
+    for (var row in results) {
+      final task = row.readTable(tasks);
+      final tag = row.readTableOrNull(tags);
+      
+      if (!taskMap.containsKey(task.id)) {
+        taskMap[task.id] = TaskWithTagsBuilder(task: task, tags: []);
+      }
+      
+      if (tag != null) {
+        taskMap[task.id]!.tags.add(tag);
+      }
+    }
+    
+    return taskMap.values.map((builder) => builder.build()).toList();
+  }
+  
+  // Stream reactivo
+  Stream<List<Task>> watchTasksByUser(String userId) {
+    return (select(tasks)
+          ..where((t) => t.userId.equals(userId))
+          ..orderBy([(t) => OrderingTerm.desc(t.createdAt)]))
+        .watch();
+  }
+  
+  // ========== UPDATE ==========
+  
+  Future<void> updateTask(TasksCompanion task) async {
+    await (update(tasks)..where((t) => t.id.equals(task.id.value))).write(task);
+  }
+  
+  Future<void> updateTaskStatus(String id, String status) async {
+    await (update(tasks)..where((t) => t.id.equals(id))).write(
+      TasksCompanion(status: Value(status)),
+    );
+  }
+  
+  // ========== DELETE ==========
+  
+  Future<int> deleteTask(String id) async {
+    return await (delete(tasks)..where((t) => t.id.equals(id))).go();
+  }
+  
+  Future<void> removeTagFromTask(String taskId, String tagId) async {
+    await (delete(taskTags)
+          ..where((tt) => tt.taskId.equals(taskId) & tt.tagId.equals(tagId)))
+        .go();
+  }
+  
+  // ========== AGGREGATION ==========
+  
+  Future<int> getTaskCount() async {
+    return tasks.count().getSingle();
+  }
+  
+  Future<Map<String, int>> getTaskCountByStatus() async {
+    final query = selectOnly(tasks)
+      ..addColumns([tasks.status, tasks.id.count()])
+      ..groupBy([tasks.status]);
+    
+    final results = await query.get();
+    return Map.fromEntries(
+      results.map((row) => MapEntry(
+        row.read(tasks.status)!,
+        row.read(tasks.id.count())!,
+      )),
+    );
+  }
+}
+
+// Clases helper para resultados JOIN
+class TaskWithUser {
+  final Task task;
+  final User user;
+  
+  TaskWithUser({required this.task, required this.user});
+}
+
+class TaskWithTags {
+  final Task task;
+  final List<Tag> tags;
+  
+  TaskWithTags({required this.task, required this.tags});
+}
+
+class TaskWithTagsBuilder {
+  final Task task;
+  final List<Tag> tags = [];
+  
+  TaskWithTagsBuilder({required this.task});
+  
+  TaskWithTags build() => TaskWithTags(task: task, tags: tags);
+}
+----
+
+==== Uso con Provider
+
+[source,dart]
+----
+final databaseProvider = Provider<AppDatabase>((ref) {
+  return AppDatabase();
+});
+
+final userDaoProvider = Provider<UserDao>((ref) {
+  return UserDao(ref.watch(databaseProvider));
+});
+
+final taskDaoProvider = Provider<TaskDao>((ref) {
+  return TaskDao(ref.watch(databaseProvider));
+});
+
+// Providers de estado
+final usersProvider = StreamProvider<List<User>>((ref) {
+  return ref.watch(userDaoProvider).watchAllUsers();
+});
+
+final tasksByUserProvider = StreamProvider.family<List<Task>, String>((ref, userId) {
+  return ref.watch(taskDaoProvider).watchTasksByUser(userId);
+});
+----
+
+'''''
+
+=== Isar - Base de Datos Rápida
+
+==== Instalación
+
+[source,yaml]
+----
+# pubspec.yaml
+dependencies:
+  isar: ^3.1.0
+  isar_flutter_libs: ^3.1.0
+
+dev_dependencies:
+  isar_generator: ^3.1.0
+  build_runner: ^2.4.7
+----
+
+==== Configuración
+
+[source,dart]
+----
+import 'package:isar/isar.dart';
+import 'package:path_provider/path_provider.dart';
+
+part 'models.g.dart';
+
+// Inicialización
+Future<Isar> initIsar() async {
+  final dir = await getApplicationDocumentsDirectory();
+  
+  return await Isar.open(
+    [UserIsarSchema, TaskIsarSchema],
+    directory: dir.path,
+    inspector: true, // Solo en desarrollo
+  );
+}
+
+// main.dart
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  
+  final isar = await initIsar();
+  
+  runApp(ProviderScope(
+    overrides: [isarProvider.overrideWithValue(isar)],
+    child: const MyApp(),
+  ));
+}
+----
+
+==== Modelos Isar
+
+[source,dart]
+----
+import 'package:isar/isar.dart';
+
+part 'isar_models.g.dart';
+
+@collection
+class UserIsar {
+  Id id = Isar.autoIncrement;
+  
+  @Index(unique: true)
+  String? userId;
+  
+  String? name;
+  
+  @Index(unique: true)
+  String? email;
+  
+  int? age;
+  
+  bool isActive = true;
+  
+  DateTime createdAt = DateTime.now();
+  
+  DateTime? updatedAt;
+  
+  List<String> tags = [];
+}
+
+@collection
+class TaskIsar {
+  Id id = Isar.autoIncrement;
+  
+  @Index(unique: true)
+  String? taskId;
+  
+  String? title;
+  
+  String? description;
+  
+  @Index()
+  String? status;
+  
+  int priority = 0;
+  
+  @Index()
+  String? userId;
+  
+  DateTime createdAt = DateTime.now();
+  
+  DateTime? dueDate;
+  
+  bool isCompleted = false;
+  
+  // Links para relaciones
+  final user = Link<UserIsar>();
+  
+  final tags = Links<TagIsar>();
+}
+
+@collection
+class TagIsar {
+  Id id = Isar.autoIncrement;
+  
+  @Index(unique: true)
+  String? tagId;
+  
+  String? name;
+  
+  String? color;
+}
+----
+
+==== Operaciones CRUD
+
+[source,dart]
+----
+class IsarUserService {
+  final Isar _isar;
+  
+  IsarUserService(this._isar);
+  
+  // ========== CREATE ==========
+  
+  Future<int> createUser(UserIsar user) async {
+    return await _isar.writeTxn(() async {
+      return await _isar.userIsars.put(user);
+    });
+  }
+  
+  Future<List<int>> createUsers(List<UserIsar> users) async {
+    return await _isar.writeTxn(() async {
+      return await _isar.userIsars.putAll(users);
+    });
+  }
+  
+  // ========== READ ==========
+  
+  Future<UserIsar?> getUser(String userId) async {
+    return await _isar.userIsars
+        .where()
+        .userIdEqualTo(userId)
+        .findFirst();
+  }
+  
+  Future<UserIsar?> getUserByEmail(String email) async {
+    return await _isar.userIsars
+        .where()
+        .emailEqualTo(email)
+        .findFirst();
+  }
+  
+  Future<List<UserIsar>> getAllUsers() async {
+    return await _isar.userIsars.where().findAll();
+  }
+  
+  Future<List<UserIsar>> getActiveUsers() async {
+    return await _isar.userIsars
+        .where()
+        .isActiveEqualTo(true)
+        .findAll();
+  }
+  
+  Future<List<UserIsar>> getUsersByAgeRange(int minAge, int maxAge) async {
+    return await _isar.userIsars
+        .where()
+        .ageBetween(minAge, maxAge)
+        .findAll();
+  }
+  
+  // Búsqueda de texto
+  Future<List<UserIsar>> searchUsers(String query) async {
+    return await _isar.userIsars
+        .where()
+        .nameContains(query)
+        .or()
+        .emailContains(query)
+        .findAll();
+  }
+  
+  // ========== UPDATE ==========
+  
+  Future<int> updateUser(UserIsar user) async {
+    return await _isar.writeTxn(() async {
+      user.updatedAt = DateTime.now();
+      return await _isar.userIsars.put(user);
+    });
+  }
+  
+  Future<bool> updateUserActive(String userId, bool isActive) async {
+    return await _isar.writeTxn(() async {
+      final user = await _isar.userIsars
+          .where()
+          .userIdEqualTo(userId)
+          .findFirst();
+      
+      if (user == null) return false;
+      
+      user.isActive = isActive;
+      user.updatedAt = DateTime.now();
+      
+      await _isar.userIsars.put(user);
+      return true;
+    });
+  }
+  
+  // Batch update
+  Future<void> updateAllUsersActive(bool isActive) async {
+    await _isar.writeTxn(() async {
+      await _isar.userIsars.where().updateAll(isActive: isActive);
+    });
+  }
+  
+  // ========== DELETE ==========
+  
+  Future<bool> deleteUser(String userId) async {
+    return await _isar.writeTxn(() async {
+      final count = await _isar.userIsars
+          .where()
+          .userIdEqualTo(userId)
+          .deleteAll();
+      return count > 0;
+    });
+  }
+  
+  Future<int> deleteAllUsers() async {
+    return await _isar.writeTxn(() async {
+      return await _isar.userIsars.where().deleteAll();
+    });
+  }
+  
+  // ========== COUNT ==========
+  
+  Future<int> getUserCount() async {
+    return await _isar.userIsars.count();
+  }
+  
+  Future<int> getActiveUserCount() async {
+    return await _isar.userIsars
+        .where()
+        .isActiveEqualTo(true)
+        .count();
+  }
+  
+  // ========== STREAM ==========
+  
+  Stream<void> watchUsers() {
+    return _isar.userIsars.watchLazy();
+  }
+  
+  Stream<List<UserIsar>> watchAllUsers() {
+    return _isar.userIsars.where().watch(fireImmediately: true);
+  }
+  
+  Stream<UserIsar?> watchUser(String userId) {
+    return _isar.userIsars
+        .where()
+        .userIdEqualTo(userId)
+        .watch(fireImmediately: true)
+        .map((list) => list.isEmpty ? null : list.first);
+  }
+}
+----
+
+==== Consultas Avanzadas
+
+[source,dart]
+----
+class IsarQueryService {
+  final Isar _isar;
+  
+  IsarQueryService(this._isar);
+  
+  // Consulta con múltiples filtros
+  Future<List<TaskIsar>> getTasks({
+    String? userId,
+    String? status,
+    int? minPriority,
+    DateTime? dueBefore,
+    String? searchQuery,
+    int? limit,
+    int? offset,
+  }) async {
+    var query = _isar.taskIsars.where();
+    
+    if (userId != null) {
+      query = query.userIdEqualTo(userId);
+    }
+    
+    if (status != null) {
+      query = query.statusEqualTo(status);
+    }
+    
+    if (minPriority != null) {
+      query = query.priorityGreaterThan(minPriority - 1);
+    }
+    
+    if (dueBefore != null) {
+      query = query.dueDateBefore(dueBefore);
+    }
+    
+    if (searchQuery != null) {
+      query = query.titleContains(searchQuery);
+    }
+    
+    var result = query.findAll();
+    
+    if (limit != null || offset != null) {
+      result = result.skip(offset ?? 0).take(limit ?? result.length).toList();
+    }
+    
+    return result;
+  }
+  
+  // Agregaciones
+  Future<Map<String, int>> getTaskCountByStatus() async {
+    final tasks = await _isar.taskIsars.where().findAll();
+    
+    final Map<String, int> counts = {};
+    for (var task in tasks) {
+      final status = task.status ?? 'unknown';
+      counts[status] = (counts[status] ?? 0) + 1;
+    }
+    
+    return counts;
+  }
+  
+  // Índices compuestos
+  Future<List<TaskIsar>> getTasksByUserAndStatus(
+    String userId,
+    String status, {
+    int limit = 20,
+  }) async {
+    return await _isar.taskIsars
+        .where()
+        .userIdEqualTo(userId)
+        .and()
+        .statusEqualTo(status)
+        .limit(limit)
+        .findAll();
+  }
+  
+  // Ordenamiento
+  Future<List<TaskIsar>> getTasksSorted({
+    required String userId,
+    String sortBy = 'createdAt',
+    bool ascending = false,
+    int limit = 50,
+  }) async {
+    var query = _isar.taskIsars.where().userIdEqualTo(userId);
+    
+    switch (sortBy) {
+      case 'createdAt':
+        query = ascending 
+            ? query.sortByCreatedAt() 
+            : query.sortByCreatedAtDesc();
+        break;
+      case 'dueDate':
+        query = ascending 
+            ? query.sortByDueDate() 
+            : query.sortByDueDateDesc();
+        break;
+      case 'priority':
+        query = ascending 
+            ? query.sortByPriority() 
+            : query.sortByPriorityDesc();
+        break;
+      case 'title':
+        query = ascending 
+            ? query.sortByTitle() 
+            : query.sortByTitleDesc();
+        break;
+    }
+    
+    return await query.limit(limit).findAll();
+  }
+  
+  // Paginación con cursor
+  Future<List<TaskIsar>> getTasksPage({
+    required String userId,
+    DateTime? afterCreatedAt,
+    int pageSize = 20,
+  }) async {
+    var query = _isar.taskIsars.where().userIdEqualTo(userId);
+    
+    if (afterCreatedAt != null) {
+      query = query.createdAtBefore(afterCreatedAt);
+    }
+    
+    return await query
+        .sortByCreatedAtDesc()
+        .limit(pageSize)
+        .findAll();
+  }
+  
+  // Búsqueda con índices
+  Future<List<UserIsar>> searchUsersByTag(String tag) async {
+    return await _isar.userIsars
+        .where()
+        .tagsElementContains(tag)
+        .findAll();
+  }
+}
+----
+
+==== Relaciones con Links
+
+[source,dart]
+----
+class IsarRelationService {
+  final Isar _isar;
+  
+  IsarRelationService(this._isar);
+  
+  // Crear tarea con usuario relacionado
+  Future<int> createTaskWithUser(TaskIsar task, UserIsar user) async {
+    return await _isar.writeTxn(() async {
+      // Guardar usuario si no existe
+      final userId = await _isar.userIsars.put(user);
+      
+      // Guardar tarea
+      task.userId = user.userId;
+      final taskId = await _isar.taskIsars.put(task);
+      
+      // Crear link
+      task.user.value = user;
+      await task.user.save();
+      
+      return taskId;
+    });
+  }
+  
+  // Obtener tareas con usuario
+  Future<List<TaskWithUser>> getTasksWithUser() async {
+    final tasks = await _isar.taskIsars.where().findAll();
+    
+    return await Future.wait(tasks.map((task) async {
+      await task.user.load();
+      return TaskWithUser(task: task, user: task.user.value);
+    }));
+  }
+  
+  // Añadir tags a tarea
+  Future<void> addTagsToTask(String taskId, List<String> tagIds) async {
+    await _isar.writeTxn(() async {
+      final task = await _isar.taskIsars
+          .where()
+          .taskIdEqualTo(taskId)
+          .findFirst();
+      
+      if (task == null) return;
+      
+      final tags = await _isar.tagIsars
+          .where()
+          .anyOf(tagIds, (q, tagId) => q.tagIdEqualTo(tagId))
+          .findAll();
+      
+      task.tags.addAll(tags);
+      await task.tags.save();
+    });
+  }
+  
+  // Obtener tareas por tag
+  Future<List<TaskIsar>> getTasksByTag(String tagId) async {
+    final tag = await _isar.tagIsars
+        .where()
+        .tagIdEqualTo(tagId)
+        .findFirst();
+    
+    if (tag == null) return [];
+    
+    await tag.tasks.load();
+    return tag.tasks.toList();
+  }
+}
+
+class TaskWithUser {
+  final TaskIsar task;
+  final UserIsar? user;
+  
+  TaskWithUser({required this.task, this.user});
+}
+----
+
+'''''
+
+=== Flutter Secure Storage
+
+==== Instalación
+
+[source,yaml]
+----
+# pubspec.yaml
+dependencies:
+  flutter_secure_storage: ^9.0.0
+----
+
+==== Uso Básico
+
+[source,dart]
+----
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+
+class SecureStorageService {
+  final FlutterSecureStorage _storage;
+  
+  SecureStorageService() : _storage = const FlutterSecureStorage(
+    aOptions: AndroidOptions(
+      encryptedSharedPreferences: true,
+    ),
+    iOptions: IOSOptions(
+      accessibility: KeychainAccessibility.first_unlock_this_device,
+    ),
+  );
+  
+  // ========== CRUD básico ==========
+  
+  Future<void> write(String key, String value) async {
+    await _storage.write(key: key, value: value);
+  }
+  
+  Future<String?> read(String key) async {
+    return await _storage.read(key: key);
+  }
+  
+  Future<void> delete(String key) async {
+    await _storage.delete(key: key);
+  }
+  
+  Future<void> deleteAll() async {
+    await _storage.deleteAll();
+  }
+  
+  Future<Map<String, String>> readAll() async {
+    return await _storage.readAll();
+  }
+  
+  Future<bool> containsKey(String key) async {
+    return await _storage.containsKey(key: key);
+  }
+  
+  // ========== Tipos de datos ==========
+  
+  // JSON
+  Future<void> writeJson(String key, Map<String, dynamic> value) async {
+    await _storage.write(key: key, value: jsonEncode(value));
+  }
+  
+  Future<Map<String, dynamic>?> readJson(String key) async {
+    final value = await _storage.read(key: key);
+    if (value == null) return null;
+    return jsonDecode(value) as Map<String, dynamic>;
+  }
+  
+  // Bool
+  Future<void> writeBool(String key, bool value) async {
+    await _storage.write(key: key, value: value.toString());
+  }
+  
+  Future<bool?> readBool(String key) async {
+    final value = await _storage.read(key: key);
+    if (value == null) return null;
+    return value.toLowerCase() == 'true';
+  }
+  
+  // Int
+  Future<void> writeInt(String key, int value) async {
+    await _storage.write(key: key, value: value.toString());
+  }
+  
+  Future<int?> readInt(String key) async {
+    final value = await _storage.read(key: key);
+    if (value == null) return null;
+    return int.tryParse(value);
+  }
+}
+----
+
+==== Gestión de Tokens
+
+[source,dart]
+----
+class TokenManager {
+  static const String _accessTokenKey = 'access_token';
+  static const String _refreshTokenKey = 'refresh_token';
+  static const String _tokenExpiryKey = 'token_expiry';
+  static const String _userIdKey = 'user_id';
+  
+  final SecureStorageService _storage;
+  
+  TokenManager(this._storage);
+  
+  // Guardar tokens
+  Future<void> saveTokens({
+    required String accessToken,
+    required String refreshToken,
+    required int expiresInSeconds,
+    String? userId,
+  }) async {
+    final expiry = DateTime.now().add(Duration(seconds: expiresInSeconds));
+    
+    await Future.wait([
+      _storage.write(_accessTokenKey, accessToken),
+      _storage.write(_refreshTokenKey, refreshToken),
+      _storage.write(_tokenExpiryKey, expiry.toIso8601String()),
+      if (userId != null) _storage.write(_userIdKey, userId),
+    ]);
+  }
+  
+  // Obtener access token
+  Future<String?> getAccessToken() async {
+    final expiry = await _storage.read(_tokenExpiryKey);
+    if (expiry == null) return null;
+    
+    final expiryDate = DateTime.parse(expiry);
+    if (DateTime.now().isAfter(expiryDate)) {
+      // Token expirado
+      return null;
+    }
+    
+    return await _storage.read(_accessTokenKey);
+  }
+  
+  // Obtener refresh token
+  Future<String?> getRefreshToken() async {
+    return await _storage.read(_refreshTokenKey);
+  }
+  
+  // Verificar si hay sesión
+  Future<bool> hasSession() async {
+    final accessToken = await getAccessToken();
+    final refreshToken = await getRefreshToken();
+    return accessToken != null || refreshToken != null;
+  }
+  
+  // Verificar si token está expirado
+  Future<bool> isTokenExpired() async {
+    final expiry = await _storage.read(_tokenExpiryKey);
+    if (expiry == null) return true;
+    
+    return DateTime.now().isAfter(DateTime.parse(expiry));
+  }
+  
+  // Limpiar tokens
+  Future<void> clearTokens() async {
+    await Future.wait([
+      _storage.delete(_accessTokenKey),
+      _storage.delete(_refreshTokenKey),
+      _storage.delete(_tokenExpiryKey),
+      _storage.delete(_userIdKey),
+    ]);
+  }
+  
+  // Obtener user ID
+  Future<String?> getUserId() async {
+    return await _storage.read(_userIdKey);
+  }
+}
+----
+
+==== Credenciales de Usuario
+
+[source,dart]
+----
+class CredentialManager {
+  static const String _emailKey = 'saved_email';
+  static const String _biometricEnabledKey = 'biometric_enabled';
+  static const String _pinKey = 'encrypted_pin';
+  
+  final SecureStorageService _storage;
+  
+  CredentialManager(this._storage);
+  
+  // Guardar email
+  Future<void> saveEmail(String email) async {
+    await _storage.write(_emailKey, email);
+  }
+  
+  // Obtener email guardado
+  Future<String?> getSavedEmail() async {
+    return await _storage.read(_emailKey);
+  }
+  
+  // Biometría
+  Future<void> enableBiometric(bool enabled) async {
+    await _storage.writeBool(_biometricEnabledKey, enabled);
+  }
+  
+  Future<bool> isBiometricEnabled() async {
+    return await _storage.readBool(_biometricEnabledKey) ?? false;
+  }
+  
+  // PIN (encriptado adicionalmente)
+  Future<void> savePin(String pin, String encryptionKey) async {
+    final encrypted = _encryptPin(pin, encryptionKey);
+    await _storage.write(_pinKey, encrypted);
+  }
+  
+  Future<bool> verifyPin(String pin, String encryptionKey) async {
+    final encrypted = await _storage.read(_pinKey);
+    if (encrypted == null) return false;
+    
+    return encrypted == _encryptPin(pin, encryptionKey);
+  }
+  
+  String _encryptPin(String pin, String key) {
+    // Usar algoritmo de hash como SHA256
+    final bytes = utf8.encode(pin + key);
+    final hash = sha256.convert(bytes);
+    return hash.toString();
+  }
+}
+----
+
+==== Provider para Secure Storage
+
+[source,dart]
+----
+final secureStorageProvider = Provider<SecureStorageService>((ref) {
+  return SecureStorageService();
+});
+
+final tokenManagerProvider = Provider<TokenManager>((ref) {
+  return TokenManager(ref.watch(secureStorageProvider));
+});
+
+final credentialManagerProvider = Provider<CredentialManager>((ref) {
+  return CredentialManager(ref.watch(secureStorageProvider));
+});
+
+// Estado de autenticación
+final authStateProvider = StateNotifierProvider<AuthStateNotifier, AuthState>((ref) {
+  return AuthStateNotifier(ref.watch(tokenManagerProvider));
+});
+
+class AuthStateNotifier extends StateNotifier<AuthState> {
+  final TokenManager _tokenManager;
+  
+  AuthStateNotifier(this._tokenManager) : super(const AuthState.initial()) {
+    _checkAuth();
+  }
+  
+  Future<void> _checkAuth() async {
+    final hasSession = await _tokenManager.hasSession();
+    if (hasSession) {
+      final userId = await _tokenManager.getUserId();
+      state = AuthState.authenticated(userId: userId);
+    } else {
+      state = const AuthState.unauthenticated();
+    }
+  }
+  
+  Future<void> login(String accessToken, String refreshToken, int expiresIn, String userId) async {
+    await _tokenManager.saveTokens(
+      accessToken: accessToken,
+      refreshToken: refreshToken,
+      expiresInSeconds: expiresIn,
+      userId: userId,
+    );
+    state = AuthState.authenticated(userId: userId);
+  }
+  
+  Future<void> logout() async {
+    await _tokenManager.clearTokens();
+    state = const AuthState.unauthenticated();
+  }
+}
+
+sealed class AuthState {
+  const AuthState();
+  
+  const factory AuthState.initial() = AuthInitial;
+  const factory AuthState.authenticated({String? userId}) = AuthAuthenticated;
+  const factory AuthState.unauthenticated() = AuthUnauthenticated;
+}
+
+class AuthInitial implements AuthState {
+  const AuthInitial();
+}
+
+class AuthAuthenticated implements AuthState {
+  final String? userId;
+  const AuthAuthenticated({this.userId});
+}
+
+class AuthUnauthenticated implements AuthState {
+  const AuthUnauthenticated();
+}
+----
+
+'''''
+
+=== Comparativa de Soluciones
+
+==== Tabla Comparativa
+
+[width="100%",cols="23%,24%,7%,10%,9%,7%,20%",options="header",]
+|===
+|Característica |SharedPreferences |Hive |SQLite |Drift |Isar |Secure
+Storage
+|*Tipo* |Key-Value |NoSQL |Relacional |ORM |NoSQL |Key-Value cifrado
+
+|*Complejidad* |Baja |Baja |Media |Media-Alta |Media |Baja
+
+|*Rendimiento* |Medio |Alto |Medio |Medio |Muy Alto |Medio
+
+|*Consultas* |Ninguna |Básicas |SQL completo |Tipadas |Avanzadas
+|Ninguna
+
+|*Relaciones* |No |No |Sí |Sí |Sí (Links) |No
+
+|*Migraciones* |No |Manual |Manual |Automáticas |Manual |No
+
+|*Cifrado* |No |Opcional |No |No |Opcional |Sí
+
+|*Tamaño recomendado* |< 100KB |< 10MB |Cualquiera |Cualquiera |> 10MB
+|< 10KB
+
+|*Reactive* |No |Sí (watch) |No |Sí |Sí |No
+
+|*Testing* |Fácil |Fácil |Medio |Fácil |Fácil |Medio
+
+|*Plataformas* |Todas |Todas |Todas |Todas |Todas |iOS/Android/Web
+|===
+
+==== Cuándo Usar Cada Uno
+
+[source,dart]
+----
+class StorageRecommendation {
+  static String recommend({
+    required bool needsEncryption,
+    required bool needsRelations,
+    required bool needsComplexQueries,
+    required int estimatedSizeKB,
+    required bool needsRealTimeUpdates,
+    required bool isSensitive,
+  }) {
+    // Datos sensibles pequeños
+    if (isSensitive && estimatedSizeKB < 10) {
+      return 'Flutter Secure Storage';
+    }
+    
+    // Datos simples y pequeños
+    if (estimatedSizeKB < 100 && !needsRelations && !needsComplexQueries) {
+      return 'SharedPreferences';
+    }
+    
+    // Necesita relaciones y consultas complejas
+    if (needsRelations && needsComplexQueries) {
+      return estimatedSizeKB > 1000 ? 'Drift' : 'SQLite';
+    }
+    
+    // Necesita actualizaciones en tiempo real
+    if (needsRealTimeUpdates) {
+      return needsRelations ? 'Drift' : 'Isar';
+    }
+    
+    // Datos medianos sin relaciones
+    if (estimatedSizeKB < 10000) {
+      return needsEncryption ? 'Hive (encrypted)' : 'Hive';
+    }
+    
+    // Grandes volúmenes
+    return 'Isar';
+  }
+}
+----
+
+'''''
+
+=== Patrones y Mejores Prácticas
+
+==== Patrón Repositorio
+
+[source,dart]
+----
+// Repositorio abstracto
+abstract class DataRepository<T> {
+  Future<T?> getById(String id);
+  Future<List<T>> getAll();
+  Future<void> save(T entity);
+  Future<void> saveAll(List<T> entities);
+  Future<void> delete(String id);
+  Future<void> deleteAll();
+}
+
+// Implementación con Hive
+class UserRepositoryHive implements DataRepository<User> {
+  final Box<User> _box;
+  
+  UserRepositoryHive(this._box);
+  
+  @override
+  Future<User?> getById(String id) async {
+    return _box.get(id);
+  }
+  
+  @override
+  Future<List<User>> getAll() async {
+    return _box.values.toList();
+  }
+  
+  @override
+  Future<void> save(User user) async {
+    await _box.put(user.id, user);
+  }
+  
+  @override
+  Future<void> saveAll(List<User> users) async {
+    final Map<String, User> userMap = {
+      for (var user in users) user.id: user
+    };
+    await _box.putAll(userMap);
+  }
+  
+  @override
+  Future<void> delete(String id) async {
+    await _box.delete(id);
+  }
+  
+  @override
+  Future<void> deleteAll() async {
+    await _box.clear();
+  }
+}
+
+// Implementación con SQLite
+class UserRepositorySQLite implements DataRepository<User> {
+  final DatabaseHelper _dbHelper;
+  
+  UserRepositorySQLite(this._dbHelper);
+  
+  @override
+  Future<User?> getById(String id) async {
+    final db = await _dbHelper.database;
+    final maps = await db.query('users', where: 'id = ?', whereArgs: [id]);
+    return maps.isEmpty ? null : User.fromMap(maps.first);
+  }
+  
+  @override
+  Future<List<User>> getAll() async {
+    final db = await _dbHelper.database;
+    final maps = await db.query('users', orderBy: 'name ASC');
+    return maps.map((m) => User.fromMap(m)).toList();
+  }
+  
+  @override
+  Future<void> save(User user) async {
+    final db = await _dbHelper.database;
+    await db.insert('users', user.toMap(), conflictAlgorithm: ConflictAlgorithm.replace);
+  }
+  
+  @override
+  Future<void> saveAll(List<User> users) async {
+    final db = await _dbHelper.database;
+    final batch = db.batch();
+    for (var user in users) {
+      batch.insert('users', user.toMap(), conflictAlgorithm: ConflictAlgorithm.replace);
+    }
+    await batch.commit(noResult: true);
+  }
+  
+  @override
+  Future<void> delete(String id) async {
+    final db = await _dbHelper.database;
+    await db.delete('users', where: 'id = ?', whereArgs: [id]);
+  }
+  
+  @override
+  Future<void> deleteAll() async {
+    final db = await _dbHelper.database;
+    await db.delete('users');
+  }
+}
+----
+
+==== Estrategia de Caché
+
+[source,dart]
+----
+class CacheStrategy {
+  final SharedPreferencesService _prefs;
+  final HiveUserService _hive;
+  
+  CacheStrategy(this._prefs, this._hive);
+  
+  // Caché de dos niveles: memoria -> disco
+  final Map<String, dynamic> _memoryCache = {};
+  
+  Future<T?> get<T>(String key, {
+    required Future<T?> Function() fetchFromNetwork,
+    Duration cacheDuration = const Duration(hours: 1),
+    bool forceRefresh = false,
+  }) async {
+    // Nivel 1: Memoria
+    if (!forceRefresh && _memoryCache.containsKey(key)) {
+      final entry = _memoryCache[key] as _CacheEntry;
+      if (!entry.isExpired) {
+        return entry.data as T;
+      }
+    }
+    
+    // Nivel 2: Disco (Hive)
+    if (!forceRefresh) {
+      final cached = await _hive.getCached<T>(key);
+      if (cached != null) {
+        _memoryCache[key] = _CacheEntry(data: cached, expiry: DateTime.now().add(cacheDuration));
+        return cached;
+      }
+    }
+    
+    // Nivel 3: Red
+    final data = await fetchFromNetwork();
+    if (data != null) {
+      // Guardar en caché
+      await _hive.cache(key, data, cacheDuration);
+      _memoryCache[key] = _CacheEntry(data: data, expiry: DateTime.now().add(cacheDuration));
+    }
+    
+    return data;
+  }
+  
+  void invalidate(String key) {
+    _memoryCache.remove(key);
+    _hive.invalidateCache(key);
+  }
+  
+  void invalidateAll() {
+    _memoryCache.clear();
+    _hive.invalidateAllCache();
+  }
+}
+
+class _CacheEntry {
+  final dynamic data;
+  final DateTime expiry;
+  
+  _CacheEntry({required this.data, required this.expiry});
+  
+  bool get isExpired => DateTime.now().isAfter(expiry);
+}
+----
+
+'''''
+
+=== Ejemplos Prácticos Completos
+
+==== App de Tareas con Hive
+
+[source,dart]
+----
+// main.dart
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  
+  // Inicializar Hive
+  await Hive.initFlutter();
+  Hive.registerAdapter(TaskHiveAdapter());
+  Hive.registerAdapter(CategoryHiveAdapter());
+  
+  final tasksBox = await Hive.openBox<TaskHive>('tasks');
+  final categoriesBox = await Hive.openBox<CategoryHive>('categories');
+  
+  runApp(ProviderScope(
+    overrides: [
+      tasksBoxProvider.overrideWithValue(tasksBox),
+      categoriesBoxProvider.overrideWithValue(categoriesBox),
+    ],
+    child: const TaskApp(),
+  ));
+}
+
+// Modelos
+@HiveType(typeId: 0)
+class TaskHive extends HiveObject {
+  @HiveField(0)
+  String id;
+  
+  @HiveField(1)
+  String title;
+  
+  @HiveField(2)
+  String? description;
+  
+  @HiveField(3)
+  bool isCompleted;
+  
+  @HiveField(4)
+  String categoryId;
+  
+  @HiveField(5)
+  DateTime createdAt;
+  
+  @HiveField(6)
+  DateTime? dueDate;
+  
+  @HiveField(7)
+  int priority;
+  
+  TaskHive({
+    required this.id,
+    required this.title,
+    this.description,
+    this.isCompleted = false,
+    required this.categoryId,
+    required this.createdAt,
+    this.dueDate,
+    this.priority = 0,
+  });
+}
+
+@HiveType(typeId: 1)
+class CategoryHive extends HiveObject {
+  @HiveField(0)
+  String id;
+  
+  @HiveField(1)
+  String name;
+  
+  @HiveField(2)
+  String color;
+  
+  CategoryHive({
+    required this.id,
+    required this.name,
+    required this.color,
+  });
+}
+
+// Providers
+final tasksBoxProvider = Provider<Box<TaskHive>>((ref) {
+  throw UnimplementedError();
+});
+
+final categoriesBoxProvider = Provider<Box<CategoryHive>>((ref) {
+  throw UnimplementedError();
+});
+
+final taskRepositoryProvider = Provider<TaskRepository>((ref) {
+  return TaskRepositoryHive(
+    ref.watch(tasksBoxProvider),
+    ref.watch(categoriesBoxProvider),
+  );
+});
+
+final taskListProvider = StateNotifierProvider<TaskListNotifier, List<TaskHive>>((ref) {
+  return TaskListNotifier(ref.watch(taskRepositoryProvider));
+});
+
+class TaskListNotifier extends StateNotifier<List<TaskHive>> {
+  final TaskRepository _repository;
+  
+  TaskListNotifier(this._repository) : super([]) {
+    _loadTasks();
+  }
+  
+  Future<void> _loadTasks() async {
+    state = await _repository.getAllTasks();
+  }
+  
+  Future<void> addTask(TaskHive task) async {
+    await _repository.addTask(task);
+    state = [...state, task];
+  }
+  
+  Future<void> updateTask(TaskHive task) async {
+    await _repository.updateTask(task);
+    state = state.map((t) => t.id == task.id ? task : t).toList();
+  }
+  
+  Future<void> deleteTask(String id) async {
+    await _repository.deleteTask(id);
+    state = state.where((t) => t.id != id).toList();
+  }
+  
+  Future<void> toggleTask(String id) async {
+    final task = state.firstWhere((t) => t.id == id);
+    final updated = TaskHive(
+      id: task.id,
+      title: task.title,
+      description: task.description,
+      isCompleted: !task.isCompleted,
+      categoryId: task.categoryId,
+      createdAt: task.createdAt,
+      dueDate: task.dueDate,
+      priority: task.priority,
+    );
+    await updateTask(updated);
+  }
+}
+
+// Repositorio
+class TaskRepositoryHive implements TaskRepository {
+  final Box<TaskHive> _tasksBox;
+  final Box<CategoryHive> _categoriesBox;
+  
+  TaskRepositoryHive(this._tasksBox, this._categoriesBox);
+  
+  @override
+  Future<List<TaskHive>> getAllTasks() async {
+    return _tasksBox.values.toList();
+  }
+  
+  @override
+  Future<List<TaskHive>> getTasksByCategory(String categoryId) async {
+    return _tasksBox.values.where((t) => t.categoryId == categoryId).toList();
+  }
+  
+  @override
+  Future<List<TaskHive>> getTasksByStatus(bool isCompleted) async {
+    return _tasksBox.values.where((t) => t.isCompleted == isCompleted).toList();
+  }
+  
+  @override
+  Future<void> addTask(TaskHive task) async {
+    await _tasksBox.put(task.id, task);
+  }
+  
+  @override
+  Future<void> updateTask(TaskHive task) async {
+    await task.save();
+  }
+  
+  @override
+  Future<void> deleteTask(String id) async {
+    await _tasksBox.delete(id);
+  }
+  
+  @override
+  Future<List<CategoryHive>> getAllCategories() async {
+    return _categoriesBox.values.toList();
+  }
+  
+  @override
+  Future<void> addCategory(CategoryHive category) async {
+    await _categoriesBox.put(category.id, category);
+  }
+  
+  @override
+  Future<void> deleteCategory(String id) async {
+    // Eliminar categoría y sus tareas
+    final tasksToDelete = _tasksBox.values.where((t) => t.categoryId == id);
+    for (var task in tasksToDelete) {
+      await task.delete();
+    }
+    await _categoriesBox.delete(id);
+  }
+}
+
+// UI
+class TaskScreen extends ConsumerWidget {
+  const TaskScreen({super.key});
+  
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final tasks = ref.watch(taskListProvider);
+    
+    return Scaffold(
+      appBar: AppBar(title: const Text('Tasks')),
+      body: tasks.isEmpty
+          ? const Center(child: Text('No tasks'))
+          : ListView.builder(
+              itemCount: tasks.length,
+              itemBuilder: (context, index) {
+                final task = tasks[index];
+                return ListTile(
+                  leading: Checkbox(
+                    value: task.isCompleted,
+                    onChanged: (_) => ref.read(taskListProvider.notifier).toggleTask(task.id),
+                  ),
+                  title: Text(
+                    task.title,
+                    style: TextStyle(
+                      decoration: task.isCompleted ? TextDecoration.lineThrough : null,
+                    ),
+                  ),
+                  subtitle: task.description != null ? Text(task.description!) : null,
+                  trailing: IconButton(
+                    icon: const Icon(Icons.delete),
+                    onPressed: () => ref.read(taskListProvider.notifier).deleteTask(task.id),
+                  ),
+                );
+              },
+            ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => _showAddTaskDialog(context, ref),
+        child: const Icon(Icons.add),
+      ),
+    );
+  }
+  
+  void _showAddTaskDialog(BuildContext context, WidgetRef ref) {
+    final titleController = TextEditingController();
+    final descriptionController = TextEditingController();
+    
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Add Task'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextField(
+                controller: titleController,
+                decoration: const InputDecoration(labelText: 'Title'),
+              ),
+              TextField(
+                controller: descriptionController,
+                decoration: const InputDecoration(labelText: 'Description'),
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('Cancel'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                ref.read(taskListProvider.notifier).addTask(TaskHive(
+                  id: DateTime.now().millisecondsSinceEpoch.toString(),
+                  title: titleController.text,
+                  description: descriptionController.text.isEmpty ? null : descriptionController.text,
+                  categoryId: 'default',
+                  createdAt: DateTime.now(),
+                ));
+                Navigator.pop(context);
+              },
+              child: const Text('Add'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+}
+----
+
+'''''
+
+=== Conclusión
+
+La persistencia de datos en Flutter ofrece múltiples soluciones según
+las necesidades:
+
+[arabic]
+. *SharedPreferences*: Ideal para datos simples (preferencias,
+configuraciones)
+. *Hive*: NoSQL ligero para objetos, rápido y fácil de usar
+. *SQLite*: Relacional completo para datos estructurados con relaciones
+. *Drift*: ORM sobre SQLite con tipado seguro y consultas reactivas
+. *Isar*: NoSQL muy rápido para grandes volúmenes con consultas
+avanzadas
+. *Secure Storage*: Cifrado para datos sensibles (tokens, credenciales)
+
+*Recomendaciones:* - Usar repositorios para abstraer la capa de datos -
+Implementar caché en múltiples niveles para rendimiento - Cifrar datos
+sensibles con Flutter Secure Storage - Usar Drift para apps con
+relaciones complejas - Usar Isar para grandes volúmenes de datos -
+Implementar migraciones para bases de datos relacionales
+
+'''''
+
+*Versión del documento*: 1.0 +
+*Flutter versión*: 3.24.0 +
+*Última actualización*: Julio 2025

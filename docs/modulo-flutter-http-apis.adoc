@@ -1,0 +1,3257 @@
+:source-highlighter: pygments
+:pygments-style: friendly
+:pygments-css: class
+
+== Módulo Completo: Peticiones HTTP y APIs en Flutter
+
+=== Índice
+
+[arabic]
+. link:#introducción-a-las-peticiones-http[Introducción a las Peticiones
+HTTP]
+. link:#paquete-http[Paquete http]
+. link:#paquete-dio[Paquete dio]
+. link:#métodos-http[Métodos HTTP]
+. link:#autenticación[Autenticación]
+. link:#interceptores[Interceptores]
+. link:#manejo-de-errores[Manejo de Errores]
+. link:#cancelación-de-peticiones[Cancelación de Peticiones]
+. link:#cacheo-de-respuestas[Cacheo de Respuestas]
+. link:#refresh-tokens[Refresh Tokens]
+. link:#patrones-y-mejores-prácticas[Patrones y Mejores Prácticas]
+. link:#ejemplos-prácticos-completos[Ejemplos Prácticos Completos]
+
+'''''
+
+=== Introducción a las Peticiones HTTP
+
+==== ¿Qué es HTTP?
+
+HTTP (HyperText Transfer Protocol) es el protocolo de comunicación
+utilizado para transferir datos en la web. En Flutter, las peticiones
+HTTP permiten comunicarse con servidores backend, APIs REST, y servicios
+web.
+
+....
+┌─────────────────────────────────────────────────────────────┐
+│                    Flujo de Petición HTTP                    │
+├─────────────────────────────────────────────────────────────┤
+│                                                              │
+│  Cliente (Flutter App)                                       │
+│         │                                                    │
+│         │  1. Crear petición                                 │
+│         │  ──────────────────►                               │
+│         │                                                    │
+│         │  2. Enviar request                                 │
+│         │  ──────────────────►  Servidor (API)              │
+│         │                         │                          │
+│         │                         │  3. Procesar            │
+│         │                         │                          │
+│         │  4. Recibir response   │                          │
+│         │  ◄──────────────────                               │
+│         │                                                    │
+│         │  5. Manejar datos/error                            │
+│         ▼                                                    │
+│  UI actualizada                                              │
+│                                                              │
+└─────────────────────────────────────────────────────────────┘
+....
+
+==== Componentes de una Petición HTTP
+
+[source,dart]
+----
+// Estructura de una petición HTTP
+class HttpRequestComponents {
+  // URL (Endpoint)
+  final String url = 'https://api.example.com/users';
+  
+  // Método HTTP
+  final String method = 'GET'; // GET, POST, PUT, DELETE, PATCH
+  
+  // Headers (Cabeceras)
+  final Map<String, String> headers = {
+    'Content-Type': 'application/json',
+    'Authorization': 'Bearer token123',
+    'Accept': 'application/json',
+  };
+  
+  // Query Parameters
+  final Map<String, String> queryParams = {
+    'page': '1',
+    'limit': '10',
+    'sort': 'name',
+  };
+  
+  // Body (Cuerpo) - Solo para POST, PUT, PATCH
+  final Map<String, dynamic> body = {
+    'name': 'Juan García',
+    'email': 'juan@email.com',
+  };
+}
+
+// Códigos de estado HTTP comunes
+class HttpStatusCodes {
+  // 2xx - Éxito
+  static const int ok = 200;
+  static const int created = 201;
+  static const int noContent = 204;
+  
+  // 4xx - Errores del cliente
+  static const int badRequest = 400;
+  static const int unauthorized = 401;
+  static const int forbidden = 403;
+  static const int notFound = 404;
+  static const int conflict = 409;
+  static const int unprocessableEntity = 422;
+  
+  // 5xx - Errores del servidor
+  static const int internalServerError = 500;
+  static const int badGateway = 502;
+  static const int serviceUnavailable = 503;
+}
+----
+
+==== Configuración Inicial
+
+[source,yaml]
+----
+# pubspec.yaml
+dependencies:
+  flutter:
+    sdk: flutter
+  
+  # Paquete http oficial
+  http: ^1.2.0
+  
+  # Dio - Cliente HTTP avanzado
+  dio: ^5.4.0
+  
+  # Para parseo JSON
+  json_annotation: ^4.8.1
+  json_serializable: ^6.7.1
+  
+  # Para código generation
+  build_runner: ^2.4.7
+
+# Permisos Android (android/app/src/main/AndroidManifest.xml)
+# <uses-permission android:name="android.permission.INTERNET" />
+
+# Configuración iOS (ios/Runner/Info.plist)
+# <key>NSAppTransportSecurity</key>
+# <dict>
+#   <key>NSAllowsArbitraryLoads</key>
+#   <true/>
+# </dict>
+----
+
+'''''
+
+=== Paquete http
+
+==== Instalación y Configuración
+
+[source,dart]
+----
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+
+// Cliente HTTP base
+class HttpClient {
+  static final HttpClient _instance = HttpClient._internal();
+  factory HttpClient() => _instance;
+  
+  final http.Client _client = http.Client();
+  final String baseUrl = 'https://api.example.com';
+  
+  HttpClient._internal();
+  
+  void dispose() {
+    _client.close();
+  }
+}
+----
+
+==== GET Request
+
+[source,dart]
+----
+class HttpGetExamples {
+  final String baseUrl = 'https://jsonplaceholder.typicode.com';
+  
+  // GET simple
+  Future<List<Post>> getPosts() async {
+    final response = await http.get(
+      Uri.parse('$baseUrl/posts'),
+    );
+    
+    if (response.statusCode == 200) {
+      final List<dynamic> data = json.decode(response.body);
+      return data.map((json) => Post.fromJson(json)).toList();
+    } else {
+      throw Exception('Failed to load posts: ${response.statusCode}');
+    }
+  }
+  
+  // GET con query parameters
+  Future<List<Post>> getPostsByUser(int userId) async {
+    final response = await http.get(
+      Uri.parse('$baseUrl/posts').replace(
+        queryParameters: {'userId': userId.toString()},
+      ),
+    );
+    
+    if (response.statusCode == 200) {
+      final List<dynamic> data = json.decode(response.body);
+      return data.map((json) => Post.fromJson(json)).toList();
+    } else {
+      throw Exception('Failed to load posts');
+    }
+  }
+  
+  // GET con headers
+  Future<Post> getPostById(int id, String token) async {
+    final response = await http.get(
+      Uri.parse('$baseUrl/posts/$id'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+        'Accept': 'application/json',
+      },
+    );
+    
+    if (response.statusCode == 200) {
+      return Post.fromJson(json.decode(response.body));
+    } else if (response.statusCode == 404) {
+      throw Exception('Post not found');
+    } else {
+      throw Exception('Failed to load post: ${response.statusCode}');
+    }
+  }
+  
+  // GET con timeout
+  Future<List<Post>> getPostsWithTimeout() async {
+    try {
+      final response = await http.get(
+        Uri.parse('$baseUrl/posts'),
+      ).timeout(const Duration(seconds: 10));
+      
+      if (response.statusCode == 200) {
+        final List<dynamic> data = json.decode(response.body);
+        return data.map((json) => Post.fromJson(json)).toList();
+      } else {
+        throw Exception('Failed to load posts');
+      }
+    } catch (e) {
+      if (e is http.ClientException) {
+        throw Exception('Network error: ${e.message}');
+      } else if (e is FormatException) {
+        throw Exception('Invalid JSON response');
+      } else {
+        rethrow;
+      }
+    }
+  }
+  
+  // GET con manejo de errores completo
+  Future<ApiResponse<List<Post>>> getPostsSafe() async {
+    try {
+      final response = await http.get(
+        Uri.parse('$baseUrl/posts'),
+      ).timeout(const Duration(seconds: 10));
+      
+      if (response.statusCode == 200) {
+        final List<dynamic> data = json.decode(response.body);
+        final posts = data.map((json) => Post.fromJson(json)).toList();
+        return ApiResponse.success(posts);
+      } else {
+        return ApiResponse.error(
+          'Server error: ${response.statusCode}',
+          response.statusCode,
+        );
+      }
+    } on http.ClientException catch (e) {
+      return ApiResponse.error('Network error: ${e.message}');
+    } on FormatException catch (e) {
+      return ApiResponse.error('Invalid response format: ${e.message}');
+    } on TimeoutException catch (_) {
+      return ApiResponse.error('Request timeout');
+    } catch (e) {
+      return ApiResponse.error('Unexpected error: $e');
+    }
+  }
+}
+
+// Modelo de respuesta genérico
+class ApiResponse<T> {
+  final T? data;
+  final String? error;
+  final int? statusCode;
+  final bool isSuccess;
+  
+  ApiResponse({
+    this.data,
+    this.error,
+    this.statusCode,
+    required this.isSuccess,
+  });
+  
+  factory ApiResponse.success(T data) {
+    return ApiResponse(data: data, isSuccess: true);
+  }
+  
+  factory ApiResponse.error(String error, [int? statusCode]) {
+    return ApiResponse(error: error, statusCode: statusCode, isSuccess: false);
+  }
+}
+
+// Modelo de Post
+class Post {
+  final int id;
+  final int userId;
+  final String title;
+  final String body;
+  
+  Post({
+    required this.id,
+    required this.userId,
+    required this.title,
+    required this.body,
+  });
+  
+  factory Post.fromJson(Map<String, dynamic> json) {
+    return Post(
+      id: json['id'],
+      userId: json['userId'],
+      title: json['title'],
+      body: json['body'],
+    );
+  }
+  
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'userId': userId,
+      'title': title,
+      'body': body,
+    };
+  }
+}
+----
+
+==== POST Request
+
+[source,dart]
+----
+class HttpPostExamples {
+  final String baseUrl = 'https://jsonplaceholder.typicode.com';
+  
+  // POST simple
+  Future<Post> createPost(Post post) async {
+    final response = await http.post(
+      Uri.parse('$baseUrl/posts'),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: json.encode(post.toJson()),
+    );
+    
+    if (response.statusCode == 201) {
+      return Post.fromJson(json.decode(response.body));
+    } else {
+      throw Exception('Failed to create post: ${response.statusCode}');
+    }
+  }
+  
+  // POST con archivo (multipart)
+  Future<Post> createPostWithImage(Post post, String imagePath) async {
+    final request = http.MultipartRequest(
+      'POST',
+      Uri.parse('$baseUrl/posts'),
+    );
+    
+    request.fields['title'] = post.title;
+    request.fields['body'] = post.body;
+    request.fields['userId'] = post.userId.toString();
+    
+    request.files.add(
+      await http.MultipartFile.fromPath('image', imagePath),
+    );
+    
+    final streamedResponse = await request.send();
+    final response = await http.Response.fromStream(streamedResponse);
+    
+    if (response.statusCode == 201) {
+      return Post.fromJson(json.decode(response.body));
+    } else {
+      throw Exception('Failed to create post');
+    }
+  }
+  
+  // POST con autenticación
+  Future<User> login(String email, String password) async {
+    final response = await http.post(
+      Uri.parse('$baseUrl/auth/login'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+      body: json.encode({
+        'email': email,
+        'password': password,
+      }),
+    );
+    
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+      return User.fromJson(data['user']);
+    } else if (response.statusCode == 401) {
+      throw UnauthorizedException('Invalid credentials');
+    } else {
+      throw Exception('Login failed: ${response.statusCode}');
+    }
+  }
+  
+  // POST con form data
+  Future<void> submitForm(FormData formData) async {
+    final response = await http.post(
+      Uri.parse('$baseUrl/forms/submit'),
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: formData.toMap(),
+    );
+    
+    if (response.statusCode != 200) {
+      throw Exception('Form submission failed');
+    }
+  }
+}
+
+class User {
+  final int id;
+  final String name;
+  final String email;
+  final String token;
+  
+  User({
+    required this.id,
+    required this.name,
+    required this.email,
+    required this.token,
+  });
+  
+  factory User.fromJson(Map<String, dynamic> json) {
+    return User(
+      id: json['id'],
+      name: json['name'],
+      email: json['email'],
+      token: json['token'],
+    );
+  }
+}
+
+class UnauthorizedException implements Exception {
+  final String message;
+  UnauthorizedException(this.message);
+  
+  @override
+  String toString() => 'UnauthorizedException: $message';
+}
+----
+
+==== PUT y PATCH Request
+
+[source,dart]
+----
+class HttpPutExamples {
+  final String baseUrl = 'https://jsonplaceholder.typicode.com';
+  
+  // PUT - Reemplaza todo el recurso
+  Future<Post> updatePost(int id, Post post) async {
+    final response = await http.put(
+      Uri.parse('$baseUrl/posts/$id'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer token123',
+      },
+      body: json.encode(post.toJson()),
+    );
+    
+    if (response.statusCode == 200) {
+      return Post.fromJson(json.decode(response.body));
+    } else {
+      throw Exception('Failed to update post');
+    }
+  }
+  
+  // PATCH - Actualiza parcialmente
+  Future<Post> partialUpdatePost(int id, Map<String, dynamic> updates) async {
+    final response = await http.patch(
+      Uri.parse('$baseUrl/posts/$id'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer token123',
+      },
+      body: json.encode(updates),
+    );
+    
+    if (response.statusCode == 200) {
+      return Post.fromJson(json.decode(response.body));
+    } else {
+      throw Exception('Failed to update post');
+    }
+  }
+  
+  // Ejemplo de uso
+  Future<void> example() async {
+    // PUT - Reemplaza el post completo
+    final updatedPost = Post(
+      id: 1,
+      userId: 1,
+      title: 'Updated Title',
+      body: 'Updated Body',
+    );
+    await updatePost(1, updatedPost);
+    
+    // PATCH - Solo actualiza algunos campos
+    await partialUpdatePost(1, {
+      'title': 'New Title Only',
+    });
+  }
+}
+----
+
+==== DELETE Request
+
+[source,dart]
+----
+class HttpDeleteExamples {
+  final String baseUrl = 'https://jsonplaceholder.typicode.com';
+  
+  // DELETE simple
+  Future<void> deletePost(int id) async {
+    final response = await http.delete(
+      Uri.parse('$baseUrl/posts/$id'),
+      headers: {
+        'Authorization': 'Bearer token123',
+      },
+    );
+    
+    if (response.statusCode != 200 && response.statusCode != 204) {
+      throw Exception('Failed to delete post');
+    }
+  }
+  
+  // DELETE con respuesta
+  Future<DeleteResult> deletePostWithResult(int id) async {
+    final response = await http.delete(
+      Uri.parse('$baseUrl/posts/$id'),
+      headers: {
+        'Authorization': 'Bearer token123',
+      },
+    );
+    
+    if (response.statusCode == 200 || response.statusCode == 204) {
+      return DeleteResult(success: true, message: 'Post deleted');
+    } else if (response.statusCode == 404) {
+      return DeleteResult(success: false, message: 'Post not found');
+    } else {
+      return DeleteResult(success: false, message: 'Failed to delete post');
+    }
+  }
+  
+  // DELETE con body (poco común pero posible)
+  Future<void> deletePostsWithReason(int id, String reason) async {
+    final response = await http.delete(
+      Uri.parse('$baseUrl/posts/$id'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer token123',
+      },
+      body: json.encode({'reason': reason}),
+    );
+    
+    if (response.statusCode != 200 && response.statusCode != 204) {
+      throw Exception('Failed to delete post');
+    }
+  }
+}
+
+class DeleteResult {
+  final bool success;
+  final String message;
+  
+  DeleteResult({required this.success, required this.message});
+}
+----
+
+==== Cliente HTTP Reutilizable
+
+[source,dart]
+----
+class ApiClient {
+  static final ApiClient _instance = ApiClient._internal();
+  factory ApiClient() => _instance;
+  
+  final http.Client _client = http.Client();
+  final String baseUrl = 'https://api.example.com';
+  String? _token;
+  
+  ApiClient._internal();
+  
+  // Setter para el token
+  set token(String? value) {
+    _token = value;
+  }
+  
+  // Headers por defecto
+  Map<String, String> get _defaultHeaders => {
+    'Content-Type': 'application/json',
+    'Accept': 'application/json',
+    if (_token != null) 'Authorization': 'Bearer $_token',
+  };
+  
+  // GET genérico
+  Future<T> get<T>(
+    String path, {
+    Map<String, String>? queryParameters,
+    T Function(Map<String, dynamic>)? fromJson,
+  }) async {
+    final uri = Uri.parse('$baseUrl$path').replace(
+      queryParameters: queryParameters?.map((k, v) => MapEntry(k, v)),
+    );
+    
+    final response = await _client.get(uri, headers: _defaultHeaders);
+    return _handleResponse<T>(response, fromJson);
+  }
+  
+  // POST genérico
+  Future<T> post<T>(
+    String path, {
+    dynamic body,
+    T Function(Map<String, dynamic>)? fromJson,
+  }) async {
+    final uri = Uri.parse('$baseUrl$path');
+    final response = await _client.post(
+      uri,
+      headers: _defaultHeaders,
+      body: json.encode(body),
+    );
+    return _handleResponse<T>(response, fromJson);
+  }
+  
+  // PUT genérico
+  Future<T> put<T>(
+    String path, {
+    dynamic body,
+    T Function(Map<String, dynamic>)? fromJson,
+  }) async {
+    final uri = Uri.parse('$baseUrl$path');
+    final response = await _client.put(
+      uri,
+      headers: _defaultHeaders,
+      body: json.encode(body),
+    );
+    return _handleResponse<T>(response, fromJson);
+  }
+  
+  // DELETE genérico
+  Future<void> delete(String path) async {
+    final uri = Uri.parse('$baseUrl$path');
+    final response = await _client.delete(uri, headers: _defaultHeaders);
+    _handleResponse<void>(response, null);
+  }
+  
+  // Manejo de respuesta
+  T _handleResponse<T>(
+    http.Response response,
+    T Function(Map<String, dynamic>)? fromJson,
+  ) {
+    switch (response.statusCode) {
+      case 200:
+      case 201:
+        if (T == void || fromJson == null) {
+          return void as T;
+        }
+        return fromJson(json.decode(response.body));
+      case 204:
+        return void as T;
+      case 400:
+        throw BadRequestException(response.body);
+      case 401:
+        throw UnauthorizedException('Unauthorized');
+      case 403:
+        throw ForbiddenException('Forbidden');
+      case 404:
+        throw NotFoundException('Not found');
+      case 500:
+        throw ServerException('Server error');
+      default:
+        throw ApiException('Unknown error: ${response.statusCode}');
+    }
+  }
+  
+  void dispose() {
+    _client.close();
+  }
+}
+
+// Excepciones personalizadas
+class ApiException implements Exception {
+  final String message;
+  ApiException(this.message);
+  
+  @override
+  String toString() => 'ApiException: $message';
+}
+
+class BadRequestException extends ApiException {
+  BadRequestException(String message) : super(message);
+}
+
+class UnauthorizedException extends ApiException {
+  UnauthorizedException(String message) : super(message);
+}
+
+class ForbiddenException extends ApiException {
+  ForbiddenException(String message) : super(message);
+}
+
+class NotFoundException extends ApiException {
+  NotFoundException(String message) : super(message);
+}
+
+class ServerException extends ApiException {
+  ServerException(String message) : super(message);
+}
+----
+
+'''''
+
+=== Paquete dio
+
+==== Instalación y Configuración
+
+[source,dart]
+----
+import 'package:dio/dio.dart';
+
+class DioClient {
+  late final Dio _dio;
+  
+  DioClient() {
+    _dio = Dio(
+      BaseOptions(
+        baseUrl: 'https://api.example.com',
+        connectTimeout: const Duration(seconds: 30),
+        receiveTimeout: const Duration(seconds: 30),
+        sendTimeout: const Duration(seconds: 30),
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+      ),
+    );
+    
+    // Añadir interceptores
+    _dio.interceptors.addAll([
+      LogInterceptor(
+        request: true,
+        requestHeader: true,
+        requestBody: true,
+        responseHeader: true,
+        responseBody: true,
+        error: true,
+      ),
+    ]);
+  }
+  
+  Dio get dio => _dio;
+}
+----
+
+==== Configuración Avanzada
+
+[source,dart]
+----
+class AdvancedDioClient {
+  late final Dio _dio;
+  String? _token;
+  final TokenStorage _tokenStorage = TokenStorage();
+  
+  AdvancedDioClient() {
+    _dio = Dio(
+      BaseOptions(
+        baseUrl: 'https://api.example.com',
+        connectTimeout: const Duration(seconds: 30),
+        receiveTimeout: const Duration(seconds: 30),
+        sendTimeout: const Duration(seconds: 30),
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+        validateStatus: (status) {
+          return status != null && status < 500;
+        },
+      ),
+    );
+    
+    _setupInterceptors();
+  }
+  
+  void _setupInterceptors() {
+    _dio.interceptors.addAll([
+      // Interceptor de autenticación
+      InterceptorsWrapper(
+        onRequest: (options, handler) async {
+          // Añadir token si existe
+          final token = await _tokenStorage.getToken();
+          if (token != null) {
+            options.headers['Authorization'] = 'Bearer $token';
+          }
+          return handler.next(options);
+        },
+        onError: (error, handler) async {
+          // Refrescar token si expiró
+          if (error.response?.statusCode == 401) {
+            final newToken = await _refreshToken();
+            if (newToken != null) {
+              // Reintentar petición con nuevo token
+              error.requestOptions.headers['Authorization'] = 'Bearer $newToken';
+              return handler.resolve(await _retry(error.requestOptions));
+            }
+          }
+          return handler.next(error);
+        },
+      ),
+      
+      // Interceptor de logging
+      LogInterceptor(
+        requestBody: true,
+        responseBody: true,
+        error: true,
+      ),
+      
+      // Interceptor de caché
+      CacheInterceptor(),
+      
+      // Interceptor de retry
+      RetryInterceptor(
+        dio: _dio,
+        retries: 3,
+        retryDelays: const [
+          Duration(seconds: 1),
+          Duration(seconds: 2),
+          Duration(seconds: 3),
+        ],
+      ),
+    ]);
+  }
+  
+  Future<String?> _refreshToken() async {
+    try {
+      final refreshToken = await _tokenStorage.getRefreshToken();
+      if (refreshToken == null) return null;
+      
+      final response = await _dio.post(
+        '/auth/refresh',
+        data: {'refreshToken': refreshToken},
+      );
+      
+      final newToken = response.data['token'];
+      await _tokenStorage.saveToken(newToken);
+      return newToken;
+    } catch (e) {
+      await _tokenStorage.clearTokens();
+      return null;
+    }
+  }
+  
+  Future<Response> _retry(RequestOptions requestOptions) async {
+    return await _dio.fetch(requestOptions);
+  }
+  
+  Dio get dio => _dio;
+}
+
+class TokenStorage {
+  Future<String?> getToken() async {
+    // Implementar con SharedPreferences, SecureStorage, etc.
+    return null;
+  }
+  
+  Future<String?> getRefreshToken() async {
+    return null;
+  }
+  
+  Future<void> saveToken(String token) async {}
+  
+  Future<void> clearTokens() async {}
+}
+----
+
+==== Métodos HTTP con Dio
+
+[source,dart]
+----
+class DioHttpExamples {
+  final DioClient _client = DioClient();
+  
+  // GET
+  Future<List<Post>> getPosts() async {
+    try {
+      final response = await _client.dio.get('/posts');
+      final List<dynamic> data = response.data;
+      return data.map((json) => Post.fromJson(json)).toList();
+    } on DioException catch (e) {
+      throw _handleDioError(e);
+    }
+  }
+  
+  // GET con parámetros
+  Future<List<Post>> getPostsByUser(int userId, {int page = 1, int limit = 10}) async {
+    try {
+      final response = await _client.dio.get(
+        '/posts',
+        queryParameters: {
+          'userId': userId,
+          '_page': page,
+          '_limit': limit,
+        },
+      );
+      return (response.data as List)
+          .map((json) => Post.fromJson(json))
+          .toList();
+    } on DioException catch (e) {
+      throw _handleDioError(e);
+    }
+  }
+  
+  // POST
+  Future<Post> createPost(Post post) async {
+    try {
+      final response = await _client.dio.post(
+        '/posts',
+        data: post.toJson(),
+      );
+      return Post.fromJson(response.data);
+    } on DioException catch (e) {
+      throw _handleDioError(e);
+    }
+  }
+  
+  // PUT
+  Future<Post> updatePost(int id, Post post) async {
+    try {
+      final response = await _client.dio.put(
+        '/posts/$id',
+        data: post.toJson(),
+      );
+      return Post.fromJson(response.data);
+    } on DioException catch (e) {
+      throw _handleDioError(e);
+    }
+  }
+  
+  // PATCH
+  Future<Post> partialUpdatePost(int id, Map<String, dynamic> updates) async {
+    try {
+      final response = await _client.dio.patch(
+        '/posts/$id',
+        data: updates,
+      );
+      return Post.fromJson(response.data);
+    } on DioException catch (e) {
+      throw _handleDioError(e);
+    }
+  }
+  
+  // DELETE
+  Future<void> deletePost(int id) async {
+    try {
+      await _client.dio.delete('/posts/$id');
+    } on DioException catch (e) {
+      throw _handleDioError(e);
+    }
+  }
+  
+  // Multipart (archivos)
+  Future<Post> uploadPostWithImage(Post post, String imagePath) async {
+    try {
+      final formData = FormData.fromMap({
+        'title': post.title,
+        'body': post.body,
+        'userId': post.userId,
+        'image': await MultipartFile.fromFile(imagePath),
+      });
+      
+      final response = await _client.dio.post(
+        '/posts',
+        data: formData,
+      );
+      return Post.fromJson(response.data);
+    } on DioException catch (e) {
+      throw _handleDioError(e);
+    }
+  }
+  
+  // Múltiples archivos
+  Future<void> uploadMultipleFiles(List<String> filePaths) async {
+    try {
+      final files = await Future.wait(
+        filePaths.map((path) => MultipartFile.fromFile(path)),
+      );
+      
+      final formData = FormData.fromMap({
+        'files': files,
+      });
+      
+      await _client.dio.post('/upload', data: formData);
+    } on DioException catch (e) {
+      throw _handleDioError(e);
+    }
+  }
+  
+  // Descarga de archivos
+  Future<String> downloadFile(String url, String savePath) async {
+    try {
+      final response = await _client.dio.download(
+        url,
+        savePath,
+        onReceiveProgress: (received, total) {
+          final progress = (received / total * 100).toStringAsFixed(0);
+          print('Download progress: $progress%');
+        },
+      );
+      return savePath;
+    } on DioException catch (e) {
+      throw _handleDioError(e);
+    }
+  }
+  
+  // Con progreso de carga
+  Future<Post> uploadWithProgress(File file, Function(int, int) onProgress) async {
+    try {
+      final formData = FormData.fromMap({
+        'file': await MultipartFile.fromFile(file.path),
+      });
+      
+      final response = await _client.dio.post(
+        '/upload',
+        data: formData,
+        onSendProgress: onProgress,
+      );
+      return Post.fromJson(response.data);
+    } on DioException catch (e) {
+      throw _handleDioError(e);
+    }
+  }
+  
+  Exception _handleDioError(DioException error) {
+    switch (error.type) {
+      case DioExceptionType.connectionTimeout:
+        return ConnectionTimeoutException('Connection timeout');
+      case DioExceptionType.sendTimeout:
+        return SendTimeoutException('Send timeout');
+      case DioExceptionType.receiveTimeout:
+        return ReceiveTimeoutException('Receive timeout');
+      case DioExceptionType.badResponse:
+        return _handleResponseError(error.response?.statusCode);
+      case DioExceptionType.cancel:
+        return RequestCancelledException('Request cancelled');
+      case DioExceptionType.connectionError:
+        return ConnectionErrorException('Connection error');
+      case DioExceptionType.badCertificate:
+        return CertificateException('Bad certificate');
+      case DioExceptionType.unknown:
+      default:
+        return UnknownException('Unknown error: ${error.message}');
+    }
+  }
+  
+  Exception _handleResponseError(int? statusCode) {
+    switch (statusCode) {
+      case 400:
+        return BadRequestException('Bad request');
+      case 401:
+        return UnauthorizedException('Unauthorized');
+      case 403:
+        return ForbiddenException('Forbidden');
+      case 404:
+        return NotFoundException('Not found');
+      case 500:
+        return ServerException('Server error');
+      default:
+        return ApiException('Error: $statusCode');
+    }
+  }
+}
+----
+
+'''''
+
+=== Métodos HTTP
+
+==== Comparativa de Métodos
+
+....
+┌─────────────────────────────────────────────────────────────┐
+│                    Métodos HTTP                              │
+├─────────────────────────────────────────────────────────────┤
+│                                                              │
+│  GET                                                          │
+│  ├── Obtener recursos                                        │
+│  ├── No modifica datos                                        │
+│  ├── Parámetros en URL                                        │
+│  └── Cacheable                                                │
+│                                                              │
+│  POST                                                         │
+│  ├── Crear recursos                                          │
+│  ├── Modifica datos                                          │
+│  ├── Datos en body                                            │
+│  └── No idempotente                                          │
+│                                                              │
+│  PUT                                                          │
+│  ├── Reemplazar recurso completo                             │
+│  ├── Modifica datos                                          │
+│  ├── Datos en body                                            │
+│  └── Idempotente                                              │
+│                                                              │
+│  PATCH                                                        │
+│  ├── Actualizar parcialmente                                  │
+│  ├── Modifica datos                                          │
+│  ├── Datos en body                                            │
+│  └── No siempre idempotente                                  │
+│                                                              │
+│  DELETE                                                       │
+│  ├── Eliminar recursos                                        │
+│  ├── No modifica datos (solo elimina)                        │
+│  └── Idempotente                                              │
+│                                                              │
+└─────────────────────────────────────────────────────────────┘
+....
+
+==== Ejemplos Completos por Método
+
+[source,dart]
+----
+class HttpMethodExamples {
+  final Dio _dio = Dio(BaseOptions(baseUrl: 'https://api.example.com'));
+  
+  // ========== GET ==========
+  
+  // GET simple
+  Future<List<User>> getUsers() async {
+    final response = await _dio.get('/users');
+    return (response.data as List).map((json) => User.fromJson(json)).toList();
+  }
+  
+  // GET con path parameter
+  Future<User> getUserById(int id) async {
+    final response = await _dio.get('/users/$id');
+    return User.fromJson(response.data);
+  }
+  
+  // GET con query parameters
+  Future<List<User>> searchUsers({
+    String? name,
+    String? email,
+    int? role,
+    int page = 1,
+    int limit = 20,
+    String sort = 'name',
+    String order = 'asc',
+  }) async {
+    final response = await _dio.get(
+      '/users/search',
+      queryParameters: {
+        if (name != null) 'name': name,
+        if (email != null) 'email': email,
+        if (role != null) 'role': role,
+        'page': page,
+        'limit': limit,
+        'sort': sort,
+        'order': order,
+      },
+    );
+    return (response.data as List).map((json) => User.fromJson(json)).toList();
+  }
+  
+  // GET con headers personalizados
+  Future<User> getUserProfile(String token) async {
+    final response = await _dio.get(
+      '/users/profile',
+      options: Options(
+        headers: {
+          'Authorization': 'Bearer $token',
+          'X-Custom-Header': 'value',
+        },
+      ),
+    );
+    return User.fromJson(response.data);
+  }
+  
+  // ========== POST ==========
+  
+  // POST crear recurso
+  Future<User> createUser(CreateUserRequest request) async {
+    final response = await _dio.post(
+      '/users',
+      data: request.toJson(),
+    );
+    return User.fromJson(response.data);
+  }
+  
+  // POST con autenticación
+  Future<AuthResponse> login(LoginRequest request) async {
+    final response = await _dio.post(
+      '/auth/login',
+      data: request.toJson(),
+    );
+    return AuthResponse.fromJson(response.data);
+  }
+  
+  // POST con archivo
+  Future<UploadResponse> uploadFile(File file) async {
+    final formData = FormData.fromMap({
+      'file': await MultipartFile.fromFile(file.path),
+    });
+    
+    final response = await _dio.post(
+      '/upload',
+      data: formData,
+    );
+    return UploadResponse.fromJson(response.data);
+  }
+  
+  // ========== PUT ==========
+  
+  // PUT reemplazar recurso
+  Future<User> updateUser(int id, UpdateUserRequest request) async {
+    final response = await _dio.put(
+      '/users/$id',
+      data: request.toJson(),
+    );
+    return User.fromJson(response.data);
+  }
+  
+  // ========== PATCH ==========
+  
+  // PATCH actualizar parcialmente
+  Future<User> partialUpdateUser(int id, Map<String, dynamic> updates) async {
+    final response = await _dio.patch(
+      '/users/$id',
+      data: updates,
+    );
+    return User.fromJson(response.data);
+  }
+  
+  // ========== DELETE ==========
+  
+  // DELETE eliminar recurso
+  Future<void> deleteUser(int id) async {
+    await _dio.delete('/users/$id');
+  }
+  
+  // DELETE con confirmación
+  Future<DeleteResponse> deleteUserWithConfirmation(int id, String confirmation) async {
+    final response = await _dio.delete(
+      '/users/$id',
+      data: {'confirmation': confirmation},
+    );
+    return DeleteResponse.fromJson(response.data);
+  }
+}
+
+// Modelos
+class CreateUserRequest {
+  final String name;
+  final String email;
+  final String password;
+  
+  CreateUserRequest({
+    required this.name,
+    required this.email,
+    required this.password,
+  });
+  
+  Map<String, dynamic> toJson() => {
+    'name': name,
+    'email': email,
+    'password': password,
+  };
+}
+
+class LoginRequest {
+  final String email;
+  final String password;
+  
+  LoginRequest({required this.email, required this.password});
+  
+  Map<String, dynamic> toJson() => {
+    'email': email,
+    'password': password,
+  };
+}
+
+class AuthResponse {
+  final String token;
+  final String refreshToken;
+  final User user;
+  
+  AuthResponse({
+    required this.token,
+    required this.refreshToken,
+    required this.user,
+  });
+  
+  factory AuthResponse.fromJson(Map<String, dynamic> json) {
+    return AuthResponse(
+      token: json['token'],
+      refreshToken: json['refreshToken'],
+      user: User.fromJson(json['user']),
+    );
+  }
+}
+
+class UploadResponse {
+  final String url;
+  final String filename;
+  final int size;
+  
+  UploadResponse({
+    required this.url,
+    required this.filename,
+    required this.size,
+  });
+  
+  factory UploadResponse.fromJson(Map<String, dynamic> json) {
+    return UploadResponse(
+      url: json['url'],
+      filename: json['filename'],
+      size: json['size'],
+    );
+  }
+}
+
+class DeleteResponse {
+  final bool success;
+  final String message;
+  
+  DeleteResponse({required this.success, required this.message});
+  
+  factory DeleteResponse.fromJson(Map<String, dynamic> json) {
+    return DeleteResponse(
+      success: json['success'],
+      message: json['message'],
+    );
+  }
+}
+----
+
+'''''
+
+=== Autenticación
+
+==== Bearer Token
+
+[source,dart]
+----
+class BearerAuthInterceptor extends Interceptor {
+  final TokenStorage _tokenStorage;
+  
+  BearerAuthInterceptor(this._tokenStorage);
+  
+  @override
+  void onRequest(RequestOptions options, RequestInterceptorHandler handler) async {
+    final token = await _tokenStorage.getToken();
+    if (token != null) {
+      options.headers['Authorization'] = 'Bearer $token';
+    }
+    super.onRequest(options, handler);
+  }
+}
+
+class AuthenticatedDioClient {
+  late final Dio _dio;
+  final TokenStorage _tokenStorage = TokenStorage();
+  
+  AuthenticatedDioClient() {
+    _dio = Dio(BaseOptions(
+      baseUrl: 'https://api.example.com',
+    ));
+    
+    _dio.interceptors.add(BearerAuthInterceptor(_tokenStorage));
+  }
+  
+  Future<User> getProfile() async {
+    final response = await _dio.get('/auth/profile');
+    return User.fromJson(response.data);
+  }
+  
+  Future<User> updateProfile(UpdateUserRequest request) async {
+    final response = await _dio.put('/auth/profile', data: request.toJson());
+    return User.fromJson(response.data);
+  }
+}
+----
+
+==== JWT Completo
+
+[source,dart]
+----
+class JwtAuthService {
+  final Dio _dio;
+  final TokenStorage _tokenStorage;
+  
+  JwtAuthService({
+    required String baseUrl,
+    required TokenStorage tokenStorage,
+  }) : _tokenStorage = tokenStorage,
+       _dio = Dio(BaseOptions(baseUrl: baseUrl)) {
+    _setupInterceptors();
+  }
+  
+  void _setupInterceptors() {
+    _dio.interceptors.addAll([
+      // Interceptor para añadir token
+      InterceptorsWrapper(
+        onRequest: (options, handler) async {
+          final token = await _tokenStorage.getToken();
+          if (token != null) {
+            options.headers['Authorization'] = 'Bearer $token';
+          }
+          return handler.next(options);
+        },
+      ),
+      
+      // Interceptor para refrescar token
+      InterceptorsWrapper(
+        onError: (error, handler) async {
+          if (error.response?.statusCode == 401) {
+            final refreshToken = await _tokenStorage.getRefreshToken();
+            if (refreshToken != null) {
+              try {
+                final newToken = await _refreshToken(refreshToken);
+                await _tokenStorage.saveToken(newToken);
+                
+                // Reintentar petición original
+                error.requestOptions.headers['Authorization'] = 'Bearer $newToken';
+                final response = await _dio.fetch(error.requestOptions);
+                return handler.resolve(response);
+              } catch (e) {
+                await _tokenStorage.clearTokens();
+              }
+            }
+          }
+          return handler.next(error);
+        },
+      ),
+    ]);
+  }
+  
+  Future<AuthResponse> login(String email, String password) async {
+    final response = await _dio.post('/auth/login', data: {
+      'email': email,
+      'password': password,
+    });
+    
+    final authResponse = AuthResponse.fromJson(response.data);
+    
+    // Guardar tokens
+    await _tokenStorage.saveToken(authResponse.token);
+    await _tokenStorage.saveRefreshToken(authResponse.refreshToken);
+    
+    return authResponse;
+  }
+  
+  Future<void> logout() async {
+    try {
+      await _dio.post('/auth/logout');
+    } finally {
+      await _tokenStorage.clearTokens();
+    }
+  }
+  
+  Future<String> _refreshToken(String refreshToken) async {
+    final response = await _dio.post('/auth/refresh', data: {
+      'refreshToken': refreshToken,
+    });
+    
+    return response.data['token'];
+  }
+  
+  Future<bool> isAuthenticated() async {
+    final token = await _tokenStorage.getToken();
+    return token != null;
+  }
+  
+  Future<User> getCurrentUser() async {
+    final response = await _dio.get('/auth/me');
+    return User.fromJson(response.data);
+  }
+}
+
+// Almacenamiento de tokens
+class TokenStorage {
+  static const _tokenKey = 'auth_token';
+  static const _refreshTokenKey = 'refresh_token';
+  
+  // Usar flutter_secure_storage o SharedPreferences
+  // final FlutterSecureStorage _storage = FlutterSecureStorage();
+  
+  Future<void> saveToken(String token) async {
+    // await _storage.write(key: _tokenKey, value: token);
+  }
+  
+  Future<void> saveRefreshToken(String refreshToken) async {
+    // await _storage.write(key: _refreshTokenKey, value: refreshToken);
+  }
+  
+  Future<String?> getToken() async {
+    // return await _storage.read(key: _tokenKey);
+    return null;
+  }
+  
+  Future<String?> getRefreshToken() async {
+    // return await _storage.read(key: _refreshTokenKey);
+    return null;
+  }
+  
+  Future<void> clearTokens() async {
+    // await _storage.delete(key: _tokenKey);
+    // await _storage.delete(key: _refreshTokenKey);
+  }
+}
+----
+
+'''''
+
+=== Interceptores
+
+==== Tipos de Interceptores
+
+[source,dart]
+----
+// Interceptor de logging
+class LoggingInterceptor extends Interceptor {
+  @override
+  void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
+    print('╔════════════════════════════════════════════════════════════');
+    print('║ REQUEST: ${options.method} ${options.uri}');
+    print('║ Headers: ${options.headers}');
+    print('║ Data: ${options.data}');
+    print('╚════════════════════════════════════════════════════════════');
+    super.onRequest(options, handler);
+  }
+  
+  @override
+  void onResponse(Response response, ResponseInterceptorHandler handler) {
+    print('╔════════════════════════════════════════════════════════════');
+    print('║ RESPONSE: ${response.statusCode}');
+    print('║ Data: ${response.data}');
+    print('╚════════════════════════════════════════════════════════════');
+    super.onResponse(response, handler);
+  }
+  
+  @override
+  void onError(DioException err, ErrorInterceptorHandler handler) {
+    print('╔════════════════════════════════════════════════════════════');
+    print('║ ERROR: ${err.type} - ${err.message}');
+    print('║ Response: ${err.response?.data}');
+    print('╚════════════════════════════════════════════════════════════');
+    super.onError(err, handler);
+  }
+}
+
+// Interceptor de retry
+class RetryInterceptor extends Interceptor {
+  final Dio dio;
+  final int maxRetries;
+  final Duration retryDelay;
+  
+  RetryInterceptor({
+    required this.dio,
+    this.maxRetries = 3,
+    this.retryDelay = const Duration(seconds: 1),
+  });
+  
+  @override
+  void onError(DioException err, ErrorInterceptorHandler handler) async {
+    if (_shouldRetry(err)) {
+      int retryCount = err.requestOptions.extra['retryCount'] ?? 0;
+      
+      if (retryCount < maxRetries) {
+        err.requestOptions.extra['retryCount'] = retryCount + 1;
+        
+        await Future.delayed(retryDelay * (retryCount + 1));
+        
+        try {
+          final response = await dio.fetch(err.requestOptions);
+          return handler.resolve(response);
+        } catch (e) {
+          return handler.next(err);
+        }
+      }
+    }
+    
+    return handler.next(err);
+  }
+  
+  bool _shouldRetry(DioException err) {
+    return err.type == DioExceptionType.connectionTimeout ||
+           err.type == DioExceptionType.receiveTimeout ||
+           err.type == DioExceptionType.connectionError ||
+           (err.response?.statusCode != null && 
+            err.response!.statusCode! >= 500);
+  }
+}
+
+// Interceptor de caché
+class CacheInterceptor extends Interceptor {
+  final Map<String, Response> _cache = {};
+  final Duration cacheDuration;
+  
+  CacheInterceptor({this.cacheDuration = const Duration(minutes: 5)});
+  
+  @override
+  void onRequest(RequestOptions options, RequestInterceptorHandler handler) async {
+    if (options.method == 'GET' && options.extra['cache'] == true) {
+      final cacheKey = _getCacheKey(options);
+      final cachedResponse = _cache[cacheKey];
+      
+      if (cachedResponse != null) {
+        final cacheTime = cachedResponse.extra['cacheTime'] as int?;
+        if (cacheTime != null && 
+            DateTime.now().millisecondsSinceEpoch - cacheTime < cacheDuration.inMilliseconds) {
+          return handler.resolve(cachedResponse);
+        }
+      }
+    }
+    
+    super.onRequest(options, handler);
+  }
+  
+  @override
+  void onResponse(Response response, ResponseInterceptorHandler handler) {
+    if (response.requestOptions.method == 'GET' && 
+        response.requestOptions.extra['cache'] == true) {
+      final cacheKey = _getCacheKey(response.requestOptions);
+      response.extra['cacheTime'] = DateTime.now().millisecondsSinceEpoch;
+      _cache[cacheKey] = response;
+    }
+    
+    super.onResponse(response, handler);
+  }
+  
+  String _getCacheKey(RequestOptions options) {
+    return '${options.uri}?${options.queryParameters}';
+  }
+  
+  void clearCache() {
+    _cache.clear();
+  }
+}
+
+// Interceptor de métricas
+class MetricsInterceptor extends Interceptor {
+  @override
+  void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
+    options.extra['startTime'] = DateTime.now().millisecondsSinceEpoch;
+    super.onRequest(options, handler);
+  }
+  
+  @override
+  void onResponse(Response response, ResponseInterceptorHandler handler) {
+    final startTime = response.requestOptions.extra['startTime'] as int?;
+    if (startTime != null) {
+      final duration = DateTime.now().millisecondsSinceEpoch - startTime;
+      print('Request took ${duration}ms');
+      // Enviar métricas a un servicio de monitoreo
+      _sendMetrics(response.requestOptions, duration);
+    }
+    super.onResponse(response, handler);
+  }
+  
+  void _sendMetrics(RequestOptions options, int duration) {
+    // Implementar envío de métricas
+  }
+}
+
+// Interceptor de headers personalizados
+class HeadersInterceptor extends Interceptor {
+  final Map<String, String> headers;
+  
+  HeadersInterceptor({required this.headers});
+  
+  @override
+  void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
+    options.headers.addAll(headers);
+    super.onRequest(options, handler);
+  }
+}
+----
+
+==== Uso de Interceptores
+
+[source,dart]
+----
+class DioWithInterceptors {
+  late final Dio _dio;
+  
+  DioWithInterceptors() {
+    _dio = Dio(BaseOptions(
+      baseUrl: 'https://api.example.com',
+      connectTimeout: const Duration(seconds: 30),
+      receiveTimeout: const Duration(seconds: 30),
+    ));
+    
+    _dio.interceptors.addAll([
+      // Orden importante: primero añadir headers
+      HeadersInterceptor(headers: {
+        'X-Api-Version': '1.0',
+        'X-Platform': 'flutter',
+      }),
+      
+      // Autenticación
+      BearerAuthInterceptor(TokenStorage()),
+      
+      // Caché
+      CacheInterceptor(),
+      
+      // Retry
+      RetryInterceptor(dio: _dio),
+      
+      // Métricas
+      MetricsInterceptor(),
+      
+      // Logging (último para ver todo)
+      LoggingInterceptor(),
+    ]);
+  }
+  
+  Dio get dio => _dio;
+}
+----
+
+'''''
+
+=== Manejo de Errores
+
+==== Estrategias de Manejo de Errores
+
+[source,dart]
+----
+// Excepciones personalizadas
+abstract class AppException implements Exception {
+  final String message;
+  final int? statusCode;
+  final dynamic data;
+  
+  const AppException({
+    required this.message,
+    this.statusCode,
+    this.data,
+  });
+  
+  @override
+  String toString() => 'AppException: $message';
+}
+
+class NetworkException extends AppException {
+  const NetworkException({
+    String message = 'No internet connection',
+    int? statusCode,
+    dynamic data,
+  }) : super(message: message, statusCode: statusCode, data: data);
+}
+
+class TimeoutException extends AppException {
+  const TimeoutException({
+    String message = 'Request timeout',
+    int? statusCode,
+    dynamic data,
+  }) : super(message: message, statusCode: statusCode, data: data);
+}
+
+class ServerException extends AppException {
+  const ServerException({
+    String message = 'Server error',
+    int? statusCode,
+    dynamic data,
+  }) : super(message: message, statusCode: statusCode, data: data);
+}
+
+class ClientException extends AppException {
+  const ClientException({
+    required String message,
+    int? statusCode,
+    dynamic data,
+  }) : super(message: message, statusCode: statusCode, data: data);
+}
+
+class UnauthorizedException extends AppException {
+  const UnauthorizedException({
+    String message = 'Unauthorized',
+    int? statusCode = 401,
+    dynamic data,
+  }) : super(message: message, statusCode: statusCode, data: data);
+}
+
+class ForbiddenException extends AppException {
+  const ForbiddenException({
+    String message = 'Forbidden',
+    int? statusCode = 403,
+    dynamic data,
+  }) : super(message: message, statusCode: statusCode, data: data);
+}
+
+class NotFoundException extends AppException {
+  const NotFoundException({
+    String message = 'Resource not found',
+    int? statusCode = 404,
+    dynamic data,
+  }) : super(message: message, statusCode: statusCode, data: data);
+}
+
+class ValidationException extends AppException {
+  final Map<String, List<String>> fieldErrors;
+  
+  const ValidationException({
+    String message = 'Validation failed',
+    int? statusCode = 422,
+    dynamic data,
+    required this.fieldErrors,
+  }) : super(message: message, statusCode: statusCode, data: data);
+}
+----
+
+==== Manejador de Errores
+
+[source,dart]
+----
+class ErrorHandler {
+  static AppException handle(dynamic error) {
+    if (error is DioException) {
+      return _handleDioError(error);
+    } else if (error is SocketException) {
+      return const NetworkException(message: 'No internet connection');
+    } else if (error is TimeoutException) {
+      return const TimeoutException();
+    } else if (error is FormatException) {
+      return const ClientException(message: 'Invalid response format');
+    } else if (error is AppException) {
+      return error;
+    } else {
+      return AppException(message: 'Unexpected error: $error');
+    }
+  }
+  
+  static AppException _handleDioError(DioException error) {
+    switch (error.type) {
+      case DioExceptionType.connectionTimeout:
+        return const TimeoutException(message: 'Connection timeout');
+        
+      case DioExceptionType.sendTimeout:
+        return const TimeoutException(message: 'Send timeout');
+        
+      case DioExceptionType.receiveTimeout:
+        return const TimeoutException(message: 'Receive timeout');
+        
+      case DioExceptionType.badCertificate:
+        return const ClientException(message: 'Bad certificate');
+        
+      case DioExceptionType.badResponse:
+        return _handleResponseError(error.response);
+        
+      case DioExceptionType.cancel:
+        return const ClientException(message: 'Request cancelled');
+        
+      case DioExceptionType.connectionError:
+        return const NetworkException(message: 'Connection error');
+        
+      case DioExceptionType.unknown:
+      default:
+        return AppException(message: error.message ?? 'Unknown error');
+    }
+  }
+  
+  static AppException _handleResponseError(Response? response) {
+    if (response == null) {
+      return const ServerException(message: 'No response');
+    }
+    
+    final statusCode = response.statusCode;
+    final data = response.data;
+    
+    switch (statusCode) {
+      case 400:
+        return ClientException(
+          message: _extractErrorMessage(data) ?? 'Bad request',
+          statusCode: statusCode,
+          data: data,
+        );
+        
+      case 401:
+        return UnauthorizedException(
+          message: _extractErrorMessage(data) ?? 'Unauthorized',
+          statusCode: statusCode,
+          data: data,
+        );
+        
+      case 403:
+        return ForbiddenException(
+          message: _extractErrorMessage(data) ?? 'Forbidden',
+          statusCode: statusCode,
+          data: data,
+        );
+        
+      case 404:
+        return NotFoundException(
+          message: _extractErrorMessage(data) ?? 'Not found',
+          statusCode: statusCode,
+          data: data,
+        );
+        
+      case 422:
+        return ValidationException(
+          message: _extractErrorMessage(data) ?? 'Validation failed',
+          statusCode: statusCode,
+          data: data,
+          fieldErrors: _extractFieldErrors(data) ?? {},
+        );
+        
+      case 429:
+        return ClientException(
+          message: 'Too many requests',
+          statusCode: statusCode,
+          data: data,
+        );
+        
+      case 500:
+      case 502:
+      case 503:
+      case 504:
+        return ServerException(
+          message: 'Server error',
+          statusCode: statusCode,
+          data: data,
+        );
+        
+      default:
+        return AppException(
+          message: _extractErrorMessage(data) ?? 'Unknown error',
+          statusCode: statusCode,
+          data: data,
+        );
+    }
+  }
+  
+  static String? _extractErrorMessage(dynamic data) {
+    if (data == null) return null;
+    
+    if (data is Map) {
+      return data['message'] ?? 
+             data['error'] ?? 
+             data['error_description'] as String?;
+    }
+    
+    return data.toString();
+  }
+  
+  static Map<String, List<String>>? _extractFieldErrors(dynamic data) {
+    if (data == null || data is! Map) return null;
+    
+    final errors = data['errors'];
+    if (errors == null || errors is! Map) return null;
+    
+    final Map<String, List<String>> fieldErrors = {};
+    
+    errors.forEach((key, value) {
+      if (value is List) {
+        fieldErrors[key] = value.map((e) => e.toString()).toList();
+      } else {
+        fieldErrors[key] = [value.toString()];
+      }
+    });
+    
+    return fieldErrors;
+  }
+}
+----
+
+==== Result Pattern
+
+[source,dart]
+----
+// Patrón Result para manejo de errores funcional
+sealed class Result<T> {
+  const Result();
+  
+  bool get isSuccess => this is Success<T>;
+  bool get isError => this is Error<T>;
+  
+  T get data => switch (this) {
+    Success<T>(data: final data) => data,
+    Error<T>() => throw StateError('Cannot get data from Error'),
+  };
+  
+  String get errorMessage => switch (this) {
+    Success<T>() => '',
+    Error<T>(message: final message) => message,
+  };
+  
+  R when<R>({
+    required R Function(T data) success,
+    required R Function(String message) error,
+  }) {
+    return switch (this) {
+      Success<T>(data: final data) => success(data),
+      Error<T>(message: final message) => error(message),
+    };
+  }
+  
+  Result<R> map<R>(R Function(T data) transform) {
+    return switch (this) {
+      Success<T>(data: final data) => Success(transform(data)),
+      Error<T>(message: final message) => Error(message),
+    };
+  }
+  
+  Result<R> flatMap<R>(Result<R> Function(T data) transform) {
+    return switch (this) {
+      Success<T>(data: final data) => transform(data),
+      Error<T>(message: final message) => Error(message),
+    };
+  }
+}
+
+class Success<T> extends Result<T> {
+  final T data;
+  
+  const Success(this.data);
+}
+
+class Error<T> extends Result<T> {
+  final String message;
+  final int? statusCode;
+  final dynamic data;
+  
+  const Error({
+    required this.message,
+    this.statusCode,
+    this.data,
+  });
+}
+
+// Repositorio usando Result
+class UserRepository {
+  final Dio _dio;
+  
+  UserRepository(this._dio);
+  
+  Future<Result<User>> getUser(int id) async {
+    try {
+      final response = await _dio.get('/users/$id');
+      final user = User.fromJson(response.data);
+      return Success(user);
+    } catch (e) {
+      final error = ErrorHandler.handle(e);
+      return Error(message: error.message, statusCode: error.statusCode);
+    }
+  }
+  
+  Future<Result<List<User>>> getUsers() async {
+    try {
+      final response = await _dio.get('/users');
+      final users = (response.data as List)
+          .map((json) => User.fromJson(json))
+          .toList();
+      return Success(users);
+    } catch (e) {
+      final error = ErrorHandler.handle(e);
+      return Error(message: error.message);
+    }
+  }
+  
+  Future<Result<User>> createUser(CreateUserRequest request) async {
+    try {
+      final response = await _dio.post('/users', data: request.toJson());
+      final user = User.fromJson(response.data);
+      return Success(user);
+    } catch (e) {
+      final error = ErrorHandler.handle(e);
+      return Error(message: error.message, statusCode: error.statusCode);
+    }
+  }
+}
+
+// Uso en UI
+class UserScreen extends StatelessWidget {
+  final UserRepository _userRepository = UserRepository(Dio());
+  
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<Result<User>>(
+      future: _userRepository.getUser(1),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const CircularProgressIndicator();
+        }
+        
+        final result = snapshot.data;
+        if (result == null) {
+          return const Text('No data');
+        }
+        
+        return result.when(
+          success: (user) => UserCard(user: user),
+          error: (message) => ErrorCard(message: message),
+        );
+      },
+    );
+  }
+}
+----
+
+'''''
+
+=== Cancelación de Peticiones
+
+==== CancelToken con Dio
+
+[source,dart]
+----
+class CancellableRequests {
+  final Dio _dio = Dio();
+  CancelToken? _cancelToken;
+  
+  // Cancelar petición
+  Future<void> fetchUsers() async {
+    _cancelToken?.cancel('Cancelled by user');
+    _cancelToken = CancelToken();
+    
+    try {
+      final response = await _dio.get(
+        '/users',
+        cancelToken: _cancelToken,
+      );
+      // Procesar respuesta
+    } on DioException catch (e) {
+      if (e.type == DioExceptionType.cancel) {
+        print('Request cancelled: ${e.message}');
+      } else {
+        rethrow;
+      }
+    }
+  }
+  
+  void cancelRequest() {
+    _cancelToken?.cancel('Cancelled by user');
+    _cancelToken = null;
+  }
+}
+----
+
+==== Múltiples Cancelaciones
+
+[source,dart]
+----
+class MultipleCancellationExample {
+  final Dio _dio = Dio();
+  final Map<String, CancelToken> _activeRequests = {};
+  
+  // Petición con ID identificador
+  Future<User> fetchUser(int id) async {
+    // Cancelar petición anterior si existe
+    _cancelRequest('user_$id');
+    
+    final token = CancelToken();
+    _activeRequests['user_$id'] = token;
+    
+    try {
+      final response = await _dio.get(
+        '/users/$id',
+        cancelToken: token,
+      );
+      _activeRequests.remove('user_$id');
+      return User.fromJson(response.data);
+    } on DioException catch (e) {
+      if (e.type == DioExceptionType.cancel) {
+        throw RequestCancelledException('Request cancelled');
+      }
+      rethrow;
+    } finally {
+      _activeRequests.remove('user_$id');
+    }
+  }
+  
+  // Cancelar petición específica
+  void _cancelRequest(String requestId) {
+    final token = _activeRequests.remove(requestId);
+    token?.cancel('Cancelled for new request');
+  }
+  
+  // Cancelar todas las peticiones activas
+  void cancelAllRequests() {
+    for (final token in _activeRequests.values) {
+      token.cancel('Cancelled all requests');
+    }
+    _activeRequests.clear();
+  }
+}
+----
+
+==== Cancelación en StatefulWidget
+
+[source,dart]
+----
+class SearchScreen extends StatefulWidget {
+  const SearchScreen({super.key});
+  
+  @override
+  State<SearchScreen> createState() => _SearchScreenState();
+}
+
+class _SearchScreenState extends State<SearchScreen> {
+  final Dio _dio = Dio();
+  final TextEditingController _searchController = TextEditingController();
+  CancelToken? _cancelToken;
+  Timer? _debounceTimer;
+  
+  @override
+  void dispose() {
+    _searchController.dispose();
+    _cancelToken?.cancel();
+    _debounceTimer?.cancel();
+    super.dispose();
+  }
+  
+  Future<void> _search(String query) async {
+    // Cancelar petición anterior
+    _cancelToken?.cancel();
+    _cancelToken = CancelToken();
+    
+    try {
+      final response = await _dio.get(
+        '/search',
+        queryParameters: {'q': query},
+        cancelToken: _cancelToken,
+      );
+      
+      if (mounted) {
+        // Actualizar UI
+        setState(() {
+          // Procesar resultados
+        });
+      }
+    } on DioException catch (e) {
+      if (e.type != DioExceptionType.cancel) {
+        // Manejar error
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Error: ${e.message}')),
+          );
+        }
+      }
+    }
+  }
+  
+  void _onSearchChanged(String query) {
+    // Debounce
+    _debounceTimer?.cancel();
+    _debounceTimer = Timer(const Duration(milliseconds: 500), () {
+      if (query.isNotEmpty) {
+        _search(query);
+      }
+    });
+  }
+  
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: TextField(
+          controller: _searchController,
+          decoration: const InputDecoration(
+            hintText: 'Search...',
+            border: InputBorder.none,
+          ),
+          onChanged: _onSearchChanged,
+        ),
+      ),
+      body: const Center(child: Text('Results')),
+    );
+  }
+}
+----
+
+'''''
+
+=== Cacheo de Respuestas
+
+==== Caché en Memoria
+
+[source,dart]
+----
+class MemoryCache {
+  static final MemoryCache _instance = MemoryCache._internal();
+  factory MemoryCache() => _instance;
+  
+  final Map<String, CacheEntry> _cache = {};
+  final Duration defaultDuration;
+  
+  MemoryCache._internal({this.defaultDuration = const Duration(minutes: 5)});
+  
+  T? get<T>(String key) {
+    final entry = _cache[key];
+    if (entry == null) return null;
+    
+    if (entry.isExpired) {
+      _cache.remove(key);
+      return null;
+    }
+    
+    return entry.data as T?;
+  }
+  
+  void set<T>(String key, T data, {Duration? duration}) {
+    _cache[key] = CacheEntry(
+      data: data,
+      expiry: DateTime.now().add(duration ?? defaultDuration),
+    );
+  }
+  
+  void remove(String key) {
+    _cache.remove(key);
+  }
+  
+  void clear() {
+    _cache.clear();
+  }
+  
+  bool has(String key) {
+    final entry = _cache[key];
+    if (entry == null) return false;
+    if (entry.isExpired) {
+      _cache.remove(key);
+      return false;
+    }
+    return true;
+  }
+}
+
+class CacheEntry {
+  final dynamic data;
+  final DateTime expiry;
+  
+  CacheEntry({required this.data, required this.expiry});
+  
+  bool get isExpired => DateTime.now().isAfter(expiry);
+}
+----
+
+==== Caché con Dio
+
+[source,dart]
+----
+class CachedDioClient {
+  final Dio _dio;
+  final MemoryCache _cache = MemoryCache();
+  
+  CachedDioClient({required String baseUrl})
+      : _dio = Dio(BaseOptions(baseUrl: baseUrl)) {
+    _dio.interceptors.add(CacheInterceptor(cache: _cache));
+  }
+  
+  // GET con caché
+  Future<T> get<T>(
+    String path, {
+    Map<String, dynamic>? queryParameters,
+    bool useCache = true,
+    Duration? cacheDuration,
+    T Function(Map<String, dynamic>)? fromJson,
+  }) async {
+    final cacheKey = _buildCacheKey(path, queryParameters);
+    
+    if (useCache) {
+      final cached = _cache.get<T>(cacheKey);
+      if (cached != null) {
+        return cached;
+      }
+    }
+    
+    final response = await _dio.get(
+      path,
+      queryParameters: queryParameters,
+    );
+    
+    final data = fromJson != null 
+        ? fromJson(response.data) 
+        : response.data as T;
+    
+    if (useCache) {
+      _cache.set(cacheKey, data, duration: cacheDuration);
+    }
+    
+    return data;
+  }
+  
+  // Invalidar caché
+  void invalidateCache(String path) {
+    // Remover todas las entradas que empiezan con path
+    _cache.clear();
+  }
+  
+  String _buildCacheKey(String path, Map<String, dynamic>? queryParameters) {
+    final buffer = StringBuffer(path);
+    if (queryParameters != null && queryParameters.isNotEmpty) {
+      buffer.write('?');
+      final sortedKeys = queryParameters.keys.toList()..sort();
+      for (final key in sortedKeys) {
+        buffer.write('$key=${queryParameters[key]}&');
+      }
+    }
+    return buffer.toString();
+  }
+}
+
+// Interceptor de caché
+class CacheInterceptor extends Interceptor {
+  final MemoryCache cache;
+  
+  CacheInterceptor({required this.cache});
+  
+  @override
+  void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
+    if (options.method == 'GET' && options.extra['useCache'] == true) {
+      final cacheKey = _getCacheKey(options);
+      final cachedData = cache.get<dynamic>(cacheKey);
+      
+      if (cachedData != null) {
+        final response = Response(
+          requestOptions: options,
+          data: cachedData,
+          statusCode: 200,
+        );
+        return handler.resolve(response);
+      }
+    }
+    
+    super.onRequest(options, handler);
+  }
+  
+  @override
+  void onResponse(Response response, ResponseInterceptorHandler handler) {
+    if (response.requestOptions.method == 'GET' && 
+        response.requestOptions.extra['useCache'] == true) {
+      final cacheKey = _getCacheKey(response.requestOptions);
+      final cacheDuration = response.requestOptions.extra['cacheDuration'] as Duration?;
+      cache.set(cacheKey, response.data, duration: cacheDuration);
+    }
+    
+    super.onResponse(response, handler);
+  }
+  
+  String _getCacheKey(RequestOptions options) {
+    return '${options.uri}';
+  }
+}
+
+// Uso
+class CachedApiExample {
+  final CachedDioClient _client = CachedDioClient(baseUrl: 'https://api.example.com');
+  
+  Future<List<User>> getUsers({bool forceRefresh = false}) async {
+    return _client.get<List<User>>(
+      '/users',
+      useCache: !forceRefresh,
+      cacheDuration: const Duration(minutes: 10),
+      fromJson: (data) => (data as List).map((json) => User.fromJson(json)).toList(),
+    ) as Future<List<User>>;
+  }
+  
+  Future<void> refreshUsers() async {
+    _client.invalidateCache('/users');
+    await getUsers(forceRefresh: true);
+  }
+}
+----
+
+==== Caché con Hive (Persistente)
+
+[source,dart]
+----
+import 'package:hive_flutter/hive_flutter.dart';
+
+class HiveCache {
+  static const String _boxName = 'api_cache';
+  late Box<String> _box;
+  
+  Future<void> init() async {
+    await Hive.initFlutter();
+    _box = await Hive.openBox<String>(_boxName);
+  }
+  
+  Future<T?> get<T>(String key) async {
+    final jsonString = _box.get(key);
+    if (jsonString == null) return null;
+    
+    try {
+      final json = jsonDecode(jsonString) as Map<String, dynamic>;
+      final expiry = DateTime.parse(json['expiry'] as String);
+      
+      if (DateTime.now().isAfter(expiry)) {
+        await _box.delete(key);
+        return null;
+      }
+      
+      return json['data'] as T;
+    } catch (e) {
+      return null;
+    }
+  }
+  
+  Future<void> set<T>(String key, T data, Duration duration) async {
+    final expiry = DateTime.now().add(duration);
+    final json = {
+      'data': data,
+      'expiry': expiry.toIso8601String(),
+    };
+    
+    await _box.put(key, jsonEncode(json));
+  }
+  
+  Future<void> remove(String key) async {
+    await _box.delete(key);
+  }
+  
+  Future<void> clear() async {
+    await _box.clear();
+  }
+}
+
+class CachedApiWithHive {
+  final Dio _dio;
+  final HiveCache _cache = HiveCache();
+  
+  CachedApiWithHive({required String baseUrl})
+      : _dio = Dio(BaseOptions(baseUrl: baseUrl));
+  
+  Future<T> get<T>(
+    String path, {
+    Map<String, dynamic>? queryParameters,
+    bool useCache = true,
+    Duration cacheDuration = const Duration(minutes: 10),
+    required T Function(Map<String, dynamic>) fromJson,
+  }) async {
+    final cacheKey = '$path${queryParameters ?? ''}';
+    
+    if (useCache) {
+      final cached = await _cache.get<Map<String, dynamic>>(cacheKey);
+      if (cached != null) {
+        return fromJson(cached);
+      }
+    }
+    
+    final response = await _dio.get(path, queryParameters: queryParameters);
+    final data = response.data as Map<String, dynamic>;
+    
+    if (useCache) {
+      await _cache.set(cacheKey, data, cacheDuration);
+    }
+    
+    return fromJson(data);
+  }
+}
+----
+
+'''''
+
+=== Refresh Tokens
+
+==== Implementación Completa
+
+[source,dart]
+----
+class RefreshTokenService {
+  final Dio _dio;
+  final TokenStorage _tokenStorage;
+  final void Function()? onSessionExpired;
+  
+  bool _isRefreshing = false;
+  final List<Completer<String>> _refreshQueue = [];
+  
+  RefreshTokenService({
+    required String baseUrl,
+    required TokenStorage tokenStorage,
+    this.onSessionExpired,
+  }) : _tokenStorage = tokenStorage,
+       _dio = Dio(BaseOptions(baseUrl: baseUrl)) {
+    _setupInterceptors();
+  }
+  
+  void _setupInterceptors() {
+    _dio.interceptors.addAll([
+      // Interceptor para añadir token
+      InterceptorsWrapper(
+        onRequest: (options, handler) async {
+          final token = await _tokenStorage.getToken();
+          if (token != null) {
+            options.headers['Authorization'] = 'Bearer $token';
+          }
+          return handler.next(options);
+        },
+      ),
+      
+      // Interceptor para refresh token
+      InterceptorsWrapper(
+        onError: (error, handler) async {
+          if (error.response?.statusCode != 401) {
+            return handler.next(error);
+          }
+          
+          final refreshToken = await _tokenStorage.getRefreshToken();
+          if (refreshToken == null) {
+            await _handleSessionExpired();
+            return handler.next(error);
+          }
+          
+          try {
+            final newToken = await _refreshAccessToken(refreshToken);
+            
+            // Actualizar header y reintentar
+            error.requestOptions.headers['Authorization'] = 'Bearer $newToken';
+            final response = await _dio.fetch(error.requestOptions);
+            return handler.resolve(response);
+          } catch (e) {
+            await _handleSessionExpired();
+            return handler.next(error);
+          }
+        },
+      ),
+    ]);
+  }
+  
+  Future<String> _refreshAccessToken(String refreshToken) async {
+    // Si ya hay un refresh en progreso, esperar en cola
+    if (_isRefreshing) {
+      final completer = Completer<String>();
+      _refreshQueue.add(completer);
+      return completer.future;
+    }
+    
+    _isRefreshing = true;
+    
+    try {
+      final response = await _dio.post(
+        '/auth/refresh',
+        data: {'refreshToken': refreshToken},
+        options: Options(headers: {'Authorization': ''}), // Sin token
+      );
+      
+      final newToken = response.data['token'];
+      final newRefreshToken = response.data['refreshToken'];
+      
+      await _tokenStorage.saveToken(newToken);
+      if (newRefreshToken != null) {
+        await _tokenStorage.saveRefreshToken(newRefreshToken);
+      }
+      
+      // Resolver todos los completers en la cola
+      for (final completer in _refreshQueue) {
+        completer.complete(newToken);
+      }
+      _refreshQueue.clear();
+      
+      return newToken;
+    } catch (e) {
+      // Fallar todos los completers en la cola
+      for (final completer in _refreshQueue) {
+        completer.completeError(e);
+      }
+      _refreshQueue.clear();
+      rethrow;
+    } finally {
+      _isRefreshing = false;
+    }
+  }
+  
+  Future<void> _handleSessionExpired() async {
+    await _tokenStorage.clearTokens();
+    onSessionExpired?.call();
+  }
+  
+  Dio get dio => _dio;
+}
+----
+
+==== Flujo de Autenticación Completo
+
+[source,dart]
+----
+class AuthService {
+  final RefreshTokenService _refreshService;
+  final TokenStorage _tokenStorage;
+  
+  AuthService({
+    required String baseUrl,
+    required TokenStorage tokenStorage,
+    required void Function() onSessionExpired,
+  }) : _tokenStorage = tokenStorage,
+       _refreshService = RefreshTokenService(
+         baseUrl: baseUrl,
+         tokenStorage: tokenStorage,
+         onSessionExpired: onSessionExpired,
+       );
+  
+  Dio get dio => _refreshService.dio;
+  
+  Future<AuthResponse> login(String email, String password) async {
+    final response = await dio.post('/auth/login', data: {
+      'email': email,
+      'password': password,
+    });
+    
+    final authResponse = AuthResponse.fromJson(response.data);
+    
+    await _tokenStorage.saveToken(authResponse.token);
+    await _tokenStorage.saveRefreshToken(authResponse.refreshToken);
+    
+    return authResponse;
+  }
+  
+  Future<void> logout() async {
+    try {
+      await dio.post('/auth/logout');
+    } finally {
+      await _tokenStorage.clearTokens();
+    }
+  }
+  
+  Future<User> getCurrentUser() async {
+    final response = await dio.get('/auth/me');
+    return User.fromJson(response.data);
+  }
+  
+  Future<bool> isAuthenticated() async {
+    final token = await _tokenStorage.getToken();
+    return token != null;
+  }
+  
+  Future<void> refreshToken() async {
+    final refreshToken = await _tokenStorage.getRefreshToken();
+    if (refreshToken == null) {
+      throw UnauthorizedException('No refresh token');
+    }
+    
+    final response = await dio.post('/auth/refresh', data: {
+      'refreshToken': refreshToken,
+    });
+    
+    final newToken = response.data['token'];
+    await _tokenStorage.saveToken(newToken);
+  }
+}
+
+// Provider con Riverpod
+final authServiceProvider = Provider<AuthService>((ref) {
+  return AuthService(
+    baseUrl: 'https://api.example.com',
+    tokenStorage: TokenStorage(),
+    onSessionExpired: () {
+      // Navegar a pantalla de login
+      ref.read(navigationProvider).goToLogin();
+    },
+  );
+});
+
+final authStateProvider = StateNotifierProvider<AuthNotifier, AuthState>((ref) {
+  return AuthNotifier(ref.watch(authServiceProvider));
+});
+
+class AuthNotifier extends StateNotifier<AuthState> {
+  final AuthService _authService;
+  
+  AuthNotifier(this._authService) : super(const AuthState.initial()) {
+    _checkAuth();
+  }
+  
+  Future<void> _checkAuth() async {
+    final isAuth = await _authService.isAuthenticated();
+    if (isAuth) {
+      final user = await _authService.getCurrentUser();
+      state = AuthState.authenticated(user);
+    } else {
+      state = const AuthState.unauthenticated();
+    }
+  }
+  
+  Future<void> login(String email, String password) async {
+    state = const AuthState.loading();
+    try {
+      final response = await _authService.login(email, password);
+      state = AuthState.authenticated(response.user);
+    } catch (e) {
+      state = AuthState.error(e.toString());
+    }
+  }
+  
+  Future<void> logout() async {
+    await _authService.logout();
+    state = const AuthState.unauthenticated();
+  }
+}
+
+sealed class AuthState {
+  const AuthState();
+  
+  const factory AuthState.initial() = AuthInitial;
+  const factory AuthState.loading() = AuthLoading;
+  const factory AuthState.authenticated(User user) = AuthAuthenticated;
+  const factory AuthState.unauthenticated() = AuthUnauthenticated;
+  const factory AuthState.error(String message) = AuthError;
+}
+
+class AuthInitial implements AuthState {
+  const AuthInitial();
+}
+
+class AuthLoading implements AuthState {
+  const AuthLoading();
+}
+
+class AuthAuthenticated implements AuthState {
+  final User user;
+  const AuthAuthenticated(this.user);
+}
+
+class AuthUnauthenticated implements AuthState {
+  const AuthUnauthenticated();
+}
+
+class AuthError implements AuthState {
+  final String message;
+  const AuthError(this.message);
+}
+----
+
+'''''
+
+=== Patrones y Mejores Prácticas
+
+==== Patrón Repositorio
+
+[source,dart]
+----
+// Repositorio abstracto
+abstract class UserRepository {
+  Future<List<User>> getUsers();
+  Future<User> getUser(int id);
+  Future<User> createUser(CreateUserRequest request);
+  Future<User> updateUser(int id, UpdateUserRequest request);
+  Future<void> deleteUser(int id);
+}
+
+// Implementación del repositorio
+class UserRepositoryImpl implements UserRepository {
+  final Dio _dio;
+  
+  UserRepositoryImpl(this._dio);
+  
+  @override
+  Future<List<User>> getUsers() async {
+    try {
+      final response = await _dio.get('/users');
+      return (response.data as List)
+          .map((json) => User.fromJson(json))
+          .toList();
+    } on DioException catch (e) {
+      throw _handleError(e);
+    }
+  }
+  
+  @override
+  Future<User> getUser(int id) async {
+    try {
+      final response = await _dio.get('/users/$id');
+      return User.fromJson(response.data);
+    } on DioException catch (e) {
+      throw _handleError(e);
+    }
+  }
+  
+  @override
+  Future<User> createUser(CreateUserRequest request) async {
+    try {
+      final response = await _dio.post('/users', data: request.toJson());
+      return User.fromJson(response.data);
+    } on DioException catch (e) {
+      throw _handleError(e);
+    }
+  }
+  
+  @override
+  Future<User> updateUser(int id, UpdateUserRequest request) async {
+    try {
+      final response = await _dio.put('/users/$id', data: request.toJson());
+      return User.fromJson(response.data);
+    } on DioException catch (e) {
+      throw _handleError(e);
+    }
+  }
+  
+  @override
+  Future<void> deleteUser(int id) async {
+    try {
+      await _dio.delete('/users/$id');
+    } on DioException catch (e) {
+      throw _handleError(e);
+    }
+  }
+  
+  Exception _handleError(DioException error) {
+    return ErrorHandler.handle(error);
+  }
+}
+----
+
+==== Service Layer
+
+[source,dart]
+----
+class UserService {
+  final UserRepository _userRepository;
+  final CacheService _cacheService;
+  
+  UserService(this._userRepository, this._cacheService);
+  
+  Future<List<User>> getUsers({bool forceRefresh = false}) async {
+    if (!forceRefresh) {
+      final cached = await _cacheService.get<List<User>>('users');
+      if (cached != null) return cached;
+    }
+    
+    final users = await _userRepository.getUsers();
+    await _cacheService.set('users', users, const Duration(minutes: 10));
+    
+    return users;
+  }
+  
+  Future<User> getUser(int id) async {
+    final cached = await _cacheService.get<User>('user_$id');
+    if (cached != null) return cached;
+    
+    final user = await _userRepository.getUser(id);
+    await _cacheService.set('user_$id', user, const Duration(minutes: 10));
+    
+    return user;
+  }
+  
+  Future<User> createUser(CreateUserRequest request) async {
+    final user = await _userRepository.createUser(request);
+    
+    // Invalidar caché
+    await _cacheService.remove('users');
+    
+    return user;
+  }
+}
+----
+
+==== Configuración por Entornos
+
+[source,dart]
+----
+enum Environment { development, staging, production }
+
+class EnvironmentConfig {
+  final Environment environment;
+  final String baseUrl;
+  final String apiKey;
+  final Duration timeout;
+  final bool enableLogging;
+  
+  const EnvironmentConfig({
+    required this.environment,
+    required this.baseUrl,
+    required this.apiKey,
+    this.timeout = const Duration(seconds: 30),
+    this.enableLogging = false,
+  });
+  
+  static const development = EnvironmentConfig(
+    environment: Environment.development,
+    baseUrl: 'https://dev.api.example.com',
+    apiKey: 'dev_key_123',
+    enableLogging: true,
+  );
+  
+  static const staging = EnvironmentConfig(
+    environment: Environment.staging,
+    baseUrl: 'https://staging.api.example.com',
+    apiKey: 'staging_key_456',
+    enableLogging: true,
+  );
+  
+  static const production = EnvironmentConfig(
+    environment: Environment.production,
+    baseUrl: 'https://api.example.com',
+    apiKey: 'prod_key_789',
+    enableLogging: false,
+  );
+}
+
+class ApiClientFactory {
+  static Dio create(EnvironmentConfig config) {
+    final dio = Dio(BaseOptions(
+      baseUrl: config.baseUrl,
+      connectTimeout: config.timeout,
+      receiveTimeout: config.timeout,
+      headers: {
+        'X-Api-Key': config.apiKey,
+      },
+    ));
+    
+    if (config.enableLogging) {
+      dio.interceptors.add(LogInterceptor(
+        requestBody: true,
+        responseBody: true,
+      ));
+    }
+    
+    return dio;
+  }
+}
+----
+
+'''''
+
+=== Ejemplos Prácticos Completos
+
+==== App de Autenticación Completa
+
+[source,dart]
+----
+// main.dart
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  
+  // Inicializar caché
+  await Hive.initFlutter();
+  
+  // Configurar entorno
+  const environment = EnvironmentConfig.development;
+  
+  runApp(ProviderScope(
+    overrides: [
+      environmentProvider.overrideWithValue(environment),
+    ],
+    child: const MyApp(),
+  ));
+}
+
+// Providers
+final environmentProvider = Provider<EnvironmentConfig>((ref) {
+  throw UnimplementedError('Environment not configured');
+});
+
+final dioProvider = Provider<Dio>((ref) {
+  final env = ref.watch(environmentProvider);
+  return ApiClientFactory.create(env);
+});
+
+final tokenStorageProvider = Provider<TokenStorage>((ref) {
+  return TokenStorage();
+});
+
+final authServiceProvider = Provider<AuthService>((ref) {
+  final dio = ref.watch(dioProvider);
+  final tokenStorage = ref.watch(tokenStorageProvider);
+  
+  return AuthService(
+    baseUrl: ref.watch(environmentProvider).baseUrl,
+    tokenStorage: tokenStorage,
+    onSessionExpired: () {
+      ref.read(authStateProvider.notifier).logout();
+    },
+  );
+});
+
+// Pantalla de login
+class LoginScreen extends ConsumerStatefulWidget {
+  const LoginScreen({super.key});
+  
+  @override
+  ConsumerState<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends ConsumerState<LoginScreen> {
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
+  
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+  
+  Future<void> _login() async {
+    if (!_formKey.currentState!.validate()) return;
+    
+    await ref.read(authStateProvider.notifier).login(
+      _emailController.text,
+      _passwordController.text,
+    );
+  }
+  
+  @override
+  Widget build(BuildContext context) {
+    final state = ref.watch(authStateProvider);
+    
+    return Scaffold(
+      appBar: AppBar(title: const Text('Login')),
+      body: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              TextFormField(
+                controller: _emailController,
+                decoration: const InputDecoration(
+                  labelText: 'Email',
+                  border: OutlineInputBorder(),
+                ),
+                keyboardType: TextInputType.emailAddress,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Email is required';
+                  }
+                  if (!value.contains('@')) {
+                    return 'Invalid email';
+                  }
+                  return null;
+                },
+              ),
+              const SizedBox(height: 16),
+              TextFormField(
+                controller: _passwordController,
+                decoration: const InputDecoration(
+                  labelText: 'Password',
+                  border: OutlineInputBorder(),
+                ),
+                obscureText: true,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Password is required';
+                  }
+                  if (value.length < 6) {
+                    return 'Password must be at least 6 characters';
+                  }
+                  return null;
+                },
+              ),
+              const SizedBox(height: 24),
+              if (state is AuthLoading)
+                const CircularProgressIndicator()
+              else
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: _login,
+                    child: const Text('Login'),
+                  ),
+                ),
+              if (state is AuthError)
+                Padding(
+                  padding: const EdgeInsets.only(top: 16),
+                  child: Text(
+                    state.message,
+                    style: const TextStyle(color: Colors.red),
+                  ),
+                ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+// Pantalla principal
+class HomeScreen extends ConsumerWidget {
+  const HomeScreen({super.key});
+  
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final user = ref.watch(authStateProvider).when(
+      authenticated: (user) => user,
+      loading: () => null,
+      unauthenticated: () => null,
+      error: (_) => null,
+    );
+    
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Home'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.logout),
+            onPressed: () => ref.read(authStateProvider.notifier).logout(),
+          ),
+        ],
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Icon(Icons.account_circle, size: 80),
+            const SizedBox(height: 16),
+            Text(
+              'Welcome, ${user?.name ?? "User"}!',
+              style: const TextStyle(fontSize: 24),
+            ),
+            const SizedBox(height: 8),
+            Text(user?.email ?? ''),
+          ],
+        ),
+      ),
+    );
+  }
+}
+----
+
+'''''
+
+=== Conclusión
+
+El manejo de peticiones HTTP en Flutter requiere considerar múltiples
+aspectos:
+
+[arabic]
+. *Paquete http*: Simple y suficiente para casos básicos
+. *Paquete dio*: Más features (interceptores, cancelación, multipart)
+. *Autenticación*: Bearer tokens, JWT, refresh tokens
+. *Interceptores*: Logging, retry, caché, headers
+. *Manejo de errores*: Excepciones personalizadas, Result pattern
+. *Cancelación*: CancelToken para abortar peticiones
+. *Caché*: Memoria y persistente para optimizar rendimiento
+. *Refresh tokens*: Flujo completo con cola de peticiones
+
+*Mejores Prácticas:* - Usar patrón repositorio para separar lógica de
+API - Implementar manejo de errores consistente - Configurar
+interceptores reutilizables - Cachear respuestas GET cuando sea
+apropiado - Cancelar peticiones cuando el widget se desmonta - Usar
+Result pattern para respuestas exitosas/erróneas - Configurar diferentes
+entornos (dev, staging, prod)
+
+'''''
+
+*Versión del documento*: 1.0 +
+*Flutter versión*: 3.24.0 +
+*Última actualización*: Julio 2025
