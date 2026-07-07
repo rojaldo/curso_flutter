@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mi_app/calculator.dart';
 
 void main() {
   runApp(const MyApp());
@@ -11,7 +12,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Flutter Examples',
       theme: ThemeData(
         // This is the theme of your application.
         //
@@ -30,7 +31,7 @@ class MyApp extends StatelessWidget {
         // tested with just a hot reload.
         colorScheme: .fromSeed(seedColor: const Color.fromARGB(255, 166, 31, 49)),
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const MyHomePage(title: 'Flutter Examples Home Page'),
     );
   }
 }
@@ -56,10 +57,11 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
 
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
+  void _navigateToCalculator() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const CalculatorPage()),
+    );
   }
 
   void _setCounter(int value) {
@@ -103,33 +105,27 @@ class _MyHomePageState extends State<MyHomePage> {
           // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
           // action in the IDE, or press "p" in the console), to see the
           // wireframe for each widget.
-          mainAxisAlignment: .center,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Text('You have pushed the button this many times:'),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
+            // quiero que ocupe el acho de la pantalla con un padding de 16
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: _navigateToCalculator,
+                  child: const Text('Calculator'),
+                ),
+              ),
             ),
-            ElevatedButton(
-              onPressed: () {
-                _setCounter(3);
-              },
-              child: const Text('3'),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                _setCounter(4);
-              },
-              child: const Text('4'),
-            ),
+
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ),
+      
     );
   }
+  
+
 }
+
