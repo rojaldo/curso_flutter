@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:mi_app/calculator.dart';
+import 'package:mi_app/calculator/calculator.dart';
 import 'package:mi_app/heroes/heroes_page.dart';
 import 'package:mi_app/apod/apod_page.dart';
-import 'package:mi_app/heroes/heroes_page.dart';
+
 
 void main() {
   runApp(const MyApp());
