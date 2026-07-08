@@ -48,6 +48,11 @@ class _ApodWidgetState extends State<ApodWidget> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
+          OutlinedButton(
+          onPressed: _selectDate,
+          child: const Text('Select Date'),
+        ), 
+        const SizedBox(height: 16),
         if (_apodData!['media_type'] == 'image')
           Image.network(_apodData!['url']),
         const SizedBox(height: 16),
@@ -62,8 +67,8 @@ class _ApodWidgetState extends State<ApodWidget> {
     );
   }
 
-  Future<void> _fetchApodData() async {
-    final url = Uri.parse('https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY&date=2026-06-07');
+  Future<void> _fetchApodData([String? date]) async {
+    final url = Uri.parse('https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY${date != null ? '&date=$date' : ''}');
     final response = await http.get(url);
 
     if (response.statusCode == 200) {
@@ -77,5 +82,21 @@ class _ApodWidgetState extends State<ApodWidget> {
         _apodData = {'title': 'Error', 'explanation': 'Failed to fetch data'};
       });
     }
+  }
+
+  Future<void> _selectDate() async {
+    final DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(1995, 6, 16),
+      lastDate: DateTime.now(),
+    );
+
+    print('Selected date: $pickedDate');
+    _fetchApodData(pickedDate?.toIso8601String().split('T').first); // Fetch data for the selected date (you'll need to modify the API call to include the selected date)
+
+    // setState(() {
+    //   selectedDate = pickedDate;
+    // });
   }
 }
