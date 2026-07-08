@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:mi_app/calculator.dart';
+import 'package:mi_app/calculator/calculator.dart';
+import 'package:mi_app/heroes/heroes_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -40,7 +41,12 @@ class MyHomePage extends StatelessWidget {
           padding: const EdgeInsets.all(16.0),
           child: SizedBox(
             width: double.infinity,
-            child: ElevatedButton(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              // expand the buttons to fill the width of the screen
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                ElevatedButton(
               onPressed: () {
                 Navigator.push(
                   context,
@@ -50,6 +56,19 @@ class MyHomePage extends StatelessWidget {
                 );
               },
               child: const Text('Calculator'),
+            ),
+            SizedBox(height: 16),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const HeroesPage(),
+                  ),
+                );
+              },
+              child: const Text('Heroes'),
+            )],
             ),
           ),
         ),
