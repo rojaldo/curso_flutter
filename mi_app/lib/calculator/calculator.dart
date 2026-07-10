@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:mi_app/calculator/calculator_display.dart';
 import 'package:mi_app/calculator/calculator_keyboard.dart';
+import 'package:mi_app/calculator/calculator_provider.dart';
 import 'package:mi_app/model/calculator_model.dart';
+import 'package:provider/provider.dart';
 
 class CalculatorPage extends StatelessWidget {
   const CalculatorPage({super.key});
+
 
   @override
   Widget build(BuildContext context) {
@@ -26,17 +29,20 @@ class CalculatorWidget extends StatefulWidget {
 }
 
 class _CalculatorWidgetState extends State<CalculatorWidget> {
-  String display = '';
-  Calculator calculator = Calculator();
-
   void _onButtonPressed(String value) {
     setState(() {
-      display = calculator.processInput(value);
+      final calculator = Calculator.fromData(
+        context.read<CalculatorProvider>().calculatorData,
+      );
+      calculator.processInput(value);
+      context.read<CalculatorProvider>().updateCalculator(calculator.toData());
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    final display = context.watch<CalculatorProvider>().calculatorData.display;
+
     return Container(
       width: double.infinity,
       height: double.infinity,

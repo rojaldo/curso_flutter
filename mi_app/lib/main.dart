@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mi_app/calculator/calculator.dart';
+import 'package:mi_app/calculator/calculator_provider.dart';
 import 'package:mi_app/heroes/heroes_page.dart';
 import 'package:mi_app/heroes/heroes_provider.dart';
 import 'package:mi_app/apod/apod_page.dart';
@@ -8,8 +9,11 @@ import 'package:provider/provider.dart';
 
 void main() {
   runApp(
-    ChangeNotifierProvider(
-      create: (_) => HeroesProvider(),
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => HeroesProvider()),
+        ChangeNotifierProvider(create: (_) => CalculatorProvider()),
+      ],
       child: const MyApp(),
     ),
   );

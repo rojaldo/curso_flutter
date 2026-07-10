@@ -1,3 +1,5 @@
+import 'package:mi_app/model/calculator_data.dart';
+
 enum CalculatorState { init, firstNumber, secondNumber, result }
 
 class Calculator {
@@ -9,7 +11,25 @@ class Calculator {
 
   CalculatorState state = CalculatorState.init;
 
-  Calculator();
+  Calculator({
+    this.number1 = 0,
+    this.number2 = 0,
+    this.operation = '',
+    this.result = 0,
+    this.display = '',
+    this.state = CalculatorState.init,
+  });
+
+  static Calculator fromData(CalculatorData calculatorData) {
+    return Calculator(
+      number1: calculatorData.number1,
+      number2: calculatorData.number2,
+      operation: calculatorData.operation,
+      result: calculatorData.result,
+      display: calculatorData.display,
+      state: calculatorData.state,
+    );
+  }
 
   String processInput(String input) {
     // check if is number
@@ -132,4 +152,17 @@ class Calculator {
     display = '';
     state = CalculatorState.init;
   }
+
+  CalculatorData toData() {
+    return CalculatorData(
+      number1: number1,
+      number2: number2,
+      operation: operation,
+      result: result,
+      display: display,
+      state: state,
+    );
+  }
+
+
 }
