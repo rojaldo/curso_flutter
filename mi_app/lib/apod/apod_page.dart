@@ -1,8 +1,10 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 import 'package:mi_app/model/apod.dart';
+import 'package:video_player/video_player.dart';
 
 class ApodPage extends StatelessWidget {
   const ApodPage({super.key});
@@ -42,7 +44,7 @@ class _ApodWidgetState extends State<ApodWidget> {
 
 
   Future<void> _fetchApodData([String? date]) async {
-    const apiKey = "tqz634Z1x0LiJzjbhSyUoExrZaGKLM0MG1VnROR6";
+    const apiKey = "DEMO_KEY"; // Replace with your actual NASA API key
     final url = Uri.parse('https://api.nasa.gov/planetary/apod?api_key=$apiKey${date != null ? '&date=$date' : ''}');
     final response = await http.get(url);
 
@@ -124,6 +126,8 @@ class ApodInfo extends StatelessWidget {
         const SizedBox(height: 16),
         if (apodData.isImage)
           Image.network(apodData.url),
+        if (apodData.isMp4Video || apodData.isYoutubeVideo)
+          MyVideoPlayerWidget(apodData: apodData),
         const SizedBox(height: 16),
         Text(
           apodData.title,
@@ -135,3 +139,97 @@ class ApodInfo extends StatelessWidget {
     );
   }
 }
+
+class MyVideoPlayerWidget extends StatefulWidget {
+  final Apod apodData;
+
+  const MyVideoPlayerWidget({super.key, required this.apodData});
+
+  @override
+  State<MyVideoPlayerWidget> createState() => _MyVideoPlayerWidgetState();
+}
+
+class _MyVideoPlayerWidgetState extends State<MyVideoPlayerWidget> {
+  VideoPlayerController? _controller;
+
+  bool get _supportsInlineVideo {
+    return kIsWeb ||
+        defaultTargetPlatform == TargetPlatform.android ||
+        defaultTargetPlatform == TargetPlatform.iOS ||
+        defaultTargetPlatform == TargetPlatform.macOS;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _initializeController();
+  }
+
+  @override
+  void didUpdateWidget(covariant MyVideoPlayerWidget oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.apodData.url != widget.apodData.url) {
+      _disposeController();
+      _initializeController();
+    }
+  }
+
+  void _initializeController() {
+    if (widget.apodData.isMp4Video && _supportsInlineVideo) {
+      _controller = VideoPlayerController.networkUrl(
+        Uri.parse(widget.apodData.url),
+      )..initialize().then((_) {
+          if (mounted) {
+            setState(() {});
+          }
+        });
+    }
+  }
+
+  void _disposeController() {
+    _controller?.dispose();
+    _controller = null;
+  }
+
+  @override
+  void dispose() {
+    _disposeController();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (widget.apodData.isYoutubeVideo) {
+      return Column(
+        children: [
+          const Text('This is a YouTube video. Please open it in a browser.'),
+        ],
+      );
+    }
+
+    if (widget.apodData.isMp4Video && !_supportsInlineVideo) {
+      return Column(
+        children: [
+          const Text('This MP4 video cannot be played inline on this platform.'),
+          SelectableText(widget.apodData.url),
+        ],
+      );
+    }
+
+    final controller = _controller;
+    if (controller == null || !controller.value.isInitialized) {
+      return const CircularProgressIndicator();
+    }
+
+    if (widget.apodData.isMp4Video) {
+      return AspectRatio(
+        aspectRatio: controller.value.aspectRatio,
+        child: VideoPlayer(controller),
+      );
+    }
+
+    return const SizedBox.shrink();
+  }
+}
+
+

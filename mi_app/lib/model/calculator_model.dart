@@ -71,8 +71,9 @@ class Calculator {
         break;
       case CalculatorState.secondNumber:
         if (symbol == '=') {
-          _calculateResult();
-          display = "$number1 $operation $number2 = $result";
+          if (_calculateResult()) {
+            display = "$number1 $operation $number2 = $result";
+          }
           state = CalculatorState.result;
         } 
         break;
@@ -89,26 +90,44 @@ class Calculator {
     }
   }
 
-  void _calculateResult() {
+  bool _calculateResult() {
     switch (operation) {
       case '+':
         result = number1 + number2;
+        if (result >= 1000000) {
+          display = 'Error: Overflow';
+          return false;
+        }
         break;
       case '-':
         result = number1 - number2;
+        if (result >= 1000000) {
+          display = 'Error: Overflow';
+          return false;
+        }
         break;
       case '*':
         result = number1 * number2;
+        if (result >= 1000000) {
+          display = 'Error: Overflow';
+          return false;
+        }
         break;
       case '/':
         if (number2 != 0) {
           result = number1 / number2;
         } else {
           display = 'Error: Division by zero';
-          return;
+          return false;
         }
+        if (result >= 1000000) {
+          display = 'Error: Overflow';
+          return false;
+        }
+
         break;
     }
+    return true;
   }
 
   void _resetCalculator() {
