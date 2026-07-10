@@ -1,6 +1,5 @@
 enum TetrisPieceType { O, I, T, S, Z, J, L }
 
-
 // interface tetris piece
 class TetrisPiece {
   //rotate function
@@ -14,11 +13,11 @@ class TetrisPiece {
 // Class O piece
 class OPiece extends TetrisPiece {
   final List<List<int>> _shape = [
-    [0,0,0,0,0],
-    [0,1,1,0,0],
-    [0,1,1,0,0],
-    [0,0,0,0,0],
-    [0,0,0,0,0],
+    [0, 0, 0, 0, 0],
+    [0, 1, 1, 0, 0],
+    [0, 1, 1, 0, 0],
+    [0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0],
   ];
   @override
   void rotate() {
@@ -31,11 +30,11 @@ class OPiece extends TetrisPiece {
 // Class I piece
 class IPiece extends TetrisPiece {
   List<List<int>> _shape = [
-    [0,0,0,0,0],
-    [0,0,0,0,0],
-    [1,1,1,1,0],
-    [0,0,0,0,0],
-    [0,0,0,0,0],
+    [0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0],
+    [1, 1, 1, 1, 0],
+    [0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0],
   ];
   int rotationState = 0; // 0: horizontal, 1: vertical
   @override
@@ -44,21 +43,21 @@ class IPiece extends TetrisPiece {
     if (rotationState == 0) {
       // Rotate to vertical
       _shape = [
-        [0,0,1,0,0],
-        [0,0,1,0,0],
-        [0,0,1,0,0],
-        [0,0,1,0,0],
-        [0,0,0,0,0],
+        [0, 0, 1, 0, 0],
+        [0, 0, 1, 0, 0],
+        [0, 0, 1, 0, 0],
+        [0, 0, 1, 0, 0],
+        [0, 0, 0, 0, 0],
       ];
       rotationState = 1;
     } else {
       // Rotate to horizontal
       _shape = [
-        [0,0,0,0,0],
-        [0,0,0,0,0],
-        [1,1,1,1,0],
-        [0,0,0,0,0],
-        [0,0,0,0,0],
+        [0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0],
+        [1, 1, 1, 1, 0],
+        [0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0],
       ];
       rotationState = 0;
     }
@@ -70,11 +69,11 @@ class IPiece extends TetrisPiece {
 // Class T piece
 class TPiece extends TetrisPiece {
   List<List<int>> _shape = [
-    [0,0,0,0,0],
-    [0,1,1,1,0],
-    [0,0,1,0,0],
-    [0,0,0,0,0],
-    [0,0,0,0,0],
+    [0, 0, 0, 0, 0],
+    [0, 1, 1, 1, 0],
+    [0, 0, 1, 0, 0],
+    [0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0],
   ];
   int rotationState = 0; // 0: up, 1: right, 2: down, 3: left
   @override
@@ -83,48 +82,47 @@ class TPiece extends TetrisPiece {
     switch (rotationState) {
       case 0:
         _shape = [
-          [0,0,0,0,0],
-          [0,0,0,1,0],
-          [0,0,1,1,0],
-          [0,0,0,1,0],
-          [0,0,0,0,0],
+          [0, 0, 0, 0, 0],
+          [0, 0, 0, 1, 0],
+          [0, 0, 1, 1, 0],
+          [0, 0, 0, 1, 0],
+          [0, 0, 0, 0, 0],
         ];
         break;
       case 1:
         _shape = [
-          [0,0,0,0,0],
-          [0,0,0,0,0],  
-          [0,0,1,0,0],
-          [0,1,1,1,0],
-          [0,0,0,0,0],
+          [0, 0, 0, 0, 0],
+          [0, 0, 0, 0, 0],
+          [0, 0, 1, 0, 0],
+          [0, 1, 1, 1, 0],
+          [0, 0, 0, 0, 0],
         ];
         break;
       case 2:
-        _shape = [  
-          [0,0,0,0,0],
-          [0,1,0,0,0],
-          [0,1,1,0,0],
-          [0,1,0,0,0],
-          [0,0,0,0,0],
+        _shape = [
+          [0, 0, 0, 0, 0],
+          [0, 1, 0, 0, 0],
+          [0, 1, 1, 0, 0],
+          [0, 1, 0, 0, 0],
+          [0, 0, 0, 0, 0],
         ];
         break;
       case 3:
         _shape = [
-          [0,0,0,0,0],
-          [0,1,1,1,0],
-          [0,0,1,0,0],
-          [0,0,0,0,0],
-          [0,0,0,0,0],
+          [0, 0, 0, 0, 0],
+          [0, 1, 1, 1, 0],
+          [0, 0, 1, 0, 0],
+          [0, 0, 0, 0, 0],
+          [0, 0, 0, 0, 0],
         ];
         break;
-        default:
+      default:
         break;
     }
   }
 
   List<List<int>> get shape => _shape;
 }
-
 
 TetrisPiece tetrisFactory(TetrisPieceType type) {
   switch (type) {

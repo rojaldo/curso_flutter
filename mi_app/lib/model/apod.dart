@@ -24,7 +24,6 @@ class Apod {
   });
 
   factory Apod.fromJson(Map<String, dynamic> json) {
-
     var result = Apod(
       title: json['title'],
       explanation: json['explanation'],
@@ -35,8 +34,10 @@ class Apod {
       hdUrl: json['hdurl'],
       copyright: json['copyright'],
     );
-    result.isMp4Video = result.mediaType == 'video' && result.url.endsWith('.mp4');
-    result.isYoutubeVideo = result.mediaType == 'video' && result.url.contains('youtube.com');
+    result.isMp4Video =
+        result.mediaType == 'video' && result.url.endsWith('.mp4');
+    result.isYoutubeVideo =
+        result.mediaType == 'video' && result.url.contains('youtube.com');
     result.isImage = result.mediaType == 'image';
     return result;
   }

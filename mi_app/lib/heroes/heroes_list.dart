@@ -10,9 +10,7 @@ class HeroesListWidget extends StatelessWidget {
     return ListView.builder(
       itemCount: heroes.length,
       itemBuilder: (context, index) {
-        return ListTile(
-          title: Text(heroes[index]),
-        );
+        return ListTile(title: Text(heroes[index]));
       },
     );
   }

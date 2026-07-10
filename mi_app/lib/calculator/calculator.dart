@@ -9,14 +9,9 @@ class CalculatorPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Calculator'),
-      ),
+      appBar: AppBar(title: const Text('Calculator')),
       body: const SafeArea(
-        child: Padding(
-          padding: EdgeInsets.all(12),
-          child: CalculatorWidget(),
-        ),
+        child: Padding(padding: EdgeInsets.all(12), child: CalculatorWidget()),
       ),
     );
   }
@@ -24,7 +19,6 @@ class CalculatorPage extends StatelessWidget {
 
 //stateful widget calculator
 class CalculatorWidget extends StatefulWidget {
-  
   const CalculatorWidget({super.key});
 
   @override
@@ -32,7 +26,6 @@ class CalculatorWidget extends StatefulWidget {
 }
 
 class _CalculatorWidgetState extends State<CalculatorWidget> {
-
   String display = '';
   Calculator calculator = Calculator();
 
@@ -56,15 +49,9 @@ class _CalculatorWidgetState extends State<CalculatorWidget> {
         children: [
           DisplayWidget(display: display),
           const SizedBox(height: 16),
-          Expanded(
-            child: KeyboardWidget(onButtonPressed: _onButtonPressed),
-          ),
+          Expanded(child: KeyboardWidget(onButtonPressed: _onButtonPressed)),
         ],
       ),
     );
   }
 }
-
-
-
-

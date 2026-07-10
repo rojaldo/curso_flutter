@@ -1,12 +1,6 @@
-enum CalculatorState {
-  init,
-  firstNumber,
-  secondNumber,
-  result,
-}
+enum CalculatorState { init, firstNumber, secondNumber, result }
 
 class Calculator {
-
   double number1 = 0;
   double number2 = 0;
   String operation = '';
@@ -75,7 +69,7 @@ class Calculator {
             display = "$number1 $operation $number2 = $result";
           }
           state = CalculatorState.result;
-        } 
+        }
         break;
       case CalculatorState.result:
         if (symbol == '+' || symbol == '-' || symbol == '*' || symbol == '/') {
@@ -85,7 +79,7 @@ class Calculator {
           operation = symbol;
           display = "$number1 $operation";
           state = CalculatorState.secondNumber;
-        } 
+        }
         break;
     }
   }
@@ -138,5 +132,4 @@ class Calculator {
     display = '';
     state = CalculatorState.init;
   }
-
 }

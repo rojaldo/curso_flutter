@@ -4,7 +4,11 @@ class HeroesFormWidget extends StatelessWidget {
   final TextEditingController controller;
   final VoidCallback onAddHero;
 
-  const HeroesFormWidget({super.key, required this.controller, required this.onAddHero});
+  const HeroesFormWidget({
+    super.key,
+    required this.controller,
+    required this.onAddHero,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -15,16 +19,11 @@ class HeroesFormWidget extends StatelessWidget {
           Expanded(
             child: TextField(
               controller: controller,
-              decoration: const InputDecoration(
-                labelText: 'New Hero',
-              ),
+              decoration: const InputDecoration(labelText: 'New Hero'),
             ),
           ),
           const SizedBox(width: 8),
-          ElevatedButton(
-            onPressed: onAddHero,
-            child: const Text('Add'),
-          ),
+          ElevatedButton(onPressed: onAddHero, child: const Text('Add')),
         ],
       ),
     );

@@ -22,4 +22,22 @@ void main() {
 
     expect(find.text('12.0 + 3.0 = 15.0'), findsOneWidget);
   });
+
+  testWidgets('permite abrir la calculadora y volver al menu principal', (
+    WidgetTester tester,
+  ) async {
+    await tester.pumpWidget(const MyApp());
+
+    await tester.tap(find.text('Calculator'));
+    await tester.pumpAndSettle();
+
+    expect(find.byType(AppBar), findsOneWidget);
+    expect(find.text('Calculator'), findsOneWidget);
+
+    await tester.tap(find.byIcon(Icons.arrow_back));
+    await tester.pumpAndSettle();
+
+    expect(find.byType(AppBar), findsOneWidget);
+    expect(find.text('Flutter Examples Home Page'), findsOneWidget);
+  });
 }

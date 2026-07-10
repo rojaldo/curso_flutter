@@ -1,15 +1,15 @@
-
-class TetrisPiece{
+class TetrisPiece {
   final List<List<int>> shape;
 
   TetrisPiece(this.shape);
 }
+
 class RotateDecorator {
   final TetrisPiece _piece;
 
   RotateDecorator(this._piece);
 
-//calculate rotation 
+  //calculate rotation
   void rotate() {
     final n = _piece.shape.length;
     final rotated = List.generate(n, (_) => List<int>.filled(n, 0));
@@ -20,6 +20,5 @@ class RotateDecorator {
     }
     _piece.shape.clear();
     _piece.shape.addAll(rotated);
-    
   }
 }

@@ -14,11 +14,12 @@ class KeyboardWidget extends StatelessWidget {
         const gap = 8.0;
 
         final buttonSize =
-            ((constraints.maxWidth - gap * (columns - 1)) / columns)
-                .clamp(0.0, double.infinity);
-        final rowSize =
-            ((constraints.maxHeight - gap * (rows - 1)) / rows)
-                .clamp(0.0, double.infinity);
+            ((constraints.maxWidth - gap * (columns - 1)) / columns).clamp(
+              0.0,
+              double.infinity,
+            );
+        final rowSize = ((constraints.maxHeight - gap * (rows - 1)) / rows)
+            .clamp(0.0, double.infinity);
         final circleSize = buttonSize < rowSize ? buttonSize : rowSize;
 
         return Column(

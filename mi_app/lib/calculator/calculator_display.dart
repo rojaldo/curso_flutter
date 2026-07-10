@@ -10,10 +10,7 @@ class DisplayWidget extends StatelessWidget {
     return Container(
       alignment: Alignment.centerRight,
       padding: const EdgeInsets.all(16),
-      child: Text(
-        display,
-        style: const TextStyle(fontSize: 32),
-      ),
+      child: Text(display, style: const TextStyle(fontSize: 32)),
     );
   }
 }

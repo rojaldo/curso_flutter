@@ -1,20 +1,20 @@
-class CompositeTetrisPiece{
+class CompositeTetrisPiece {
   final List<List<int>> _shape;
   final rotationsList = <List<List<int>>>[];
 
-  CompositeTetrisPiece(this._shape){
+  CompositeTetrisPiece(this._shape) {
     _getRotations();
-
   }
 
-  void _getRotations(){
+  void _getRotations() {
     //rotate 3 times and add to the list of rotations
     var tempPiece = _shape;
-    for (var i = 0; i < 4; i++){
+    for (var i = 0; i < 4; i++) {
       rotationsList.add(tempPiece);
       tempPiece = _rotateMatrix(tempPiece);
     }
   }
+
   List<List<int>> _rotateMatrix(List<List<int>> matrix) {
     final n = matrix.length;
     final rotated = List.generate(n, (_) => List<int>.filled(n, 0));
@@ -36,7 +36,6 @@ class CompositeTetrisPiece{
 }
 
 class TetrisBuilder {
-
   TetrisBuilder() {
     // Initialize the builder
   }
@@ -44,17 +43,16 @@ class TetrisBuilder {
   CompositeTetrisPiece buildPiece(List<List<int>> shape) {
     return CompositeTetrisPiece(shape);
   }
-
-   
 }
 
 void main() {
   var builder = TetrisBuilder();
-  var piece = builder.buildPiece([[0,0,0,0,0],
-                                  [0,1,1,1,0],
-                                  [0,1,1,1,0],
-                                  [0,0,0,0,0],
-                                  [0,0,0,0,0]]);
+  var piece = builder.buildPiece([
+    [0, 0, 0, 0, 0],
+    [0, 1, 1, 1, 0],
+    [0, 1, 1, 1, 0],
+    [0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0],
+  ]);
   print(piece.rotationsList);
 }
-

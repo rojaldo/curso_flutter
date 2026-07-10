@@ -1,11 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:mi_app/calculator/calculator.dart';
 import 'package:mi_app/heroes/heroes_page.dart';
+import 'package:mi_app/heroes/heroes_provider.dart';
 import 'package:mi_app/apod/apod_page.dart';
-
+import 'package:mi_app/tetris/tetris_page.dart';
+import 'package:provider/provider.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    ChangeNotifierProvider(
+      create: (_) => HeroesProvider(),
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -49,39 +56,51 @@ class MyHomePage extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const CalculatorPage(),
-                  ),
-                );
-              },
-              child: const Text('Calculator'),
-            ),
-            SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const HeroesPage(),
-                  ),
-                );
-              },
-              child: const Text('Heroes'),
-            ),SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const ApodPage(),
-                  ),
-                );
-              },
-              child: const Text('Apod'),
-            )],
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const CalculatorPage(),
+                      ),
+                    );
+                  },
+                  child: const Text('Calculator'),
+                ),
+                SizedBox(height: 16),
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const HeroesPage(),
+                      ),
+                    );
+                  },
+                  child: const Text('Heroes'),
+                ),
+                SizedBox(height: 16),
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const ApodPage()),
+                    );
+                  },
+                  child: const Text('Apod'),
+                ),
+                SizedBox(height: 16),
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const TetrisPage(),
+                      ),
+                    );
+                  },
+                  child: const Text('Tetris'),
+                ),
+              ],
             ),
           ),
         ),

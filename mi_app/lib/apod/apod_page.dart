@@ -12,12 +12,8 @@ class ApodPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Apod'),
-      ),
-      body: const Center(
-        child: ApodWidget(),
-      ),
+      appBar: AppBar(title: const Text('Apod')),
+      body: const Center(child: ApodWidget()),
     );
   }
 }
@@ -30,9 +26,7 @@ class ApodWidget extends StatefulWidget {
 }
 
 class _ApodWidgetState extends State<ApodWidget> {
-
   Apod? _apodData;
-
 
   @override
   void initState() {
@@ -41,11 +35,11 @@ class _ApodWidgetState extends State<ApodWidget> {
     _fetchApodData();
   }
 
-
-
   Future<void> _fetchApodData([String? date]) async {
     const apiKey = "DEMO_KEY"; // Replace with your actual NASA API key
-    final url = Uri.parse('https://api.nasa.gov/planetary/apod?api_key=$apiKey${date != null ? '&date=$date' : ''}');
+    final url = Uri.parse(
+      'https://api.nasa.gov/planetary/apod?api_key=$apiKey${date != null ? '&date=$date' : ''}',
+    );
     final response = await http.get(url);
 
     if (response.statusCode == 200) {
@@ -68,26 +62,23 @@ class _ApodWidgetState extends State<ApodWidget> {
     }
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     if (_apodData == null) {
       return const CircularProgressIndicator();
     }
 
-//scroll with column and image, title and explanation
+    //scroll with column and image, title and explanation
     return SingleChildScrollView(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           ApodPicker(onDateSelected: _fetchApodData),
-        ApodInfo(apodData: _apodData!),
+          ApodInfo(apodData: _apodData!),
         ],
       ),
     );
   }
-
 }
 
 class ApodPicker extends StatelessWidget {
@@ -124,8 +115,7 @@ class ApodInfo extends StatelessWidget {
     return Column(
       children: [
         const SizedBox(height: 16),
-        if (apodData.isImage)
-          Image.network(apodData.url),
+        if (apodData.isImage) Image.network(apodData.url),
         if (apodData.isMp4Video || apodData.isYoutubeVideo)
           MyVideoPlayerWidget(apodData: apodData),
         const SizedBox(height: 16),
@@ -176,13 +166,13 @@ class _MyVideoPlayerWidgetState extends State<MyVideoPlayerWidget> {
 
   void _initializeController() {
     if (widget.apodData.isMp4Video && _supportsInlineVideo) {
-      _controller = VideoPlayerController.networkUrl(
-        Uri.parse(widget.apodData.url),
-      )..initialize().then((_) {
-          if (mounted) {
-            setState(() {});
-          }
-        });
+      _controller =
+          VideoPlayerController.networkUrl(Uri.parse(widget.apodData.url))
+            ..initialize().then((_) {
+              if (mounted) {
+                setState(() {});
+              }
+            });
     }
   }
 
@@ -210,7 +200,9 @@ class _MyVideoPlayerWidgetState extends State<MyVideoPlayerWidget> {
     if (widget.apodData.isMp4Video && !_supportsInlineVideo) {
       return Column(
         children: [
-          const Text('This MP4 video cannot be played inline on this platform.'),
+          const Text(
+            'This MP4 video cannot be played inline on this platform.',
+          ),
           SelectableText(widget.apodData.url),
         ],
       );
@@ -231,5 +223,3 @@ class _MyVideoPlayerWidgetState extends State<MyVideoPlayerWidget> {
     return const SizedBox.shrink();
   }
 }
-
-
