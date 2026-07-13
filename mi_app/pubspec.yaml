@@ -45,6 +45,7 @@ dependencies:
   firebase_crashlytics: ^5.2.4
   image_picker: ^1.2.3
   supabase_flutter: ^2.16.0
+  infinite_scroll_pagination: ^5.1.1
 
 dev_dependencies:
   flutter_test:

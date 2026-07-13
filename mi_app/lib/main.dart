@@ -8,6 +8,7 @@ import 'package:mi_app/heroes/heroes_provider.dart';
 import 'package:mi_app/apod/apod_page.dart';
 import 'package:mi_app/tetris/tetris_page.dart';
 import 'package:mi_app/trivial/trivial_page.dart';
+import 'package:mi_app/trivial/trivial_provider.dart';
 import 'package:mi_app/firebase/firebase_menu_page.dart';
 import 'package:mi_app/firebase/firebase_options.dart';
 import 'package:mi_app/supabase/supabase_menu_page.dart';
@@ -38,6 +39,7 @@ void main() async {
       providers: [
         ChangeNotifierProvider(create: (_) => HeroesProvider()),
         ChangeNotifierProvider(create: (_) => CalculatorProvider()),
+        ChangeNotifierProvider(create: (_) => TrivialProvider()),
       ],
       child: const MyApp(),
     ),

@@ -8,6 +8,7 @@ class Trivial {
   List<String> _allAnswers = [];
   bool _responded = false;
   bool _rightAnswered = false;
+  String _selectedAnswer = '';
 
   Trivial({
     required String type,
@@ -47,11 +48,13 @@ class Trivial {
   List<String> get allAnswers => List.unmodifiable(_allAnswers);
   bool get responded => _responded;
   bool get rightAnswered => _rightAnswered;
+  String get selectedAnswer => _selectedAnswer;
 
   /// Marca la respuesta elegida. Devuelve true si era correcta.
   bool respond(String answer) {
     if (_responded) return false;
     _responded = true;
+    _selectedAnswer = answer;
     _rightAnswered = answer == _correctAnswer;
     return _rightAnswered;
   }
@@ -90,4 +93,35 @@ class Trivial {
     'category': _category,
     'incorrect_answers': _incorrectAnswers,
   };
+
+  /// Serialización completa incluido el estado de respuesta, para persistir
+  /// en Supabase. Conserva el orden barajado de `allAnswers`.
+  Map<String, dynamic> toMap() => {
+    'type': _type,
+    'difficulty': _difficulty,
+    'question': _question,
+    'correct_answer': _correctAnswer,
+    'category': _category,
+    'incorrect_answers': _incorrectAnswers,
+    'all_answers': _allAnswers,
+    'selected_answer': _selectedAnswer,
+    'responded': _responded,
+    'right_answered': _rightAnswered,
+  };
+
+  /// Restaura desde `toMap`, conservando el orden guardado (sin barajar).
+  Trivial.fromMap(Map<String, dynamic> m) {
+    _type = m['type'] ?? '';
+    _difficulty = m['difficulty'] ?? '';
+    _question = m['question'] ?? '';
+    _correctAnswer = m['correct_answer'] ?? '';
+    _category = m['category'] ?? '';
+    _incorrectAnswers = List<String>.from(m['incorrect_answers'] ?? []);
+    _allAnswers = List<String>.from(
+      m['all_answers'] ?? [_correctAnswer, ..._incorrectAnswers],
+    );
+    _selectedAnswer = m['selected_answer'] ?? '';
+    _responded = m['responded'] ?? false;
+    _rightAnswered = m['right_answered'] ?? false;
+  }
 }
