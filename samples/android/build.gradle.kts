@@ -5,6 +5,8 @@ allprojects {
     }
 }
 
+val forcedCompileSdk = 36
+
 val newBuildDir: Directory =
     rootProject.layout.buildDirectory
         .dir("../../build")
@@ -20,6 +22,7 @@ subprojects {
     // Forzar JVM 17 para consistencia entre Java y Kotlin en todos los subproyectos
     project.plugins.withId("com.android.application") {
         project.extensions.configure<com.android.build.gradle.AppExtension> {
+            compileSdkVersion(forcedCompileSdk)
             compileOptions {
                 sourceCompatibility = JavaVersion.VERSION_17
                 targetCompatibility = JavaVersion.VERSION_17
@@ -28,6 +31,7 @@ subprojects {
     }
     project.plugins.withId("com.android.library") {
         project.extensions.configure<com.android.build.gradle.LibraryExtension> {
+            compileSdkVersion(forcedCompileSdk)
             compileOptions {
                 sourceCompatibility = JavaVersion.VERSION_17
                 targetCompatibility = JavaVersion.VERSION_17

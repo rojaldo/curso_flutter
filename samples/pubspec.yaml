@@ -55,7 +55,7 @@ dependencies:
   equatable: ^2.0.8
   # Selector de archivos multiplataforma (galería/diálogo nativo).
   # Soporte Linux (xdg-desktop-portal) y Windows (Win32) para el ejemplo YOLO.
-  file_picker: ^8.1.0
+  # file_picker: ^8.1.0
 
 dev_dependencies:
   flutter_test:

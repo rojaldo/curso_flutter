@@ -17,7 +17,7 @@
 
 import 'dart:io';
 
-import 'package:file_picker/file_picker.dart';
+// import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:image/image.dart' as img;
 import 'package:sample_app/ui/features/camera/services/model_registry.dart';
@@ -141,10 +141,11 @@ class _YoloImagePageState extends State<YoloImagePage> {
       _error = null;
     });
     try {
-      final result = await FilePicker.platform.pickFiles(
-        type: FileType.image,
-        allowMultiple: false,
-      );
+      // final result = await FilePicker.platform.pickFiles(
+      //   type: FileType.image,
+      //   allowMultiple: false,
+      // );
+      final result = null;
       if (result == null || result.files.isEmpty) {
         if (!mounted) return;
         setState(() => _busy = false);

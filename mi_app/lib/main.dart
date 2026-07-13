@@ -7,6 +7,7 @@ import 'package:mi_app/heroes/heroes_page.dart';
 import 'package:mi_app/heroes/heroes_provider.dart';
 import 'package:mi_app/apod/apod_page.dart';
 import 'package:mi_app/tetris/tetris_page.dart';
+import 'package:mi_app/trivial/trivial_page.dart';
 import 'package:mi_app/firebase/firebase_menu_page.dart';
 import 'package:mi_app/firebase/firebase_options.dart';
 import 'package:mi_app/supabase/supabase_menu_page.dart';
@@ -24,15 +25,10 @@ bool get kFirebaseSupported =>
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   if (kFirebaseSupported) {
-    // En web hay que pasar FirebaseOptions explícitas (no hay
-    // google-services.json / GoogleService-Info.plist). En nativo los
-    // configs ya colocados se leen automáticamente sin argumentos.
     await Firebase.initializeApp(
       options: kIsWeb ? DefaultFirebaseOptions.currentPlatform : null,
     );
   }
-  // Supabase: inicialización única con URL + publishable key. Funciona en
-  // web, móvil, escritorio — no requiere configs nativos por plataforma.
   await Supabase.initialize(
     url: SupabaseConfig.url,
     publishableKey: SupabaseConfig.publishableKey,
@@ -61,108 +57,124 @@ class MyApp extends StatelessWidget {
         ),
         useMaterial3: true,
       ),
-      home: const MyHomePage(title: 'Flutter Examples Home Page'),
+      home: const HomePage(),
     );
   }
 }
 
-class MyHomePage extends StatelessWidget {
-  const MyHomePage({super.key, required this.title});
-
+class _DrawerItem {
   final String title;
+  final IconData icon;
+  final Widget page;
+  final bool enabled;
+  final String? disabledHint;
+
+  const _DrawerItem({
+    required this.title,
+    required this.icon,
+    required this.page,
+    this.enabled = true,
+    this.disabledHint,
+  });
+}
+
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  late final List<_DrawerItem> _items;
+
+  @override
+  void initState() {
+    super.initState();
+    _items = [
+      const _DrawerItem(
+        title: 'Calculator',
+        icon: Icons.calculate,
+        page: CalculatorPage(),
+      ),
+      const _DrawerItem(
+        title: 'Heroes',
+        icon: Icons.people,
+        page: HeroesPage(),
+      ),
+      const _DrawerItem(
+        title: 'Apod',
+        icon: Icons.photo,
+        page: ApodPage(),
+      ),
+      const _DrawerItem(
+        title: 'Tetris',
+        icon: Icons.grid_on,
+        page: TetrisPage(),
+      ),
+      const _DrawerItem(
+        title: 'Trivial',
+        icon: Icons.quiz,
+        page: TrivialPage(),
+      ),
+      _DrawerItem(
+        title: kFirebaseSupported ? 'Firebase' : 'Firebase (no disponible)',
+        icon: Icons.local_fire_department,
+        page: const FirebaseMenuPage(),
+        enabled: kFirebaseSupported,
+        disabledHint: 'No disponible en esta plataforma',
+      ),
+      const _DrawerItem(
+        title: 'Supabase',
+        icon: Icons.cloud,
+        page: SupabaseMenuPage(),
+      ),
+    ];
+  }
+
+  void _openPage(int i) {
+    final item = _items[i];
+    if (!item.enabled) return;
+    Navigator.pop(context); // cierra el drawer
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => item.page),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(title),
+        title: const Text('Flutter Examples'),
       ),
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: SizedBox(
-            width: double.infinity,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              // expand the buttons to fill the width of the screen
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const CalculatorPage(),
-                      ),
-                    );
-                  },
-                  child: const Text('Calculator'),
-                ),
-                SizedBox(height: 16),
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const HeroesPage(),
-                      ),
-                    );
-                  },
-                  child: const Text('Heroes'),
-                ),
-                SizedBox(height: 16),
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const ApodPage()),
-                    );
-                  },
-                  child: const Text('Apod'),
-                ),
-                SizedBox(height: 16),
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const TetrisPage(),
-                      ),
-                    );
-                  },
-                  child: const Text('Tetris'),
-                ),
-                SizedBox(height: 16),
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const FirebaseMenuPage(),
-                      ),
-                    );
-                  },
-                  child: Text(
-                    kFirebaseSupported ? 'Firebase' : 'Firebase (no disponible en esta plataforma)',
-                  ),
-                ),
-                SizedBox(height: 16),
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const SupabaseMenuPage(),
-                      ),
-                    );
-                  },
-                  child: const Text('Supabase'),
-                ),
-              ],
+      drawer: Drawer(
+        child: ListView(
+          children: [
+            const DrawerHeader(
+              decoration: BoxDecoration(
+                color: Color.fromARGB(255, 166, 31, 49),
+              ),
+              child: Text(
+                'Ejemplos',
+                style: TextStyle(color: Colors.white, fontSize: 24),
+              ),
             ),
-          ),
+            for (int i = 0; i < _items.length; i++)
+              ListTile(
+                leading: Icon(_items[i].icon),
+                title: Text(_items[i].title),
+                enabled: _items[i].enabled,
+                subtitle:
+                    _items[i].enabled ? null : Text(_items[i].disabledHint ?? ''),
+                onTap: () => _openPage(i),
+              ),
+          ],
         ),
+      ),
+      body: const Center(
+        child: Text('Abre el menú (≡) para ver los ejemplos'),
       ),
     );
   }

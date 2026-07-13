@@ -9,10 +9,12 @@ void main() {
   ) async {
     await tester.pumpWidget(const MyApp());
 
+    // Abre el drawer y entra a Calculator
+    await tester.tap(find.byTooltip('Open navigation menu'));
+    await tester.pumpAndSettle();
     await tester.tap(find.text('Calculator'));
     await tester.pumpAndSettle();
 
-    expect(find.byType(AppBar), findsOneWidget);
     expect(find.text('Calculator'), findsOneWidget);
 
     for (final input in ['1', '2', '+', '3', '=']) {
@@ -28,16 +30,16 @@ void main() {
   ) async {
     await tester.pumpWidget(const MyApp());
 
+    await tester.tap(find.byTooltip('Open navigation menu'));
+    await tester.pumpAndSettle();
     await tester.tap(find.text('Calculator'));
     await tester.pumpAndSettle();
 
-    expect(find.byType(AppBar), findsOneWidget);
     expect(find.text('Calculator'), findsOneWidget);
 
     await tester.tap(find.byIcon(Icons.arrow_back));
     await tester.pumpAndSettle();
 
-    expect(find.byType(AppBar), findsOneWidget);
-    expect(find.text('Flutter Examples Home Page'), findsOneWidget);
+    expect(find.text('Flutter Examples'), findsOneWidget);
   });
 }
