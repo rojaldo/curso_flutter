@@ -37,6 +37,14 @@ dependencies:
   http: ^1.6.0
   provider: ^6.1.5+1
   video_player: ^2.11.1
+  firebase_core: ^4.11.0
+  firebase_auth: ^6.5.4
+  cloud_firestore: ^6.6.0
+  firebase_storage: ^13.4.3
+  firebase_analytics: ^12.4.3
+  firebase_crashlytics: ^5.2.4
+  image_picker: ^1.2.3
+  supabase_flutter: ^2.16.0
 
 dev_dependencies:
   flutter_test:

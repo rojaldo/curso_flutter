@@ -1,3 +1,5 @@
+import 'dart:io' show Platform;
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:mi_app/calculator/calculator.dart';
 import 'package:mi_app/calculator/calculator_provider.dart';
@@ -5,9 +7,36 @@ import 'package:mi_app/heroes/heroes_page.dart';
 import 'package:mi_app/heroes/heroes_provider.dart';
 import 'package:mi_app/apod/apod_page.dart';
 import 'package:mi_app/tetris/tetris_page.dart';
+import 'package:mi_app/firebase/firebase_menu_page.dart';
+import 'package:mi_app/firebase/firebase_options.dart';
+import 'package:mi_app/supabase/supabase_menu_page.dart';
+import 'package:mi_app/supabase/supabase_config.dart';
 import 'package:provider/provider.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
-void main() {
+/// Firebase solo tiene plugin nativo en Android, iOS, macOS y Web.
+/// En Linux/Windows lo saltamos y la sección Firebase avisa al usuario.
+/// Supabase funciona en todas las plataformas (incluida Linux/Windows).
+bool get kFirebaseSupported =>
+    kIsWeb || Platform.isAndroid || Platform.isIOS || Platform.isMacOS;
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  if (kFirebaseSupported) {
+    // En web hay que pasar FirebaseOptions explícitas (no hay
+    // google-services.json / GoogleService-Info.plist). En nativo los
+    // configs ya colocados se leen automáticamente sin argumentos.
+    await Firebase.initializeApp(
+      options: kIsWeb ? DefaultFirebaseOptions.currentPlatform : null,
+    );
+  }
+  // Supabase: inicialización única con URL + publishable key. Funciona en
+  // web, móvil, escritorio — no requiere configs nativos por plataforma.
+  await Supabase.initialize(
+    url: SupabaseConfig.url,
+    publishableKey: SupabaseConfig.publishableKey,
+  );
   runApp(
     MultiProvider(
       providers: [
@@ -103,6 +132,32 @@ class MyHomePage extends StatelessWidget {
                     );
                   },
                   child: const Text('Tetris'),
+                ),
+                SizedBox(height: 16),
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const FirebaseMenuPage(),
+                      ),
+                    );
+                  },
+                  child: Text(
+                    kFirebaseSupported ? 'Firebase' : 'Firebase (no disponible en esta plataforma)',
+                  ),
+                ),
+                SizedBox(height: 16),
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const SupabaseMenuPage(),
+                      ),
+                    );
+                  },
+                  child: const Text('Supabase'),
                 ),
               ],
             ),

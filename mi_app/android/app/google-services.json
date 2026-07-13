@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "515751052950",
+    "project_id": "mi-app-flutter-demo",
+    "storage_bucket": "mi-app-flutter-demo.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:515751052950:android:71838cb46ac9ca469d64b7",
+        "android_client_info": {
+          "package_name": "com.example.mi_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBjjkrcdDei0toJ19tIF0uExTG2USbC9mU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

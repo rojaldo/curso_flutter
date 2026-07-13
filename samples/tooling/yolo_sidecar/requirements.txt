@@ -1,0 +1,9 @@
+# Dependencias del sidecar YOLO para ejecutar modelos .pt (PyTorch).
+# Flutter no puede cargar .pt directamente — este venv lo hace por nosotros.
+#
+# Python 3.12 requerido (TF/ultralytics aún no soportan 3.14).
+ultralytics>=8.4.0
+# torch CPU es suficiente para inferencia on-device (sin CUDA).
+# Ultralytics tira de torch por defecto; no hace falta listarlo explícitamente
+# salvo que queramos forzar CPU-only:
+# torch==2.12.1+cpu --index-url https://download.pytorch.org/whl/cpu
